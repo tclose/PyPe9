@@ -1,0 +1,43 @@
+##################################################################
+#
+# A collection of notes to aid the Purkinje model development
+# from meeting with Erik.
+#
+# @author Tom Close
+# @date 8/11/2011
+#
+##################################################################
+
+
+- How many synapses to activate a Purkinje spike?
+  - ~50 synapses in reality
+  - Erik suggests ~10 synapses in model for good trade off between importance of synchrony and biological levels
+   (THOUGHT: Maybe look at ways to get a single synapse to simulate the firing of several smaller ones by adding noise)
+
+- How large does the EPSP need to be then?
+  - Erik reckons ~5 times larger than reality
+  - Need to check how large the normal EPSP actually is
+  
+- How many parallel fibres to synapse with a single Purkinje
+  - Around 1000 parallel fibres
+  - Remove leaf sections and place synapses on segments instead (need some way of calculating the number of segments 
+    and spreading the synapses over the branches
+  
+- Testing  
+  - 1000 synapses, 1hz Poisson spikes
+  - Does it look physiologically realistic at soma (need to define what is realistic)
+  - Is the dendritic depolarization below a 10-15mv max above, which it may significantly effect the conduction
+  
+- Tuning  
+  - Max conductance and diameter
+  - Capacitance??? (on the backburner for now)
+  - Length?? (hasn't been brought up yet)
+  
+- Futher reading
+ - Read up on the computational modelling techniques, so understand limitations
+ - Read up on effect of capacitance/diameter (probably same as above)  
+ 
+ 
+ - Membrane too leaky
+  - check input resistance with Roth Hausser
+  - 

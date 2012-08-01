@@ -1,0 +1,62 @@
+##################################################################
+#
+# Project strategies for the "Cerebellar Mega Model"
+#
+# @author Tom Close
+# @date 16/11/2011
+#
+##################################################################
+
+Questions to pose?
+------------------
+
+  1) Does spatial correlation matter in the processing performed in the Cerebellum?
+    1.5) How small a cortical section can we get away with (particularly in the parasagittal directions)
+    
+  2) Can the network represent a dynamic system that can learn to invert the dynamics of simple models (i.e. inverted 
+     pendulum).
+
+########################################################################################################################
+
+
+1) Spatial/temporal correlation
+-------------------------------
+
+  Requirements:
+   - Working NEURON model
+   
+  Approach:
+    - Define a measure of the relative "importance" of temporal patterns over spatial ones
+      - Correlation
+      - Mutual Information
+      - Fisher Information
+    - Identify all "free" parameters in the model
+    - Specify uncertainty ('prior') distributions over all free parameters in the model
+    - Run simulations over a range of parameters  
+
+   Team:
+     - Daqing on the analysis measures
+     - 
+
+
+2) Dynamic system set-point search
+---------------------------
+
+  Requirements:
+    - NEST model ASAP
+      - Incorporating Ivan's boundary representation
+      - Ability to set all free parameters in the model simply in a general manner.
+
+  Overall approach: 
+    - Distinguish between:
+      - "variable parameters" (eg. synaptic strengths, number of connections)
+      - "unknown parameters", i.e. set points of variable parameters (means of variable parameters)
+    - Specify uncertainty ('prior') distributions over all variable and unknown parameters in the model
+    - Define a measure that specifies interesting states from the dynamics.
+      - Criticality???
+      - Stability
+    - Parameter search over all "unknown parameters" (note not variable parameters, which will be randomly distributed)
+
+  
+  Team:
+   - Ivan

@@ -1,0 +1,37 @@
+Passive parameters, measurements (from Roth and Hausser 2001):
+
+Capacitance (cm)
+  - mean:       0.77 uF cm^-2
+  - std_dev:    0.17 uF cm^-2
+
+Membrane Resistance (rm)
+  R_m
+    - mean:     122 k\Ohm cm^2
+    - std_dev:  18  k\Ohm cm^2
+        
+Axial (intracellular) resistance (ri)
+    - mean:     115 Ohm cm
+    - std_dev:  20  Ohm cm
+    
+h-current
+   - Uniform density
+   - peak conductance of 25 μS/cm^2
+
+Input resistance
+   - Peak (with Ih): 106.2 M Ohm
+   - Steady-state (with Ih): 59.3 M Ohm
+   - Steady-state (without Ih): 267.8 M Ohm
+   
+Resting potential
+   - with Ih: ?? M Ohm
+   - without Ih: 73.6 M Ohm
+   
+Membrane time-constant
+   - with Ih 64.6 M Ohm
+   - without Ih 116.9 M Ohm 
+
+                                          Cell_1  Cell_2  Cell_3  Cell_4 
+-------------------------------------------------------------------------
+Total surface area (without spines; μm^2)  15786   11788   25768   40821
+Cell volume (without spines; μm^3)         8085    6157    13161   20084
+
