@@ -35,7 +35,7 @@ PROJECT_NUMBER = v0.1
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description for a project that appears at the top of each page and should give viewer a quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF = "A combined model of the cerebellum and the Basal Ganglia to be implemented on the k-computer"
+PROJECT_BRIEF = "A combined model of the cerebellum and the basal ganglia to be implemented on the k-computer"
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is
 # included in the documentation. The maximum height of the logo should not
@@ -598,7 +598,7 @@ WARN_FORMAT = "$file:$line: $text"
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT = ../src 
+INPUT = ../src
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
