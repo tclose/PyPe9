@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <network id="BasalGangliaNetwork">
+        <!-- Populations -->
+        <population id="Pop1" cell="Pop1Cell">
+            <layout pattern="Grid2D" />
+        </population>
+        <population id="Pop2" cell="Pop2Cell">
+            <layout pattern="Grid2D" />
+        </population>
+        <!-- Projections -->        
+        <projection id="Pop1_Pop2">
+            <source id="Pop1" />
+            <destination id="Pop2" synapse="excitatory" />
+            <connection pattern="OneToOne" />
+            <weight pattern="Constant" value="0.1" />
+            <delay pattern="Constant" value="0.5 ms" />
+        </projection>
+    </network>
+</nineml>
