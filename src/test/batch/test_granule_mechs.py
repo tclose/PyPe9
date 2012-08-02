@@ -26,8 +26,8 @@ methods = ('noise', 'step')
 
 PROJECT_PATH = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..', '..', '..'))
 
-NEW_PATH = os.path.join(PROJECT_PATH, 'NINEMLP', 'ncml', 'build', 'nmodl')
-OLD_PATH = os.path.join(PROJECT_PATH, 'NINEMLP', 'ncml', 'build', 'nmodl.old')
+NEW_PATH = os.path.join(PROJECT_PATH, 'xml/cerebellum', 'ncml', 'build', 'nmodl')
+OLD_PATH = os.path.join(PROJECT_PATH, 'xml/cerebellum', 'ncml', 'build', 'nmodl.old')
 
 ON_TOMBO = (socket.gethostname()[0:5] == 'tombo')
 
@@ -41,12 +41,12 @@ else:
     save_action = '--save_plot'
 
 
-for f in os.listdir(os.path.join(PROJECT_PATH, 'NINEMLP', 'ncml', 'build', 'nmodl')):
+for f in os.listdir(os.path.join(PROJECT_PATH, 'xml/cerebellum', 'ncml', 'build', 'nmodl')):
     (mech_name, ext) = os.path.splitext(f)
     if ext == '.mod':
         for method in methods:
             script_path = os.path.join(PROJECT_PATH, 'src', 'test', 'mechanisms.py')
-            output_path = os.path.join(PROJECT_PATH, 'NINEMLP', 'ncml', 'build', 'nmodl',
+            output_path = os.path.join(PROJECT_PATH, 'xml/cerebellum', 'ncml', 'build', 'nmodl',
                                                                 'differences', method , mech_name)
 
             if action == 'plot':

@@ -29,7 +29,7 @@ import ninemlp.utilities.nmodl as nmodl
 from ninemlp import BUILD_MODE, BUILD_MODE_OPTIONS
 import subprocess
 
-DEFAULT_NINEMLP_TEST = './NINEMLP/test.xml'
+DEFAULT_NINEMLP_TEST = './xml/cerebellum/test.xml'
 DEFAULT_HOC_TEST = './Molecular_Layer/tests/set5'
 
 parser = argparse.ArgumentParser(description='A script to ')

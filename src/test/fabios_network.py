@@ -30,7 +30,7 @@ else:
     os.environ['PATH'] += os.pathsep + '/opt/nrn-7.1/x86_64/bin' # Sorry this is the path on my machine (to save me having to set the environment variable in eclipse)
 
 PROJECT_PATH = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..', '..'))
-NETWORK_XML_LOCATION = os.path.join(PROJECT_PATH, 'NINEMLP', 'fabios_network.xml')
+NETWORK_XML_LOCATION = os.path.join(PROJECT_PATH, 'xml/cerebellum', 'fabios_network.xml')
 
 parser = argparse.ArgumentParser(description='A script to ')
 parser.add_argument('--simulator', type=str, default='neuron',

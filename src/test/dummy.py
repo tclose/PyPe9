@@ -1,5 +1,5 @@
-#fin = open('/home/tclose/cerebellar/NINEMLP/brep/build/projections/Granule-Golgi')
-#fout = open('/home/tclose/cerebellar/NINEMLP/brep/build/projections/Granule-Golgi.out', 'w')
+#fin = open('/home/tclose/cerebellar/xml/cerebellum/brep/build/projections/Granule-Golgi')
+#fout = open('/home/tclose/cerebellar/xml/cerebellum/brep/build/projections/Granule-Golgi.out', 'w')
 #for line in fin:
 #    (pre_id, post_id, weight, delay) = line.split()
 #    pre_id = int(pre_id)
