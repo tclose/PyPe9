@@ -416,7 +416,12 @@
                 <passiveCurrent condDensity="3.0" units="S_per_m2" />
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="ca" value="129.33" units="mV" segmentGroup="soma_group"/>
-                <!-- FIXME: Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
+                <!-- FIXME: Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->   
+            </membraneProperties>
+            <intracellularProperties>
+                <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
+            </intracellularProperties>
+            <synapses>
                 <conductanceSynapse id="AMPA" type="Exp2Syn" segmentGroup="soma_group">
                     <arg name="tau1" value="0.3" units="ms" />
                     <arg name="tau2" value="0.5" units="ms" />
@@ -434,11 +439,8 @@
                     <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
                         units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
                 </conductanceSynapse>
-                <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />             
-            </membraneProperties>
-            <intracellularProperties>
-                <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
-            </intracellularProperties>
+                <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />         
+            </synapses>            
         </biophysicalProperties>
     </cell>
 </neuroml>
