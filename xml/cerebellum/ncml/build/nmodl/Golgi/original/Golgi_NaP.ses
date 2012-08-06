@@ -1,0 +1,73 @@
+load_file("nrngui.hoc")
+objref vce	// voltage clamp)
+objref g[ 1 ] // graph objects
+objref vgraphbox, hgraphbox[ 1 ]
+vgraphbox=new VBox()
+vgraphbox.intercept(1)
+hgraphbox[ 0 ]=new HBox()
+hgraphbox[ 0 ].intercept(1)
+i =  0
+g[i]=new Graph()
+g[i].exec_menu("Keep Lines")
+hgraphbox[ 0 ].intercept(0)
+hgraphbox[ 0 ].map()
+
+vgraphbox.intercept(0)
+
+vec_sizes = tstop/dt + 1	// recorded traces are all this size
+
+soma vce=new VClamp(0)
+
+dt = 0.001
+
+proc vcrun() {
+	
+	vce.dur[0]=vchdur
+	vce.dur[1]=vcbdur
+	vce.dur[2]=vchdur
+
+	tstop=vce.dur[0]+vce.dur[1]+vce.dur[2]
+	
+	vce.amp[0]=vchold
+	vce.amp[2]=vchold
+	
+	for j=0, vcsteps-1 {
+		x=vcbase+j*vcincrement
+		vce.amp[1]=x
+
+		init()
+
+		run()
+		$o2.line(g[$1], dt)
+
+                for i=0,$o2.size()-1 {
+                    $o4.printf("%g %g\n", $o3.x[i], $o2.x[i])
+                    }
+
+		if (stoppedrun()) {
+			break
+		}
+	}
+}
+print "generating  NaP "
+vchold = soma.comp195_vchold_Golgi_NaP
+vcbase = soma.comp195_vcbase_Golgi_NaP
+vcincrement = soma.comp195_vcinc_Golgi_NaP
+vcsteps = soma.comp195_vcsteps_Golgi_NaP
+vchdur = soma.comp195_vchdur_Golgi_NaP
+vcbdur = soma.comp195_vcbdur_Golgi_NaP
+objref  NaP
+NaP = new Vector(vec_sizes)
+NaP.record (&soma.ina( 0.5 ))
+objref tlog
+tlog = new Vector(vec_sizes,0)
+tlog.record (&t)
+objref logfile
+logfile = new File()
+logfile.wopen ( "NaP.dat" )
+vcrun( 0 ,  NaP , tlog, logfile)
+g[ 0 ].label(.5,.85," NaP ")
+logfile.close()
+i=0
+g[i].exec_menu("View = plot")
+vgraphbox.map()

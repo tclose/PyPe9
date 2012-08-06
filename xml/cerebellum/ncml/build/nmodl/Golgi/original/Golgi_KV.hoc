@@ -1,0 +1,21 @@
+create soma
+access soma
+
+insert Golgi_KV
+
+soma {
+	nseg = 1 
+
+	diam = 9.76 
+
+	L = 9.76 
+
+	cm = 1
+
+	Ra = 100
+
+	ek = -84.69
+}
+
+xopen("Golgi_KV.ses")
+

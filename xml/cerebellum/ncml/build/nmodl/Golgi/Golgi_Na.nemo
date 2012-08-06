@@ -1,0 +1,93 @@
+
+;; Reference: Theta-Frequency Bursting and Resonance in Cerebellar Granule Cells:Experimental
+;; Evidence and Modeling of a Slow K+-Dependent Mechanism
+;; Egidio D'Angelo,Thierry Nieus,Arianna Maffei,Simona Armano,Paola Rossi,Vanni Taglietti,
+;; Andrea Fontana and Giovanni Naldi
+
+(nemo-model Golgi_Na
+
+  (
+   (input v celsius)
+
+   (defun linoid (x y) 
+    	 (if ((abs (x / y)) < 1e-6) 
+             then (y * (1 - ((x / y) / 2)))
+	     else (x / (1 - exp (x / y) ))
+	      ))
+
+
+   (component (type ionic-current) (name Na )
+	      
+	      (component (type gate)
+
+			 ;; rate constants
+			 (Q10 = (pow (3 ((celsius - 20) / 10))))
+
+			 (const Aalpha_m  = 0.3)
+			 (const Kalpha_m  = -10)
+			 (const V0alpha_m = -25)
+	
+			 (const Abeta_m  = 12)
+			 (const Kbeta_m  = -18.182)
+			 (const V0beta_m = -50)
+
+			 (const Aalpha_h  = 0.21)
+			 (const Kalpha_h  = -3.333)
+			 (const V0alpha_h = -50)
+ 
+			 (const Abeta_h  = 3)
+			 (const Kbeta_h  = -5)
+			 (const V0beta_h = -17)
+
+			 ;; rate functions
+			 (defun alpha_m (v Q10)	
+			   (Q10 * Aalpha_m * linoid((v - V0alpha_m) Kalpha_m) ))
+
+			 (defun beta_m (v Q10)
+			   (Q10 * Abeta_m * exp((v - V0beta_m) / Kbeta_m) ))
+
+			 (defun alpha_h (v Q10)
+			   (Q10 * Aalpha_h * exp((v - V0alpha_h) / Kalpha_h) ))	
+				
+			 (defun beta_h (v Q10)
+			   (Q10 * Abeta_h / (1 + exp((v - V0beta_h) / Kbeta_h) )))
+
+			 
+			 (hh-ionic-gate 
+			  (Na  ;; ion name: exported variables will be of the form {ion}_{id}
+			   (initial-m  ((alpha_m (v Q10)) / (alpha_m (v Q10) + beta_m (v Q10)) ))
+			   (initial-h  ((alpha_h (v Q10)) / (alpha_h (v Q10) + beta_h (v Q10)) ))
+			   (m-power    3)
+			   (h-power    1)
+			   (m-alpha    (alpha_m (v Q10)))
+			   (m-beta     (beta_m (v Q10)))
+			   (h-alpha    (alpha_h (v Q10)))
+			   (h-beta     (beta_h (v Q10)))
+			   ))
+			 
+			 )
+	      
+	      (component (type pore)
+			 (const  gbar  = 0.048)
+			 (output gbar ))
+
+	      
+	      (component (type permeating-ion) (name na)
+			 (const e = 87.39)
+			 (output e ))
+	      
+	      ) ;; end Na current
+
+
+   (component (type voltage-clamp) (name Na)
+
+	      (const vchold   = -71)
+	      (const vcbase   = -60)
+	      (const vcinc    = 10)
+	      (const vcsteps  = 9)
+	      (const vchdur   = 30)
+	      (const vcbdur   = 100)
+           
+	      (output vchold vcbase vcinc vcsteps vchdur vcbdur))
+
+))

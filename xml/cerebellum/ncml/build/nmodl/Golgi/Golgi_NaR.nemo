@@ -1,0 +1,87 @@
+
+	  
+;; Author: T.Nieus
+;; Last revised: 30.6.2003 
+;; Critical value gNa
+;; Inserted a control in bet_s to avoid huge values of x1
+
+(nemo-model Golgi_NaR
+
+  (
+   (input v celsius)
+
+   (component (type ionic-current) (name NaR )
+	      
+	      (component (type gate)
+
+			 ;; rate constants
+			 (Q10 = (pow (3 ((celsius - 20) / 10))))
+
+			 (const Aalpha_s     = -0.00493)
+			 (const V0alpha_s    = -4.48754)
+			 (const Kalpha_s     = -6.81881)
+			 (const Shiftalpha_s = 0.00008)
+
+			 (const Abeta_s     = 0.01558)
+			 (const V0beta_s    = 43.97494)
+			 (const Kbeta_s     =  0.10818)
+			 (const Shiftbeta_s = 0.04752)
+
+			 (const Aalpha_f  = 0.31836)
+			 (const V0alpha_f = -80)
+			 (const Kalpha_f  = -62.52621)
+
+			 (const Abeta_f  = 0.01014)
+			 (const V0beta_f = -83.3332)
+			 (const Kbeta_f  = 16.05379)
+
+			 ;; rate functions
+			 (defun alpha_s (v Q10) 
+			   (Q10 * (Shiftalpha_s + (Aalpha_s * ((v + V0alpha_s) )) ) / (exp ((v + V0alpha_s) / Kalpha_s) - 1)))
+
+			 (defun beta_s (v Q10) 
+                           (let ((x1 ((v + V0beta_s) / Kbeta_s)))
+			     (Q10 * (Shiftbeta_s + Abeta_s * ((v + V0beta_s) / (exp((if (x1 > 200) then 200 else x1)) - 1))))))
+
+			 (defun alpha_f (v Q10) 
+			   (Q10 * Aalpha_f * exp( ( v - V0alpha_f ) / Kalpha_f)))
+
+			 (defun beta_f (v Q10) 
+			   (Q10 * Abeta_f * exp( ( v - V0beta_f ) / Kbeta_f )  ))
+
+			 (hh-ionic-gate 
+			  (NaR  ;; ion name: exported variables will be of the form {ion}_{id}
+			   (initial-m  ((alpha_s (v Q10)) / (alpha_s (v Q10) + beta_s (v Q10)) ))
+			   (initial-h  ((alpha_f (v Q10)) / (alpha_f (v Q10) + beta_f (v Q10)) ))
+			   (m-power    1)
+			   (h-power    1)
+			   (m-alpha    (alpha_s (v Q10)))
+			   (m-beta     (beta_s (v Q10)))
+			   (h-alpha    (alpha_f (v Q10)))
+			   (h-beta     (beta_f (v Q10)))
+			   ))
+			 )
+
+	      (component (type pore)
+			 (const  gbar  = 0.0017)
+			 (output gbar ))
+
+	      (component (type permeating-ion) (name na)
+			 (const e = 87.39)
+			 (output e ))
+	      
+	      ) ;; end Nar current
+
+
+   (component (type voltage-clamp) (name NaR)
+
+	      (const vchold   = -71)
+	      (const vcbase   = -60)
+	      (const vcinc    = 10)
+	      (const vcsteps  = 9)
+	      (const vchdur   = 30)
+	      (const vcbdur   = 100)
+           
+	      (output vchold vcbase vcinc vcsteps vchdur vcbdur))
+
+))
