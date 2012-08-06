@@ -45,12 +45,16 @@ parser.add_argument('--start_input', type=float, default=1000, help='The start t
 parser.add_argument('--min_delay', type=float, default=0.0005, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.00005, help='The timestep used for the simulation')
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
-parser.add_argument('--stim_seed', type=int, default=123456, help='The seed passed to the stimulated spikes')
+parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
 args = parser.parse_args()
 
-numpy.random.seed(args.stim_seed)
-
+if not args.stim_seed:
+    stim_seed = long(time.time() * 256)
+    print "Stimulation seed is %d" % stim_seed
+else:
+    stim_seed = int(args.stim_seed)
+ 
 print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.mf_rate
