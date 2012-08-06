@@ -23,7 +23,7 @@
         <population id="MossyFiberInputs" cell="SpikeSourceArray">
             <layout type="Extension" engine="Brep" id="MossyFibers" />
         </population>
-        <population id="Golgis" cell="Granule">
+        <population id="Golgis" cell="Golgi">
             <layout type="Extension" engine="Brep" id="Golgis" />
         </population>
         <!-- Projections -->
