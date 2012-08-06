@@ -332,7 +332,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-<!--                <ionicCurrent id="Golgi_BK" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_KCa" segmentGroup="soma_group">
                     <defun name="alp_c">
                         <arg name="v" />
                         <body> tcorr*Aalpha_c/(1+(Balpha_c*exp(v/Kalpha_c)/cai))
@@ -343,7 +343,7 @@
                         <body> tcorr*Abeta_c/(1+cai/(Bbeta_c*exp(v/Kbeta_c)))
                         </body>
                     </defun>
-                </ionicCurrent> -->
+                </ionicCurrent>
                 <ionicCurrent id="Golgi_SK2" segmentGroup="soma_group">
                     <!-- no functions instead of temperature -->
                 </ionicCurrent>
