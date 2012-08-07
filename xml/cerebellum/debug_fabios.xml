@@ -6,6 +6,9 @@
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
         <!-- Populations -->
+        <population id="Granules" cell="Granule">
+            <layout type="Extension" engine="Brep" id="debug_Granules" />
+        </population>
         <population id="MossyFibers" cell="HH_cond_exp">
             <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
             <cellParameters>
@@ -26,6 +29,15 @@
             <connection pattern="OneToOne" />
             <weight pattern="Constant" value="1"/>
             <delay pattern="Constant" value="0.05"/>            
+        </projection>
+        <projection id="MossyFibers_Granules_AMPA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="AMPA" segment="soma" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
+                number="39" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="2.6 uS"
+                rate="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
         </projection>
     </network>
 </nineml>
