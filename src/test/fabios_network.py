@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 
   This script performs a comparison between the performance of networks specified with NINEML+ and
@@ -32,7 +33,7 @@ else:
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
-parser = argparse.ArgumentParser(description='A script to ')
+parser = argparse.ArgumentParser(description='Creates and runs fabios_network')
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
 parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,

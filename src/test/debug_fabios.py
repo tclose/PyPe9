@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 
   This script performs a comparison between the performance of networks specified with NINEML+ and
