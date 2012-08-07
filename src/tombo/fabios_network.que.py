@@ -26,8 +26,8 @@ parser.add_argument('--simulator', type=str, default='neuron',
 parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
 parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)  (default: %(default)s)')
 parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation (default: %(default)s)')
-parser.add_argument('--min_delay', type=float, default=0.0005, help='The minimum synaptic delay in the network (default: %(default)s)')
-parser.add_argument('--timestep', type=float, default=0.00005, help='The timestep used for the simulation (default: %(default)s)')
+parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network (default: %(default)s)')
+parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation (default: %(default)s)')
 parser.add_argument('--stim_seed', default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--num_processes', type=int, default=96, help='The the number of processes to use for the simulation (default: %(default)s)')
 parser.add_argument('--legacy_hoc', action='store_true', help="If this flag is passed, then the old legacy code is run instead")
@@ -88,12 +88,16 @@ print "Compiling required objects"
 if not args.legacy_hoc:
     try:
         execfile(os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'))
-    except SystemExit:
-        pass
+    except SystemExit as exit_status:
+        print SCRIPT_NAME
+        if exit_status:
+            raise exit_status
     run_dir = os.path.join(output_dir, 'src')
     cmd_line = "time mpirun python test/{script_name}.py --output {output_dir}/output_activity --time {time} \
     --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} --simulator {simulator} \
-    --timestep {timestep} --stim_seed {stim_seed}".format(mf_rate=args.mf_rate, 
+    --timestep {timestep} --stim_seed {stim_seed}".format(script_name=SCRIPT_NAME,
+                                                          output_dir=output_dir,
+                                                          mf_rate=args.mf_rate, 
                                                           start_input=args.start_input, 
                                                           time=args.time, 
                                                           min_delay=args.min_delay, 
@@ -154,7 +158,7 @@ cd {run_dir}
 {cmd_line}
 
 echo "==============Mpirun has ended===============" 
-""".format(script_name=SCRIPT_NAME, output_dir=output_dir, path=PATH, pythonpath=PYTHONPATH, 
+""".format(output_dir=output_dir, path=PATH, pythonpath=PYTHONPATH, 
   ld_library_path=LD_LIBRARY_PATH, ninemlp_src_path=NINEMLP_SRC_PATH, np=np, run_dir=run_dir, 
   cmd_line=cmd_line))
 f.close()
