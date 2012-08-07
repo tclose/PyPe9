@@ -86,7 +86,8 @@ if not args.legacy_hoc:
     compile_env['NINEMLP_SRC_PATH'] = NINEMLP_SRC_PATH
     compile_env['NINEMLP_BUILD_MODE'] = 'compile_only'
     compile_env['NINEMLP_MPI'] = '1'   
-    subprocess.check_call('python %s --compile_only' % os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), 
+    subprocess.check_call('python %s --build compile_only' % 
+                                      os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), 
                                                                        shell=True, env=compile_env)
     # Set up command line and working directory
     run_dir = os.path.join(output_dir, 'src')
