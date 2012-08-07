@@ -18,7 +18,7 @@ import os.path
 if 'NINEMLP_MPI' in os.environ:
     import mpi4py #@UnresolvedImport @UnusedImport
     print "importing MPI"
-from backports import argparse
+import argparse
 import ninemlp
 import math
 import time
