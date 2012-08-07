@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <!-- The base network from which to build the main network -->
+    <network id="CerebellarGranularLayer">
+        <extensions>
+            <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
+        </extensions>
+        <!-- Populations -->
+        <population id="MossyFibers" cell="HH_cond_exp">
+            <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
+            <cellParameters>
+                <const name="gbar_Na" value="0.25 S/cm2" />
+                <const name="g_leak" value="0.0001666 S/cm2" />
+                <const name="e_rev_leak" value="-60 mV" />
+                <const name="diameter" value="10.0 um" />
+                <const name="length" value="1.0 um" />
+                <const name="Ra" value="123 Ohm/cm" />
+            </cellParameters>
+        </population>
+        <population id="MossyFiberInputs" cell="SpikeSourceArray">
+            <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
+        </population>
+        <projection id="MossyFiberInputs_MossyFibers">
+            <source id="MossyFiberInputs" />
+            <destination id="MossyFibers" synapse="excitatory" segment="source_section" />
+            <connection pattern="OneToOne" />
+            <weight pattern="Constant" value="0.01"/>
+            <delay pattern="Constant" value="0.05"/>            
+        </projection>
+    </network>
+</nineml>

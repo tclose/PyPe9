@@ -31,8 +31,6 @@ else:
     os.environ['PATH'] += os.pathsep + '/opt/NEURON-7.2/x86_64/bin' # Sorry this is the path on my machine (to save me having to set the environment variable in eclipse)
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
-NETWORK_XML_LOCATION = os.path.join(PROJECT_PATH, 'xml/cerebellum', 'fabios_network.xml')
-print "NETWORK_XML_LOCATION: %s" % NETWORK_XML_LOCATION
 
 parser = argparse.ArgumentParser(description='A script to ')
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -50,7 +48,15 @@ parser.add_argument('--save_connections', type=str, default=None, help='A path i
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
 parser.add_argument('--save_v', action='store_true', help='Save voltage trace as well as spike data')
+parser.add_argument('--debug', action='store_true', help='Uses ''debug_fabios.xml'' instead')
 args = parser.parse_args()
+
+if args.debug:
+    xml_filename = 'debug_fabios.xml'
+else:
+    xml_filename = 'fabios_network.xml'
+    
+network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)
 
 if not args.stim_seed:
     stim_seed = long(time.time() * 256)
@@ -71,7 +77,7 @@ setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@Undefin
 
 print "Building network"
 
-net = Network(NETWORK_XML_LOCATION) #@UndefinedVariable
+net = Network(network_xml_location) #@UndefinedVariable
 
 if args.build == 'compile_only':
     print "Compiled Fabio's Network and now exiting ('--build' option was set to 'compile_only')"
