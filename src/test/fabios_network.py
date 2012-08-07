@@ -49,9 +49,13 @@ parser.add_argument('--save_connections', type=str, default=None, help='A path i
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
 parser.add_argument('--save_v', action='store_true', help='Save voltage trace as well as spike data')
+parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 args = parser.parse_args()
 
-xml_filename = 'fabios_network.xml'
+if args.debug:
+    xml_filename = 'debug_fabios.xml'
+else:
+    xml_filename = 'fabios_network.xml'
     
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)
 
