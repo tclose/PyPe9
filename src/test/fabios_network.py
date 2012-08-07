@@ -21,6 +21,7 @@ if 'NINEMLP_MPI' in os.environ:
 from backports import argparse
 import ninemlp
 import math
+import time
 #from pyNN.random import RandomDistribution, NumpyRNG
 import numpy.random
 
@@ -47,6 +48,7 @@ parser.add_argument('--timestep', type=float, default=0.00005, help='The timeste
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
+parser.add_argument('--save_v', action='store_true', help='Save voltage trace as well as spike data')
 args = parser.parse_args()
 
 if not args.stim_seed:
@@ -94,7 +96,7 @@ else:
 
 for pop in net.all_populations():
     record(pop, args.output + "." + pop.label + ".spikes") #@UndefinedVariable
-    if pop.label != 'MossyFiberInputs':
+    if args.save_v and pop.label != 'MossyFiberInputs':
         record_v(pop, args.output + "." + pop.label + ".v") #@UndefinedVariable
 
 print "Final Network is..."
