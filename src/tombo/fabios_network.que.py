@@ -69,36 +69,39 @@ if args.legacy_hoc:
 for directory in DIRS_TO_COPY:
     shutil.copytree(os.path.join(code_dir,directory), os.path.join(output_dir,directory), symlinks=True)
 
-# Set path variables
+# Specify path variables
 PATH ='/apps/python/272/bin:/apps/DeschutterU/NEURON-7.2/x86_64/bin:/opt/mpi/gnu/openmpi-1.4.3/bin'
 PYTHONPATH = os.path.join(output_dir, 'src')
 LD_LIBRARY_PATH = '/opt/mpi/gnu/openmpi-1.4.3/lib'
 NINEMLP_SRC_PATH = os.path.join(output_dir, 'src')
 
-#Compile network
-os.environ['PATH'] = PATH + os.pathsep + os.environ['PATH']
-sys.path.append(PYTHONPATH)
-os.environ['LD_LIBRARY_PATH '] = LD_LIBRARY_PATH 
-os.environ['NINEMLP_SRC_PATH'] = NINEMLP_SRC_PATH
-os.environ['NINEMLP_BUILD_MODE'] = 'compile_only'
-os.environ['NINEMLP_MPI'] = '1'
-
 print "Compiling required objects"
 
 if not args.legacy_hoc:
-    subprocess.check_call('python %s --compile_only' % os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), shell=True)
+    #Compile network
+    compile_env = os.environ.copy()
+    compile_env['PATH'] = PATH + os.pathsep + os.environ['PATH']
+    compile_env['PYTHONPATH'] = PYTHONPATH
+    compile_env['LD_LIBRARY_PATH '] = LD_LIBRARY_PATH 
+    compile_env['NINEMLP_SRC_PATH'] = NINEMLP_SRC_PATH
+    compile_env['NINEMLP_BUILD_MODE'] = 'compile_only'
+    compile_env['NINEMLP_MPI'] = '1'   
+    subprocess.check_call('python %s --compile_only' % os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), 
+                                                                       shell=True, env=compile_env)
+    # Set up command line and working directory
     run_dir = os.path.join(output_dir, 'src')
-    cmd_line = "time mpirun python test/{script_name}.py --output {output_dir}/output_activity --time {time} \
-    --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} --simulator {simulator} \
-    --timestep {timestep} --stim_seed {stim_seed}".format(script_name=SCRIPT_NAME,
-                                                          output_dir=output_dir,
-                                                          mf_rate=args.mf_rate, 
-                                                          start_input=args.start_input, 
-                                                          time=args.time, 
-                                                          min_delay=args.min_delay, 
-                                                          simulator=args.simulator, 
-                                                          timestep=args.timestep, 
-                                                          stim_seed=stim_seed, np=np)
+    cmd_line = "time mpirun python test/{script_name}.py --output {output_dir}/output_activity \
+--time {time}  --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} \
+--simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}".format(
+                                                                      script_name=SCRIPT_NAME,
+                                                                      output_dir=output_dir,
+                                                                      mf_rate=args.mf_rate, 
+                                                                      start_input=args.start_input, 
+                                                                      time=args.time, 
+                                                                      min_delay=args.min_delay, 
+                                                                      simulator=args.simulator, 
+                                                                      timestep=args.timestep, 
+                                                                      stim_seed=stim_seed, np=np)
 else:
     run_dir = os.path.join(output_dir, 'external_refs/fabios_network')
     os.chdir(run_dir)
