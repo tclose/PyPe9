@@ -31,7 +31,6 @@ parser.add_argument('--timestep', type=float, default=0.001, help='The timestep 
 parser.add_argument('--stim_seed', default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--num_processes', type=int, default=96, help='The the number of processes to use for the simulation (default: %(default)s)')
 parser.add_argument('--legacy_hoc', action='store_true', help="If this flag is passed, then the old legacy code is run instead")
-parser.add_argument('--username', type=str, default=None, help='The username with which to run the script with (specifies the appropriate folder in /work directory')
 args = parser.parse_args()
 
 np = args.num_processes
@@ -44,27 +43,9 @@ else:
 #Name of the script to run
 SCRIPT_NAME = 'fabios_network'
 
-# Set directory to copy files to when completed process
-OUTPUT_DIR = os.path.join(os.environ['HOME'], 'Output')
-
-if args.username:
-    username = args.username
-else:
-    username = os.getlogin()
-
-DESCHUTTER_UNIT = ['tclose', 'mnegrello', 'raikov', 'dguo', 'shyamkumar']
-DOYA_UNIT = ['otsuka','jun-y', 'shauno']
-
-if username in DESCHUTTER_UNIT:
-    unit_dir = 'DeSchutterU'
-elif username in DOYA_UNIT:
-    unit_dir = 'DoyaU'
-else:
-    raise Exception("Unrecognised user '%s', please edit tombo/fabios_network.py to specifiy which unit they belong to")
-
 # Automatically generate paths
 time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs
-work_dir = os.path.join('work', unit_dir, username, SCRIPT_NAME + "." + time_str + ".1") # Working directory path
+work_dir = os.path.join(os.environ['HOME'], 'Output', SCRIPT_NAME + "." + time_str + ".1") # Working directory path
 code_dir = os.path.abspath(os.path.join(os.path.basename(__file__), '..')) # Root directory of the project code
 
 #Ensure that working directory is unique
@@ -177,15 +158,9 @@ cd {run_dir}
 
 echo "==============Mpirun has ended===============" 
 
-echo "============== Copying files to output directory '{output_dir}/{work_dir}' ===============" 
-
-cp -R {work_dir} {output_dir}
-
-echo "============== Done ===============" 
-
 """.format(work_dir=work_dir, path=PATH, pythonpath=PYTHONPATH, 
   ld_library_path=LD_LIBRARY_PATH, ninemlp_src_path=NINEMLP_SRC_PATH, np=np, run_dir=run_dir, 
-  cmd_line=cmd_line, output_dir=OUTPUT_DIR))
+  cmd_line=cmd_line))
 f.close()
 
 # Submit job
