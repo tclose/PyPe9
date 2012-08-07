@@ -32,6 +32,7 @@ else:
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 NETWORK_XML_LOCATION = os.path.join(PROJECT_PATH, 'xml/cerebellum', 'fabios_network.xml')
+print "NETWORK_XML_LOCATION: %s" % NETWORK_XML_LOCATION
 
 parser = argparse.ArgumentParser(description='A script to ')
 parser.add_argument('--simulator', type=str, default='neuron',
