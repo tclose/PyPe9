@@ -50,7 +50,7 @@ parser.add_argument('--para_unsafe', action='store_true', help='If set the netwo
 parser.add_argument('--save_v', action='store_true', help='Save voltage trace as well as spike data')
 args = parser.parse_args()
 
-xml_filename = 'fabios_network.xml'
+xml_filename = 'debug_fabios.xml'
     
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)
 

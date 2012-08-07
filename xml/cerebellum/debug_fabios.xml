@@ -24,7 +24,7 @@
             <source id="MossyFiberInputs" />
             <destination id="MossyFibers" synapse="excitatory" segment="source_section" />
             <connection pattern="OneToOne" />
-            <weight pattern="Constant" value="0.01"/>
+            <weight pattern="Constant" value="1"/>
             <delay pattern="Constant" value="0.05"/>            
         </projection>
     </network>
