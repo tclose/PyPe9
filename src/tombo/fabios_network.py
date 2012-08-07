@@ -43,9 +43,12 @@ else:
 #Name of the script to run
 SCRIPT_NAME = 'fabios_network'
 
+# Set directory to copy files to when completed process
+OUTPUT_DIR = os.path.join(os.environ['HOME'], 'Output')
+
 # Automatically generate paths
 time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs
-output_dir = os.path.join(os.environ['HOME'], 'Output', SCRIPT_NAME + "." + time_str + ".1") # Working directory path
+work_dir = os.path.join('work', os.getlogin(), SCRIPT_NAME + "." + time_str + ".1") # Working directory path
 code_dir = os.path.abspath(os.path.join(os.path.basename(__file__), '..')) # Root directory of the project code
 
 #Ensure that working directory is unique
@@ -53,27 +56,27 @@ created_directory=False
 count = 1
 while not created_directory:
     try:
-        os.makedirs(output_dir) 
+        os.makedirs(work_dir) 
         created_directory=True
     except IOError as e:
         count += 1
         if count > 1000:
-            print "Something has gone wrong, can't create directory '%s', maybe check permissions" % output_dir
+            print "Something has gone wrong, can't create directory '%s', maybe check permissions" % work_dir
             raise e
-        output_dir[-1] = str(count)
+        work_dir[-1] = str(count)
 
 # Copy snapshot of code directory and network description to working directory
 DIRS_TO_COPY = ['src', 'xml']
 if args.legacy_hoc:
     DIRS_TO_COPY.append('external_refs/fabios_network')
 for directory in DIRS_TO_COPY:
-    shutil.copytree(os.path.join(code_dir,directory), os.path.join(output_dir,directory), symlinks=True)
+    shutil.copytree(os.path.join(code_dir,directory), os.path.join(work_dir,directory), symlinks=True)
 
 # Specify path variables
 PATH ='/apps/python/272/bin:/apps/DeschutterU/NEURON-7.2/x86_64/bin:/opt/mpi/gnu/openmpi-1.4.3/bin'
-PYTHONPATH = os.path.join(output_dir, 'src')
+PYTHONPATH = os.path.join(work_dir, 'src')
 LD_LIBRARY_PATH = '/opt/mpi/gnu/openmpi-1.4.3/lib'
-NINEMLP_SRC_PATH = os.path.join(output_dir, 'src')
+NINEMLP_SRC_PATH = os.path.join(work_dir, 'src')
 
 print "Compiling required objects"
 
@@ -87,15 +90,15 @@ if not args.legacy_hoc:
     compile_env['NINEMLP_BUILD_MODE'] = 'compile_only'
     compile_env['NINEMLP_MPI'] = '1'   
     subprocess.check_call('python %s --build compile_only' % 
-                                      os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), 
+                                      os.path.join(work_dir,'src', 'test', SCRIPT_NAME + '.py'), 
                                                                        shell=True, env=compile_env)
     # Set up command line and working directory
-    run_dir = os.path.join(output_dir, 'src')
-    cmd_line = "time mpirun python test/{script_name}.py --output {output_dir}/output_activity \
+    run_dir = os.path.join(work_dir, 'src')
+    cmd_line = "time mpirun python test/{script_name}.py --output {work_dir}/output_activity \
 --time {time}  --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} \
 --simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}".format(
                                                                       script_name=SCRIPT_NAME,
-                                                                      output_dir=output_dir,
+                                                                      work_dir=work_dir,
                                                                       mf_rate=args.mf_rate, 
                                                                       start_input=args.start_input, 
                                                                       time=args.time, 
@@ -104,13 +107,13 @@ if not args.legacy_hoc:
                                                                       timestep=args.timestep, 
                                                                       stim_seed=stim_seed, np=np)
 else:
-    run_dir = os.path.join(output_dir, 'external_refs/fabios_network')
+    run_dir = os.path.join(work_dir, 'external_refs/fabios_network')
     os.chdir(run_dir)
     subprocess.call('nrnivmodl', shell=True)
     cmd_line = "time mpirun nrniv network.hoc"
 
 #Create jobscript
-jobscript_path = os.path.join(output_dir, SCRIPT_NAME + '.job.sh')
+jobscript_path = os.path.join(work_dir, SCRIPT_NAME + '.job.sh')
 f = open(jobscript_path, 'w')
 f.write("""#!/usr/bin/env sh
 
@@ -121,8 +124,8 @@ f.write("""#!/usr/bin/env sh
 #$ -j y
 
 # Standard output and standard error files
-#$ -o {output_dir}/output
-#$ -e {output_dir}/output
+#$ -o {work_dir}/output
+#$ -e {work_dir}/output
 
 # Name of the queue
 #$ -q longP
@@ -157,14 +160,21 @@ cd {run_dir}
 {cmd_line}
 
 echo "==============Mpirun has ended===============" 
-""".format(output_dir=output_dir, path=PATH, pythonpath=PYTHONPATH, 
+
+echo "============== Copying files to output directory '{output_dir}/{work_dir}' ===============" 
+
+cp -R {work_dir} {output_dir}
+
+echo "============== Done ===============" 
+
+""".format(work_dir=work_dir, path=PATH, pythonpath=PYTHONPATH, 
   ld_library_path=LD_LIBRARY_PATH, ninemlp_src_path=NINEMLP_SRC_PATH, np=np, run_dir=run_dir, 
-  cmd_line=cmd_line))
+  cmd_line=cmd_line, output_dir=OUTPUT_DIR))
 f.close()
 
 # Submit job
 print "Submitting job %s" % jobscript_path
 subprocess.call('qsub %s' % jobscript_path, shell=True)
 print "The output of this job can be viewed by:"
-print "less " + os.path.join(output_dir, 'output')
+print "less " + os.path.join(work_dir, 'output')
             
