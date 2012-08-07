@@ -86,12 +86,7 @@ os.environ['NINEMLP_MPI'] = '1'
 print "Compiling required objects"
 
 if not args.legacy_hoc:
-    try:
-        execfile(os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), [], [])
-    except SystemExit as exit_status:
-        print SCRIPT_NAME
-        if exit_status:
-            raise exit_status
+    subprocess.check_call('python %s --compile_only' % os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), shell=True)
     run_dir = os.path.join(output_dir, 'src')
     cmd_line = "time mpirun python test/{script_name}.py --output {output_dir}/output_activity --time {time} \
     --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} --simulator {simulator} \
