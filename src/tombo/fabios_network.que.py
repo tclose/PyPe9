@@ -87,7 +87,7 @@ print "Compiling required objects"
 
 if not args.legacy_hoc:
     try:
-        execfile(os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'))
+        execfile(os.path.join(output_dir,'src', 'test', SCRIPT_NAME + '.py'), [], [])
     except SystemExit as exit_status:
         print SCRIPT_NAME
         if exit_status:
