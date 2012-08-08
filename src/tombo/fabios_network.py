@@ -46,7 +46,7 @@ else:
 SCRIPT_NAME = 'fabios_network'
 
 # Set directory to copy files to when completed process
-OUTPUT_DIR = os.path.join(os.environ['HOME'], 'Output')
+OUTPUT_PARENT_DIR = os.path.join(os.environ['HOME'], 'Output')
 
 if args.username:
     username = args.username
@@ -80,6 +80,8 @@ while not created_directory:
             print "Something has gone wrong, can't create directory '%s' after 1000 attempts" % work_dir
             raise e
         work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) # Replace old count at the end of work directory with new count
+
+output_dir = os.path.join(OUTPUT_PARENT_DIR, os.path.split(work_dir)[1])
 
 # Copy snapshot of code directory and network description to working directory
 DIRS_TO_COPY = ['src', 'xml']
@@ -146,8 +148,8 @@ f.write("""#!/usr/bin/env sh
 #$ -j y
 
 # Standard output and standard error files
-#$ -o {work_dir}/output
-#$ -e {work_dir}/output
+#$ -o {work_dir}/output_stream
+#$ -e {work_dir}/output_stream
 
 # Name of the queue
 #$ -q longP
@@ -183,23 +185,26 @@ cd {run_dir}
 
 echo "==============Mpirun has ended===============" 
 
-echo "Moving files to output directory '{output_path}' and cleaning work directory" 
+echo "Moving files to output directory '{output_dir}' and cleaning work directory" 
 
-mv {work_dir}/output {output_path}
-mv {work_dir}/{jobscript_path} {output_path}/job
+mv {work_dir}/output {output_dir}
+mv {work_dir}/{jobscript_path} {output_dir}/job
+mv {work_dir}/output_stream {output_dir}/output
 rm -r {work_dir}
 
 echo "============== Done ===============" 
 
 """.format(work_dir=work_dir, path=PATH, pythonpath=PYTHONPATH, 
   ld_library_path=LD_LIBRARY_PATH, ninemlp_src_path=NINEMLP_SRC_PATH, np=np, run_dir=run_dir, 
-  cmd_line=cmd_line, output_path=os.path.join(OUTPUT_DIR, os.path.split(work_dir)[1])), 
-  jobscript_path=jobscript_path)
+  cmd_line=cmd_line, output_dir=output_dir, 
+  jobscript_path=jobscript_path))
 f.close()
 
 # Submit job
 print "Submitting job %s" % jobscript_path
 subprocess.call('qsub %s' % jobscript_path, shell=True)
-print "The output of this job can be viewed by:"
-print "less " + os.path.join(work_dir, 'output')
+print "While the job is running, its output stream can be viewed by:"
+print "less " + os.path.join(work_dir, 'output_stream')
+print "Once completed the output files (including the output stream and job script) of this job will be copied to:"
+print output_dir
             

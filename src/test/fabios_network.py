@@ -102,9 +102,9 @@ else:
                                                                     (args.start_input, args.time)
 
 for pop in net.all_populations():
-    record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
+    record(pop, args.output_prefix + pop.label + ".spikes") #@UndefinedVariable
     if args.save_v and pop.label != 'MossyFiberInputs':
-        record_v(pop, args.output + "." + pop.label + ".v") #@UndefinedVariable
+        record_v(pop, args.output_prefix + "." + pop.label + ".v") #@UndefinedVariable
 
 print "Final Network is..."
 
