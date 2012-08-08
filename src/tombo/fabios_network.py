@@ -57,7 +57,7 @@ DESCHUTTER_UNIT = ['tclose', 'mnegrello', 'raikov', 'dguo', 'shyamkumar']
 DOYA_UNIT = ['otsuka','jun-y', 'shauno']
 
 if username in DESCHUTTER_UNIT:
-    unit_dir = 'DeSchutterU'
+    unit_dir = 'DeschutterU'
 elif username in DOYA_UNIT:
     unit_dir = 'DoyaU'
 else:
@@ -73,14 +73,13 @@ created_directory=False
 count = 1
 while not created_directory:
     try:
-        os.makedirs(work_dir) 
-        created_directory=True
+        created_directory = not os.makedirs(work_dir) 
     except IOError as e:
         count += 1
         if count > 1000:
-            print "Something has gone wrong, can't create directory '%s', maybe check permissions" % work_dir
+            print "Something has gone wrong, can't create directory '%s' after 1000 attempts" % work_dir
             raise e
-        work_dir[-1] = str(count)
+        work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) # Replace old count at the end of work directory with new count
 
 # Copy snapshot of code directory and network description to working directory
 DIRS_TO_COPY = ['src', 'xml']
@@ -180,15 +179,15 @@ cd {run_dir}
 
 echo "==============Mpirun has ended===============" 
 
-echo "============== Copying files to output directory '{output_dir}/{work_dir}' ===============" 
+echo "Moving files to output directory '{output_path}'" 
 
-cp -R {work_dir} {output_dir}
+mv {work_dir} {output_dir}
 
 echo "============== Done ===============" 
 
 """.format(work_dir=work_dir, path=PATH, pythonpath=PYTHONPATH, 
   ld_library_path=LD_LIBRARY_PATH, ninemlp_src_path=NINEMLP_SRC_PATH, np=np, run_dir=run_dir, 
-  cmd_line=cmd_line, output_dir=OUTPUT_DIR))
+  cmd_line=cmd_line, output_dir=OUTPUT_DIR, output_path=os.path.join(OUTPUT_DIR, os.path.split(work_dir)[1])))
 f.close()
 
 # Submit job
