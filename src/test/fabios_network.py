@@ -95,7 +95,7 @@ if stim_range >= 0.0:
     num_spikes = stim_range / mean_interval
     num_spikes = int(num_spikes + math.exp(-num_spikes / 10.0) * 10.0) # Add extra spikes to account for variability in numbers
     mf_spike_intervals = numpy.random.exponential(mean_interval, size=(mossy_fiber_inputs.size, num_spikes))
-    mf_spike_times = numpy.cumsum(mf_spike_intervals, axis=1)
+    mf_spike_times = numpy.cumsum(mf_spike_intervals, axis=1) + args.start_input
     mossy_fiber_inputs.tset('spike_times', mf_spike_times)
 else:
     print "Warning, stimulation start (%f) is after end of experiment (%f)" % \
