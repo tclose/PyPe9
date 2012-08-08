@@ -66,7 +66,7 @@ else:
 # Automatically generate paths
 time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs
 work_dir = os.path.join('/work', unit_dir, username, SCRIPT_NAME + "." + time_str + ".1") # Working directory path
-code_dir = os.path.abspath(os.path.join(os.path.basename(__file__), '..')) # Root directory of the project code
+project_dir = os.path.abspath(os.path.join(os.path.basename(__file__), '..')) # Root directory of the project code
 
 #Ensure that working directory is unique
 created_directory=False
@@ -86,7 +86,11 @@ DIRS_TO_COPY = ['src', 'xml']
 if args.legacy_hoc:
     DIRS_TO_COPY.append('external_refs/fabios_network')
 for directory in DIRS_TO_COPY:
-    shutil.copytree(os.path.join(code_dir,directory), os.path.join(work_dir,directory), symlinks=True)
+    shutil.copytree(os.path.join(project_dir,directory), os.path.join(work_dir,directory), symlinks=True)
+# Make output directory for the generated files
+os.mkdir(os.path.join(work_dir,'output'))
+# Save the git revision in the output folder for reference
+subprocess.call('cd %s; git rev-parse HEAD > %s' % (project_dir, os.path.join(work_dir,'output', 'git_revision')), shell=True)
 
 # Specify path variables
 PATH ='/apps/python/272/bin:/apps/DeschutterU/NEURON-7.2/x86_64/bin:/opt/mpi/gnu/openmpi-1.4.3/bin'
@@ -110,7 +114,7 @@ if not args.legacy_hoc:
                                                                        shell=True, env=compile_env)
     # Set up command line and working directory
     run_dir = os.path.join(work_dir, 'src')
-    cmd_line = "time mpirun python test/{script_name}.py --output {work_dir}/output_activity \
+    cmd_line = "time mpirun python test/{script_name}.py --output {work_dir}/output/ \
 --time {time}  --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} \
 --simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}".format(
                                                                       script_name=SCRIPT_NAME,
@@ -123,7 +127,7 @@ if not args.legacy_hoc:
                                                                       timestep=args.timestep, 
                                                                       stim_seed=stim_seed, np=np)
     if args.debug:
-      cmd_line += " --debug"
+        cmd_line += " --debug"
 else:
     run_dir = os.path.join(work_dir, 'external_refs/fabios_network')
     os.chdir(run_dir)
@@ -131,7 +135,7 @@ else:
     cmd_line = "time mpirun nrniv network.hoc"
 
 #Create jobscript
-jobscript_path = os.path.join(work_dir, SCRIPT_NAME + '.job.sh')
+jobscript_path = os.path.join(work_dir, SCRIPT_NAME + '.job')
 f = open(jobscript_path, 'w')
 f.write("""#!/usr/bin/env sh
 
@@ -179,15 +183,18 @@ cd {run_dir}
 
 echo "==============Mpirun has ended===============" 
 
-echo "Moving files to output directory '{output_path}'" 
+echo "Moving files to output directory '{output_path}' and cleaning work directory" 
 
-mv {work_dir} {output_dir}
+mv {work_dir}/output {output_path}
+mv {work_dir}/{jobscript_path} {output_path}/job
+rm -r {work_dir}
 
 echo "============== Done ===============" 
 
 """.format(work_dir=work_dir, path=PATH, pythonpath=PYTHONPATH, 
   ld_library_path=LD_LIBRARY_PATH, ninemlp_src_path=NINEMLP_SRC_PATH, np=np, run_dir=run_dir, 
-  cmd_line=cmd_line, output_dir=OUTPUT_DIR, output_path=os.path.join(OUTPUT_DIR, os.path.split(work_dir)[1])))
+  cmd_line=cmd_line, output_path=os.path.join(OUTPUT_DIR, os.path.split(work_dir)[1])), 
+  jobscript_path=jobscript_path)
 f.close()
 
 # Submit job
