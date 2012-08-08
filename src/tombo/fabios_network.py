@@ -188,7 +188,7 @@ echo "==============Mpirun has ended==============="
 echo "Moving files to output directory '{output_dir}' and cleaning work directory" 
 
 mv {work_dir}/output {output_dir}
-mv {work_dir}/{jobscript_path} {output_dir}/job
+mv {jobscript_path} {output_dir}/job
 mv {work_dir}/output_stream {output_dir}/output
 rm -r {work_dir}
 
