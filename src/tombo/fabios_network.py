@@ -1,13 +1,12 @@
 #!/usr/bin/env python
+"""
+ This script prepares the environment for the Sun Grid Engine batch script to run in by making a
+ snapshot of the code base at the start of the run, generating a jobscript and sending it to the job 
+que
 
-####################################################################################################
-# This script prepares the environment for the Sun Grid Engine batch script to run in by making a
-# snapshot of the code base at the start of the run, generating a jobscript and sending it to the job que
-#
-# Author: Tom Close (tclose@oist.jp)
-# Created: 6/8/2012
-# 
-####################################################################################################
+ Author: Tom Close (tclose@oist.jp)
+ Created: 6/8/2012
+"""
 
 import sys
 
@@ -20,7 +19,7 @@ import shutil
 import subprocess
 import argparse
 
-parser = argparse.ArgumentParser(description='A script to ')
+parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
 parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
