@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 """
+  This script creates and runs the Granular network that Fabio created for his 2011 paper.
 
-  This script performs a comparison between the performance of networks specified with NINEML+ and
-  the legacy hoc code.
-
-  @file comparison.py
   @author Tom Close
 
 """
@@ -33,7 +30,7 @@ else:
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
-parser = argparse.ArgumentParser(description='Creates and runs fabios_network')
+parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
 parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
