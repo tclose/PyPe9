@@ -31,7 +31,7 @@ parser.add_argument('--output_parent', default=None, type=str, help='The parent 
 args = parser.parse_args()
 
 # Create work directory and get path for output directory
-work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_parent, args.username)
+work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_parent, username=args.username)
 
 #Compile network
 tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
