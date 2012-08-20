@@ -30,13 +30,14 @@ parser.add_argument('--debug', action='store_true', help='Loads a stripped down 
 parser.add_argument('--output_parent', default=None, type=str, help='The output parent directory in which the output directory will be created (defaults to $HOME/Output)')
 args = parser.parse_args()
 
+
 # Create work directory and get path for output directory
 work_dir, output_dir = create_work_dir(SCRIPT_NAME, args.output_parent, args.username)
 
 #Compile network
 compile_ninemlp(SCRIPT_NAME, work_dir)
 
-# Set command line that runs the simulation script
+# Set up command to run the script
 cmd_line = "python src/simulate/{script_name}.py --output {work_dir}/output/ \
 --time {time}  --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} \
 --simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}".format(
