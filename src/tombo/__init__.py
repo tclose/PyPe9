@@ -11,7 +11,6 @@ import os
 import time
 import shutil
 import subprocess
-import os.environ
 from copy import copy
 
 UNIT_MEMBERS = {'deschutter': ['tclose', 'mnegrello', 'raikov', 'dguo', 'shyamkumar'],
