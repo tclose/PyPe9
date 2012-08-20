@@ -11,7 +11,7 @@
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'fabios_network'
 
-from tombo import * #@UnusedWildImport
+import tombo
 import argparse
 
 parser = argparse.ArgumentParser(description=__doc__)
@@ -30,12 +30,11 @@ parser.add_argument('--debug', action='store_true', help='Loads a stripped down 
 parser.add_argument('--output_parent', default=None, type=str, help='The output parent directory in which the output directory will be created (defaults to $HOME/Output)')
 args = parser.parse_args()
 
-
 # Create work directory and get path for output directory
-work_dir, output_dir = create_work_dir(SCRIPT_NAME, args.output_parent, args.username)
+work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_parent, args.username)
 
 #Compile network
-compile_ninemlp(SCRIPT_NAME, work_dir)
+tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
 
 # Set up command to run the script
 cmd_line = "python src/simulate/{script_name}.py --output {work_dir}/output/ \
@@ -49,9 +48,9 @@ cmd_line = "python src/simulate/{script_name}.py --output {work_dir}/output/ \
                                                                   min_delay=args.min_delay,
                                                                   simulator=args.simulator,
                                                                   timestep=args.timestep,
-                                                                  stim_seed=create_seed(args.stim_seed))
+                                                                  stim_seed=tombo.create_seed(args.stim_seed))
 if args.debug:
     cmd_line += " --debug"
 
 # Submit job to que
-submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir)
+tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir)
