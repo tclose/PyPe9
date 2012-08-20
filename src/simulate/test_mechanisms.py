@@ -18,7 +18,7 @@
 import os.path
 from backports import argparse
 import math
-import test.mechs #@UnusedImport
+import simulate.mechs #@UnusedImport
 import numpy as np
 import pickle
 try:
@@ -28,7 +28,7 @@ except:
 from ninemlp.utilities.nmodl import build as build_nmodl
 from ninemlp import SRC_PATH
 default_nmodl_path = os.path.join(SRC_PATH, 'test', 'mechs')
-from test import plot_simulation, Recording
+from simulate import plot_simulation, Recording
 import neuron
 
 

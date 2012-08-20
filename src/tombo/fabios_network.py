@@ -116,7 +116,7 @@ if not args.legacy_hoc:
                                                                        shell=True, env=compile_env)
     # Set up command line and working directory
     run_dir = os.path.join(work_dir, 'src')
-    cmd_line = "time mpirun python test/{script_name}.py --output {work_dir}/output/ \
+    cmd_line = "time mpirun python simulate/{script_name}.py --output {work_dir}/output/ \
 --time {time}  --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} \
 --simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}".format(
                                                                       script_name=SCRIPT_NAME,
