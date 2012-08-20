@@ -24,7 +24,6 @@ parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum 
 parser.add_argument('--timestep', type=float, default=0.001, help='The time step used for the simulation (default: %(default)s)')
 parser.add_argument('--stim_seed', default=None, help='The seed passed to the stimulated spikes (defaults to time stamp)')
 parser.add_argument('--np', type=int, default=96, help='The the number of processes to use for the simulation (default: %(default)s)')
-parser.add_argument('--legacy_hoc', action='store_true', help="If this flag is passed, then the old legacy code is run instead")
 parser.add_argument('--username', type=str, default=None, help='The username with which to run the script with to specify the appropriate folder in /work directory (defaults to user login)')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--output_parent', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
