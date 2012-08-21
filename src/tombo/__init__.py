@@ -88,7 +88,7 @@ def init_work_dir(work_dir, required_dirs, time_str):
     subprocess.call('cd %s; git rev-parse HEAD > %s' % (get_project_dir(), os.path.join(work_dir, 'output', 'git_revision')), shell=True)
     # Write time string to file for future reference
     f = open(os.path.join(work_dir, 'output', 'time_stamp'), 'w')
-    f.write(time_str)
+    f.write(time_str + '\n')
     f.close()
     
 
