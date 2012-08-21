@@ -21,7 +21,7 @@
             </cellParameters>
         </population>
         <population id="Golgis" cell="Golgi">
-            <layout type="Extension" engine="Brep" id="Golgis" />
+            <layout type="Extension" engine="Brep" id="debug_Golgis" />
         </population>
         <population id="MossyFiberInputs" cell="SpikeSourceArray">
             <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
@@ -54,7 +54,7 @@
         <projection id="Granules_Golgis">
             <source id="Granules" />
             <destination id="Golgis" synapse="GABA" segment="soma" />
-            <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />
+            <connection pattern="Extension" engine="Brep" id="debug_Granule-Golgi" />
         </projection>     
     </network>
 </nineml>
