@@ -39,5 +39,14 @@
                 rate="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
         </projection>
+        <projection id="MossyFibers_Granules_NMDA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="NMDA" segment="soma" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
+                number="25" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="0.2244 uS"
+                rate="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
+        </projection>        
     </network>
 </nineml>
