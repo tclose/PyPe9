@@ -36,9 +36,9 @@ work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_parent, us
 tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
 
 # Set up command to run the script
-cmd_line = "python src/simulate/{script_name}.py --output {work_dir}/output/ \
+cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ \
 --time {time}  --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} \
---simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}".format(
+--simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}\n".format(
                                                                   script_name=SCRIPT_NAME,
                                                                   work_dir=work_dir,
                                                                   mf_rate=args.mf_rate,

@@ -55,7 +55,7 @@ def create_work_dir(script_name, output_parent_dir=None, required_dirs=['src', '
         raise Exception("Unrecognised user '%s', please edit tombo/fabios_network.py to specifiy which unit they belong to in the tombo.UNIT_MEMBERS directory.")
     # Automatically generate paths
     time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs    
-    work_dir = os.path.join('/work', unit_dir, script_name + "." + time_str + ".1") # Working directory path
+    work_dir = os.path.join('/work', unit_dir, username, script_name + "." + time_str + ".1") # Working directory path
     #Ensure that working directory is unique
     created_work_dir=False
     count = 1
@@ -131,12 +131,12 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate'):
     
 
 
-def submit_job(script_name, cmd_line, np, work_dir, output_dir, env=None, copy_to_output=['xml'], strip_build_from_copy=True):
+def submit_job(script_name, cmds, np, work_dir, output_dir, env=None, copy_to_output=['xml'], strip_build_from_copy=True):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
     
     @param script_name: The name of the script (used to give a meaningful name to the job)
-    @param cmd_line: The command to run on the cluster
+    @param cmds: The commands to run on the cluster
     @param np: The number of processors to request for the job
     @param work_dir: The working directory to run the script from
     @param output_dir: The output directory to copy the results to
@@ -151,7 +151,7 @@ def submit_job(script_name, cmd_line, np, work_dir, output_dir, env=None, copy_t
     copy_cmd = ''
     for directory in copy_to_output:
         if strip_build_from_copy:
-            copy_cmd+='find {work_dir}/{directory} -name build -exec rm -r {} \; 2>/dev/null\n'.format(work_dir=work_dir, directory=directory)
+            copy_cmd+='find {work_dir}/{directory} -name build -exec rm -r {{}} \; 2>/dev/null\n'.format(work_dir=work_dir, directory=directory)
         copy_cmd+='mv {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
     #Create jobscript
     jobscript_path = os.path.join(work_dir, script_name + '.job')
@@ -198,33 +198,22 @@ export NINEMLP_SRC_PATH={ninemlp_src_path}
 export NINEMLP_BUILD_MODE='lazy'
 export NINEMLP_MPI=1
 
-echo "==============Starting mpirun===============" 
+echo "============== Starting mpirun ===============" 
 
 cd {work_dir}
-time mpirun {cmd_line}
+{cmds}
 
-echo "==============Mpirun has ended===============" 
-
-echo "Moving files to output directory '{output_dir}' and cleaning work directory" 
-
+echo "============== Mpirun has ended - Copying files to output directory '{output_dir}' =============="
 mv {work_dir}/output {output_dir}
-echo "here-2"
-mv {jobscript_path} {output_dir}/job
-echo "here-1"
-mv {work_dir}/output_stream {output_dir}/output
-echo "here"
+cp {jobscript_path} {output_dir}/job
+cp {work_dir}/output_stream {output_dir}/output
 {copy_cmd}
-echo "here2"
-rm -r {work_dir}
-
 echo "============== Done ===============" 
-    
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=os.path.join(work_dir,'src'), np=np,
-      cmd_line=cmd_line, output_dir=output_dir, copy_cmd=copy_cmd,
+      cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
       jobscript_path=jobscript_path))
     f.close()
-    
     # Submit job
     print "Submitting job '%s' to que" % jobscript_path
     subprocess.check_call('qsub %s' % jobscript_path, shell=True)
