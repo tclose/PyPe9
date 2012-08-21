@@ -203,11 +203,14 @@ echo "============== Starting mpirun ==============="
 cd {work_dir}
 {cmds}
 
-echo "============== Mpirun has ended - Copying files to output directory '{output_dir}' =============="
+echo "============== Mpirun has ended =============="
+
+echo "Copying files to output directory '{output_dir}'"
 mv {work_dir}/output {output_dir}
 cp {jobscript_path} {output_dir}/job
 cp {work_dir}/output_stream {output_dir}/output
 {copy_cmd}
+
 echo "============== Done ===============" 
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=os.path.join(work_dir,'src'), np=np,
