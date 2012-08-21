@@ -20,6 +20,9 @@
                 <const name="Ra" value="123 Ohm/cm" />
             </cellParameters>
         </population>
+        <population id="Golgis" cell="Golgi">
+            <layout type="Extension" engine="Brep" id="Golgis" />
+        </population>
         <population id="MossyFiberInputs" cell="SpikeSourceArray">
             <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
         </population>
@@ -47,6 +50,11 @@
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="0.2244 uS"
                 rate="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
-        </projection>        
+        </projection>
+        <projection id="Granules_Golgis">
+            <source id="Granules" />
+            <destination id="Golgis" synapse="GABA" segment="soma" />
+            <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />
+        </projection>     
     </network>
 </nineml>
