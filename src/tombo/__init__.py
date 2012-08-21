@@ -120,12 +120,13 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate'):
     env['NINEMLP_BUILD_MODE'] = 'compile_only'
     env['NINEMLP_MPI'] = '1'
     print "Compiling required NINEML+ objects"
-#    subprocess.check_call('python %s --build compile_only' %
-#                                      os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
-#                                                                       shell=True, env=env)
+    subprocess.check_call('python %s --build compile_only' %
+                                      os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
+                                                                       shell=True, env=env)
     
 
-def submit_job(script_name, cmd_line, np, work_dir, output_dir, env=None, src_path=None, copy_to_output=['xml']):
+
+def submit_job(script_name, cmd_line, np, work_dir, output_dir, env=None, copy_to_output=['xml']):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
     
@@ -141,8 +142,6 @@ def submit_job(script_name, cmd_line, np, work_dir, output_dir, env=None, src_pa
         env = create_env(work_dir)
     else:
         env = copy(env)
-    if not src_path:
-        src_path = os.path.join(get_project_dir(), 'src')
     copy_cmd = ''
     for directory in copy_to_output:
         copy_cmd+='mv {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
@@ -168,10 +167,13 @@ def submit_job(script_name, cmd_line, np, work_dir, output_dir, env=None, src_pa
 #$ -pe openmpi {np}
 
 # Export the following env variables:
-#$ -v HOMEiven username (which defaults to login username)
+#$ -v HOME
 #$ -v PATH
 #$ -v PYTHONPATH
 #$ -v LD_LIBRARY_PATH
+#$ -v NINEMLP_SRC_PATH
+#$ -v NINEMLP_BUILD_MODE
+#$ -v NINEMLP_MPI
 #$ -v BREP_DEVEL
 #$ -v PARAMDIR
 #$ -v VERBOSE
@@ -206,14 +208,14 @@ rm -r {work_dir}
 echo "============== Done ===============" 
     
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
-      ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=src_path, np=np,
+      ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=os.path.join(work_dir,'src'), np=np,
       cmd_line=cmd_line, output_dir=output_dir, copy_cmd=copy_cmd,
       jobscript_path=jobscript_path))
     f.close()
     
     # Submit job
     print "Submitting job '%s' to que" % jobscript_path
-    #subprocess.check_call('qsub %s' % jobscript_path, shell=True)
+    subprocess.check_call('qsub %s' % jobscript_path, shell=True)
     print "Your job '%s' has been submitted" % jobscript_path
     print "While the job is running, its output stream can be viewed by:"
     print "less " + os.path.join(work_dir, 'output_stream')
