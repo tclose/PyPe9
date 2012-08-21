@@ -69,10 +69,10 @@ def create_work_dir(script_name, output_parent_dir=None, required_dirs=['src', '
                 raise e
             work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) # Replace old count at the end of work directory with new count
     output_dir = os.path.join(output_parent_dir, os.path.split(work_dir)[1])
-    init_work_dir(work_dir, required_dirs)   
+    init_work_dir(work_dir, required_dirs, time_str)   
     return work_dir, output_dir
 
-def init_work_dir(work_dir, required_dirs):
+def init_work_dir(work_dir, required_dirs, time_str):
     """
     Copies directories from the project directory to the work directory
     
@@ -86,6 +86,11 @@ def init_work_dir(work_dir, required_dirs):
     os.mkdir(os.path.join(work_dir, 'output'))
     # Save the git revision in the output folder for reference
     subprocess.call('cd %s; git rev-parse HEAD > %s' % (get_project_dir(), os.path.join(work_dir, 'output', 'git_revision')), shell=True)
+    # Write time string to file for future reference
+    f = open(os.path.join(work_dir, 'time_stamp'))
+    f.write(time_str)
+    f.close()
+    
 
 
 def create_env(work_dir):
@@ -200,9 +205,13 @@ echo "==============Mpirun has ended==============="
 echo "Moving files to output directory '{output_dir}' and cleaning work directory" 
 
 mv {work_dir}/output {output_dir}
+echo "here-2"
 mv {jobscript_path} {output_dir}/job
+echo "here-1"
 mv {work_dir}/output_stream {output_dir}/output
+echo "here"
 {copy_cmd}
+echo "here2"
 rm -r {work_dir}
 
 echo "============== Done ===============" 
