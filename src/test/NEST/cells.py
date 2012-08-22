@@ -17,7 +17,7 @@
 #######################################################################################
 
 
-from simulate.NEST import _BaseCell
+from test.NEST import _BaseCell
 
 class OneCompartmentCell(_BaseCell):
     """
