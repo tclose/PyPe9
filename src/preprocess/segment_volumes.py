@@ -18,7 +18,7 @@
 import math
 import argparse
 import numpy as np
-from visualisation.common import draw_bounding_box
+from visualisation import draw_bounding_box
 
 def main():
     """
