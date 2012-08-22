@@ -40,7 +40,7 @@ parser.add_argument('--timestep', type=float, default=0.001, help='The timestep 
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
-parser.add_argument('--volt_traces', type=list, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
+parser.add_argument('--volt_trace', nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 args = parser.parse_args()
 
@@ -97,9 +97,10 @@ for pop in net.all_populations():
     record(pop, args.output_prefix + pop.label + ".spikes") #@UndefinedVariable
 
 # Set up voltage traces    
-for pop_name, cell_id in args.volt_traces: 
-    cell = net.get_population(pop_name)[cell_id]
-    record_v(cell, args.output_prefix + "." + pop_name + "." + cell_id + ".v") #@UndefinedVariable
+#for pop_name, cell_id in args.volt_traces: 
+if args.volt_trace:
+    cell = net.get_population(args.volt_trace[0])[int(args.volt_trace[1])]
+    record_v(cell, args.output_prefix + "." + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
 
 print "Final Network is..."
 
