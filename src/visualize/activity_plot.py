@@ -75,7 +75,7 @@ if variable == 'spikes':
     # Set axis labels and limits
     ax.set_xlabel("Time (ms)")
     ax.set_ylabel("Neuron #")
-    plt.title(file_header['label'] + ' ' + args.label + '- Spike Times')
+    plt.title(file_header['label'] + ' ' + args.label + ' - Spike Times')
     max_id = numpy.max(ids)
     ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
     ax.set_ylim(-2, max_id + 2)
@@ -90,7 +90,7 @@ elif variable == 'v':
     IDs = []
     for line in f:
         if line[0] != '#': # Check to see if the line is a comment
-            v, ID = line[:-1].split()
+            v, ID = line.split()
             v = float(v)
             # If the ID signifies the start of a new cell reset the time index
             if ID != prev_ID:
@@ -115,7 +115,7 @@ elif variable == 'v':
         plt.plot(t, v)
         sorted_IDs.append(ID)
     plt.legend(sorted_IDs)
-    plt.title(file_header['label'] + ' ' + args.label + ' - Voltage v Time')
+    plt.title(file_header['label'] + ' ' + args.extra_label + ' - Voltage v Time')
     plt.xlabel('Time (ms)')
     plt.ylabel('Soma Voltage (V)')
 else:
