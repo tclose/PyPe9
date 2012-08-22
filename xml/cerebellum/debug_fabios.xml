@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <network id="CerebellarGranularLayer">
-        <population id="Golgis" cell="Golgi" size="1"/>
-        <population id="MossyFiberInputs" cell="SpikeSourceArray" size="1"/>
-<!--        <projection id="Golgi_MossyFiberInputs">
+        <projection id="Golgi_MossyFiberInputs">
             <source id="MossyFiberInputs"/>
             <destination id="Golgis" synapse="GABA" segment="soma"/>
             <connection pattern="OneToOne" />
