@@ -1,0 +1,85 @@
+;;
+;; Reference:
+;;             Sergio M. Solinas, Lia Forti, Elisabetta Cesana, 
+;;             Jonathan Mapelli, Erik De Schutter and Egidio D`Angelo (2008)
+;;             Computational reconstruction of pacemaking and intrinsic 
+;;             electroresponsiveness in cerebellar golgi cells
+;;             Frontiers in Cellular Neuroscience 2:2
+;; Author:Sergio Solinas, Lia Forti, Egidio DAngelo
+;; Data from: Santoro et al. J Neurosci. 2000
+;;
+
+(nemo-model Golgi_HCN1
+
+  (
+   (input v celsius)
+   
+   (component (type ionic-current) (name HCN1)
+              
+	      (component (type gate)
+                         
+
+                         (const Ehalf = -72.49)
+                         (const c = 0.11305)
+
+			 ;; rate constants
+	
+                         (const rA = 0.002096)
+                         (const rB = 0.97596)
+                         (const tCf = 0.01371)
+                         (const tDf = -3.368)
+                         (const tEf = 2.302585092)
+                         (const tCs = 0.01451)
+                         (const tDs = -4.056)
+                         (const tEs = 2.302585092)
+
+                         (defun r (potential)
+                           ((rA * potential) + rB))
+                         
+                         (defun tau (potential t1 t2 t3)
+                           (exp (((t1 * potential) - t2) * t3)))
+
+                         (defun o_inf (potential Ehalf c)
+                           (1 / (1 + exp ((potential - Ehalf) * c))))
+
+                         (o_fast_inf = (r (v) * o_inf (v Ehalf c)))
+                         (o_slow_inf = ((1 - r (v)) * o_inf (v Ehalf c)))
+			
+                         (tau_f =  (tau (v tCf tDf tEf)) )
+                         (tau_s =  (tau (v tCs tDs tEs)) )
+
+                         (d (o_fast) = ((o_fast_inf - o_fast) / tau_f) 
+                            (initial o_fast_inf))
+                         (d (o_slow) = ((o_slow_inf - o_slow) / tau_s) 
+                            (initial o_slow_inf))
+
+                         (o_slow_plus_fast = (o_slow + o_fast))
+                         
+                         (output o_slow_plus_fast)
+
+			 )
+	      
+	      (component (type pore)
+			 (const  gbar  = 5e-5)
+			 (output gbar))
+	      
+	      (component (type permeating-ion) (name non-specific)
+			 (const e = -20)
+			 (output e ))
+	      
+	      ) ;; end HCN1 current
+
+              
+	      (component (type voltage-clamp) (name HCN1)
+           
+			 (const vchold   = -71)
+			 (const vcbase   = -69)
+			 (const vcinc    = 10)
+			 (const vcsteps  = 8)
+			 (const vchdur   = 30)
+			 (const vcbdur   = 100)
+           
+			 (output vchold vcbase vcinc vcsteps vchdur vcbdur)
+			 )
+
+))
