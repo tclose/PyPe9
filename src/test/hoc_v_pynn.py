@@ -23,7 +23,7 @@ import os.path
 from ninemlp import SRC_PATH
 project_dir = os.path.join(SRC_PATH, '..')
 sys.path.append(os.path.join(project_dir, 'Molecular_Layer'))
-from backports import argparse
+import argparse
 import time
 import ninemlp.utilities.nmodl as nmodl
 from ninemlp import BUILD_MODE, BUILD_MODE_OPTIONS

@@ -19,7 +19,7 @@
 
 from neuronvisio.controls import Controls
 from ninemlp.neuron.ncml import load_cell_type
-from backports import argparse
+import argparse
 
 parser = argparse.ArgumentParser(description='A script to load and plot the morphology of a cell in \
                                                                                     neuronvisio')

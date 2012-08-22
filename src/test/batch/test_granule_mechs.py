@@ -4,7 +4,7 @@ import os.path
 import subprocess
 from ninemlp.utilities.nmodl import build as build_nmodl
 import socket
-from backports import argparse
+import argparse
 
 parser = argparse.ArgumentParser(description='Batch run comparisons of mechanisms')
 parser.add_argument('--action', nargs=1, help="Just plot the files instead of running then plotting")

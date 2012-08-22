@@ -14,7 +14,7 @@
 #######################################################################################
 
 # General imports
-from backports import collections
+import collections
 from neuron import h as nrn, init as nrn_init, \
     run as nrn_run
 from test import Recording as Recording

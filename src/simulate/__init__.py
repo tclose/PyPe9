@@ -19,7 +19,7 @@ try:
 except:
     pass
 
-from backports import collections
+import collections
 
 
 ## A named tuple to hold the return value of the 'run' method
