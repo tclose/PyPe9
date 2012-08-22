@@ -221,7 +221,7 @@ echo "============== Done ==============="
     print "Submitting job '%s' to que" % jobscript_path
     subprocess.check_call('qsub %s' % jobscript_path, shell=True)
     print "Your job '%s' has been submitted" % jobscript_path
-    print "While the job is running, its output stream can be viewed by:"
+    print "The output stream can be viewed by:"
     print "less " + os.path.join(work_dir, 'output_stream')
     print "Once completed the output files (including the output stream and job script) of this job will be copied to:"
     print output_dir
