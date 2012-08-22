@@ -18,7 +18,7 @@
 import os.path
 import argparse
 import math
-import simulate.mechs #@UnusedImport
+import test.mechs #@UnusedImport
 import numpy as np
 import pickle
 try:
@@ -28,9 +28,8 @@ except:
 from ninemlp.utilities.nmodl import build as build_nmodl
 from ninemlp import SRC_PATH
 default_nmodl_path = os.path.join(SRC_PATH, 'test', 'mechs')
-from simulate import plot_simulation, Recording
+from test import plot_simulation, Recording
 import neuron
-
 
 def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_time=5000, dt=1, input_shape='random', plot=True, save_plot=None):
     """
@@ -81,11 +80,11 @@ def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_
 
         if simulator_name not in imported_simulators:
             exec('import %s' % import_name)
-            exec('from %s import simulate' % import_name)
+            exec('from %s import test' % import_name)
             exec('from %s.cells import OneCompartmentCell as NeuronTestCell' % import_name)
             imported_simulators.append(simulator_name)
 
-        cell = NeuronTestCell(mech_name)
+        cell = NeuronTestCell(mech_name) #@UndefinedVariable
 
         cell.inject_soma_current(input_current, times)
 
@@ -97,7 +96,7 @@ def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_
         else:
             raise Exception ("Unrecognised simulator name '%s'" % simulator_name)
 
-        recs.append(simulate(end_time, record_v=record_v))
+        recs.append(test(end_time, record_v=record_v))
         titles.append(("Mech: " + mech_name + ", Sim: " + simulator_name))
 
         if plot and not save_plot:

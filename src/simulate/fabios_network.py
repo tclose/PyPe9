@@ -23,11 +23,6 @@ import time
 #from pyNN.random import RandomDistribution, NumpyRNG
 import numpy.random
 
-if 'NRNHOME' in os.environ:
-    os.environ['PATH'] += os.pathsep + os.environ['NRNHOME']
-else:
-    os.environ['PATH'] += os.pathsep + '/opt/NEURON-7.2/x86_64/bin' # Sorry this is the path on my machine (to save me having to set the environment variable in eclipse)
-
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
 parser = argparse.ArgumentParser(description=__doc__)
