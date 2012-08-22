@@ -2,15 +2,15 @@
 <nineml>
     <network id="CerebellarGranularLayer">
         <population id="Golgis" cell="Golgi" size="1"/>
-        <population id="GolgiInputs" cell="SpikeSourceArray" size="1"/>
-        <projection id="Golgi_GolgiInputs">
-            <source id="GolgiInputs"/>
+        <population id="MossyFiberInputs" cell="SpikeSourceArray" size="1"/>
+<!--        <projection id="Golgi_MossyFiberInputs">
+            <source id="MossyFiberInputs"/>
             <destination id="Golgis" synapse="GABA" segment="soma"/>
             <connection pattern="OneToOne" />
             <weight pattern="Constant" value="1"/>
             <delay pattern="Constant" value="0.15"/>   
         </projection>
-<!--         <extensions>
+         <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
         <population id="Granules" cell="Granule">

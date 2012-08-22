@@ -82,10 +82,10 @@ mossy_fiber_inputs = net.get_population('MossyFiberInputs')
 
 print "Setting up simulation"
 mean_interval = 1000 / args.mf_rate # Convert from Hz to ms
-stim_range = args.time - args.start_input # Is scaled by 50% just to be sure it doesn't end early
+stim_range = args.time - args.start_input
 if stim_range >= 0.0:
     num_spikes = stim_range / mean_interval
-    num_spikes = int(num_spikes + math.exp(-num_spikes / 10.0) * 10.0) # Add extra spikes to account for variability in numbers
+    num_spikes = int(num_spikes + math.exp(-num_spikes / 10.0) * 10.0) # Add extra spikes to make sure spike train doesn't stop short
     mf_spike_intervals = numpy.random.exponential(mean_interval, size=(mossy_fiber_inputs.size, num_spikes))
     mf_spike_times = numpy.cumsum(mf_spike_intervals, axis=1) + args.start_input
     mossy_fiber_inputs.tset('spike_times', mf_spike_times)
@@ -100,7 +100,7 @@ for pop in net.all_populations():
 #for pop_name, cell_id in args.volt_traces: 
 if args.volt_trace:
     cell = net.get_population(args.volt_trace[0])[int(args.volt_trace[1])]
-    record_v(cell, args.output_prefix + "." + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
+    record_v(cell, args.output_prefix + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
 
 print "Final Network is..."
 
