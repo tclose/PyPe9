@@ -40,7 +40,7 @@ parser.add_argument('--timestep', type=float, default=0.001, help='The timestep 
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
-parser.add_argument('--save_v', action='store_true', help='Save voltage trace as well as spike data')
+parser.add_argument('--volt_traces', type=list, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 args = parser.parse_args()
 
@@ -92,11 +92,14 @@ if stim_range >= 0.0:
 else:
     print "Warning, stimulation start (%f) is after end of experiment (%f)" % \
                                                                     (args.start_input, args.time)
-
+# Set up spike recordings
 for pop in net.all_populations():
     record(pop, args.output_prefix + pop.label + ".spikes") #@UndefinedVariable
-    if args.save_v and pop.label != 'MossyFiberInputs':
-        record_v(pop, args.output_prefix + "." + pop.label + ".v") #@UndefinedVariable
+
+# Set up voltage traces    
+for pop_name, cell_id in args.volt_traces: 
+    cell = net.get_population(pop_name)[cell_id]
+    record_v(cell, args.output_prefix + "." + pop_name + "." + cell_id + ".v") #@UndefinedVariable
 
 print "Final Network is..."
 
