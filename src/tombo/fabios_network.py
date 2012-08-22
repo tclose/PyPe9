@@ -28,32 +28,48 @@ parser.add_argument('--volt_trace', nargs=2, default=None, help="The population 
 parser.add_argument('--username', type=str, default=None, help='The username with which to run the script with to specify the appropriate folder in /work directory (defaults to user login)')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--output_parent', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
+parser.add_argument('--legacy_hoc', action="store_true", help="Run fabios original hoc model instead of the pyNN version")
 args = parser.parse_args()
 
+if args.legacy_hoc:
+    required_dirs  = ['external_refs']
+else:
+    required_dirs = ['src', 'xml']    
+
 # Create work directory and get path for output directory
-work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_parent, username=args.username)
+work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_parent, username=args.username, required_dirs=required_dirs)
 
-#Compile network
-tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
-
-# Set up command to run the script
-cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ \
+if args.legacy_hoc:
+    import subprocess
+    import os.path
+    os.chdir(os.path.join(tombo.get_project_dir(), 'exteran_refs','fabios_network'))
+    subprocess.check_call('nrnivmodl', shell=True)
+    cmd_line = """
+cd external_refs/fabios_network
+nrniv network.hoc
+"""
+    copy_to_output = []
+else:
+    #Compile network
+    tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
+    # Set up command to run the script
+    cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ \
 --time {time}  --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} \
 --simulator {simulator} --timestep {timestep} --stim_seed {stim_seed}".format(
-                                                                  script_name=SCRIPT_NAME,
-                                                                  work_dir=work_dir,
-                                                                  mf_rate=args.mf_rate,
-                                                                  start_input=args.start_input,
-                                                                  time=args.time,
-                                                                  min_delay=args.min_delay,
-                                                                  simulator=args.simulator,
-                                                                  timestep=args.timestep,
-                                                                  stim_seed=tombo.create_seed(args.stim_seed))
-if args.debug:
-    cmd_line += " --debug"
-if args.volt_trace:
-    cmd_line += " --volt_trace {volt_pop} {volt_cellid}".format(volt_pop=args.volt_trace[0], volt_cellid=args.volt_trace[1])
-                                                                  
+                                                                      script_name=SCRIPT_NAME,
+                                                                      work_dir=work_dir,
+                                                                      mf_rate=args.mf_rate,
+                                                                      start_input=args.start_input,
+                                                                      time=args.time,
+                                                                      min_delay=args.min_delay,
+                                                                      simulator=args.simulator,
+                                                                      timestep=args.timestep,
+                                                                      stim_seed=tombo.create_seed(args.stim_seed))
+    if args.debug:
+        cmd_line += " --debug"
+    if args.volt_trace:
+        cmd_line += " --volt_trace {volt_pop} {volt_cellid}".format(volt_pop=args.volt_trace[0], volt_cellid=args.volt_trace[1])
+    copy_to_output= ['xml']
                                                                   
 # Submit job to que
-tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir)
+tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output)
