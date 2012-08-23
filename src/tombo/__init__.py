@@ -123,7 +123,7 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate'):
     
 
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, env=None, copy_to_output=['xml'], strip_build_from_copy=True):
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=['xml'], strip_build_from_copy=True):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
     
@@ -161,7 +161,7 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, env=None, copy_to_ou
 #$ -e {work_dir}/output_stream
 
 # Name of the queue
-#$ -q longP
+#$ -q {que_name}
 
 # use OpenMPI parallel environment with {np} processes
 #$ -pe openmpi {np}
@@ -206,7 +206,7 @@ cp {work_dir}/output_stream {output_dir}/output
 echo "============== Done ===============" 
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=os.path.join(work_dir,'src'), np=np,
-      cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
+      que_name=que_name,cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd, 
       jobscript_path=jobscript_path))
     f.close()
     # Submit job

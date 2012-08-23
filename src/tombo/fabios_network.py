@@ -24,6 +24,7 @@ parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum 
 parser.add_argument('--timestep', type=float, default=0.001, help='The time step used for the simulation (default: %(default)s)')
 parser.add_argument('--stim_seed', default=None, help='The seed passed to the stimulated spikes (defaults to time stamp)')
 parser.add_argument('--np', type=int, default=96, help='The the number of processes to use for the simulation (default: %(default)s)')
+parser.add_argument('--que_name', type=str, default='longP', help='The the que to submit the job to(default: %(default)s)')
 parser.add_argument('--volt_trace', nargs=2, default=None, help="The population label and cell ID of a cell to record its voltage trace")
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
@@ -45,7 +46,7 @@ if args.legacy_hoc:
         nrnivmodl_path = subprocess.check_output('which nrnivmodl', shell=True)
     except subprocess.CalledProcessError:
         raise Exception('Could not find nrnivmodl on system path')        
-    os.chdir(os.path.join(tombo.get_project_dir(), 'external_refs','fabios_network'))    
+    os.chdir(os.path.join(work_dir, 'external_refs','fabios_network'))    
     subprocess.check_call('nrnivmodl', shell=True)
     cmd_line = \
 """
@@ -77,4 +78,4 @@ else:
     copy_to_output= ['xml']
                                                                   
 # Submit job to que
-tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output)
+tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output, que_name=args.que_name)
