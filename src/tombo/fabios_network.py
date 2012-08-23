@@ -41,7 +41,11 @@ work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, requi
 if args.legacy_hoc:
     import subprocess
     import os.path
-    os.chdir(os.path.join(tombo.get_project_dir(), 'external_refs','fabios_network'))
+    try:
+        nrnivmodl_path = subprocess.check_output('which nrnivmodl', shell=True)
+    except subprocess.CalledProcessError:
+        raise Exception('Could not find nrnivmodl on system path')        
+    os.chdir(os.path.join(tombo.get_project_dir(), 'external_refs','fabios_network'))    
     subprocess.check_call('nrnivmodl', shell=True)
     cmd_line = \
 """
