@@ -81,8 +81,7 @@ INITIAL {
 	rate(v) 
 	s = s_inf 
 	u = u_inf 
-	printf ("s = %g\n" ,  s)
-	printf ("u = %g\n" ,  u)
+	print_state()
 } 
  
 BREAKPOINT { 
@@ -93,6 +92,7 @@ BREAKPOINT {
 	beta_s = bet_s(v)
 	alpha_u = alp_u(v)
 	beta_u = bet_u(v)
+	print_state()
 }
  
 DERIVATIVE states { 
@@ -135,5 +135,10 @@ PROCEDURE rate(v (mV)) {LOCAL a_s, b_s, a_u, b_u
 	tau_s = 1/(a_s + b_s) 
 	u_inf = a_u/(a_u + b_u) 
 	tau_u = 1/(a_u + b_u) 
+}
+
+PROCEDURE print_state () {
+  printf ("t = %g: s = %g\n" , t,  s)
+  printf ("t = %g: u = %g\n" , t,  u)
 }
 

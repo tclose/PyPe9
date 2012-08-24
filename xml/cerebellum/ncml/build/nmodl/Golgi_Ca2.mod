@@ -12,11 +12,11 @@ NEURON {
 
 PARAMETER {
   comp19_valence  =  2.0
-  comp19_ca2i0  =  5e-05
-  comp19_beta  =  1.3
-  comp19_ca2o  =  2.0
   comp19_d  =  0.2
   comp19_F  =  96485.0
+  comp19_ca2i0  =  5e-05
+  comp19_ca2o  =  2.0
+  comp19_beta  =  1.3
 }
 
 
@@ -47,15 +47,16 @@ DERIVATIVE states {
   comp19_ca2'  =  
   (-(ica2)) / (2.0 * comp19_F * comp19_d) * 10000.0 + 
     -(comp19_beta * (comp19_ca2 + -(comp19_ca2i0)))
+  print_state()
 }
 
 
 INITIAL {
-    comp19_ca2  =  5e-05
-    print_state()
+  comp19_ca2  =  5e-05
+  print_state()
 }
 
 
 PROCEDURE print_state () {
-  printf ("comp19_ca2 = %g\n" ,  comp19_ca2)
+  printf ("t = %g: comp19_ca2 = %g\n" , t,  comp19_ca2)
 }
