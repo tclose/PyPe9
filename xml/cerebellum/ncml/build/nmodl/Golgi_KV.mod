@@ -35,20 +35,20 @@ FUNCTION comp35_beta_n (v, Q10) {
 
 
 PARAMETER {
-  comp183_vcinc  =  10.0
-  comp35_V0alpha_n  =  -26.0
-  comp183_vchold  =  -71.0
-  comp35_Abeta_n  =  0.125
-  comp35_Aalpha_n  =  -0.01
-  comp35_e  =  -84.69
-  comp183_vchdur  =  30.0
-  comp35_gbar  =  0.032
-  comp183_vcbase  =  -69.0
-  comp35_Kbeta_n  =  -80.0
-  comp183_vcsteps  =  8.0
   comp35_V0beta_n  =  -36.0
-  comp183_vcbdur  =  100.0
+  comp183_vchdur  =  30.0
+  comp35_e  =  -84.69
+  comp35_V0alpha_n  =  -26.0
+  comp35_Aalpha_n  =  -0.01
   comp35_Kalpha_n  =  -10.0
+  comp183_vcbase  =  -69.0
+  comp183_vcinc  =  10.0
+  comp35_Abeta_n  =  0.125
+  comp35_gbar  =  0.032
+  comp183_vcsteps  =  8.0
+  comp183_vcbdur  =  100.0
+  comp35_Kbeta_n  =  -80.0
+  comp183_vchold  =  -71.0
 }
 
 
@@ -105,6 +105,8 @@ INITIAL {
   (comp35_alpha_n(v, comp35_Q10)) / 
     (comp35_alpha_n(v, comp35_Q10) + comp35_beta_n(v, comp35_Q10))
   KV_mO  =  KV_m
+  print_state()
+ 
 }
 
 

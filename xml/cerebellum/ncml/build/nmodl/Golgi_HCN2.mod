@@ -42,24 +42,24 @@ FUNCTION comp19_tau_fast (potential, t1, t2, t3) {
 
 
 PARAMETER {
-  comp19_tDs  =  -5.2944
-  comp19_e  =  -20.0
-  comp19_c  =  0.1661
-  comp289_vcsteps  =  8.0
-  comp289_vcinc  =  10.0
   comp19_tCf  =  0.0269
-  comp19_rB  =  -1.4694
-  comp19_rA  =  -0.0227
-  comp289_vchdur  =  30.0
   comp19_tCs  =  0.0152
+  comp289_vcinc  =  10.0
+  comp19_tEf  =  2.3026
+  comp289_vchold  =  -71.0
   comp289_vcbase  =  -69.0
+  comp19_tEs  =  2.3026
   comp19_Ehalf  =  -81.95
   comp289_vcbdur  =  100.0
-  comp289_vchold  =  -71.0
-  comp19_tEf  =  2.3026
-  comp19_tEs  =  2.3026
-  comp19_gbar  =  8e-05
+  comp289_vcsteps  =  8.0
+  comp19_rA  =  -0.0227
+  comp19_rB  =  -1.4694
   comp19_tDf  =  -5.6111
+  comp19_e  =  -20.0
+  comp19_c  =  0.1661
+  comp19_tDs  =  -5.2944
+  comp289_vchdur  =  30.0
+  comp19_gbar  =  8e-05
 }
 
 
@@ -70,10 +70,10 @@ STATE {
 
 
 ASSIGNED {
-  comp19_o_fast_inf
   comp19_o_slow_inf
-  comp19_tau_s
+  comp19_o_fast_inf
   comp19_o_slow_plus_fast
+  comp19_tau_s
   comp19_tau_f
   celsius
   v
@@ -85,14 +85,14 @@ ASSIGNED {
 
 PROCEDURE asgns () {
   comp19_tau_f  =  comp19_tau_fast(v, comp19_tCf, comp19_tDf, comp19_tEf)
-  comp19_o_slow_plus_fast  =  comp19_o_slow + comp19_o_fast
   comp19_tau_s  =  comp19_tau_slow(v, comp19_tCs, comp19_tDs, comp19_tEs)
-  comp19_o_slow_inf  =  
-  (1.0 + -(comp19_r(v, comp19_rA, comp19_rB))) * 
-    (comp19_o_inf(v, comp19_Ehalf, comp19_c))
+  comp19_o_slow_plus_fast  =  comp19_o_slow + comp19_o_fast
   comp19_o_fast_inf  =  
   comp19_r(v, comp19_rA, comp19_rB) * 
     comp19_o_inf(v, comp19_Ehalf, comp19_c)
+  comp19_o_slow_inf  =  
+  (1.0 + -(comp19_r(v, comp19_rA, comp19_rB))) * 
+    (comp19_o_inf(v, comp19_Ehalf, comp19_c))
 }
 
 
@@ -114,6 +114,8 @@ INITIAL {
   asgns ()
   comp19_o_fast  =  comp19_o_fast_inf
   comp19_o_slow  =  comp19_o_slow_inf
+  print_state()
+
 }
 
 

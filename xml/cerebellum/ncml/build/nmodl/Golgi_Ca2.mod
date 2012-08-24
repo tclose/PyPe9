@@ -11,11 +11,11 @@ NEURON {
 
 
 PARAMETER {
-  comp19_beta  =  1.3
-  comp19_d  =  0.2
-  comp19_ca2o  =  2.0
-  comp19_ca2i0  =  0.0001
   comp19_valence  =  2.0
+  comp19_ca2i0  =  5e-05
+  comp19_beta  =  1.3
+  comp19_ca2o  =  2.0
+  comp19_d  =  0.2
   comp19_F  =  96485.0
 }
 
@@ -26,8 +26,8 @@ STATE {
 
 
 ASSIGNED {
-  ica2
   v
+  ica2
   ca2i
 }
 
@@ -45,13 +45,15 @@ BREAKPOINT {
 
 DERIVATIVE states {
   comp19_ca2'  =  
-  (-(ica2)) / (2.0 * comp19_F * comp19_d * 10000.0) + 
-    -(comp19_beta * (ca2i + -(comp19_ca2i0)))
+  (-(ica2)) / (2.0 * comp19_F * comp19_d) * 10000.0 + 
+    -(comp19_beta * (comp19_ca2 + -(comp19_ca2i0)))
 }
 
 
 INITIAL {
-  comp19_ca2  =  0.0001
+    comp19_ca2  =  5e-05
+    print_state()
+
 }
 
 

@@ -14,25 +14,25 @@ NEURON {
 
 
 PARAMETER {
+  comp220_vcbase  =  -69.0
   comp220_vchdur  =  30.0
-  comp19_invo2  =  0.1
   comp19_invo1  =  1.0
-  comp220_vcinc  =  10.0
-  comp19_gbar  =  0.038
+  comp19_invo2  =  0.1
+  comp19_diro1  =  0.16
+  comp19_diro2  =  1.2
   comp220_vcbdur  =  100.0
+  comp220_vcsteps  =  8.0
+  comp220_vchold  =  -71.0
   comp19_e  =  -84.69
+  comp19_invc1  =  0.08
+  comp19_invc2  =  0.08
+  comp19_invc3  =  0.2
+  comp19_diff  =  3.0
+  comp220_vcinc  =  10.0
   comp19_dirc4  =  80.0
   comp19_dirc2  =  200.0
   comp19_dirc3  =  160.0
-  comp220_vcbase  =  -69.0
-  comp220_vcsteps  =  8.0
-  comp19_diff  =  3.0
-  comp220_vchold  =  -71.0
-  comp19_diro1  =  0.16
-  comp19_invc2  =  0.08
-  comp19_diro2  =  1.2
-  comp19_invc1  =  0.08
-  comp19_invc3  =  0.2
+  comp19_gbar  =  0.038
 }
 
 
@@ -48,24 +48,24 @@ STATE {
 
 
 ASSIGNED {
-  comp19_diro1_t
-  comp19_dirc4_t_ca
-  comp19_dirc2_t_ca
-  comp19_dirc3_t_ca
   comp19_dirc4_t
-  comp19_invo2_t
-  comp19_invc2_t
+  comp19_dirc3_t_ca
+  comp19_dirc2_t
+  comp19_dirc2_t_ca
   comp19_invc1_t
+  comp19_diro2_t
+  comp19_invo2_t
+  comp19_dirc4_t_ca
+  comp19_invo1_t
+  comp19_Q10
+  comp19_diro1_t
+  comp19_invc2_t
   comp19_invc3_t
   comp19_dirc3_t
-  comp19_Q10
-  comp19_dirc2_t
-  comp19_diro2_t
-  comp19_invo1_t
-  v
   celsius
   cai
   ica
+  v
   ik
   ek
   i_SK2
@@ -74,19 +74,19 @@ ASSIGNED {
 
 PROCEDURE asgns () {
   comp19_Q10  =  3.0 ^ ((celsius + -23.0) / 10.0)
-  comp19_invo1_t  =  comp19_invo1 * comp19_Q10
-  comp19_diro2_t  =  comp19_diro2 * comp19_Q10
-  comp19_dirc2_t  =  comp19_dirc2 * comp19_Q10
   comp19_dirc3_t  =  comp19_dirc3 * comp19_Q10
   comp19_invc3_t  =  comp19_invc3 * comp19_Q10
-  comp19_invc1_t  =  comp19_invc1 * comp19_Q10
   comp19_invc2_t  =  comp19_invc2 * comp19_Q10
-  comp19_invo2_t  =  comp19_invo2 * comp19_Q10
-  comp19_dirc4_t  =  comp19_dirc4 * comp19_Q10
   comp19_diro1_t  =  comp19_diro1 * comp19_Q10
-  comp19_dirc3_t_ca  =  comp19_dirc3_t * cai / comp19_diff
-  comp19_dirc2_t_ca  =  comp19_dirc2_t * cai / comp19_diff
+  comp19_invo1_t  =  comp19_invo1 * comp19_Q10
+  comp19_invo2_t  =  comp19_invo2 * comp19_Q10
+  comp19_diro2_t  =  comp19_diro2 * comp19_Q10
+  comp19_invc1_t  =  comp19_invc1 * comp19_Q10
+  comp19_dirc2_t  =  comp19_dirc2 * comp19_Q10
+  comp19_dirc4_t  =  comp19_dirc4 * comp19_Q10
   comp19_dirc4_t_ca  =  comp19_dirc4_t * cai / comp19_diff
+  comp19_dirc2_t_ca  =  comp19_dirc2_t * cai / comp19_diff
+  comp19_dirc3_t_ca  =  comp19_dirc3_t * cai / comp19_diff
 }
 
 
@@ -117,8 +117,11 @@ KINETIC kstates {
 INITIAL {
   asgns ()
   SOLVE kstates STEADYSTATE sparse
+  reactions()
+  print_state()
 }
 
 
 PROCEDURE print_state () {
+    printf ("comp19_SK2_z = %g\n", comp19_SK2_z)
 }
