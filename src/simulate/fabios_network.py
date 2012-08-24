@@ -33,7 +33,7 @@ parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres')
 parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)')
-parser.add_argument('--output_prefix', type=str, default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.out.') , help='The output location of the recording files')
+parser.add_argument('--output_prefix', type=str, default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.') , help='The output location of the recording files')
 parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation')
 parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')

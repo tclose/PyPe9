@@ -84,6 +84,7 @@ elif variable == 'v':
         raise Exception("Required header field 'dt' was not found in file header.")
     # Load voltages selectively, if the difference between previous voltage point exceeds args.v_incr
     f = open(args.filename)
+    time_i = 0
     prev_ID = None
     voltages = []
     times = []
@@ -94,6 +95,10 @@ elif variable == 'v':
             v = float(v)
             # If the ID signifies the start of a new cell reset the time index
             if ID != prev_ID:
+                # If not in the initial loop, append last value/time pair to fill out the plot of the previous ID out to the right 
+                if prev_ID != None:
+                    voltages[-1].append(v)
+                    times[-1].append(time_i * file_header['dt'])
                 time_i = 0
                 prev_v = v - 2.0 * args.v_incr
                 prev_ID = ID
@@ -106,6 +111,9 @@ elif variable == 'v':
                 times[-1].append(time_i * file_header['dt'])
                 prev_v = v
             time_i += 1
+    # Append last value/time pair to fill out plot of the final ID to the right
+    voltages[-1].append(v)
+    times[-1].append(time_i * file_header['dt'])
     if not voltages:
         print "No trace was loaded from file"
         sys.exit(0)

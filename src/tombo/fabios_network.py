@@ -32,7 +32,7 @@ parser.add_argument('--legacy_hoc', action="store_true", help="Run fabios origin
 args = parser.parse_args()
 
 if args.legacy_hoc:
-    required_dirs  = ['external_refs']
+    required_dirs  = ['external']
 else:
     required_dirs = ['src', 'xml']    
 
@@ -46,11 +46,11 @@ if args.legacy_hoc:
         nrnivmodl_path = subprocess.check_output('which nrnivmodl', shell=True)
     except subprocess.CalledProcessError:
         raise Exception('Could not find nrnivmodl on system path')        
-    os.chdir(os.path.join(work_dir, 'external_refs','fabios_network'))    
+    os.chdir(os.path.join(work_dir, 'external','fabios_network'))    
     subprocess.check_call('nrnivmodl', shell=True)
     cmd_line = \
 """
-cd external_refs/fabios_network
+cd external/fabios_network
 nrniv mosinit.hoc
 """
     copy_to_output = []
