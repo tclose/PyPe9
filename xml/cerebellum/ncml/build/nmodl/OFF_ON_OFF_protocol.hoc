@@ -11,8 +11,8 @@ access soma
 //**********************************************************************
 proc simulate() { local preDT, mainDT
     
-mainDT = 0.025
-preDT = 0.025
+mainDT = 0.001
+preDT = 0.001
 
 dt = preDT
 tstop = prelength
