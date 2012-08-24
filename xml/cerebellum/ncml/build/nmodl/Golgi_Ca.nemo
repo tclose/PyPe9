@@ -16,11 +16,11 @@
  	      (const  F       = 96485.0)
 	      (const  d       = .2)
 	      (const  cao     = 2.)
- 	      (const  cai0    = 1e-4)
+ 	      (const  cai0    = 50e-6)
  	      (const  beta    = 1.3)
-	      
-	      (d (ca) =  ((neg (ica) / (2 * F * d)) -
- 			  (beta * (cai - cai0)))
+
+	      (d (ca) =  ((neg (ica) / (2 * F * d * 1e4)) -
+ 			  (beta * (ca - cai0)))
 	      	      	 (initial cai0))
 	      
   	      (output ca)

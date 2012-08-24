@@ -4,7 +4,7 @@ TITLE CGC_Lkg2
 
 
 NEURON {
-  RANGE comp0_egaba, comp0_ggaba
+  RANGE comp47_egaba, comp47_ggaba
   RANGE i_Lkg2
   RANGE e
   NONSPECIFIC_CURRENT i
@@ -12,10 +12,10 @@ NEURON {
 
 
 PARAMETER {
-  comp0_ggaba  =  2.17e-05
-  Vrest  =  -68.0
   fix_celsius  =  30.0
-  comp0_egaba  =  -65.0
+  comp47_ggaba  =  2.17e-05
+  comp47_egaba  =  -65.0
+  Vrest  =  -68.0
 }
 
 
@@ -24,9 +24,9 @@ STATE {
 
 
 ASSIGNED {
-  ica
-  cai
   v
+  cai
+  ica
   i
   e
   i_Lkg2
@@ -34,7 +34,7 @@ ASSIGNED {
 
 
 BREAKPOINT {
-  i_Lkg2  =  comp0_ggaba * (v - comp0_egaba)
+  i_Lkg2  =  comp47_ggaba * (v - comp47_egaba)
   i  =  i_Lkg2
 }
 

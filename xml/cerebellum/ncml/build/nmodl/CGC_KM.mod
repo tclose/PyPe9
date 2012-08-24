@@ -4,47 +4,47 @@ TITLE CGC_KM
 
 
 NEURON {
-  RANGE KM_m, comp24_vcbdur, comp24_vchdur, comp24_vcsteps, comp24_vcinc, comp24_vcbase, comp24_vchold, comp0_e, comp0_gbar
+  RANGE KM_m, comp235_vcbdur, comp235_vchdur, comp235_vcsteps, comp235_vcinc, comp235_vcbase, comp235_vchold, comp47_e, comp47_gbar
   RANGE i_KM
   RANGE ik
   USEION k READ ek WRITE ik
 }
 
 
-FUNCTION comp0_beta_n (v) {
-  comp0_beta_n  =  
-  comp0_Q10 * comp0_Abeta_n * 
-    exp((v + -(comp0_V0beta_n)) / comp0_Kbeta_n)
+FUNCTION comp47_alpha_n (v) {
+  comp47_alpha_n  =  
+  comp47_Q10 * comp47_Aalpha_n * 
+    exp((v + -(comp47_V0alpha_n)) / comp47_Kalpha_n)
 }
 
 
-FUNCTION comp0_alpha_n (v) {
-  comp0_alpha_n  =  
-  comp0_Q10 * comp0_Aalpha_n * 
-    exp((v + -(comp0_V0alpha_n)) / comp0_Kalpha_n)
+FUNCTION comp47_beta_n (v) {
+  comp47_beta_n  =  
+  comp47_Q10 * comp47_Abeta_n * 
+    exp((v + -(comp47_V0beta_n)) / comp47_Kbeta_n)
 }
 
 
 PARAMETER {
-  comp0_Abeta_n  =  0.0033
-  comp0_V0_ninf  =  -30.0
-  comp0_Kalpha_n  =  40.0
-  comp0_gbar  =  0.00035
-  comp24_vchdur  =  30.0
-  comp0_Q10  =  2.40822468528069
-  comp24_vcsteps  =  8.0
-  comp0_V0beta_n  =  -30.0
-  comp24_vchold  =  -71.0
-  comp0_Kbeta_n  =  -20.0
-  comp0_e  =  -84.69
-  comp0_B_ninf  =  6.0
-  comp24_vcbase  =  -69.0
-  comp0_Aalpha_n  =  0.0033
-  Vrest  =  -68.0
+  comp47_Kalpha_n  =  40.0
+  comp235_vcbase  =  -69.0
   fix_celsius  =  30.0
-  comp24_vcbdur  =  100.0
-  comp24_vcinc  =  10.0
-  comp0_V0alpha_n  =  -30.0
+  comp47_Abeta_n  =  0.0033
+  comp47_V0_ninf  =  -30.0
+  comp47_Kbeta_n  =  -20.0
+  comp47_V0alpha_n  =  -30.0
+  comp47_V0beta_n  =  -30.0
+  comp235_vchold  =  -71.0
+  comp235_vcsteps  =  8.0
+  comp235_vcinc  =  10.0
+  comp47_e  =  -84.69
+  comp235_vchdur  =  30.0
+  comp47_B_ninf  =  6.0
+  comp47_Aalpha_n  =  0.0033
+  Vrest  =  -68.0
+  comp47_gbar  =  0.00035
+  comp235_vcbdur  =  100.0
+  comp47_Q10  =  2.40822468528069
 }
 
 
@@ -54,11 +54,11 @@ STATE {
 
 
 ASSIGNED {
-  KM_m_inf
   KM_m_tau
-  ica
-  cai
+  KM_m_inf
   v
+  cai
+  ica
   ik
   ek
   i_KM
@@ -66,14 +66,14 @@ ASSIGNED {
 
 
 PROCEDURE asgns () {
-  KM_m_tau  =  1.0 / (comp0_alpha_n(v) + comp0_beta_n(v))
-  KM_m_inf  =  1.0 / (1.0 + exp(-(v + -(comp0_V0_ninf)) / comp0_B_ninf))
+  KM_m_inf  =  1.0 / (1.0 + exp(-(v + -(comp47_V0_ninf)) / comp47_B_ninf))
+  KM_m_tau  =  1.0 / (comp47_alpha_n(v) + comp47_beta_n(v))
 }
 
 
 BREAKPOINT {
   SOLVE states METHOD derivimplicit
-  i_KM  =  (comp0_gbar * KM_m) * (v - comp0_e)
+  i_KM  =  (comp47_gbar * KM_m) * (v - comp47_e)
   ik  =  i_KM
 }
 
@@ -86,7 +86,7 @@ DERIVATIVE states {
 
 INITIAL {
   asgns ()
-  KM_m  =  (comp0_alpha_n(v)) / (comp0_alpha_n(v) + comp0_beta_n(v))
+  KM_m  =  (comp47_alpha_n(v)) / (comp47_alpha_n(v) + comp47_beta_n(v))
 }
 
 

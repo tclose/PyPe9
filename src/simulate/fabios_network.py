@@ -33,14 +33,14 @@ parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres')
 parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)')
-parser.add_argument('--output_prefix', type=str, default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.out.') , help='The output location of the recording files')
+parser.add_argument('--output_prefix', type=str, default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.') , help='The output location of the recording files')
 parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation')
 parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
-parser.add_argument('--save_v', action='store_true', help='Save voltage trace as well as spike data')
+parser.add_argument('--volt_trace', nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 args = parser.parse_args()
 
@@ -82,21 +82,25 @@ mossy_fiber_inputs = net.get_population('MossyFiberInputs')
 
 print "Setting up simulation"
 mean_interval = 1000 / args.mf_rate # Convert from Hz to ms
-stim_range = args.time - args.start_input # Is scaled by 50% just to be sure it doesn't end early
+stim_range = args.time - args.start_input
 if stim_range >= 0.0:
     num_spikes = stim_range / mean_interval
-    num_spikes = int(num_spikes + math.exp(-num_spikes / 10.0) * 10.0) # Add extra spikes to account for variability in numbers
+    num_spikes = int(num_spikes + math.exp(-num_spikes / 10.0) * 10.0) # Add extra spikes to make sure spike train doesn't stop short
     mf_spike_intervals = numpy.random.exponential(mean_interval, size=(mossy_fiber_inputs.size, num_spikes))
     mf_spike_times = numpy.cumsum(mf_spike_intervals, axis=1) + args.start_input
     mossy_fiber_inputs.tset('spike_times', mf_spike_times)
 else:
     print "Warning, stimulation start (%f) is after end of experiment (%f)" % \
                                                                     (args.start_input, args.time)
-
+# Set up spike recordings
 for pop in net.all_populations():
     record(pop, args.output_prefix + pop.label + ".spikes") #@UndefinedVariable
-    if args.save_v and pop.label != 'MossyFiberInputs':
-        record_v(pop, args.output_prefix + "." + pop.label + ".v") #@UndefinedVariable
+
+# Set up voltage traces    
+#for pop_name, cell_id in args.volt_traces: 
+if args.volt_trace:
+    cell = net.get_population(args.volt_trace[0])[int(args.volt_trace[1])]
+    record_v(cell, args.output_prefix + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
 
 print "Final Network is..."
 

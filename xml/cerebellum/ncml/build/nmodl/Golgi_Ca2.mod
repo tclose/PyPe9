@@ -53,7 +53,6 @@ DERIVATIVE states {
 INITIAL {
     comp19_ca2  =  5e-05
     print_state()
-
 }
 
 

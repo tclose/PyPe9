@@ -13,12 +13,6 @@ import shutil
 import subprocess
 from copy import copy
 
-UNIT_MEMBERS = {'deschutter': ['tclose', 'mnegrello', 'raikov', 'dguo', 'shyamkumar'],
-                'doya': ['otsuka','jun-y', 'shauno']}
-
-UNIT_WORK_DIRS = {'deschutter': 'DeschutterU',
-                  'doya': 'DoyaU'}
-
 def get_project_dir():
     """
     Returns the root directory of the project
@@ -32,30 +26,28 @@ def create_seed(seed):
         seed = int(seed)
     return seed
 
-def create_work_dir(script_name, output_parent_dir=None, required_dirs=['src', 'xml'], username=None):
+def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', 'xml']):
     """
     Generates unique paths for the work and output directories, creating the work directory in the 
     process.
     
     @param script_name: The name of the script, used to name the directories appropriately
-    @param output_parent_dir: The name of the parent directory in which the output directory will be created (defaults to $HOME/Output).
+    @param output_dir_parent: The name of the parent directory in which the output directory will be created (defaults to $HOME/Output).
     @param required_dirs: The sub-directories that need to be copied into the work directory    
-    @param username: The username of the user, in order to get the appropriate work directory for them (defaults to login username).
     """
-    if not output_parent_dir:
-        output_parent_dir = os.path.join(os.environ['HOME'], 'Output')
-    if not username:
-        username = os.getlogin()
-    unit_dir = None
-    for unit, members in UNIT_MEMBERS.iteritems():
-        if username in members:
-            unit_dir = UNIT_WORK_DIRS[unit]
-            break        
-    if not unit_dir:
-        raise Exception("Unrecognised user '%s', please edit tombo/fabios_network.py to specifiy which unit they belong to in the tombo.UNIT_MEMBERS directory.")
+    if not output_dir_parent:
+        output_dir_parent = os.path.join(os.environ['HOME'], 'output')
+    work_dir_parent = os.path.realpath(os.path.join(os.environ['HOME'], 'work'))
+    if not os.path.exists(work_dir_parent):
+        raise Exception("Symbolic link to work directory is missing from your home directory \
+(i.e. $HOME/work). A symbolic link should be created that points to an appropriate \
+directory in your units sub-directory of '/work' (i.e. ln -s /work/<unit-name>/<user-name> $HOME/work)")
+    if not work_dir_parent.startswith('/work'):
+        raise Exception("$HOME/work be a symbolic link to a sub-directory of the high-performance \
+filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
     # Automatically generate paths
     time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs    
-    work_dir = os.path.join('/work', unit_dir, username, script_name + "." + time_str + ".1") # Working directory path
+    work_dir = os.path.join(work_dir_parent, script_name + "." + time_str + ".1") # Working directory path
     #Ensure that working directory is unique
     created_work_dir=False
     count = 1
@@ -68,7 +60,7 @@ def create_work_dir(script_name, output_parent_dir=None, required_dirs=['src', '
                 print "Something has gone wrong, can't create directory '%s' after 1000 attempts" % work_dir
                 raise e
             work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) # Replace old count at the end of work directory with new count
-    output_dir = os.path.join(output_parent_dir, os.path.split(work_dir)[1])
+    output_dir = os.path.join(output_dir_parent, os.path.split(work_dir)[1])
     init_work_dir(work_dir, required_dirs, time_str)   
     return work_dir, output_dir
 
@@ -131,7 +123,7 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate'):
     
 
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, env=None, copy_to_output=['xml'], strip_build_from_copy=True):
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=['xml'], strip_build_from_copy=True):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
     
@@ -169,7 +161,7 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, env=None, copy_to_ou
 #$ -e {work_dir}/output_stream
 
 # Name of the queue
-#$ -q longP
+#$ -q {que_name}
 
 # use OpenMPI parallel environment with {np} processes
 #$ -pe openmpi {np}
@@ -214,14 +206,14 @@ cp {work_dir}/output_stream {output_dir}/output
 echo "============== Done ===============" 
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=os.path.join(work_dir,'src'), np=np,
-      cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
+      que_name=que_name,cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd, 
       jobscript_path=jobscript_path))
     f.close()
     # Submit job
     print "Submitting job '%s' to que" % jobscript_path
     subprocess.check_call('qsub %s' % jobscript_path, shell=True)
     print "Your job '%s' has been submitted" % jobscript_path
-    print "While the job is running, its output stream can be viewed by:"
+    print "The output stream can be viewed by:"
     print "less " + os.path.join(work_dir, 'output_stream')
     print "Once completed the output files (including the output stream and job script) of this job will be copied to:"
     print output_dir
