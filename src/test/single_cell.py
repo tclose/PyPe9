@@ -11,11 +11,7 @@
 #    Copyright 2011 Okinawa Institute of Science and Technology (OIST), Okinawa, Japan
 #
 #######################################################################################
-import sys
 import os.path
-if 'NINEMLP_MPI' in os.environ:
-    import mpi4py #@UnresolvedImport @UnusedImport
-    print "importing MPI"
 import argparse
 import ninemlp
 
@@ -54,6 +50,7 @@ for pop in net.all_populations():
     record_v(pop, args.output_prefix + pop.label + ".v") #@UndefinedVariable
 #    record_gsyn(pop, args.output_prefix + pop.label + '.gsyn') #@UndefinedVariable
     # record_gsyn = common.build_record('gsyn', simulator)
+
 
 print "Starting run"
 
