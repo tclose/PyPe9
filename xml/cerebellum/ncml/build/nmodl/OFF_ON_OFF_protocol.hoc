@@ -1,0 +1,69 @@
+load_file("nrngui.hoc")
+load_file("mechanisms.hoc")
+load_file("OFF_ON_OFF.ses")
+
+prelength = 1000
+mainlength = 1500
+
+
+access soma
+
+//**********************************************************************
+proc simulate() { local preDT, mainDT
+    
+mainDT = 0.025
+preDT = 0.025
+
+dt = preDT
+tstop = prelength
+run()
+
+
+if ( stoprun == 1) return
+
+dt = mainDT
+continuerun(prelength + mainlength)
+if ( stoprun == 1) return
+
+for i=0,$o1.size()-1 {
+    $o3.printf("%g %g\n", $o1.x[i], $o2.x[i])
+}
+
+}
+
+
+//*************User-Interface*******************************************
+
+nrnsecmenu(0.5, 1)
+
+xpanel("Spontaneous firing")
+xvalue("Time for Initialization", "prelength")
+xvalue("Main duration", "mainlength")
+
+xvalue("dt", "dt")
+xvalue("t", "t")
+xlabel("")
+xbutton("Start", "simulate()")
+xbutton("Stop", "stoprun = 1")
+xpanel()
+
+vec_sizes = (prelength+mainlength)/dt + 1	// recorded traces are all this size
+
+objref  Vlog
+Vlog = new Vector(vec_sizes)
+Vlog.record (&soma.v(0.5))
+
+objref tlog
+tlog = new Vector(vec_sizes,0)
+tlog.record (&t)
+
+objref logfile
+logfile = new File()
+logfile.wopen ( "OFF_ON_OFF.dat" )
+
+simulate(tlog,Vlog,logfile)
+logfile.close()
+
+
+quit()
+
