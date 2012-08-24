@@ -123,5 +123,5 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("t = %g: comp19_SK2_z = %g\n" , t,  comp19_SK2_z)
+  printf ("%g comp19_SK2_z %g\n", t  comp19_SK2_z)
 }

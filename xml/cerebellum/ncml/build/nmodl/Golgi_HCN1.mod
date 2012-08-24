@@ -103,6 +103,6 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("t = %g: comp19_o_fast = %g\n" , t,  comp19_o_fast)
-  printf ("t = %g: comp19_o_slow = %g\n" , t,  comp19_o_slow)
+  printf ("%g HCN1_comp19_o_fast %g\n", t  comp19_o_fast)
+  printf ("%g HCN1_comp19_o_slow %g\n", t  comp19_o_slow)
 }

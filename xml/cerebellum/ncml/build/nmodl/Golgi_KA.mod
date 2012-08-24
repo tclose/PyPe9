@@ -135,6 +135,6 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("t = %g: KA_h = %g\n" , t,  KA_h)
-  printf ("t = %g: KA_m = %g\n" , t,  KA_m)
+  printf ("%g KA_h %g\n", t  KA_h)
+  printf ("%g KA_m %g\n", t  KA_m)
 }
