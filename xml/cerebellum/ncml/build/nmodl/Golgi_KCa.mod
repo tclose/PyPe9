@@ -13,13 +13,6 @@ NEURON {
 }
 
 
-FUNCTION comp19_beta_c (v, cai, Q10) {
-  comp19_beta_c  =  
-  (Q10 * comp19_Abeta_c) / 
-    (1.0 + cai / (comp19_Bbeta_c * exp(v / comp19_Kbeta_c)))
-}
-
-
 FUNCTION comp19_alpha_c (v, cai, Q10) {
   comp19_alpha_c  =  
   (Q10 * comp19_Aalpha_c) / 
@@ -27,21 +20,28 @@ FUNCTION comp19_alpha_c (v, cai, Q10) {
 }
 
 
+FUNCTION comp19_beta_c (v, cai, Q10) {
+  comp19_beta_c  =  
+  (Q10 * comp19_Abeta_c) / 
+    (1.0 + cai / (comp19_Bbeta_c * exp(v / comp19_Kbeta_c)))
+}
+
+
 PARAMETER {
-  comp170_vcbase  =  -69.0
+  comp170_vcinc  =  10.0
+  comp170_vcbdur  =  100.0
+  comp19_Kalpha_c  =  -11.765
   comp19_Bbeta_c  =  0.00015
   comp170_vchdur  =  30.0
-  comp19_Abeta_c  =  1.0
-  comp19_Kbeta_c  =  -11.765
-  comp19_Aalpha_c  =  7.0
-  comp170_vcsteps  =  8.0
-  comp19_Kalpha_c  =  -11.765
-  comp170_vcinc  =  10.0
-  comp170_vchold  =  -71.0
   comp19_e  =  -84.69
-  comp170_vcbdur  =  100.0
-  comp19_Balpha_c  =  0.0015
+  comp19_Kbeta_c  =  -11.765
+  comp170_vcsteps  =  8.0
   comp19_gbar  =  0.003
+  comp19_Balpha_c  =  0.0015
+  comp170_vcbase  =  -69.0
+  comp19_Aalpha_c  =  7.0
+  comp19_Abeta_c  =  1.0
+  comp170_vchold  =  -71.0
 }
 
 
@@ -54,10 +54,10 @@ STATE {
 
 ASSIGNED {
   comp19_Q10
+  v
+  ica
   celsius
   cai
-  ica
-  v
   ik
   ek
   i_KCa
@@ -79,6 +79,7 @@ BREAKPOINT {
   reactions ()
   i_KCa  =  (comp19_gbar * KCa_m) * (v - comp19_e)
   ik  =  i_KCa
+  print_state()
 }
 
 
@@ -104,5 +105,6 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("KCa_mO = %g\n" ,  KCa_mO)
+  printf ("t = %g: KCa_mO = %g\n" , t,  KCa_mO)
+  printf ("t = %g: KCa_m = %g\n" , t,  KCa_m)
 }
