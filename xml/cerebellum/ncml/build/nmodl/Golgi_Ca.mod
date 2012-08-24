@@ -11,11 +11,11 @@ NEURON {
 
 
 PARAMETER {
-  comp19_cai0  =  5e-05
-  comp19_beta  =  1.3
+  comp19_cao  =  2.0
   comp19_d  =  0.2
   comp19_F  =  96485.0
-  comp19_cao  =  2.0
+  comp19_cai0  =  5e-05
+  comp19_beta  =  1.3
 }
 
 
@@ -25,9 +25,9 @@ STATE {
 
 
 ASSIGNED {
-  cai
-  ica
   v
+  ica
+  cai
 }
 
 
@@ -39,6 +39,7 @@ PROCEDURE pools () {
 BREAKPOINT {
   SOLVE states METHOD derivimplicit
   pools ()
+  print_state()
 }
 
 
@@ -50,11 +51,11 @@ DERIVATIVE states {
 
 
 INITIAL {
-    comp19_ca  =  5e-05
-    print_state()
+  comp19_ca  =  5e-05
+  print_state()
 }
 
 
 PROCEDURE print_state () {
-  printf ("comp19_ca = %g\n" ,  comp19_ca)
+  printf ("t = %g: comp19_ca = %g\n" , t,  comp19_ca)
 }
