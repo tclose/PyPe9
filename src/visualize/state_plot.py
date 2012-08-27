@@ -12,12 +12,13 @@ Contains a method for plotting saved states from NMODL printouts
 #
 #######################################################################################
 
-MAX_NUM_POINTS = 1000
-
 import sys
 import math
 import matplotlib.pyplot as plt
 import argparse
+
+COLOR_SEQUENCE=['b','g','r','m','c','y','k']
+PATTERN_SEQUENCE=['-','--',':','-.']
 
 parser = argparse.ArgumentParser(description='A script to plot spike activity')
 parser.add_argument('filename', help='The file to plot the spikes from')
@@ -25,6 +26,8 @@ parser.add_argument('--time_start', type=float, default=None, help='The start of
 parser.add_argument('--time_stop', type=float, default=None, help='The stop of the plot')
 parser.add_argument('--incr', type=float, default=0.01, help='The minimum increment required before the next step in the voltage trace is plotted as a fraction of the starting value')
 parser.add_argument('--extra_label', type=str, default='', help='Additional label information')
+parser.add_argument('--max_num_points', type=int, default=5000, help='The maximum number of lines plotted per state, if the minimum increment fails to reduce the number of lines below this number the state plot will either be decimated or truncated (in order to contain plot to permissible overal number of lines) (default: %(default)s)')
+parser.add_argument('--truncate', action="store_true", help='If the number of points for a state falls exceeds the maximum number, the state''s plot will be automatically decimated (have time points removed) down to an appropriate size. However, using this option it can also be truncated to show a short example of the trace with no intermediate points missing')
 args = parser.parse_args()
 
 max_values = {}
@@ -95,22 +98,34 @@ for ID in last_x.keys():
     print "'%s' has %d points (range %g, incr %g)" % (ID,len(states[ID]), max_values[ID] - min_values[ID], incrs[ID])
 # Plot states sorted in order of their IDs
 legend = []
+line_count = 0
+fig = plt.figure()
+ax = plt.subplot(111)
 for ID in sorted(states.keys()):
     state = states[ID]
     time = times[ID]
     num_points = len(state)
     assert(len(time) == num_points)
     # If the number of points exceeds the maxium, decimate the 
-    if num_points > MAX_NUM_POINTS:
-        incr = num_points / MAX_NUM_POINTS
-        state = state[0:incr:num_points]
-        time = time[0:incr:num_points]
-        print "Warning state '%s' had to have its time course decimated, likely to have large magnitude high frequency oscillations." % ID
-    len(time)
-    len(state)
-    plt.plot(time, state)
+    if num_points > args.max_num_points:
+        if args.truncate:
+            state = state[0:args.max_num_points]
+            time = time[0:args.max_num_points]
+            print "Warning state '%s' has had its time course truncated at t=%f" % (ID, time[-1])
+        else:
+            incr = num_points / args.max_num_points            
+            state = state[0:incr:num_points]
+            time = time[0:incr:num_points]
+            print "Warning state '%s' has had its time course decimated, meaning it may have large magnitude high frequency oscillations that have been omitted from the plot (use '--truncate' option to investigate short section of trace)." % ID
+    line_style = COLOR_SEQUENCE[line_count % len(COLOR_SEQUENCE)] + \
+                 PATTERN_SEQUENCE[line_count/len(COLOR_SEQUENCE) % len(PATTERN_SEQUENCE)]
+    ax.plot(time, state, line_style)
+    line_count += 1
     legend.append(ID + ' x 10^' + str(math.log(order_of_mags[ID],10.0)))
-plt.legend(legend)
+box = ax.get_position()
+ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+# Put a legend to the right of the current axis
+ax.legend(legend,loc='center left', bbox_to_anchor=(1, 0.5))
 plt.setp(plt.gca().get_legend().get_texts(), fontsize='small')
 plt.title('States v Time (%s)' % args.filename)
 plt.xlabel('Time (ms)')
