@@ -12,7 +12,7 @@ Contains a method for plotting saved states from NMODL printouts
 #
 #######################################################################################
 
-MAX_NUM_POINTS = 25
+MAX_NUM_POINTS = 1000
 
 import sys
 import math
@@ -105,14 +105,14 @@ for ID in sorted(states.keys()):
         incr = num_points / MAX_NUM_POINTS
         state = state[0:incr:num_points]
         time = time[0:incr:num_points]
-        print "Warning state '%s' had to have its time course decimated, likely to have large magnitude high frequency oscillations."
+        print "Warning state '%s' had to have its time course decimated, likely to have large magnitude high frequency oscillations." % ID
     len(time)
     len(state)
     plt.plot(time, state)
     legend.append(ID + ' x 10^' + str(math.log(order_of_mags[ID],10.0)))
 plt.legend(legend)
 plt.setp(plt.gca().get_legend().get_texts(), fontsize='small')
-plt.title('States v Time')
+plt.title('States v Time (%s)' % args.filename)
 plt.xlabel('Time (ms)')
 # Show the plot
 plt.show()
