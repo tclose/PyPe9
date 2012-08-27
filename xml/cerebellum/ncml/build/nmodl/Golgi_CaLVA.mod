@@ -136,6 +136,6 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("%g CaLVA_h %g\n", t  CaLVA_h)
-  printf ("%g CaLVA_m %g\n", t  CaLVA_m)
+  printf ("state: %g CaLVA_h %g\n", t,  CaLVA_h)
+  printf ("state: %g CaLVA_m %g\n", t,  CaLVA_m)
 }

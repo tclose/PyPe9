@@ -58,5 +58,5 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("%g Ca2_comp19 %g\n", t  comp19_ca2)
+  printf ("state: %g Ca2_comp19 %g\n", t,  comp19_ca2)
 }

@@ -138,7 +138,7 @@ PROCEDURE rate(v (mV)) {LOCAL a_s, b_s, a_u, b_u
 }
 
 PROCEDURE print_state () {
-  printf ("%g CaHVA_s %g\n", t  s)
-  printf ("%g CaHVA_u %g\n", t  u)
+  printf ("state: %g CaHVA_s %g\n", t,  s)
+  printf ("state: %g CaHVA_u %g\n", t,  u)
 }
 

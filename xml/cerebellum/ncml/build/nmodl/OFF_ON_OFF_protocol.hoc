@@ -2,8 +2,8 @@ load_file("nrngui.hoc")
 load_file("mechanisms.hoc")
 load_file("OFF_ON_OFF.ses")
 
-prelength = 1000
-mainlength = 1500
+prelength = 100
+mainlength = 150
 
 
 access soma

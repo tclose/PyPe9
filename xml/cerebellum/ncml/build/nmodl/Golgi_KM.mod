@@ -91,5 +91,5 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("%g KM_m %g\n", t  KM_m)
+  printf ("state: %g KM_m %g\n", t,  KM_m)
 }

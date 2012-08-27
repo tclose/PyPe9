@@ -105,6 +105,6 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("%g KCa_mO %g\n", t  KCa_mO)
-  printf ("%g KCa_m %g\n", t  KCa_m)
+  printf ("state: %g KCa_mO %g\n", t,  KCa_mO)
+  printf ("state: %g KCa_m %g\n", t,  KCa_m)
 }
