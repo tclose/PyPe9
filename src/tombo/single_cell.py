@@ -22,7 +22,7 @@ parser.add_argument('--simulator', type=str, default='neuron',
 parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
-parser.add_argument('--time', type=float, default=100.0, help='The run time of the simulation (ms)')
+parser.add_argument('--time', type=float, default=25.0, help='The run time of the simulation (ms)')
 parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
