@@ -25,11 +25,9 @@ parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--time', type=float, default=100.0, help='The run time of the simulation (ms)')
-parser.add_argument('--output_prefix', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.') , help='The output location of the recording files')
+parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.') , help='The output location of the recording files')
 parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
-parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
-parser.add_argument('--volt_trace', nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 args = parser.parse_args()
 
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', args.xml_filename)
@@ -46,9 +44,9 @@ net = Network(network_xml_location) #@UndefinedVariable
 
 # Set up spike recordings
 for pop in net.all_populations():
-    record(pop, args.output_prefix + pop.label + ".spikes") #@UndefinedVariable
-    record_v(pop, args.output_prefix + pop.label + ".v") #@UndefinedVariable
-#    record_gsyn(pop, args.output_prefix + pop.label + '.gsyn') #@UndefinedVariable
+    record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
+    record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
+#    record_gsyn(pop, args.output + pop.label + '.gsyn') #@UndefinedVariable
     # record_gsyn = common.build_record('gsyn', simulator)
 
 
