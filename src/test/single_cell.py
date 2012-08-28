@@ -47,7 +47,17 @@ net = Network(network_xml_location) #@UndefinedVariable
 
 # Set up spike recordings
 for pop in net.all_populations():
-    dir(pop)
+    print pop
+    print "nine.pop: " + str(dir(pop)).replace(',', ',\n')
+    print sys.path
+    import ninemlp.neuron as nine
+    print "nine.nine: " + str(dir(nine)).replace(',', ',\n')
+    print "nine.pyNN: " + str(dir(nine.pyNN)).replace(',', ',\n')
+    print "nine.Population: " + str(dir(nine.Population)).replace(',', ',\n')
+    print "pyNN.version: " + nine.pyNN.__version__
+    p = nine.Population('test', 100, nine.pyNN.neuron.IF_curr_alpha)
+    print p
+    print "p: " + str(dir(p)).replace(',',',\n')
     record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
     record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
 #    record_gsyn(pop, args.output + pop.label + '.gsyn') #@UndefinedVariable
