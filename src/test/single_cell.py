@@ -47,6 +47,7 @@ net = Network(network_xml_location) #@UndefinedVariable
 
 # Set up spike recordings
 for pop in net.all_populations():
+    dir(pop)
     record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
     record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
 #    record_gsyn(pop, args.output + pop.label + '.gsyn') #@UndefinedVariable
