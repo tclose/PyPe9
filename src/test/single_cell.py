@@ -32,7 +32,8 @@ args = parser.parse_args()
 
 network_xml_location = os.path.join(PROJECT_PATH, 'xml', args.xml_filename)
 if not os.path.exists(network_xml_location):
-    raise Exception("Could not find xml file in either relative location or in '<kbrain-home>/xml/cerebellum/%s" % args.xml_location)
+    raise Exception("Could not find xml file at '<kbrain-home>/xml/cerebellum/%s (note passed \
+filename needs to be is relative to xml directory)" % args.xml_location)
 
 ninemlp.BUILD_MODE = args.build
 

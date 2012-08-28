@@ -36,10 +36,10 @@ required_dirs = ['src', 'xml']
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
 
 #Compile network
-tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
+tombo.compile_ninemlp(SCRIPT_NAME, work_dir, script_dir='test', script_args=args.xml_filename)
 # Set up command to run the script
 cmd_line = \
-"time mpirun python src/simulate/{script_name}.py {xml_filename} --output {work_dir}/output/ --time {time}  \
+"time mpirun python src/test/{script_name}.py {xml_filename} --output {work_dir}/output/ --time {time}  \
  --min_delay {min_delay} --simulator {simulator} --timestep {timestep}".format(script_name=SCRIPT_NAME,
                                                                               xml_filename=args.xml_filename,
                                                                               work_dir=work_dir,
