@@ -101,7 +101,7 @@ def create_env(work_dir):
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
     return env
     
-def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate'):
+def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', script_args=''):
     """
     Compiles objects in the work directory that are required by the NINEML+ network
     
@@ -117,8 +117,8 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate'):
     env['NINEMLP_BUILD_MODE'] = 'compile_only'
     env['NINEMLP_MPI'] = '1'
     print "Compiling required NINEML+ objects"
-    subprocess.check_call('python %s --build compile_only' %
-                                      os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
+    subprocess.check_call('python %s %s --build compile_only' %
+                                      (os.path.join(work_dir, 'src', script_dir, script_name + '.py'), script_args),
                                                                        shell=True, env=env)
     
 

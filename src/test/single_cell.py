@@ -31,11 +31,12 @@ parser.add_argument('--timestep', type=float, default=0.001, help='The timestep 
 args = parser.parse_args()
 
 if not os.path.exists(args.xml_filename):
-    network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', args.xml_filename)
+    network_xml_location = os.path.join(PROJECT_PATH, 'xml', 'cerebellum', args.xml_filename)
     if not os.path.exists(network_xml_location):
         raise Exception("Could not find xml file in either relative location or in '<kbrain-home>/xml/cerebellum/%s" % args.xml_location)
 else:
-    network_xml_locaiton = args.xml_filename
+    network_xml_location = args.xml_filename
+print network_xml_location
 
 ninemlp.BUILD_MODE = args.build
 
