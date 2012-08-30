@@ -102,5 +102,5 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("state: %g NaP_m %g\n", t,  NaP_m)
+  printf ("t = %g: NaP_m = %g\n" , t,  NaP_m)
 }

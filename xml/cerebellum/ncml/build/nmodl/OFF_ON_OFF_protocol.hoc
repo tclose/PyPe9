@@ -2,8 +2,8 @@ load_file("nrngui.hoc")
 load_file("mechanisms.hoc")
 load_file("OFF_ON_OFF.ses")
 
-prelength = 100
-mainlength = 150
+prelength = 1000
+mainlength = 1500
 
 
 access soma
@@ -11,8 +11,8 @@ access soma
 //**********************************************************************
 proc simulate() { local preDT, mainDT
     
-mainDT = 0.001
-preDT = 0.001
+mainDT = 0.025
+preDT = 0.025
 
 dt = preDT
 tstop = prelength

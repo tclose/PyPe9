@@ -143,8 +143,8 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("state: %g Na_hO %g\n", t,  Na_hO)
-  printf ("state: %g Na_mO %g\n", t,  Na_mO)
-  printf ("state: %g Na_h %g\n", t,  Na_h)
-  printf ("state: %g Na_m %g\n", t,  Na_m)
+  printf ("t = %g: Na_hO = %g\n" , t,  Na_hO)
+  printf ("t = %g: Na_mO = %g\n" , t,  Na_mO)
+  printf ("t = %g: Na_h = %g\n" , t,  Na_h)
+  printf ("t = %g: Na_m = %g\n" , t,  Na_m)
 }

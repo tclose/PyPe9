@@ -111,6 +111,6 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("state: %g KV_mO %g\n", t,  KV_mO)
-  printf ("state: %g KV_m %g\n", t,  KV_m)
+  printf ("t = %g: KV_mO = %g\n" , t,  KV_mO)
+  printf ("t = %g: KV_m = %g\n" , t,  KV_m)
 }

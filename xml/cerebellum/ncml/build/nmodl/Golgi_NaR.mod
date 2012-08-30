@@ -141,8 +141,8 @@ INITIAL {
 
 
 PROCEDURE print_state () {
-  printf ("state: %g NaR_hO %g\n", t,  NaR_hO)
-  printf ("state: %g NaR_mO %g\n", t,  NaR_mO)
-  printf ("state: %g NaR_h %g\n", t,  NaR_h)
-  printf ("state: %g NaR_m %g\n", t,  NaR_m)
+  printf ("t = %g: NaR_hO = %g\n" , t,  NaR_hO)
+  printf ("t = %g: NaR_mO = %g\n" , t,  NaR_mO)
+  printf ("t = %g: NaR_h = %g\n" , t,  NaR_h)
+  printf ("t = %g: NaR_m = %g\n" , t,  NaR_m)
 }
