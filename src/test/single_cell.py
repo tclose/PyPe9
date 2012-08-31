@@ -49,9 +49,8 @@ net = Network(network_xml_location) #@UndefinedVariable
 for pop in net.all_populations():
     record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
     record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
-#    record_gsyn(pop, args.output + pop.label + '.gsyn') #@UndefinedVariable
-    # record_gsyn = common.build_record('gsyn', simulator)
-
+#   record_gsyn(pop, args.output + pop.label + '.gsyn') #@UndefinedVariable
+#   record_gsyn = common.build_record('gsyn', simulator)
 
 print "Starting run"
 
