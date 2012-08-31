@@ -8,17 +8,17 @@ soma {
     Ra = 100 // From Roth&Hausser2000
     celsius = 23
     
-    insert Golgi_Ca
-    insert Golgi_Ca2
-    insert Golgi_CaHVA
-    insert Golgi_CaLVA
-    insert Golgi_HCN1
-    insert Golgi_HCN2
+    insert Golgi_CALC
+    insert Golgi_CALC_ca2
+    insert Golgi_Ca_HVA
+    insert Golgi_Ca_LVA
+    insert Golgi_hcn1
+    insert Golgi_hcn2
     insert Golgi_KA
-    insert Golgi_KCa
+    insert Golgi_BK
     insert Golgi_KM
     insert Golgi_KV
-    insert Golgi_Lkg
+    insert Golgi_lkg
     insert Golgi_Na
     insert Golgi_NaP
     insert Golgi_NaR
