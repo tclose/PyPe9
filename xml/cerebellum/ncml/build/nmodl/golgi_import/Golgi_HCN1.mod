@@ -19,7 +19,6 @@ NEURON {
 	NONSPECIFIC_CURRENT ih
 	RANGE o_fast_inf, o_slow_inf, tau_f, tau_s, Erev
 	RANGE gbar,r,g
-	 THREADSAFE
 }       
         
 UNITS {

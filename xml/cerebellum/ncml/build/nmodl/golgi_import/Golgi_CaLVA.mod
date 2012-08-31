@@ -35,8 +35,8 @@ NEURON {
 	RANGE v0_m_inf,v0_h_inf,k_m_inf,k_h_inf,C_tau_m
 	RANGE A_tau_m,v0_tau_m1,v0_tau_m2,k_tau_m1,k_tau_m2
 	RANGE C_tau_h ,A_tau_h ,v0_tau_h1,v0_tau_h2,k_tau_h1 ,k_tau_h2
-  THREADSAFE
-}
+
+    }
 
 UNITS {
         (molar) = (1/liter)

@@ -15,7 +15,6 @@ NEURON {
 	:RANGE Aalpha_n, Kalpha_n, V0alpha_n, alpha_n, beta_n 
 	:RANGE Abeta_n, Kbeta_n, V0beta_n
 	RANGE n, n_inf, tau_n, tcorr
-	THREADSAFE
 } 
  
 UNITS { 

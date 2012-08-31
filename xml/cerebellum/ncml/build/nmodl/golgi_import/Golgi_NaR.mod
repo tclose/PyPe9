@@ -18,7 +18,6 @@ NEURON {
         RANGE Shiftalpha_s,Shiftbeta_s,tau_s,s_inf
 	RANGE Aalpha_f,Abeta_f,V0alpha_f,V0beta_f,Kalpha_f, Kbeta_f
 	RANGE f, tau_f,f_inf,s , tau_s,s_inf, tcorr
-	THREADSAFE
 } 
  
 UNITS {    

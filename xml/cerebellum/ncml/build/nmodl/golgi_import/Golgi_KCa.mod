@@ -15,7 +15,6 @@ NEURON {
 	RANGE Aalpha_c, Balpha_c, Kalpha_c, alpha_c, beta_c
 	RANGE Abeta_c, Bbeta_c, Kbeta_c 
 	RANGE c_inf, tau_c, c, tcorr
-	THREADSAFE
 } 
  
 UNITS { 
