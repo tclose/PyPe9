@@ -11,7 +11,6 @@ NEURON {
         SUFFIX Golgi_Ca2
         USEION ca2 READ ica2, ca2o WRITE ca2i VALENCE 2
         RANGE d, beta, ca2i0, ca2_pump_i
-               THREADSAFE
 }
 
 UNITS {

@@ -19,7 +19,6 @@ NEURON{
 	USEION ca READ cai
 	USEION k READ ek WRITE ik 
 	RANGE gkbar, g, ik, tcorr
-               THREADSAFE
 }
 
 UNITS {

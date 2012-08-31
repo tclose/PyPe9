@@ -20,7 +20,6 @@ NEURON {
 	RANGE Abeta_h, Kbeta_h, V0beta_h
 
 	RANGE m_inf, tau_m, h_inf, tau_h, m, h, tcorr
-	THREADSAFE
 } 
  
 UNITS { 

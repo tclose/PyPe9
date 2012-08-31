@@ -219,7 +219,7 @@
                         </body>
                     </defun>
                     <defun name="bet_f">
-                        <arg name="v" />
+                        <arg name="v" />~/Desktop/pyNN_output.txt
                         <body> temp_adj * Abeta_f * exp( ( v - V0beta_f ) / Kbeta_f )
                         </body>
                     </defun>
@@ -439,7 +439,7 @@
                     <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
                         units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
                 </conductanceSynapse>
-                <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />         
+<!--                 <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />          -->
             </synapses>            
         </biophysicalProperties>
     </cell>

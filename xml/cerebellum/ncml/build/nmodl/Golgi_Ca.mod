@@ -1,61 +1,57 @@
+TITLE Cerebellum Golgi Cell Model
 
-
-TITLE Golgi_Ca
-
+COMMENT
+        Calcium first order kinetics
+   
+	Author: A. Fontana
+	Revised: 12.12.98
+ENDCOMMENT
 
 NEURON {
-  RANGE comp19_ca
-  RANGE ica, cai
-  USEION ca READ ica WRITE cai
+        SUFFIX Golgi_Ca
+        USEION ca READ ica, cao WRITE cai
+        RANGE d, beta, cai0, ca_pump_i
+               THREADSAFE
 }
 
+UNITS {
+        (mV)    = (millivolt)
+        (mA)    = (milliamp)
+	(um)    = (micron)
+	(molar) = (1/liter)
+        (mM)    = (millimolar)
+   	F      = (faraday) (coulomb)
+}
 
 PARAMETER {
-  comp19_cao  =  2.0
-  comp19_d  =  0.2
-  comp19_F  =  96485.0
-  comp19_cai0  =  5e-05
-  comp19_beta  =  1.3
+        ica             (mA/cm2)
+        celsius    (degC)
+        d = .2          (um)
+        cao = 2.        (mM)         
+        cai0 = 1e-4     (mM)         
+        beta = 1.3        (/ms)
 }
-
-
-STATE {
-  comp19_ca
-}
-
 
 ASSIGNED {
-  v
-  ica
-  cai
+	ca_pump_i	(mA)
 }
-
-
-PROCEDURE pools () {
-  cai = comp19_ca
+STATE {
+	cai (mM)
 }
-
-
-BREAKPOINT {
-  SOLVE states METHOD derivimplicit
-  pools ()
-  print_state()
-}
-
-
-DERIVATIVE states {
-  comp19_ca'  =  
-  (-(ica)) / (2.0 * comp19_F * comp19_d) * 10000.0 + 
-    -(comp19_beta * (comp19_ca + -(comp19_cai0)))
-}
-
 
 INITIAL {
-  comp19_ca  =  5e-05
-  print_state()
+        cai = cai0 
+}
+
+BREAKPOINT {
+       SOLVE conc METHOD derivimplicit
+}
+
+DERIVATIVE conc {    
+	:  outward ionic current with valence 2+
+	ca_pump_i = 2*beta*(cai-cai0)
+	:  total outward Ca current
+	cai' =  -ica/(2*F*d)*(1e4) - beta*(cai-cai0)
 }
 
 
-PROCEDURE print_state () {
-  printf ("t = %g: comp19_ca = %g\n" , t,  comp19_ca)
-}

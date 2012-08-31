@@ -18,7 +18,6 @@ NEURON {
 	SUFFIX Golgi_Lkg
 	NONSPECIFIC_CURRENT i
 	RANGE el, glbar, i
-  THREADSAFE
 }
 
 UNITS {

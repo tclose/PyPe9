@@ -16,7 +16,6 @@ NEURON {
 	:RANGE V0_minf, B_minf
 	RANGE m, m_inf, tau_m, tcorr
 	:GLOBAL i
-	THREADSAFE
 } 
  
 UNITS { 
