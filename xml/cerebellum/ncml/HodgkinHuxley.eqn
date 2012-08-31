@@ -1,0 +1,100 @@
+model global quantities: K_m Na_h Na_m comp216_gbar_Leak comp216_e_Leak comp154_e_K comp154_gbar_K comp62_gbar_Na comp62_e_Na comp47_C i ina ik e ena ek v comp216_e_Leak comp62_e_Na Vrest comp47_C comp154_e_K comp154_gbar_K V_t comp62_gbar_Na comp216_gbar_Leak i_K i_Na i_Leak
+
+
+imported quantities: v 
+
+permeating ions: non-specific na k 
+
+ionic currents: i_Na ina i_K ik i_Leak i
+
+
+
+
+Initial values: 
+  comp216_e_Leak  =  -54.4
+  comp62_e_Na  =  50.0
+  Vrest  =  -65.0
+  comp47_C  =  1.0
+  comp154_e_K  =  -77.0
+  comp154_gbar_K  =  36.0
+  V_t  =  -35.0
+  comp62_gbar_Na  =  120.0
+  comp216_gbar_Leak  =  0.3
+  K_m  =  (comp154_anf(Vrest)) / (comp154_anf(Vrest) + comp154_bnf(Vrest))
+  K_mO  =  K_m
+  Na_m  =  (comp62_amf(Vrest)) / (comp62_amf(Vrest) + comp62_bmf(Vrest))
+  Na_mO  =  Na_m
+  Na_h  =  (comp62_ahf(Vrest)) / (comp62_ahf(Vrest) + comp62_bhf(Vrest))
+  Na_hO  =  Na_h
+  v348  =  Na_m 
+i_Na  =  (comp62_gbar_Na * v348 * v348 * v348 * Na_h) * (v - comp62_e_Na)
+  ina  =  i_Na
+  v346  =  K_m 
+i_K  =  (comp154_gbar_K * v346 * v346 * v346 * v346) * (v - comp154_e_K)
+  ik  =  i_K
+  i_Leak  =  comp216_gbar_Leak * (v - comp216_e_Leak)
+  i  =  i_Leak
+
+
+
+
+State equations: 
+  Na_h  =  Na_hO
+  Na_m  =  Na_mO
+  K_m  =  K_mO
+  v351  =  K_mO 
+d(K_mO)  =  -(K_mO * comp154_bnf(v)) + (1 - v351) * (comp154_anf(v))
+  v354  =  Na_mO 
+d(Na_mO)  =  -(Na_mO * comp62_bmf(v)) + (1 - v354) * (comp62_amf(v))
+  v357  =  Na_hO 
+d(Na_hO)  =  -(Na_hO * comp62_bhf(v)) + (1 - v357) * (comp62_ahf(v))
+  v348  =  Na_m 
+i_Na  =  (comp62_gbar_Na * v348 * v348 * v348 * Na_h) * (v - comp62_e_Na)
+  ina  =  i_Na
+  v346  =  K_m 
+i_K  =  (comp154_gbar_K * v346 * v346 * v346 * v346) * (v - comp154_e_K)
+  ik  =  i_K
+  i_Leak  =  comp216_gbar_Leak * (v - comp216_e_Leak)
+  i  =  i_Leak
+
+
+function comp154_bnf (v)
+  0.125 * exp(-(v + 65.0) / 80.0)
+end
+
+
+
+
+function comp62_amf (v)
+  0.1 * (v + 40.0) / (1.0 + -(exp(-(v + 40.0) / 10.0)))
+end
+
+
+
+
+function comp62_ahf (v)
+  0.07 * exp(-(v + 65.0) / 20.0)
+end
+
+
+
+
+function comp62_bmf (v)
+  4.0 * exp(-(v + 65.0) / 18.0)
+end
+
+
+
+
+function comp62_bhf (v)
+  1.0 / (1.0 + exp(-(v + 35.0) / 10.0))
+end
+
+
+
+
+function comp154_anf (v)
+  0.01 * (v + 55.0) / (1.0 + -(exp(-(v + 55.0) / 10.0)))
+end
+
+
