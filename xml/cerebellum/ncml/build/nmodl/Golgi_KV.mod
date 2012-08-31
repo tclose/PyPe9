@@ -1,116 +1,101 @@
+TITLE Cerebellum Golgi Cell Model
 
+COMMENT
+        KDr channel
+	Gutfreund parametrization
+   
+	Author: A. Fontana
+	Last revised: 12.12.98
+ENDCOMMENT
 
-TITLE Golgi_KV
+NEURON { 
+	SUFFIX Golgi_KV 
+	USEION k READ ek WRITE ik 
+	RANGE gkbar, ik, g
+	:RANGE Aalpha_n, Kalpha_n, V0alpha_n, alpha_n, beta_n 
+	:RANGE Abeta_n, Kbeta_n, V0beta_n
+	RANGE n, n_inf, tau_n, tcorr
+	THREADSAFE
+} 
+ 
+UNITS { 
+	(mA) = (milliamp) 
+	(mV) = (millivolt) 
+} 
+ 
+PARAMETER { 
+	
+	Aalpha_n = -0.01 (/ms-mV)
+	Kalpha_n = -10 (mV)
+	V0alpha_n = -26 (mV)
 
+	Abeta_n = 0.125 (/ms)
+	Kbeta_n = -80 (mV)
+	V0beta_n = -36 (mV)
+	v (mV)  
+	gkbar= 0.032 (mho/cm2)
 
-NEURON {
-  RANGE KV_m, comp183_vcbdur, comp183_vchdur, comp183_vcsteps, comp183_vcinc, comp183_vcbase, comp183_vchold, comp35_e, comp35_gbar
-  RANGE i_KV
-  RANGE ik
-  USEION k READ ek WRITE ik
-}
+	ek (mV) 
+	celsius (degC)
+	Q10 = 3 (1)
+} 
 
+STATE { 
+	n 
+} 
 
-FUNCTION comp35_beta_n (v, Q10) {
-  comp35_beta_n  =  
-  Q10 * comp35_Abeta_n * exp((v + -(comp35_V0beta_n)) / comp35_Kbeta_n)
-}
+ASSIGNED { 
+	ik (mA/cm2) 
+	n_inf 
+	tau_n (ms) 
+	g (mho/cm2) 
+	alpha_n (/ms) 
+	beta_n (/ms)
+	tcorr	(1) 
+} 
+ 
+INITIAL { 
+	rate(v) 
+	n = n_inf 
+} 
+ 
+BREAKPOINT { 
+	SOLVE states METHOD derivimplicit 
+	g = gkbar*n*n*n*n 
+	ik = g*(v - ek) 
+	alpha_n = alp_n(v) 
+	beta_n = bet_n(v) 
+} 
+ 
+DERIVATIVE states { 
+	rate(v) 
+	n' =(n_inf - n)/tau_n 
+} 
+ 
+FUNCTION alp_n(v(mV))(/ms) {
+	tcorr = Q10^((celsius-6.3(degC))/10(degC)) 
+	alp_n = tcorr*Aalpha_n*linoid(v-V0alpha_n, Kalpha_n)
+} 
+ 
+FUNCTION bet_n(v(mV))(/ms) {
+	tcorr = Q10^((celsius-6.3(degC))/10(degC)) 
+	bet_n = tcorr*Abeta_n*exp((v-V0beta_n)/Kbeta_n) 
+} 
+ 
+PROCEDURE rate(v (mV)) {LOCAL a_n, b_n 
+	TABLE n_inf, tau_n 
+	DEPEND Aalpha_n, Kalpha_n, V0alpha_n, 
+               Abeta_n, Kbeta_n, V0beta_n, celsius FROM -100 TO 30 WITH 13000 
+	a_n = alp_n(v)  
+	b_n = bet_n(v) 
+	tau_n = 1/(a_n + b_n) 
+	n_inf = a_n/(a_n + b_n) 
+} 
 
-
-FUNCTION comp35_alpha_n (v, Q10) {
-  comp35_alpha_n  =  
-  Q10 * comp35_Aalpha_n * 
-    linoid(v + -(comp35_V0alpha_n), comp35_Kalpha_n)
-}
-
-
-FUNCTION linoid (x, y) {
-  LOCAL v314
-  if 
-    (fabs(x / y) < 1e-06) 
-     {v314  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v314  =  x / (exp(x / y) + -1.0)} 
-linoid  =  v314
-}
-
-
-PARAMETER {
-  comp183_vcsteps  =  8.0
-  comp183_vchdur  =  30.0
-  comp35_V0beta_n  =  -36.0
-  comp35_V0alpha_n  =  -26.0
-  comp183_vcinc  =  10.0
-  comp183_vcbdur  =  100.0
-  comp35_Abeta_n  =  0.125
-  comp183_vcbase  =  -69.0
-  comp35_Kalpha_n  =  -10.0
-  comp35_Kbeta_n  =  -80.0
-  comp35_e  =  -84.69
-  comp35_Aalpha_n  =  -0.01
-  comp183_vchold  =  -71.0
-  comp35_gbar  =  0.032
-}
-
-
-STATE {
-  KV_mC
-  KV_mO
-  KV_m
-}
-
-
-ASSIGNED {
-  comp35_Q10
-  v
-  celsius
-  ik
-  ek
-  i_KV
-}
-
-
-PROCEDURE asgns () {
-  comp35_Q10  =  3.0 ^ ((celsius + -6.3) / 10.0)
-}
-
-
-PROCEDURE reactions () {
-  KV_m  =  KV_mO
-}
-
-
-BREAKPOINT {
-  LOCAL v316
-  SOLVE states METHOD derivimplicit
-  reactions ()
-  v316  =  KV_m 
-i_KV  =  (comp35_gbar * v316 * v316 * v316 * v316) * (v - comp35_e)
-  ik  =  i_KV
-  print_state()
-}
-
-
-DERIVATIVE states {
-  LOCAL v312
-  asgns ()
-  v312  =  KV_mO 
-KV_mO'  =  
-    -(KV_mO * comp35_beta_n(v, comp35_Q10)) + 
-        (1 - v312) * (comp35_alpha_n(v, comp35_Q10))
-}
-
-
-INITIAL {
-  asgns ()
-  KV_m  =  
-  (comp35_alpha_n(v, comp35_Q10)) / 
-    (comp35_alpha_n(v, comp35_Q10) + comp35_beta_n(v, comp35_Q10))
-  KV_mO  =  KV_m
-  print_state()
-}
-
-
-PROCEDURE print_state () {
-  printf ("t = %g: KV_mO = %g\n" , t,  KV_mO)
-  printf ("t = %g: KV_m = %g\n" , t,  KV_m)
+FUNCTION linoid(x (mV),y (mV)) (mV) {
+        if (fabs(x/y) < 1e-6) {
+                linoid = y*(1 - x/y/2)
+        }else{
+                linoid = x/(exp(x/y) - 1)
+        }
 }

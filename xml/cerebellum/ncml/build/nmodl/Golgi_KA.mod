@@ -1,140 +1,155 @@
+TITLE Cerebellum Golgi Cell Model
 
+COMMENT
+        KA channel
+   
+        Author:E.D Angelo, T.Nieus, A. Fontana
+	Last revised: Egidio 3.12.2003
+ENDCOMMENT
 
-TITLE Golgi_KA
+NEURON { 
+	SUFFIX Golgi_KA
+	USEION k READ ek WRITE ik 
+	RANGE gkbar, ik, g
+	:RANGE Aalpha_a, Kalpha_a, V0alpha_a, alpha_a, beta_a, alpha_b
+	:RANGE Abeta_a, Kbeta_a, V0beta_a, beta_b
+	:RANGE Aalpha_b, Kalpha_b, V0alpha_b
+	:RANGE Abeta_b, Kbeta_b, V0beta_b
+	:RANGE V0_ainf, K_ainf, V0_binf, K_binf
+	RANGE a, b, a_inf, tau_a, b_inf, tau_b, tcorr
+	THREADSAFE
+} 
+ 
+UNITS { 
+	(mA) = (milliamp) 
+	(mV) = (millivolt) 
+} 
+ 
+PARAMETER { 
+	gkbar= 0.008 (mho/cm2)
+	Aalpha_a = 0.8147 (/ms)
+	Kalpha_a = -23.32708 (mV)
+	V0alpha_a = -9.17203 (mV)
+	Abeta_a = 0.1655 (/ms)
+	Kbeta_a = 19.47175 (mV)
+	V0beta_a = -18.27914 (mV)
 
+	Aalpha_b = 0.0368 (/ms)
+	Kalpha_b = 12.8433 (mV)
+	V0alpha_b = -111.33209 (mV)   
+	Abeta_b = 0.0345(/ms)
+	Kbeta_b = -8.90123 (mV)
+	V0beta_b = -49.9537 (mV)
 
-NEURON {
-  RANGE KA_h, KA_m, comp355_vcbdur, comp355_vchdur, comp355_vcsteps, comp355_vcinc, comp355_vcbase, comp355_vchold, comp35_e, comp35_gbar
-  RANGE i_KA
-  RANGE ik
-  USEION k READ ek WRITE ik
+	V0_ainf = -38(mV)
+	K_ainf = -17(mV)
+
+	V0_binf = -78.8 (mV)
+	K_binf = 8.4 (mV)
+	v (mV) 
+	ek (mV) 
+	celsius (degC)
+	Q10 = 3	(1) 
+} 
+
+STATE { 
+	a
+	b 
+} 
+
+ASSIGNED { 
+	ik (mA/cm2) 
+	a_inf 
+	b_inf 
+	tau_a (ms) 
+	tau_b (ms) 
+	g (mho/cm2) 
+	alpha_a (/ms)
+	beta_a (/ms)
+	alpha_b (/ms)
+	beta_b (/ms)
+	tcorr (1)
+} 
+ 
+INITIAL { 
+	rate(v) 
+	a = a_inf 
+	b = b_inf 
+} 
+ 
+BREAKPOINT { 
+	SOLVE states METHOD derivimplicit 
+	g = gkbar*a*a*a*b 
+	ik = g*(v - ek)
+	alpha_a = alp_a(v)
+	beta_a = bet_a(v) 
+	alpha_b = alp_b(v)
+	beta_b = bet_b(v) 
+} 
+ 
+DERIVATIVE states { 
+	rate(v) 
+	a' =(a_inf - a)/tau_a 
+	b' =(b_inf - b)/tau_b 
+} 
+ 
+FUNCTION alp_a(v(mV))(/ms) {
+	tcorr = Q10^((celsius-25.5(degC))/10(degC))
+:	alp_a = tcorr*Aalpha_a*exp(Kalpha_a*(v-V0alpha_a)) 
+:	alp_a = -0.04148(/mV-ms)*linoid(v+67.697(mV),-3.857(mV))
+	alp_a = tcorr*Aalpha_a*sigm(v-V0alpha_a,Kalpha_a)
+} 
+ 
+FUNCTION bet_a(v(mV))(/ms) {
+	tcorr = Q10^((celsius-25.5(degC))/10(degC))
+:	bet_a = tcorr*Abeta_a*exp(Kbeta_a*(v-V0beta_a)) 
+:	bet_a = 0.0359(/mV-ms)*linoid(v+45.878(mV),23.654(mV))
+	bet_a = tcorr*Abeta_a/(exp((v-V0beta_a)/Kbeta_a))
+} 
+ 
+FUNCTION alp_b(v(mV))(/ms) {
+	tcorr = Q10^((celsius-25.5(degC))/10(degC))
+:	alp_b = tcorr*Aalpha_b*exp(Kalpha_b*(v-V0alpha_b)) 
+:	alp_b = 0.356(/mV-ms)*linoid(v+231.03(mV),17.8(mV))
+	alp_b = tcorr*Aalpha_b*sigm(v-V0alpha_b,Kalpha_b)
+} 
+ 
+FUNCTION bet_b(v(mV))(/ms) {
+	tcorr = Q10^((celsius-25.5(degC))/10(degC))
+:	bet_b = tcorr*Abeta_b*exp(Kbeta_b*(v-V0beta_b)) 
+:	bet_b = -0.00825(/mV-ms)*linoid(v+43.284(mV),-8.927(mV))
+	bet_b = tcorr*Abeta_b*sigm(v-V0beta_b,Kbeta_b)
+} 
+ 
+PROCEDURE rate(v (mV)) {LOCAL a_a, b_a, a_b, b_b 
+	TABLE a_inf, tau_a, b_inf, tau_b 
+	DEPEND Aalpha_a, Kalpha_a, V0alpha_a, 
+	       Abeta_a, Kbeta_a, V0beta_a,
+               Aalpha_b, Kalpha_b, V0alpha_b,
+               Abeta_b, Kbeta_b, V0beta_b, celsius FROM -100 TO 30 WITH 13000 
+	a_a = alp_a(v)  
+	b_a = bet_a(v) 
+	a_b = alp_b(v)  
+	b_b = bet_b(v) 
+	a_inf = 1/(1+exp((v-V0_ainf)/K_ainf)) 
+	tau_a = 1/(a_a + b_a) 
+	b_inf = 1/(1+exp((v-V0_binf)/K_binf))
+	tau_b = 1/(a_b + b_b) 
+: Bardoni Belluzzi data
+:	a_inf = 1/(1+exp(-(v+46.7)/19.8))
+:	tau_a = 0.41*exp(-(v+43.5)/42.8)+0.167
+:	b_inf = 1/(1+exp((v+78.8)/8.4))
+:	tau_b = 10.8 + 0.03*v + 1/(57.9*exp(0.127*v)+0.000134*exp(-0.059*v))
 }
 
+FUNCTION linoid(x (mV),y (mV)) (mV) {
+        if (fabs(x/y) < 1e-6) {
+                linoid = y*(1 - x/y/2)
+        }else{
+                linoid = x/(exp(x/y) - 1)
+        }
+} 
 
-FUNCTION comp35_beta_a (v, Q10) {
-  comp35_beta_a  =  
-  Q10 * comp35_Abeta_a / exp((v + -(comp35_V0beta_a)) / comp35_Kbeta_a)
-}
-
-
-FUNCTION comp35_beta_b (v, Q10) {
-  comp35_beta_b  =  
-  Q10 * comp35_Abeta_b * sigm(v + -(comp35_V0beta_b), comp35_Kbeta_b)
-}
-
-
-FUNCTION sigm (x, y) {
-  sigm  =  1.0 / (exp(x / y) + 1.0)
-}
-
-
-FUNCTION comp35_alpha_a (v, Q10) {
-  comp35_alpha_a  =  
-  Q10 * comp35_Aalpha_a * sigm(v + -(comp35_V0alpha_a), comp35_Kalpha_a)
-}
-
-
-FUNCTION comp35_alpha_b (v, Q10) {
-  comp35_alpha_b  =  
-  Q10 * comp35_Aalpha_b * sigm(v + -(comp35_V0alpha_b), comp35_Kalpha_b)
-}
-
-
-PARAMETER {
-  comp35_V0_ainf  =  -38.0
-  comp35_Abeta_a  =  0.1655
-  comp35_Abeta_b  =  0.0345
-  comp355_vcbdur  =  100.0
-  comp35_V0beta_b  =  -49.9537
-  comp35_V0beta_a  =  -18.27914
-  comp355_vchold  =  -71.0
-  comp35_Aalpha_b  =  0.0368
-  comp35_Aalpha_a  =  0.8147
-  comp355_vchdur  =  30.0
-  comp355_vcsteps  =  8.0
-  comp35_V0alpha_a  =  -9.17203
-  comp35_V0alpha_b  =  -111.33209
-  comp355_vcinc  =  10.0
-  comp35_V0_binf  =  -78.8
-  comp35_K_binf  =  8.4
-  comp35_Kbeta_a  =  19.47175
-  comp35_Kbeta_b  =  -8.90123
-  comp35_K_ainf  =  -17.0
-  comp355_vcbase  =  -69.0
-  comp35_e  =  -84.69
-  comp35_Kalpha_b  =  12.8433
-  comp35_Kalpha_a  =  -23.32708
-  comp35_gbar  =  0.008
-}
-
-
-STATE {
-  KA_h
-  KA_m
-}
-
-
-ASSIGNED {
-  KA_h_tau
-  comp35_Q10
-  KA_m_inf
-  comp35_b_inf
-  comp35_a_inf
-  KA_m_tau
-  comp35_tau_b
-  comp35_tau_a
-  KA_h_inf
-  v
-  celsius
-  ik
-  ek
-  i_KA
-}
-
-
-PROCEDURE asgns () {
-  comp35_a_inf  =  
-  1.0 / (1.0 + exp((v + -(comp35_V0_ainf)) / comp35_K_ainf))
-  comp35_b_inf  =  
-  1.0 / (1.0 + exp((v + -(comp35_V0_binf)) / comp35_K_binf))
-  comp35_Q10  =  3.0 ^ ((celsius + -25.5) / 10.0)
-  KA_h_inf  =  comp35_b_inf
-  comp35_tau_a  =  
-  1.0 / (comp35_alpha_a(v, comp35_Q10) + comp35_beta_a(v, comp35_Q10))
-  comp35_tau_b  =  
-  1.0 / (comp35_alpha_b(v, comp35_Q10) + comp35_beta_b(v, comp35_Q10))
-  KA_m_inf  =  comp35_a_inf
-  KA_m_tau  =  comp35_tau_a
-  KA_h_tau  =  comp35_tau_b
-}
-
-
-BREAKPOINT {
-  LOCAL v497
-  SOLVE states METHOD derivimplicit
-  v497  =  KA_m 
-i_KA  =  (comp35_gbar * v497 * v497 * v497 * KA_h) * (v - comp35_e)
-  ik  =  i_KA
-  print_state()
-}
-
-
-DERIVATIVE states {
-  asgns ()
-  KA_m'  =  (KA_m_inf + -(KA_m)) / KA_m_tau
-  KA_h'  =  (KA_h_inf + -(KA_h)) / KA_h_tau
-}
-
-
-INITIAL {
-  asgns ()
-  KA_h  =  comp35_b_inf
-  KA_m  =  comp35_a_inf
-  print_state()
-}
-
-
-PROCEDURE print_state () {
-  printf ("t = %g: KA_h = %g\n" , t,  KA_h)
-  printf ("t = %g: KA_m = %g\n" , t,  KA_m)
+FUNCTION sigm(x (mV),y (mV)) {
+                sigm = 1/(exp(x/y) + 1)
 }

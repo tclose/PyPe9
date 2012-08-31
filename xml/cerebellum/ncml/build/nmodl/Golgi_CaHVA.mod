@@ -18,8 +18,7 @@ NEURON {
 	:RANGE Abeta_u, Kbeta_u, V0beta_u
 	RANGE s_inf, tau_s, u_inf, tau_u
 	RANGE s, u, tcorr
-        RANGE comp283_vcinc, comp283_vcbdur, comp283_vcbase, comp283_vchdur, comp283_vchold, comp283_vcsteps
-
+	THREADSAFE
 } 
  
 UNITS { 
@@ -49,13 +48,6 @@ PARAMETER {
 	eca (mV) 
 	celsius (degC)
 	Q10 = 3 
-        
-        comp283_vcinc  =  10.0
-        comp283_vcbdur  =  100.0
-        comp283_vcbase  =  -69.0
-        comp283_vchdur  =  30.0
-        comp283_vchold  =  -71.0
-        comp283_vcsteps  =  8.0
 } 
 
 STATE { 
@@ -81,7 +73,6 @@ INITIAL {
 	rate(v) 
 	s = s_inf 
 	u = u_inf 
-	print_state()
 } 
  
 BREAKPOINT { 
@@ -92,7 +83,6 @@ BREAKPOINT {
 	beta_s = bet_s(v)
 	alpha_u = alp_u(v)
 	beta_u = bet_u(v)
-	print_state()
 }
  
 DERIVATIVE states { 
@@ -135,10 +125,5 @@ PROCEDURE rate(v (mV)) {LOCAL a_s, b_s, a_u, b_u
 	tau_s = 1/(a_s + b_s) 
 	u_inf = a_u/(a_u + b_u) 
 	tau_u = 1/(a_u + b_u) 
-}
-
-PROCEDURE print_state () {
-  printf ("t = %g: s = %g\n" , t,  s)
-  printf ("t = %g: u = %g\n" , t,  u)
 }
 

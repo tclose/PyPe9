@@ -1,106 +1,104 @@
+TITLE Cerebellum Golgi Cell Model
 
+COMMENT
+        Na persistent channel
+   
+	Author: E.D Angelo, T.Nieus, A. Fontana 
+	Last revised: 8.5.2000
+ENDCOMMENT
+ 
+NEURON { 
+	SUFFIX Golgi_NaP 
+	USEION na READ ena WRITE ina 
+	RANGE gbar, ina, g
+	:RANGE Aalpha_m, Kalpha_m, V0alpha_m, alpha_m, beta_m
+	:RANGE Abeta_m, Kbeta_m, V0beta_m
+	:RANGE V0_minf, B_minf
+	RANGE m, m_inf, tau_m, tcorr
+	:GLOBAL i
+	THREADSAFE
+} 
+ 
+UNITS { 
+	(mA) = (milliamp) 
+	(mV) = (millivolt) 
+} 
+ 
+PARAMETER { 
+	gbar		= 0.00019 (mho/cm2)
+	Aalpha_m 	= -0.91 (/mV-ms)
+	Kalpha_m 	= -5 (mV)
+	V0alpha_m 	= -40 (mV)
+	Abeta_m 	= 0.62 (/mV-ms)
+	Kbeta_m 	= 5 (mV)
+	V0beta_m 	= -40 (mV)
+	V0_minf 	= -43 (mV)
+	B_minf 		= 5 (mV)
+	v (mV) 
+	ena 	 (mV) 
+	celsius  (degC) 
+	Q10 = 3	(1)
+} 
 
-TITLE Golgi_NaP
+STATE { 
+	m 
+} 
 
+ASSIGNED { 
+	ina (mA/cm2) 
+	m_inf 
+	tau_m (ms) 
+	g (mho/cm2) 
+	alpha_m (/ms)
+	beta_m (/ms)
+	tcorr	(1)
+} 
+ 
+INITIAL { 
+	rate(v) 
+	m = m_inf 
+} 
+ 
+BREAKPOINT { 
+	SOLVE states METHOD derivimplicit 
+	g = gbar*m 
+	ina = g*(v - ena) 
+	alpha_m = alp_m(v)
+	beta_m = bet_m(v)
+} 
+ 
+DERIVATIVE states { 
+	rate(v) 
+	m' =(m_inf - m)/tau_m 
+} 
 
-NEURON {
-  RANGE NaP_m, comp211_vcbdur, comp211_vchdur, comp211_vcsteps, comp211_vcinc, comp211_vcbase, comp211_vchold, comp35_e, comp35_gbar
-  RANGE i_NaP
-  RANGE ina
-  USEION na READ ena WRITE ina
+FUNCTION alp_m(v(mV))(/ms) {
+	tcorr = Q10^((celsius-30(degC))/10(degC))
+	alp_m = tcorr * Aalpha_m*linoid(v-V0alpha_m, Kalpha_m) 
+} 
+ 
+FUNCTION bet_m(v(mV))(/ms) {
+	tcorr = Q10^((celsius-30(degC))/10(degC))
+	bet_m = tcorr * Abeta_m*linoid(v-V0beta_m, Kbeta_m) 
+} 
+ 
+PROCEDURE rate(v (mV)) {LOCAL a_m, b_m 
+	TABLE m_inf, tau_m 
+	DEPEND Aalpha_m, Kalpha_m, V0alpha_m, 
+	       Abeta_m, Kbeta_m, V0beta_m, celsius FROM -100 TO 30 WITH 13000
+	a_m = alp_m(v)  
+	b_m = bet_m(v) 
+:	m_inf = a_m/(a_m + b_m) 
+	m_inf = 1/(1+exp(-(v-V0_minf)/B_minf))
+	tau_m = 5/(a_m + b_m) 
+} 
+
+FUNCTION linoid(x (mV),y (mV)) (mV) {
+        if (fabs(x/y) < 1e-6) {
+                linoid = y*(1 - x/y/2)
+        }else{
+                linoid = x/(exp(x/y) - 1)
+        }
 }
 
 
-FUNCTION comp35_beta_m (v, Q10) {
-  comp35_beta_m  =  
-  Q10 * comp35_Abeta_m * linoid(v + -(comp35_V0beta_m), comp35_Kbeta_m)
-}
-
-
-FUNCTION comp35_alpha_m (v, Q10) {
-  comp35_alpha_m  =  
-  Q10 * comp35_Aalpha_m * 
-    linoid(v + -(comp35_V0alpha_m), comp35_Kalpha_m)
-}
-
-
-FUNCTION linoid (x, y) {
-  LOCAL v339
-  if 
-    (fabs(x / y) < 1e-06) 
-     {v339  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v339  =  x / (exp(x / y) + -1.0)} 
-linoid  =  v339
-}
-
-
-PARAMETER {
-  comp211_vchold  =  -71.0
-  comp35_V0_minf  =  -43.0
-  comp35_V0beta_m  =  -40.0
-  comp211_vcsteps  =  9.0
-  comp35_B_minf  =  5.0
-  comp211_vcbase  =  -60.0
-  comp35_V0alpha_m  =  -40.0
-  comp35_Abeta_m  =  0.62
-  comp211_vchdur  =  30.0
-  comp211_vcinc  =  10.0
-  comp211_vcbdur  =  100.0
-  comp35_Kalpha_m  =  -5.0
-  comp35_Kbeta_m  =  5.0
-  comp35_e  =  87.39
-  comp35_Aalpha_m  =  -0.91
-  comp35_gbar  =  0.00019
-}
-
-
-STATE {
-  NaP_m
-}
-
-
-ASSIGNED {
-  NaP_m_tau
-  comp35_Q10
-  NaP_m_inf
-  v
-  celsius
-  ina
-  ena
-  i_NaP
-}
-
-
-PROCEDURE asgns () {
-  NaP_m_inf  =  
-  1.0 / (1.0 + exp(-(v + -(comp35_V0_minf)) / comp35_B_minf))
-  comp35_Q10  =  3.0 ^ ((celsius + -30.0) / 10.0)
-  NaP_m_tau  =  
-  5.0 / (comp35_alpha_m(v, comp35_Q10) + comp35_beta_m(v, comp35_Q10))
-}
-
-
-BREAKPOINT {
-  SOLVE states METHOD derivimplicit
-  i_NaP  =  (comp35_gbar * NaP_m) * (v - comp35_e)
-  ina  =  i_NaP
-  print_state()
-}
-
-
-DERIVATIVE states {
-  asgns ()
-  NaP_m'  =  (NaP_m_inf + -(NaP_m)) / NaP_m_tau
-}
-
-
-INITIAL {
-  asgns ()
-  NaP_m  =  1.0 / (1.0 + exp(-(v + -(comp35_V0_minf)) / comp35_B_minf))
-  print_state()
-}
-
-
-PROCEDURE print_state () {
-  printf ("t = %g: NaP_m = %g\n" , t,  NaP_m)
-}
