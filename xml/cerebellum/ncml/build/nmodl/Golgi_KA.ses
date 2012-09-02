@@ -71,3 +71,4 @@ logfile.close()
 i=0
 g[i].exec_menu("View = plot")
 vgraphbox.map()
+ 

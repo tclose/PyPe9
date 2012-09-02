@@ -139,3 +139,4 @@ PROCEDURE evaluate_fct(v(mV)) {
         tau_h = ( C_tau_h + A_tau_h / ( exp((v+shift - v0_tau_h1)/k_tau_h1) + exp((v+shift - v0_tau_h2)/k_tau_h2) ) ) / phi_h
 }
 UNITSON
+ 

@@ -102,3 +102,4 @@ PROCEDURE rate(v (mV)) {LOCAL a_n, b_n, s_n
 	n_inf = 1/(1+exp(-(v-V0_ninf)/B_ninf))
 } 
 
+ 
