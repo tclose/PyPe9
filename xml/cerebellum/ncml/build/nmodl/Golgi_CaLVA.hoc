@@ -1,0 +1,22 @@
+create soma
+access soma
+
+insert Golgi_CaLVA
+
+soma {
+	nseg = 1 
+
+	diam = 9.76 
+
+	L = 9.76 
+
+	cm = 1
+
+	Ra = 100
+
+	eca2 = 129.33
+}
+
+xopen("Golgi_CaLVA.ses")
+
+ 

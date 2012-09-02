@@ -1,0 +1,66 @@
+model global quantities: comp213_el comp213_gl comp138_vca comp138_gca comp138_u comp34_vk comp34_gk comp34_w comp19_c ica i ik eca e ek v comp213_gl comp213_el comp138_v1 comp138_v2 comp19_c comp138_gca comp138_vca comp34_phi comp34_v3 comp34_v4 comp34_vk comp34_gk comp138_u i_comp34 i_leak i_comp138
+
+
+imported quantities: v 
+
+permeating ions: ca non-specific k 
+
+ionic currents: i_leak i i_comp34 ik i_comp138 ica
+
+
+
+
+Initial values: 
+  comp213_gl  =  20.0
+  comp213_el  =  -50.0
+  comp138_v1  =  -1.0
+  comp138_v2  =  15.0
+  comp19_c  =  20.0
+  comp138_gca  =  4.0
+  comp138_vca  =  100.0
+  comp34_phi  =  0.0667
+  comp34_v3  =  10.0
+  comp34_v4  =  14.5
+  comp34_vk  =  -70.0
+  comp34_gk  =  8.0
+  comp138_u  =  comp138_minf(v)
+  i_leak  =  comp213_gl * (v - comp213_el)
+  i  =  i_leak
+  i_comp34  =  (comp34_gk * comp34_w) * (v - comp34_vk)
+  ik  =  i_comp34
+  i_comp138  =  (comp138_gca * comp138_u) * (v - comp138_vca)
+  ica  =  i_comp138
+
+
+
+
+State equations: 
+  comp138_u  =  comp138_minf(v)
+  d(comp34_w)  =  (comp34_lamw(v)) * (comp34_winf(v) + -(comp34_w))
+  i_leak  =  comp213_gl * (v - comp213_el)
+  i  =  i_leak
+  i_comp34  =  (comp34_gk * comp34_w) * (v - comp34_vk)
+  ik  =  i_comp34
+  i_comp138  =  (comp138_gca * comp138_u) * (v - comp138_vca)
+  ica  =  i_comp138
+
+
+function comp138_minf (v)
+  0.5 * (1.0 + tanh((v + -(comp138_v1)) / comp138_v2))
+end
+
+
+
+
+function comp34_lamw (v)
+  comp34_phi * cosh((v + -(comp34_v3)) / (2.0 * comp34_v4))
+end
+
+
+
+
+function comp34_winf (v)
+  0.5 * (1.0 + tanh((v + -(comp34_v3)) / comp34_v4))
+end
+
+

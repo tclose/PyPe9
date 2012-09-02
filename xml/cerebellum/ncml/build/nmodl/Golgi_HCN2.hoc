@@ -1,0 +1,22 @@
+create soma
+access soma
+
+insert Golgi_HCN2
+
+soma {
+	nseg = 1 
+
+	diam = 9.76 
+
+	L = 9.76 
+
+	cm = 1
+
+	Ra = 100
+
+	e = -60
+}
+
+xopen("Golgi_HCN2.ses")
+
+ 

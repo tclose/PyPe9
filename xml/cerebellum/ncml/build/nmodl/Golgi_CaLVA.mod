@@ -27,7 +27,7 @@ TITLE Low threshold calcium current Cerebellum Golgi Cell Model
 INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
 
 NEURON {
-        SUFFIX Golgi_Ca_LVA
+        SUFFIX Golgi_CaLVA
         USEION ca2 READ ca2i, ca2o WRITE ica2 VALENCE 2
         RANGE g, gca2bar, m_inf, tau_m, h_inf, tau_h, shift
 	RANGE ica2, m ,h, ca2rev
@@ -35,8 +35,8 @@ NEURON {
 	RANGE v0_m_inf,v0_h_inf,k_m_inf,k_h_inf,C_tau_m
 	RANGE A_tau_m,v0_tau_m1,v0_tau_m2,k_tau_m1,k_tau_m2
 	RANGE C_tau_h ,A_tau_h ,v0_tau_h1,v0_tau_h2,k_tau_h1 ,k_tau_h2
-
-    }
+  THREADSAFE
+}
 
 UNITS {
         (molar) = (1/liter)
@@ -138,9 +138,5 @@ PROCEDURE evaluate_fct(v(mV)) {
         tau_m = ( C_tau_m + A_tau_m / ( exp((v+shift - v0_tau_m1)/ k_tau_m1) + exp((v+shift - v0_tau_m2)/k_tau_m2) ) ) / phi_m
         tau_h = ( C_tau_h + A_tau_h / ( exp((v+shift - v0_tau_h1)/k_tau_h1) + exp((v+shift - v0_tau_h2)/k_tau_h2) ) ) / phi_h
 }
-<<<<<<< HEAD:xml/Golgi_Ca_LVA.mod
-UNITSON
-=======
 UNITSON
  
->>>>>>> master:xml/cerebellum/ncml/build/nmodl/golgi_import/Golgi_CaLVA.mod

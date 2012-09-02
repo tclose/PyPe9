@@ -1,0 +1,22 @@
+create soma
+access soma
+
+insert Golgi_NaR
+
+soma {
+	nseg = 1 
+
+	diam = 9.76 
+
+	L = 9.76 
+
+	cm = 1
+
+	Ra = 100
+
+	ena = 87.39
+}
+
+xopen("Golgi_NaR.ses")
+
+ 
