@@ -126,3 +126,4 @@ PROCEDURE rate(v (mV)) {LOCAL a_s, b_s, a_u, b_u
 	tau_u = 1/(a_u + b_u) 
 }
 
+ 

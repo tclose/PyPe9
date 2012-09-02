@@ -98,3 +98,4 @@ FUNCTION linoid(x (mV),y (mV)) (mV) {
                 linoid = x/(exp(x/y) - 1)
         }
 }
+ 

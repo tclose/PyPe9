@@ -141,3 +141,4 @@ FUNCTION bet_f(v (mV)) (/ms){
 	bet_f =	tcorr * Abeta_f * exp( ( v - V0beta_f ) / Kbeta_f )	
 }
 
+ 

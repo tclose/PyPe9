@@ -167,3 +167,4 @@ PROCEDURE rate(v (mV)) {
 	tau_f =  tau_fast(v,tCf,tDf,tEf)
 	tau_s =  tau_slow(v,tCs,tDs,tEs)
 }
+ 

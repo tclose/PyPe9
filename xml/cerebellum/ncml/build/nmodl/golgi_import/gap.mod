@@ -10,4 +10,4 @@ ASSIGNED {
 	vnb 	        (millivolt)
 	i 		(nanoamp)
 }
-BREAKPOINT { i = g*(v - vnb)}
+BREAKPOINT { i = g*(v - vnb)} 

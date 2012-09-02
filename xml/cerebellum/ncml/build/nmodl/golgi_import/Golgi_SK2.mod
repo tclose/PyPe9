@@ -126,3 +126,4 @@ PROCEDURE rate (celsius(degC)) {
 	dirc3_t = dirc3*tcorr
 	dirc4_t = dirc4*tcorr
 }
+ 

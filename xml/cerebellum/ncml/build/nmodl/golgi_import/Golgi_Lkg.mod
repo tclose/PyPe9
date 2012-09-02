@@ -35,3 +35,4 @@ PARAMETER {
 ASSIGNED { i (mA/cm2) }
 
 BREAKPOINT { i = glbar * (v - el ) }
+ 
