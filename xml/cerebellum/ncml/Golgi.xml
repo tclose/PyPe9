@@ -243,7 +243,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <!-- <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma_group">
                     <defun name="alp_s">
                         <arg name="v" />
                         <body> temp_adj * Aalpha_s*exp((v-V0alpha_s)/Kalpha_s)
@@ -264,7 +264,7 @@
                         <body> temp_adj * Abeta_u*exp((v-V0beta_u)/Kbeta_u)
                         </body>
                     </defun>
-                </ionicCurrent> -->
+                </ionicCurrent>
                 <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma_group" />
                 <ionicCurrent id="Golgi_KV" segmentGroup="soma_group">
                     <defun name="alp_n">
