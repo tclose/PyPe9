@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<neuroml xmlns="http://www.neuroml.org/schema/neuroml2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 ../Schemas/NeuroML2/NeuroML_v2alpha.xsd"
+    id="NML2_FullCell">
+    <cell id="Test">
+        <notes>A model of a Golgi cell</notes>
+        <morphology id="GolgiMorph">
+            <segment id="soma">
+                <proximal x="0" y="0" z="0" diameter="27" />
+                <distal x="0" y="0" z="27" diameter="27" />
+            </segment>
+            <segmentGroup id="soma_group">
+                <member segment="soma" />
+            </segmentGroup>
+        </morphology>
+        <biophysicalProperties id="GolgiBiophys">
+            <membraneProperties>
+                <ionicCurrent id="Golgi_Ca" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_Ca2" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_HCN1" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_HCN2" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_KA" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_KCa" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_KM" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_KV" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_Lkg" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_Na" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_NaP" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_NaR" segmentGroup="soma_group" />
+                <ionicCurrent id="Golgi_SK2" segmentGroup="soma_group" /> 
+<!--                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma_group" /> -->                
+                <passiveCurrent condDensity="3.0" units="S_per_m2" />
+                <specificCapacitance value="1.0" units="uF_per_cm2" />
+            </membraneProperties>
+            <intracellularProperties>
+                <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
+            </intracellularProperties>
+            <synapses>
+            </synapses>            
+        </biophysicalProperties>
+    </cell>
+</neuroml>

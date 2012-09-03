@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <network id="CerebellarGranularLayer">
+        <population id="TestCells" cell="Test" size="1"/>
+    </network>
+</nineml>
