@@ -14,6 +14,7 @@
 import os.path
 import argparse
 import ninemlp
+from neuron import h
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
@@ -44,6 +45,9 @@ setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@Undefin
 print "Building network"
 
 net = Network(network_xml_location) #@UndefinedVariable
+
+test_cell = net.get_population('TestCells')[0]._cell
+h.psection(sec=test_cell.soma)
 
 # Set up spike recordings
 for pop in net.all_populations():

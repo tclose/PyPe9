@@ -49,5 +49,6 @@ soma {
 
     ena =  87.39
     ek  = -84.69
+    psection()
 }
  
