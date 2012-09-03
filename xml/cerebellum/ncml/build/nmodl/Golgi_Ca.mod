@@ -28,7 +28,7 @@ PARAMETER {
         celsius    (degC)
         d = .2          (um)
         cao = 2.        (mM)         
-        cai0 = 1e-4     (mM)         
+        cai0 = 5e-05     (mM)         
         beta = 1.3        (/ms)
 }
 
