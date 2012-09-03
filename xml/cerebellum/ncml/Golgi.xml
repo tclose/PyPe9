@@ -170,7 +170,7 @@
         <biophysicalProperties id="GolgiBiophys">
             <!-- FIXME: celsius = 23 Not sure where to put this -->
             <membraneProperties>
-                <ionicCurrent id="Golgi_Lkg" segmentGroup="dendrite_group" />
+                <ionicCurrent id="Golgi_Lkg" />            
                 <ionicCurrent id="Golgi_Na" segmentGroup="soma_group">
                     <defun name="alp_m">
                         <arg name="v" />
@@ -411,11 +411,12 @@
                 </ionicCurrent>
                 <ionicCurrent id="Golgi_Ca" segmentGroup="soma_group" />
                 <ionicCurrent id="Golgi_Ca2" segmentGroup="soma_group" />
-                <kinetics id="Na_conc" segmentGroup="soma_group" /> <!-- FIXME: Don't know what the tag for this should be. -->
-                <kinetics id="K_conc" segmentGroup="soma_group" /> <!-- FIXME: Don't know what the tag for this should be. -->
-                <passiveCurrent condDensity="3.0" units="S_per_m2" />
+<!--                 <kinetics id="Na_conc" segmentGroup="soma_group" /> --> <!-- FIXME: Don't know what the tag for this should be. -->
+<!--                 <kinetics id="K_conc" segmentGroup="soma_group" />  --> <!-- FIXME: Don't know what the tag for this should be. -->
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="ca" value="129.33" units="mV" segmentGroup="soma_group"/>
+                <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma_group"/>
+                <reversalPotential species="k" value="-84.69" units="mV" segmentGroup="soma_group"/>                
                 <!-- FIXME: Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->   
             </membraneProperties>
             <intracellularProperties>

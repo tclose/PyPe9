@@ -46,8 +46,8 @@ print "Building network"
 
 net = Network(network_xml_location) #@UndefinedVariable
 
-test_cell = net.get_population('TestCells')[0]._cell
-h.psection(sec=test_cell.soma)
+golgi_cell = net.get_population('Golgis')[0]._cell
+h.psection(sec=golgi_cell.soma)
 
 # Set up spike recordings
 for pop in net.all_populations():
