@@ -8,6 +8,19 @@ soma {
     Ra = 100 // From Roth&Hausser2000
     celsius = 23
     
+//    insert CGC_CaHVA
+//    insert CGC_Ca
+//    insert CGC_KA
+//    insert CGC_KCa
+//    insert CGC_Kir
+//    insert CGC_KM
+//    insert CGC_KV
+//    insert CGC_Lkg1
+//    insert CGC_Lkg2
+//    insert CGC_Na
+//    insert CGC_Nar
+//    insert CGC_pNa
+
     insert Golgi_Ca
     insert Golgi_Ca2
     insert Golgi_CaHVA
