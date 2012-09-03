@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX Golgi_KCa
+	SUFFIX Golgi_BK
 	USEION k READ ek WRITE ik 
 	USEION ca READ cai
 	RANGE gkbar, ik, g
@@ -92,4 +92,4 @@ PROCEDURE rate(v (mV)) {LOCAL a_c, b_c
 	b_c = bet_c(v) 
 	tau_c = 1/(a_c + b_c) 
 	c_inf = a_c/(a_c + b_c) 
-} 
+}

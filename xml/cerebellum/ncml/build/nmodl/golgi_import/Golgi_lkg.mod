@@ -15,7 +15,7 @@ Published in:
 ENDCOMMENT
 
 NEURON {
-	SUFFIX Golgi_Lkg
+	SUFFIX Golgi_lkg
 	NONSPECIFIC_CURRENT i
 	RANGE el, glbar, i
 }
@@ -35,4 +35,3 @@ PARAMETER {
 ASSIGNED { i (mA/cm2) }
 
 BREAKPOINT { i = glbar * (v - el ) }
- 

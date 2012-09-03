@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX Golgi_CaHVA
+	SUFFIX Golgi_Ca_HVA
 	USEION ca READ eca WRITE ica 
 	RANGE gcabar, ica, g
 	:RANGE alpha_s, beta_s, alpha_u, beta_u 
@@ -126,4 +126,3 @@ PROCEDURE rate(v (mV)) {LOCAL a_s, b_s, a_u, b_u
 	tau_u = 1/(a_u + b_u) 
 }
 
- 

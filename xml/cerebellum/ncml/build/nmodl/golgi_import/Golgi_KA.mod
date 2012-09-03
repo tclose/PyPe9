@@ -152,4 +152,3 @@ FUNCTION linoid(x (mV),y (mV)) (mV) {
 FUNCTION sigm(x (mV),y (mV)) {
                 sigm = 1/(exp(x/y) + 1)
 }
- 

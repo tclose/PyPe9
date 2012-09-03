@@ -8,9 +8,9 @@ COMMENT
 ENDCOMMENT
 
 NEURON {
-        SUFFIX Golgi_Ca
-        USEION ca READ ica, cao WRITE cai
-        RANGE d, beta, cai0, ca_pump_i
+        SUFFIX Golgi_CALC_ca2
+        USEION ca2 READ ica2, ca2o WRITE ca2i VALENCE 2
+        RANGE d, beta, ca2i0, ca2_pump_i
 }
 
 UNITS {
@@ -23,23 +23,23 @@ UNITS {
 }
 
 PARAMETER {
-        ica             (mA/cm2)
+        ica2             (mA/cm2)
         celsius    (degC)
         d = .2          (um)
-        cao = 2.        (mM)         
-        cai0 = 1e-4     (mM)         
+        ca2o        (mM)         
+        ca2i0     (mM)         
         beta = 1.3        (/ms)
 }
-
 ASSIGNED {
-	ca_pump_i	(mA)
+	ca2_pump_i	(mA)
 }
+
 STATE {
-	cai (mM)
+	ca2i (mM)
 }
 
 INITIAL {
-        cai = cai0 
+        ca2i = ca2i0 
 }
 
 BREAKPOINT {
@@ -48,10 +48,9 @@ BREAKPOINT {
 
 DERIVATIVE conc {    
 	:  outward ionic current with valence 2+
-	ca_pump_i = 2*beta*(cai-cai0)
-	:  total outward Ca current
-	cai' =  -ica/(2*F*d)*(1e4) - beta*(cai-cai0)
+	ca2_pump_i = 2*beta*(ca2i-ca2i0)
+	:  total outward Ca2 current
+	ca2i' = -ica2/(2*F*d)*(1e4) - beta*(ca2i-ca2i0)
 }
 
 
- 
