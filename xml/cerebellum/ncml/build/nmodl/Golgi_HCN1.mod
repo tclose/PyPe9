@@ -110,8 +110,8 @@ FUNCTION q10(celsius (deg))  {
 }
 
 PROCEDURE rate(v (mV)) { 
-	TABLE o_fast_inf, o_slow_inf, tau_f, tau_s
-	DEPEND celsius FROM -100 TO 30 WITH 13000
+:	TABLE o_fast_inf, o_slow_inf, tau_f, tau_s
+:	DEPEND celsius FROM -100 TO 30 WITH 13000
 
 	: r(v) is the fraction of fast component in double exponential
 	o_fast_inf = r(v) * o_inf(v,Ehalf,c)
