@@ -29,7 +29,7 @@
                 <ionicCurrent id="Golgi_NaP" segmentGroup="soma_group" />
                 <ionicCurrent id="Golgi_NaR" segmentGroup="soma_group" />
                 <ionicCurrent id="Golgi_SK2" segmentGroup="soma_group" /> 
-<!--                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma_group" /> -->                
+                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma_group" />
                 <passiveCurrent condDensity="3.0" units="S_per_m2" />
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
             </membraneProperties>
