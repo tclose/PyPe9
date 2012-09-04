@@ -7,6 +7,7 @@ NEURON {
   RANGE pNa_m, comp251_vcbdur, comp251_vchdur, comp251_vcsteps, comp251_vcinc, comp251_vcbase, comp251_vchold, comp63_e, comp63_gbar
   RANGE i_pNa
   RANGE ina
+  RANGE ena
   USEION na READ ena WRITE ina
 }
 
@@ -84,7 +85,7 @@ PROCEDURE asgns () {
 
 BREAKPOINT {
   SOLVE states METHOD derivimplicit
-  i_pNa  =  (comp63_gbar * pNa_m) * (v - comp63_e)
+  i_pNa  =  (comp63_gbar * pNa_m) * (v - ena)
   ina  =  i_pNa
 }
 
@@ -98,6 +99,7 @@ DERIVATIVE states {
 INITIAL {
   asgns ()
   pNa_m  =  (comp63_alpha_m(v)) / (comp63_alpha_m(v) + comp63_beta_m(v))
+  ena  =  comp63_e
 }
 
 

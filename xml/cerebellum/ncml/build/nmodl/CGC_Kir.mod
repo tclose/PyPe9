@@ -7,6 +7,7 @@ NEURON {
   RANGE Kir_m, comp207_vcbdur, comp207_vchdur, comp207_vcsteps, comp207_vcinc, comp207_vcbase, comp207_vchold, comp47_e, comp47_gbar
   RANGE i_Kir
   RANGE ik
+  RANGE ek
   USEION k READ ek WRITE ik
 }
 
@@ -71,7 +72,7 @@ PROCEDURE reactions () {
 BREAKPOINT {
   SOLVE states METHOD derivimplicit
   reactions ()
-  i_Kir  =  (comp47_gbar * Kir_m) * (v - comp47_e)
+  i_Kir  =  (comp47_gbar * Kir_m) * (v - ek)
   ik  =  i_Kir
 }
 
@@ -87,6 +88,7 @@ Kir_mO'  =
 INITIAL {
   Kir_m  =  (comp47_alpha_d(v)) / (comp47_alpha_d(v) + comp47_beta_d(v))
   Kir_mO  =  Kir_m
+  ek  =  comp47_e
 }
 
 

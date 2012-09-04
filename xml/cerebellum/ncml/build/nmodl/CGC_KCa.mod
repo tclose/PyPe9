@@ -7,6 +7,7 @@ NEURON {
   RANGE KCa_m, comp47_e, comp47_gbar
   RANGE i_KCa
   RANGE ik
+  RANGE ek
   USEION k READ ek WRITE ik
 }
 
@@ -65,7 +66,7 @@ PROCEDURE asgns () {
 
 BREAKPOINT {
   SOLVE states METHOD derivimplicit
-  i_KCa  =  (comp47_gbar * KCa_m) * (v - comp47_e)
+  i_KCa  =  (comp47_gbar * KCa_m) * (v - ek)
   ik  =  i_KCa
 }
 
@@ -81,6 +82,7 @@ INITIAL {
   KCa_m  =  
   (comp47_alpha_c(v, cai)) / 
     (comp47_alpha_c(v, cai) + comp47_beta_c(v, cai))
+  ek  =  comp47_e
 }
 
 

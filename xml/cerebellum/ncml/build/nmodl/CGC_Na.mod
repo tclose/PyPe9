@@ -7,6 +7,7 @@ NEURON {
   RANGE Na_h, Na_m, comp337_vcbdur, comp337_vchdur, comp337_vcsteps, comp337_vcinc, comp337_vcbase, comp337_vchold, comp63_e, comp63_gbar
   RANGE i_Na
   RANGE ina
+  RANGE ena
   USEION na READ ena WRITE ina
 }
 
@@ -107,7 +108,7 @@ BREAKPOINT {
   SOLVE states METHOD derivimplicit
   reactions ()
   v487  =  Na_m 
-i_Na  =  (comp63_gbar * v487 * v487 * v487 * Na_h) * (v - comp63_e)
+i_Na  =  (comp63_gbar * v487 * v487 * v487 * Na_h) * (v - ena)
   ina  =  i_Na
 }
 
@@ -128,6 +129,7 @@ INITIAL {
   Na_hO  =  Na_h
   Na_m  =  (comp63_alpha_m(v)) / (comp63_alpha_m(v) + comp63_beta_m(v))
   Na_mO  =  Na_m
+  ena  =  comp63_e
 }
 
 

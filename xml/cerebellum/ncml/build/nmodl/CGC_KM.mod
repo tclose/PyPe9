@@ -7,6 +7,7 @@ NEURON {
   RANGE KM_m, comp235_vcbdur, comp235_vchdur, comp235_vcsteps, comp235_vcinc, comp235_vcbase, comp235_vchold, comp47_e, comp47_gbar
   RANGE i_KM
   RANGE ik
+  RANGE ek
   USEION k READ ek WRITE ik
 }
 
@@ -73,7 +74,7 @@ PROCEDURE asgns () {
 
 BREAKPOINT {
   SOLVE states METHOD derivimplicit
-  i_KM  =  (comp47_gbar * KM_m) * (v - comp47_e)
+  i_KM  =  (comp47_gbar * KM_m) * (v - ek)
   ik  =  i_KM
 }
 
@@ -87,6 +88,7 @@ DERIVATIVE states {
 INITIAL {
   asgns ()
   KM_m  =  (comp47_alpha_n(v)) / (comp47_alpha_n(v) + comp47_beta_n(v))
+  ek  =  comp47_e
 }
 
 

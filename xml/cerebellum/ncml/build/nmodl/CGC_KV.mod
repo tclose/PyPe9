@@ -7,6 +7,7 @@ NEURON {
   RANGE KV_m, comp223_vcbdur, comp223_vchdur, comp223_vcsteps, comp223_vcinc, comp223_vcbase, comp223_vchold, comp63_e, comp63_gbar
   RANGE i_KV
   RANGE ik
+  RANGE ek
   USEION k READ ek WRITE ik
 }
 
@@ -83,7 +84,7 @@ BREAKPOINT {
   SOLVE states METHOD derivimplicit
   reactions ()
   v356  =  KV_m 
-i_KV  =  (comp63_gbar * v356 * v356 * v356 * v356) * (v - comp63_e)
+i_KV  =  (comp63_gbar * v356 * v356 * v356 * v356) * (v - ek)
   ik  =  i_KV
 }
 
@@ -99,6 +100,7 @@ KV_mO'  =
 INITIAL {
   KV_m  =  (comp63_alpha_n(v)) / (comp63_alpha_n(v) + comp63_beta_n(v))
   KV_mO  =  KV_m
+  ek  =  comp63_e
 }
 
 

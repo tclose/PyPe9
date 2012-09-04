@@ -7,6 +7,7 @@ NEURON {
   RANGE CaHVA_h, CaHVA_m, comp307_vcbdur, comp307_vchdur, comp307_vcsteps, comp307_vcinc, comp307_vcbase, comp307_vchold, comp33_e, comp33_gbar
   RANGE i_CaHVA
   RANGE ica
+  RANGE eca
   USEION ca READ eca WRITE ica
 }
 
@@ -94,7 +95,7 @@ BREAKPOINT {
   SOLVE states METHOD derivimplicit
   reactions ()
   v455  =  CaHVA_m 
-i_CaHVA  =  (comp33_gbar * v455 * v455 * CaHVA_h) * (v - comp33_e)
+i_CaHVA  =  (comp33_gbar * v455 * v455 * CaHVA_h) * (v - eca)
   ica  =  i_CaHVA
 }
 
@@ -115,6 +116,7 @@ INITIAL {
   CaHVA_hO  =  CaHVA_h
   CaHVA_m  =  (comp33_alpha_s(v)) / (comp33_alpha_s(v) + comp33_beta_s(v))
   CaHVA_mO  =  CaHVA_m
+  eca  =  comp33_e
 }
 
 

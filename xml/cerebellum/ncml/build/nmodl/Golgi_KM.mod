@@ -1,105 +1,95 @@
-TITLE Cerebellum Golgi Cell Model
 
-COMMENT
-        K-slow channel
-   
-	Author: E.DAngelo, T.Nieus, A. Fontana
-	Last revised: 8.5.2000
-ENDCOMMENT
 
-NEURON { 
-	SUFFIX Golgi_KM 
-	USEION k READ ek WRITE ik 
-	RANGE gkbar, ik, g
-	:RANGE Aalpha_n, Kalpha_n, V0alpha_n, alpha_n, beta_n 
-	:RANGE Abeta_n, Kbeta_n, V0beta_n
-	:RANGE V0_ninf, B_ninf
-	RANGE n, n_inf, tau_n, tcorr
-	THREADSAFE
-} 
- 
-UNITS { 
-	(mA) = (milliamp) 
-	(mV) = (millivolt) 
-} 
- 
-PARAMETER { 
-	Aalpha_n = 0.0033 (/ms)
-	Kalpha_n = 40 (mV)
-	V0alpha_n = -30 (mV)
-	
-	Abeta_n = 0.0033 (/ms)
-	Kbeta_n = -20 (mV)
-	V0beta_n = -30 (mV)
-	
-	V0_ninf = -35 (mV)
-	B_ninf =  6 (mV)
-	
-	gkbar= 0.001 (mho/cm2)
-	ek   (mV)
-	celsius (degC) 
-	Q10 = 3	(1) 
+TITLE Golgi_KM
+
+
+NEURON {
+  RANGE KM_m, comp195_vcbdur, comp195_vchdur, comp195_vcsteps, comp195_vcinc, comp195_vcbase, comp195_vchold, comp19_e, comp19_gbar
+  RANGE i_KM
+  RANGE ik
+  RANGE ek
+  USEION k READ ek WRITE ik
 }
 
-STATE { 
-	n 
-} 
 
-ASSIGNED { 
-	v (mV) 
-	ik (mA/cm2) 
-	n_inf 
-	tau_n (ms) 
-	g (mho/cm2) 
-	alpha_n (/ms) 
-	beta_n (/ms) 
-	tcorr (1)
-} 
- 
-INITIAL { 
-	rate(v) 
-	n = n_inf 
-} 
- 
-BREAKPOINT { 
-	SOLVE states METHOD derivimplicit 
-	g = gkbar*n 
-	ik = g*(v - ek) 
-	alpha_n = alp_n(v) 
-	beta_n = bet_n(v) 
-} 
- 
-DERIVATIVE states { 
-	rate(v) 
-	n' =(n_inf - n)/tau_n 
-} 
- 
-FUNCTION alp_n(v(mV))(/ms) { 
-	alp_n = Aalpha_n*exp((v-V0alpha_n)/Kalpha_n) 
-} 
- 
-FUNCTION bet_n(v(mV))(/ms) { 
-	bet_n = Abeta_n*exp((v-V0beta_n)/Kbeta_n) 
-} 
+FUNCTION comp19_alpha_n (v, Q10) {
+  comp19_alpha_n  =  
+  Q10 * comp19_Aalpha_n * 
+    exp((v + -(comp19_V0alpha_n)) / comp19_Kalpha_n)
+}
 
-UNITSOFF
 
-LOCAL delta
-LOCAL q10
- 
-PROCEDURE rate(v (mV)) {LOCAL a_n, b_n, s_n  
-:	TABLE n_inf, tau_n 
-:	DEPEND Aalpha_n, Kalpha_n, V0alpha_n, 
-:	       Abeta_n, Kbeta_n, V0beta_n, V0_ninf, B_ninf, celsius FROM -100 TO 30 WITH 13000 
-	a_n = alp_n(v)  
-	b_n = bet_n(v)
+FUNCTION comp19_beta_n (v, Q10) {
+  comp19_beta_n  =  
+  Q10 * comp19_Abeta_n * exp((v + -(comp19_V0beta_n)) / comp19_Kbeta_n)
+}
 
-	tcorr = Q10^((celsius - 22)/10)
-	s_n = tcorr*(a_n + b_n) 
-	tau_n = 1/s_n
- 
-:  n_inf = a_n/(a_n + b_n) 
-	n_inf = 1/(1+exp(-(v-V0_ninf)/B_ninf))
-} 
 
- 
+PARAMETER {
+  comp19_Kalpha_n  =  40.0
+  comp195_vchold  =  -71.0
+  comp19_e  =  -84.69
+  comp19_V0beta_n  =  -30.0
+  comp19_V0_ninf  =  -35.0
+  comp19_Kbeta_n  =  -20.0
+  comp195_vchdur  =  30.0
+  comp195_vcbdur  =  100.0
+  comp195_vcbase  =  -69.0
+  comp195_vcsteps  =  8.0
+  comp19_B_ninf  =  6.0
+  comp19_Aalpha_n  =  0.0033
+  comp19_gbar  =  0.001
+  comp195_vcinc  =  10.0
+  comp19_V0alpha_n  =  -30.0
+  comp19_Abeta_n  =  0.0033
+}
+
+
+STATE {
+  KM_m
+}
+
+
+ASSIGNED {
+  KM_m_inf
+  comp19_Q10
+  KM_m_tau
+  celsius
+  v
+  ik
+  ek
+  i_KM
+}
+
+
+PROCEDURE asgns () {
+  comp19_Q10  =  3.0 ^ ((celsius + -22.0) / 10.0)
+  KM_m_inf  =  1.0 / (1.0 + exp(-(v + -(comp19_V0_ninf)) / comp19_B_ninf))
+  KM_m_tau  =  
+  1.0 / (comp19_alpha_n(v, comp19_Q10) + comp19_beta_n(v, comp19_Q10))
+}
+
+
+BREAKPOINT {
+  SOLVE states METHOD derivimplicit
+  i_KM  =  (comp19_gbar * KM_m) * (v - ek)
+  ik  =  i_KM
+}
+
+
+DERIVATIVE states {
+  asgns ()
+  KM_m'  =  (KM_m_inf + -(KM_m)) / KM_m_tau
+}
+
+
+INITIAL {
+  asgns ()
+  KM_m  =  1.0 / (1.0 + exp(-(v + -(comp19_V0_ninf)) / comp19_B_ninf))
+  ek  =  comp19_e
+}
+
+
+PROCEDURE print_state () {
+  printf ("NMODL state: t = %g v = %g KM_m = %g\n" , t, v,  KM_m)
+}

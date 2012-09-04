@@ -1,96 +1,110 @@
-TITLE Cerebellum Golgi Cell Model
 
-COMMENT
-        KCa channel
-   
-	Author: E.DAngelo, T.Nieus, A. Fontana
-	Last revised: 8.5.2000
-ENDCOMMENT
- 
-NEURON { 
-	SUFFIX Golgi_KCa
-	USEION k READ ek WRITE ik 
-	USEION ca READ cai
-	RANGE gkbar, ik, g
-	RANGE Aalpha_c, Balpha_c, Kalpha_c, alpha_c, beta_c
-	RANGE Abeta_c, Bbeta_c, Kbeta_c 
-	RANGE c_inf, tau_c, c, tcorr
-	THREADSAFE
-} 
- 
-UNITS { 
-	(mA) = (milliamp) 
-	(mV) = (millivolt) 
-	(molar) = (1/liter)
-	(mM) = (millimolar)
-} 
- 
-PARAMETER { 
-	Aalpha_c = 7 (/ms)
-	Balpha_c = 1.5e-3 (mM)
 
-	Kalpha_c =  -11.765 (mV)
+TITLE Golgi_KCa
 
-	Abeta_c = 1 (/ms)
-	Bbeta_c = 0.15e-3 (mM)
 
-	Kbeta_c = -11.765 (mV)
+NEURON {
+  RANGE KCa_m, comp170_vcbdur, comp170_vchdur, comp170_vcsteps, comp170_vcinc, comp170_vcbase, comp170_vchold, comp19_e, comp19_gbar
+  RANGE i_KCa
+  RANGE ik
+  RANGE ek
+  USEION k READ ek WRITE ik
+  RANGE cai
+  USEION ca READ cai
+}
 
-	v (mV) 
-	cai (mM)
-	gkbar= 0.003 (mho/cm2) 
-	ek (mV)
-	celsius (degC) 
-	Q10 = 3		(1)
-} 
 
-STATE { 
-	c 
-} 
+FUNCTION comp19_alpha_c (v, cai, Q10) {
+  comp19_alpha_c  =  
+  (Q10 * comp19_Aalpha_c) / 
+    (1.0 + (comp19_Balpha_c * exp(v / comp19_Kalpha_c)) / cai)
+}
 
-ASSIGNED { 
-	ik (mA/cm2) 
-	ica (mA/cm2)
 
-	c_inf 
-	tau_c (ms) 
-	g (mho/cm2) 
-	alpha_c (/ms) 
-	beta_c (/ms)
-	tcorr (1)
-} 
- 
-INITIAL { 
-	rate(v) 
-	c = c_inf 
-} 
- 
-BREAKPOINT { 
-	SOLVE states METHOD derivimplicit 
-	g = gkbar*c 
-	ik = g*(v - ek) 
-	alpha_c = alp_c(v) 
-	beta_c = bet_c(v) 
-} 
- 
-DERIVATIVE states { 
-	rate(v) 
-	c' =(c_inf - c)/tau_c 
-} 
- 
-FUNCTION alp_c(v(mV))(/ms) { 
-	tcorr = Q10^((celsius-30(degC))/10(degC))
-	alp_c = tcorr*Aalpha_c/(1+(Balpha_c*exp(v/Kalpha_c)/cai)) 
-} 
- 
-FUNCTION bet_c(v(mV))(/ms) {
-	tcorr = Q10^((celsius-30(degC))/10(degC))
-	bet_c = tcorr*Abeta_c/(1+cai/(Bbeta_c*exp(v/Kbeta_c))) 
-} 
- 
-PROCEDURE rate(v (mV)) {LOCAL a_c, b_c 
-	a_c = alp_c(v)  
-	b_c = bet_c(v) 
-	tau_c = 1/(a_c + b_c) 
-	c_inf = a_c/(a_c + b_c) 
-} 
+FUNCTION comp19_beta_c (v, cai, Q10) {
+  comp19_beta_c  =  
+  (Q10 * comp19_Abeta_c) / 
+    (1.0 + cai / (comp19_Bbeta_c * exp(v / comp19_Kbeta_c)))
+}
+
+
+PARAMETER {
+  comp19_Kalpha_c  =  -11.765
+  comp19_e  =  -84.69
+  comp19_Kbeta_c  =  -11.765
+  comp19_Balpha_c  =  0.0015
+  comp170_vchold  =  -71.0
+  comp170_vchdur  =  30.0
+  comp170_vcsteps  =  8.0
+  comp170_vcbdur  =  100.0
+  comp170_vcbase  =  -69.0
+  comp19_Aalpha_c  =  7.0
+  comp19_Bbeta_c  =  0.00015
+  comp19_gbar  =  0.003
+  comp19_Abeta_c  =  1.0
+  comp170_vcinc  =  10.0
+}
+
+
+STATE {
+  KCa_mC
+  KCa_mO
+  KCa_m
+}
+
+
+ASSIGNED {
+  comp19_Q10
+  celsius
+  ica
+  cai
+  v
+  ik
+  ek
+  i_KCa
+}
+
+
+PROCEDURE asgns () {
+  comp19_Q10  =  3.0 ^ ((celsius + -30.0) / 10.0)
+}
+
+
+PROCEDURE reactions () {
+  KCa_m  =  KCa_mO
+}
+
+
+BREAKPOINT {
+  SOLVE states METHOD derivimplicit
+  reactions ()
+  i_KCa  =  (comp19_gbar * KCa_m) * (v - ek)
+  ik  =  i_KCa
+}
+
+
+DERIVATIVE states {
+  LOCAL v299
+  asgns ()
+  v299  =  KCa_mO 
+KCa_mO'  =  
+    -(KCa_mO * comp19_beta_c(v, cai, comp19_Q10)) + 
+        (1 - v299) * (comp19_alpha_c(v, cai, comp19_Q10))
+}
+
+
+INITIAL {
+  asgns ()
+  KCa_m  =  
+  (comp19_alpha_c(v, cai, comp19_Q10)) / 
+    (comp19_alpha_c(v, cai, comp19_Q10) + 
+        comp19_beta_c(v, cai, comp19_Q10))
+  KCa_mO  =  KCa_m
+  ek  =  comp19_e
+}
+
+
+PROCEDURE print_state () {
+  printf ("NMODL state: t = %g v = %g KCa_mO = %g\n" , t, v,  KCa_mO)
+  printf ("NMODL state: t = %g v = %g KCa_m = %g\n" , t, v,  KCa_m)
+}

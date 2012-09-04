@@ -7,6 +7,7 @@ NEURON {
   RANGE Nar_h, Nar_m, comp349_vcbdur, comp349_vchdur, comp349_vcsteps, comp349_vcinc, comp349_vcbase, comp349_vchold, comp47_e, comp47_gbar
   RANGE i_Nar
   RANGE ina
+  RANGE ena
   USEION na READ ena WRITE ina
 }
 
@@ -103,7 +104,7 @@ PROCEDURE reactions () {
 BREAKPOINT {
   SOLVE states METHOD derivimplicit
   reactions ()
-  i_Nar  =  (comp47_gbar * Nar_m * Nar_h) * (v - comp47_e)
+  i_Nar  =  (comp47_gbar * Nar_m * Nar_h) * (v - ena)
   ina  =  i_Nar
 }
 
@@ -124,6 +125,7 @@ INITIAL {
   Nar_hO  =  Nar_h
   Nar_m  =  (comp47_alpha_s(v)) / (comp47_alpha_s(v) + comp47_beta_s(v))
   Nar_mO  =  Nar_m
+  ena  =  comp47_e
 }
 
 

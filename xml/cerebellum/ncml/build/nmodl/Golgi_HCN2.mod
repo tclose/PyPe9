@@ -1,171 +1,123 @@
-TITLE Cerebellum Golgi Cell HCN2 Model
 
-COMMENT
 
-Author:Sergio Solinas, Lia Forti, Egidio DAngelo
-Data from: Santoro et al. J Neurosci. 2000
-Last revised: May 2007
+TITLE Golgi_HCN2
 
-Published in:
-             Sergio M. Solinas, Lia Forti, Elisabetta Cesana, 
-             Jonathan Mapelli, Erik De Schutter and Egidio D`Angelo (2008)
-             Computational reconstruction of pacemaking and intrinsic 
-             electroresponsiveness in cerebellar golgi cells
-             Frontiers in Cellular Neuroscience 2:2
-
-ENDCOMMENT
 
 NEURON {
+  RANGE comp289_vcbdur, comp289_vchdur, comp289_vcsteps, comp289_vcinc, comp289_vcbase, comp289_vchold, comp19_e, comp19_gbar, comp19_o_slow_plus_fast
+  RANGE i_HCN2
+  RANGE e
+  NONSPECIFIC_CURRENT i
+}
 
-        SUFFIX Golgi_HCN2
-        
-	NONSPECIFIC_CURRENT ih
-        
-	RANGE o_fast_inf, o_slow_inf, tau_f, tau_s, gbar, ehcn2, g
-        
-	:GLOBAL o_fast_inf, o_slow_inf
-	THREADSAFE
-}       
-        
-UNITS {
-        
-        (mA) = (milliamp)
-        
-	(mV) = (millivolt)
-        
-	(S)  = (siemens)
-        
+
+FUNCTION comp19_tau_fast (potential, t1, t2, t3) {
+  comp19_tau_fast  =  exp(t3 * (t1 * potential + -(t2)))
+}
+
+
+FUNCTION comp19_r (potential, r1, r2) {
+  LOCAL v376, v377
+  if 
+    (potential >= -64.7) 
+     {v376  =  0.0} 
+    else 
+    {if 
+          (potential <= -108.7) 
+           {v377  =  1.0} 
+          else {v377  =  r1 * potential + r2} 
+      v376  =  v377} 
+comp19_r  =  v376
+}
+
+
+FUNCTION comp19_tau_slow (potential, t1, t2, t3) {
+  comp19_tau_slow  =  exp(t3 * (t1 * potential + -(t2)))
+}
+
+
+FUNCTION comp19_o_inf (potential, Ehalf, c) {
+  comp19_o_inf  =  1.0 / (1.0 + exp((potential + -(Ehalf)) * c))
 }
 
 
 PARAMETER {
-        
-	celsius  (degC)
-
-	gbar = 8e-5   (S/cm2)   < 0, 1e9 >
-
-        ehcn2 = -20 (mV)
-
-	Ehalf = -81.95 (mV)
-	c = 0.1661 (/mV)
-
-	q_10 = 3
-	rA = -0.0227 (/mV)
-        rB = -1.4694 (1)
-        tCf = 0.0269 (1)
-        tDf = -5.6111 (mV)
-	tEf = 2.3026 (/mV)
-	tCs = 0.0152 (1)
-        tDs = -5.2944 (mV)
-	tEs = 2.3026 (/mV)
+  comp19_rB  =  -1.4694
+  comp19_rA  =  -0.0227
+  comp289_vchold  =  -71.0
+  comp19_e  =  -20.0
+  comp19_c  =  0.1661
+  comp289_vcinc  =  10.0
+  comp289_vchdur  =  30.0
+  comp19_tEs  =  2.3026
+  comp19_tEf  =  2.3026
+  comp19_tDs  =  -5.2944
+  comp19_tDf  =  -5.6111
+  comp19_tCs  =  0.0152
+  comp19_tCf  =  0.0269
+  comp19_Ehalf  =  -81.95
+  comp289_vcbdur  =  100.0
+  comp289_vcbase  =  -69.0
+  comp289_vcsteps  =  8.0
+  comp19_gbar  =  8e-05
 }
+
+
+STATE {
+  comp19_o_slow
+  comp19_o_fast
+}
+
 
 ASSIGNED {
-
-	ih		(mA/cm2)
-
-        v               (mV)
-
-	g		(S/cm2)
-
-	o_fast_inf
-
-        o_slow_inf
-
-        tau_f           (ms)
-
-	tau_s           (ms)
-        
+  comp19_o_fast_inf
+  comp19_o_slow_plus_fast
+  comp19_o_slow_inf
+  comp19_tau_s
+  comp19_tau_f
+  celsius
+  v
+  i
+  e
+  i_HCN2
 }
 
 
-
-STATE {	o_fast o_slow }
+PROCEDURE asgns () {
+  comp19_tau_f  =  comp19_tau_fast(v, comp19_tCf, comp19_tDf, comp19_tEf)
+  comp19_tau_s  =  comp19_tau_slow(v, comp19_tCs, comp19_tDs, comp19_tEs)
+  comp19_o_slow_inf  =  
+  (1.0 + -(comp19_r(v, comp19_rA, comp19_rB))) * 
+    (comp19_o_inf(v, comp19_Ehalf, comp19_c))
+  comp19_o_slow_plus_fast  =  comp19_o_slow + comp19_o_fast
+  comp19_o_fast_inf  =  
+  comp19_r(v, comp19_rA, comp19_rB) * 
+    comp19_o_inf(v, comp19_Ehalf, comp19_c)
+}
 
 
 BREAKPOINT {
-	
-	SOLVE state METHOD cnexp
-
-	g = gbar * (o_fast + o_slow)
-
-        ih = g * (v - ehcn2)
-
+  SOLVE states METHOD derivimplicit
+  i_HCN2  =  (comp19_gbar * comp19_o_slow_plus_fast) * (v - e)
+  i  =  i_HCN2
 }
 
-DERIVATIVE state {	
 
-	rate(v)
-
-	o_fast' = (o_fast_inf - o_fast) / tau_f
-
-	o_slow' = (o_slow_inf - o_slow) / tau_s
-
+DERIVATIVE states {
+  asgns ()
+  comp19_o_fast'  =  (comp19_o_fast_inf + -(comp19_o_fast)) / comp19_tau_f
+  comp19_o_slow'  =  (comp19_o_slow_inf + -(comp19_o_slow)) / comp19_tau_s
 }
 
-LOCAL q
 
 INITIAL {
-	
-	q = q_10^((celsius -33(degC)) / 10(degC))
-
-	rate(v)
-
-	o_fast = o_fast_inf
-
-	o_slow = o_slow_inf
-
+  asgns ()
+  comp19_o_slow  =  comp19_o_slow_inf
+  comp19_o_fast  =  comp19_o_fast_inf
 }
 
-FUNCTION r(potential (mV),r1,r2)  { 	:fraction of fast component in double exponential
-    UNITSOFF
-    if (potential >= -64.70)  {
-	r = 0
-    } else{ 
-	if (potential <= -108.70)  {
-	    r = 1
-	} else{ 
-	    r =  (r1 * potential) + r2
-	}
-    }
-    UNITSON
+
+PROCEDURE print_state () {
+  printf ("NMODL state: t = %g v = %g comp19_o_fast = %g\n" , t, v,  comp19_o_fast)
+  printf ("NMODL state: t = %g v = %g comp19_o_slow = %g\n" , t, v,  comp19_o_slow)
 }
-
-FUNCTION tau_fast(potential (mV),t1,t2,t3) (ms) { 
-	UNITSOFF
-        tau_fast = exp(t3 * ((t1 * potential) - t2))
-	UNITSON
-
-}
-
-FUNCTION tau_slow(potential (mV) ,t1,t2,t3) (ms) { 
-	UNITSOFF
-        tau_slow = exp(t3 * ((t1 * potential) - t2))
-	UNITSON
-
-}
-
-FUNCTION o_inf(potential (mV),Ehalf,c)  { 
-	UNITSOFF
-        o_inf = 1 / (1 + exp((potential - Ehalf) * c))
-        UNITSON
-
-}
-
-FUNCTION q10(celsius (deg))  { 
-	UNITSOFF
-        q10 = exp(1.0986 * ((celsius - 33) / 10))
-        UNITSON
-}
-
-PROCEDURE rate(v (mV)) { 
-:	TABLE o_fast_inf, o_slow_inf, tau_f, tau_s
-:	DEPEND celsius FROM -100 TO 30 WITH 13000
-
-	o_fast_inf = r(v,rA,rB) * o_inf(v,Ehalf,c)
-        o_slow_inf = (1 - r(v,rA,rB)) * o_inf(v,Ehalf,c)
-
-	tau_f =  tau_fast(v,tCf,tDf,tEf)
-	tau_s =  tau_slow(v,tCs,tDs,tEs)
-}
- 

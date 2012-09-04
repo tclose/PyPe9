@@ -7,6 +7,7 @@ NEURON {
   RANGE KA_h, KA_m, comp393_vcbdur, comp393_vchdur, comp393_vcsteps, comp393_vcinc, comp393_vcbase, comp393_vchold, comp63_e, comp63_gbar
   RANGE i_KA
   RANGE ik
+  RANGE ek
   USEION k READ ek WRITE ik
 }
 
@@ -117,7 +118,7 @@ BREAKPOINT {
   LOCAL v535
   SOLVE states METHOD derivimplicit
   v535  =  KA_m 
-i_KA  =  (comp63_gbar * v535 * v535 * v535 * KA_h) * (v - comp63_e)
+i_KA  =  (comp63_gbar * v535 * v535 * v535 * KA_h) * (v - ek)
   ik  =  i_KA
 }
 
@@ -133,6 +134,7 @@ INITIAL {
   asgns ()
   KA_h  =  (comp63_alpha_b(v)) / (comp63_alpha_b(v) + comp63_beta_b(v))
   KA_m  =  (comp63_alpha_a(v)) / (comp63_alpha_a(v) + comp63_beta_a(v))
+  ek  =  comp63_e
 }
 
 

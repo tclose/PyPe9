@@ -34,7 +34,7 @@ ASSIGNED {
 
 
 BREAKPOINT {
-  i_Lkg1  =  comp47_gbar * (v - comp47_e)
+  i_Lkg1  =  comp47_gbar * (v - e)
   i  =  i_Lkg1
 }
 

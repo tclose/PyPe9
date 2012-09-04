@@ -1,145 +1,148 @@
-TITLE Cerebellum Golgi Cell Model
-
-COMMENT
-        Na resurgent channel
-	  
-	Author: T.Nieus
-	Last revised: 30.6.2003 
-	Critical value gNa
-	Inserted a control in bet_s to avoid huge values of x1
-			
-ENDCOMMENT
- 
-NEURON { 
-	SUFFIX Golgi_NaR
-	USEION na READ ena WRITE ina 
-	RANGE gnabar, ina, g
-	RANGE Aalpha_s,Abeta_s,V0alpha_s,V0beta_s,Kalpha_s,Kbeta_s 
-        RANGE Shiftalpha_s,Shiftbeta_s,tau_s,s_inf
-	RANGE Aalpha_f,Abeta_f,V0alpha_f,V0beta_f,Kalpha_f, Kbeta_f
-	RANGE f, tau_f,f_inf,s , tau_s,s_inf, tcorr
-	THREADSAFE
-} 
- 
-UNITS {    
-	(mA) = (milliamp) 
-	(mV) = (millivolt) 
-} 
- 
-PARAMETER { 
-	
-	: s-ALFA
-	Aalpha_s = -0.00493 (/ms)
-	V0alpha_s = -4.48754 (mV)
-	Kalpha_s = -6.81881 (mV)
-	Shiftalpha_s = 0.00008 (/ms)
-
-	: s-BETA
-	Abeta_s = 0.01558 (/ms)
-	V0beta_s = 43.97494 (mV)
-	Kbeta_s =  0.10818 (mV)
-	Shiftbeta_s = 0.04752 (/ms)
-
-	: f-ALFA
-	Aalpha_f = 0.31836 (/ms)
-	V0alpha_f = -80 (mV)
-	Kalpha_f = -62.52621 (mV)
-
-	: f-BETA
-	Abeta_f = 0.01014 (/ms)
-	V0beta_f = -83.3332 (mV)
-	Kbeta_f = 16.05379 (mV)
-
-	v (mV) 
-	gnabar= 0.0017 (mho/cm2)
-	ena  (mV) 
-	celsius (degC) 
-	Q10 = 3	(1)
-} 
-
-STATE { 
-	s 
-	f
-} 
-
-ASSIGNED { 
-	ina (mA/cm2) 
-	g (mho/cm2) 
-
-	alpha_s (/ms)
-	beta_s (/ms)
-	s_inf
-	tau_s (ms)
-	
-	alpha_f (/ms)
-	beta_f (/ms)
-	f_inf
-	tau_f (ms)
-	tcorr (1)
-} 
- 
-INITIAL { 
-	rate(v) 
-	s = s_inf
-	f = f_inf
-} 
- 
-BREAKPOINT { 
-	SOLVE states METHOD derivimplicit 
-	g = gnabar*s*f
-	ina = g*(v - ena)
-
-	alpha_s = alp_s(v)
-	beta_s = bet_s(v) 
-
-	alpha_f = alp_f(v)
-	beta_f = bet_f(v) 
-} 
- 
-DERIVATIVE states { 
-	rate(v) 
-	s' = ( s_inf - s ) / tau_s 
-	f' = ( f_inf - f ) / tau_f 
-} 
- 
-PROCEDURE rate(v (mV)) { LOCAL a_s,b_s,a_f,b_f
-:	TABLE s_inf,tau_s,f_inf,tau_f DEPEND celsius FROM -100 TO 30 WITH 13000	
-
-	a_s = alp_s(v)  
-	b_s = bet_s(v) 
-	s_inf = a_s / ( a_s + b_s ) 
-	tau_s = 1 / ( a_s + b_s ) 
-
-	a_f = alp_f(v)  
-	b_f = bet_f(v) 
-	f_inf = a_f / ( a_f + b_f ) 
-	tau_f = 1 / ( a_f + b_f ) 
-} 
 
 
+TITLE Golgi_NaR
 
-FUNCTION alp_s(v (mV)) (/ms){
-	tcorr = Q10^( ( celsius - 20 (degC) ) / 10 (degC) )
-	alp_s = tcorr*(Shiftalpha_s+Aalpha_s*((v+V0alpha_s)/ 1 (mV) )/(exp((v+V0alpha_s)/Kalpha_s)-1))
+
+NEURON {
+  RANGE NaR_h, NaR_m, comp313_vcbdur, comp313_vchdur, comp313_vcsteps, comp313_vcinc, comp313_vcbase, comp313_vchold, comp19_e, comp19_gbar
+  RANGE i_NaR
+  RANGE ina
+  RANGE ena
+  USEION na READ ena WRITE ina
 }
 
-FUNCTION bet_s(v (mV)) (/ms){ LOCAL x1
-	tcorr = Q10^((celsius-20(degC))/10(degC))	
 
-	x1=(v+V0beta_s)/Kbeta_s
-	if (x1>200) {x1=200}
-	bet_s =tcorr*(Shiftbeta_s+Abeta_s*((v+V0beta_s)/1 (mV) )/(exp(x1)-1))
-
+FUNCTION comp19_alpha_s (v, Q10) {
+  comp19_alpha_s  =  
+  (Q10 * 
+        (comp19_Shiftalpha_s + 
+            comp19_Aalpha_s * (v + comp19_V0alpha_s))) 
+    / 
+    (exp((v + comp19_V0alpha_s) / comp19_Kalpha_s) + -1.0)
 }
 
-FUNCTION alp_f(v (mV)) (/ms){
-	tcorr = Q10^( ( celsius - 20 (degC) ) / 10 (degC) )
-	alp_f =	tcorr * Aalpha_f * exp( ( v - V0alpha_f ) / Kalpha_f)
+
+FUNCTION comp19_alpha_f (v, Q10) {
+  comp19_alpha_f  =  
+  Q10 * comp19_Aalpha_f * 
+    exp((v + -(comp19_V0alpha_f)) / comp19_Kalpha_f)
 }
 
-FUNCTION bet_f(v (mV)) (/ms){
-	tcorr = Q10^( ( celsius - 20 (degC) ) / 10 (degC) )
-	bet_f =	tcorr * Abeta_f * exp( ( v - V0beta_f ) / Kbeta_f )	
+
+FUNCTION comp19_beta_s (v, Q10) {
+  LOCAL v462, v461
+  v461  =  (v + comp19_V0beta_s) / comp19_Kbeta_s 
+if (v461 > 200.0)  {v462  =  200.0} else {v462  =  v461} 
+  comp19_beta_s  =  
+      Q10 * 
+          (comp19_Shiftbeta_s + 
+              comp19_Abeta_s * 
+                (v + comp19_V0beta_s) / (exp(v462) + -1.0))
 }
 
- 
+
+FUNCTION comp19_beta_f (v, Q10) {
+  comp19_beta_f  =  
+  Q10 * comp19_Abeta_f * exp((v + -(comp19_V0beta_f)) / comp19_Kbeta_f)
+}
+
+
+PARAMETER {
+  comp19_Kalpha_s  =  -6.81881
+  comp19_Kalpha_f  =  -62.52621
+  comp19_e  =  87.39
+  comp19_V0beta_s  =  43.97494
+  comp19_V0beta_f  =  -83.3332
+  comp313_vcbdur  =  100.0
+  comp19_Kbeta_s  =  0.10818
+  comp19_Kbeta_f  =  16.05379
+  comp313_vcbase  =  -60.0
+  comp313_vcsteps  =  9.0
+  comp19_Aalpha_s  =  -0.00493
+  comp19_Aalpha_f  =  0.31836
+  comp313_vchold  =  -71.0
+  comp19_Shiftbeta_s  =  0.04752
+  comp19_gbar  =  0.0017
+  comp19_V0alpha_s  =  -4.48754
+  comp19_Shiftalpha_s  =  8e-05
+  comp19_V0alpha_f  =  -80.0
+  comp19_Abeta_s  =  0.01558
+  comp19_Abeta_f  =  0.01014
+  comp313_vchdur  =  30.0
+  comp313_vcinc  =  10.0
+}
+
+
+STATE {
+  NaR_hC
+  NaR_hO
+  NaR_mC
+  NaR_mO
+  NaR_h
+  NaR_m
+}
+
+
+ASSIGNED {
+  comp19_Q10
+  celsius
+  v
+  ina
+  ena
+  i_NaR
+}
+
+
+PROCEDURE asgns () {
+  comp19_Q10  =  3.0 ^ ((celsius + -20.0) / 10.0)
+}
+
+
+PROCEDURE reactions () {
+  NaR_h  =  NaR_hO
+  NaR_m  =  NaR_mO
+}
+
+
+BREAKPOINT {
+  SOLVE states METHOD derivimplicit
+  reactions ()
+  i_NaR  =  (comp19_gbar * NaR_m * NaR_h) * (v - ena)
+  ina  =  i_NaR
+}
+
+
+DERIVATIVE states {
+  LOCAL v456, v459
+  asgns ()
+  v456  =  NaR_mO 
+NaR_mO'  =  
+    -(NaR_mO * comp19_beta_s(v, comp19_Q10)) + 
+        (1 - v456) * (comp19_alpha_s(v, comp19_Q10))
+  v459  =  NaR_hO 
+NaR_hO'  =  
+    -(NaR_hO * comp19_beta_f(v, comp19_Q10)) + 
+        (1 - v459) * (comp19_alpha_f(v, comp19_Q10))
+}
+
+
+INITIAL {
+  asgns ()
+  NaR_h  =  
+  (comp19_alpha_f(v, comp19_Q10)) / 
+    (comp19_alpha_f(v, comp19_Q10) + comp19_beta_f(v, comp19_Q10))
+  NaR_hO  =  NaR_h
+  NaR_m  =  
+  (comp19_alpha_s(v, comp19_Q10)) / 
+    (comp19_alpha_s(v, comp19_Q10) + comp19_beta_s(v, comp19_Q10))
+  NaR_mO  =  NaR_m
+  ena  =  comp19_e
+}
+
+
+PROCEDURE print_state () {
+  printf ("NMODL state: t = %g v = %g NaR_hO = %g\n" , t, v,  NaR_hO)
+  printf ("NMODL state: t = %g v = %g NaR_mO = %g\n" , t, v,  NaR_mO)
+  printf ("NMODL state: t = %g v = %g NaR_h = %g\n" , t, v,  NaR_h)
+  printf ("NMODL state: t = %g v = %g NaR_m = %g\n" , t, v,  NaR_m)
+}
