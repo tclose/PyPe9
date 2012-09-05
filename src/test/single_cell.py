@@ -50,9 +50,11 @@ pop = net.all_populations()[0]
 cell = pop[0]._cell
 h.psection(sec=cell.soma)
 
-pop.record('soma(0.5).cai', args.output + pop.label + '.cai')
-record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
-record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
+pop.record_all(args.output + pop.label)
+
+#pop.record('cai', args.output + pop.label + '.cai')
+#record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
+#record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
     
 print "Starting run"
 
