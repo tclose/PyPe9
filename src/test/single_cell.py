@@ -46,16 +46,14 @@ print "Building network"
 
 net = Network(network_xml_location) #@UndefinedVariable
 
-golgi_cell = net.get_population('Golgis')[0]._cell
-h.psection(sec=golgi_cell.soma)
+pop = net.all_populations()[0]
+cell = pop[0]._cell
+h.psection(sec=cell.soma)
 
-# Set up spike recordings
-for pop in net.all_populations():
-    record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
-    record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
-#   record_gsyn(pop, args.output + pop.label + '.gsyn') #@UndefinedVariable
-#   record_gsyn = common.build_record('gsyn', simulator)
-
+pop.record('soma(0.5).cai', args.output + pop.label + '.cai')
+record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
+record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
+    
 print "Starting run"
 
 run(args.time) #@UndefinedVariable
