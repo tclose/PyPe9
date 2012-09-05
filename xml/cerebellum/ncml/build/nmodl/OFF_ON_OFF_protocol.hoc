@@ -65,6 +65,6 @@ simulate(tlog,Vlog,logfile)
 logfile.close()
 
 
-quit()
+//quit()
 
  
