@@ -28,7 +28,6 @@ parser.add_argument('--combined', action='store_true', help='Plot the variable f
 args = parser.parse_args()
 
 # Set up the common axis to plot the results on
-
 num_spike_trains = 0
 num_v = 0
 num_currents = 0
@@ -37,7 +36,6 @@ for filename in args.filenames:
     if ext == 'spikes': num_spike_trains += 1
     if ext == 'v': num_v += 1
     if ext == 'spikes': num_currents += 1
-    
 if num_spike_trains:    
     spike_fig = plt.figure()
     num_wide = int(round(math.sqrt(num_spike_trains)))
@@ -45,16 +43,15 @@ if num_spike_trains:
     spike_axes = []
     for i in xrange(num_spike_trains):
         spike_axes.append(spike_fig.add_subplot(num_high, num_wide,i))
-
 spike_train_count = 0
 v_count = 0
 currents_count = 0
-
+legend = []
 for filename in args.filenames:
-    # Read Header
-    file_header = {}
-    f = open(filename)
-    for line in f:
+    #Read Header
+    header = {}
+    fle = open(filename)
+    for line in fle:
         if line[0] != '#': # Check to see if the line is a comment
             break
         split_line = line.split()
@@ -68,13 +65,12 @@ for filename in args.filenames:
                 value = int(value)
             except ValueError:
                 pass
-        file_header[key] = value
+        header[key] = value
     # Check loaded header
-    if not file_header:
+    if not header:
         raise Exception("Did not load a header from the passed file '%s', is it a pyNN output file?" % filename)
-    if not file_header.has_key('label'):
+    if not header.has_key('label'):
         raise Exception("Required header field 'label' was not found in file header.")
-    
     # Get the type of variable recorded via the file's extension
     variable = filename.split('.')[-1]
     if variable == 'spikes':
@@ -100,13 +96,13 @@ for filename in args.filenames:
         # Set axis labels and limits
         ax.set_xlabel("Time (ms)")
         ax.set_ylabel("Neuron #")
-        plt.title(file_header['label'] + ' ' + args.label + ' - Spike Times')
+        plt.title(header['label'] + ' ' + args.label + ' - Spike Times')
         max_id = numpy.max(ids)
         ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
         ax.set_ylim(-2, max_id + 2)
         spike_train_count += 1
     elif variable == 'v':
-        if not file_header.has_key('dt'):
+        if not header.has_key('dt'):
             raise Exception("Required header field 'dt' was not found in file header.")
         # Load voltages selectively, if the difference between previous voltage point exceeds args.incr
         f = open(filename)
@@ -124,7 +120,7 @@ for filename in args.filenames:
                     # If not in the initial loop, append last value/time pair to fill out the plot of the previous ID out to the right 
                     if prev_ID != None:
                         voltages[-1].append(v)
-                        times[-1].append(time_i * file_header['dt'])
+                        times[-1].append(time_i * header['dt'])
                     time_i = 0
                     prev_v = v - 2.0 * args.incr
                     prev_ID = ID
@@ -134,12 +130,12 @@ for filename in args.filenames:
                 # If the voltage change is greater than the specified incr add it to the vector
                 if abs(v - prev_v) > args.incr:
                     voltages[-1].append(v)
-                    times[-1].append(time_i * file_header['dt'])
+                    times[-1].append(time_i * header['dt'])
                     prev_v = v
                 time_i += 1
         # Append last value/time pair to fill out plot of the final ID to the right
         voltages[-1].append(v)
-        times[-1].append(time_i * file_header['dt'])
+        times[-1].append(time_i * header['dt'])
         if not voltages:
             print "No trace was loaded from file"
             sys.exit(0)
@@ -149,11 +145,11 @@ for filename in args.filenames:
             plt.plot(t, v)
             sorted_IDs.append(ID)
         plt.legend(sorted_IDs)
-        plt.title(file_header['label'] + ' ' + args.extra_label + ' - Voltage v Time')
+        plt.title(header['label'] + ' ' + args.extra_label + ' - Voltage v Time')
         plt.xlabel('Time (ms)')
         plt.ylabel('Soma Voltage (V)')
     else:
-        if not file_header.has_key('dt'):
+        if not header.has_key('dt'):
             raise Exception("Required header field 'dt' was not found in file header.")
         # Load states selectistateely, if the difference betweenprevious state point exceeds args.incr
         f = open(filename)
@@ -171,7 +167,7 @@ for filename in args.filenames:
                     # If not in the initial loop, append last value/time pair to fill out the plot of theprevious ID out to the right 
                     if prev_ID != None:
                         states[-1].append(state)
-                        times[-1].append(time_i * file_header['dt'])
+                        times[-1].append(time_i * header['dt'])
                     time_i = 0
                     prev_state = state - 2.0 * args.incr
                     prev_ID = ID
@@ -181,12 +177,12 @@ for filename in args.filenames:
                 # If the state change is greater than the specified incr add it to the vector
                 if abs(state -prev_state) > args.incr:
                     states[-1].append(state)
-                    times[-1].append(time_i * file_header['dt'])
+                    times[-1].append(time_i * header['dt'])
                     prev_state = state
                 time_i += 1
         # Append last value/time pair to fill out plot of the final ID to the right
         states[-1].append(state)
-        times[-1].append(time_i * file_header['dt'])
+        times[-1].append(time_i * header['dt'])
         if not states:
             print "No trace was loaded from file"
             sys.exit(0)
@@ -196,8 +192,10 @@ for filename in args.filenames:
             plt.plot(t, state)
             sorted_IDs.append(ID)
         plt.legend(sorted_IDs)
-        plt.title(file_header['label'] + ' ' + args.extra_label + ' - ' + variable + ' v Time')
+        plt.title(header['label'] + ' ' + args.extra_label + ' - ' + variable + ' v Time')
         plt.xlabel('Time (ms)')
         plt.ylabel(variable)
 # Show the plot
 plt.show()
+
+
