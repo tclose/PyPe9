@@ -25,10 +25,10 @@ parser.add_argument('--simulator', type=str, default='neuron',
 parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
-parser.add_argument('--time', type=float, default=100.0, help='The run time of the simulation (ms)')
+parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)')
 parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.') , help='The output location of the recording files')
-parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
-parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
+parser.add_argument('--min_delay', type=float, default=0.05, help='The minimum synaptic delay in the network')
+parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
 args = parser.parse_args()
 
 network_xml_location = os.path.join(PROJECT_PATH, 'xml', args.xml_filename)
@@ -51,10 +51,6 @@ cell = pop[0]._cell
 h.psection(sec=cell.soma)
 
 pop.record_all(args.output + pop.label)
-
-#pop.record('cai', args.output + pop.label + '.cai')
-#record(pop, args.output + pop.label + ".spikes") #@UndefinedVariable
-#record_v(pop, args.output + pop.label + ".v") #@UndefinedVariable
     
 print "Starting run"
 

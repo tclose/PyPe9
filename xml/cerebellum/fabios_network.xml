@@ -5,6 +5,9 @@
         <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
+        <networkParams>
+            <temperature value="23" />
+        </networkParams>
         <!-- Populations -->
         <population id="Granules" cell="Granule">
             <layout type="Extension" engine="Brep" id="Granules" />
@@ -31,8 +34,8 @@
             <source id="MossyFiberInputs" />
             <destination id="MossyFibers" synapse="excitatory" segment="source_section" />
             <connection pattern="OneToOne" />
-            <weight pattern="Constant" value="0.01"/>
-            <delay pattern="Constant" value="0.05"/>            
+            <weight pattern="Constant" value="0.01" />
+            <delay pattern="Constant" value="0.05" />
         </projection>
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
