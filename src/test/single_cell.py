@@ -40,11 +40,9 @@ ninemlp.BUILD_MODE = args.build
 
 exec("from ninemlp.%s import *" % args.simulator)
 
-setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@UndefinedVariable
-
 print "Building network"
 
-net = Network(network_xml_location) #@UndefinedVariable
+net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@UndefinedVariable
 
 pop = net.all_populations()[0]
 cell = pop[0]._cell
