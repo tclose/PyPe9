@@ -49,7 +49,7 @@ cell = pop[0]._cell
 h.psection(sec=cell.soma)
 
 pop.record_all(args.output + pop.label)
-    
+print "celsius: " + str(h.celsius)    
 print "Starting run"
 
 run(args.time) #@UndefinedVariable

@@ -3,6 +3,7 @@
     <network id="CerebellarGranularLayer">
         <simulationParams>
             <temperature value="30" />
+            <timestep value="0.025" />
         </simulationParams>
         <population id="Granules" cell="Granule" size="1"/>
     </network>

@@ -6,8 +6,10 @@
         <morphology id="GranuleMorph">
             <!-- Segments -->
             <segment id="soma">
-                <proximal x="0" y="0" z="0" diameter="9.76" />
-                <distal x="9.76" y="0" z="0" diameter="9.76" />
+                <proximal x="0" y="0" z="0" diameter="11.8" />
+                <distal x="11.8" y="0" z="0" diameter="11.8" /> 
+                <!-- <proximal x="0" y="0" z="0" diameter="9.76" />
+                <distal x="9.76" y="0" z="0" diameter="9.76" /> -->
             </segment>
             <segmentGroup id="soma_group">
                 <member segment="soma" />
@@ -50,7 +52,7 @@
                     <ncml:component type="gate">
                         <ncml:const name="Q10"> (pow (3 ((fix_celsius - 20) / 10)))
                         </ncml:const>
-                        <!-- constant functions -->
+                     
                         <ncml:const name="Aalpha_s" value="0.04944" />
                         <ncml:const name="Kalpha_s" value="15.87301587302" />
                         <ncml:const name="V0alpha_s" value="-29.06" />
@@ -63,7 +65,7 @@
                         <ncml:const name="Abeta_u" value="0.0013" />
                         <ncml:const name="Kbeta_u" value="83.33" />
                         <ncml:const name="V0beta_u" value="-48" />
-                        <!-- rate functions -->
+
                         <ncml:defun name="alpha_s">
                             <ncml:arg>v</ncml:arg>
                             <ncml:body> (Q10 * Aalpha_s * exp((v - V0alpha_s) / Kalpha_s))
@@ -85,7 +87,7 @@
                             </ncml:body>
                         </ncml:defun>
                         <ncml:hh_ionic_gate name="CaHVA">
-                            <!-- ion name: exported variables will be of the form {ion}_{id} -->
+
                             <ncml:initial_m> ((alpha_s (v))/(alpha_s (v) + beta_s (v)) )
                             </ncml:initial_m>
                             <ncml:initial_h> ((alpha_u (v))/(alpha_u (v) + beta_u (v)) )
@@ -107,10 +109,8 @@
                         <ncml:output name="e_Kv4" />
                     </ncml:component>
                 </ncml:component>
-                <!-- end CaHVA current -->
                 <ncml:component type="ionic-current" name="KA">
                     <ncml:component type="gate">
-                        <!-- rate constants -->
                         <ncml:const name="Q10"> (pow (3 ((fix_celsius - 20) / 10)))
                         </ncml:const>
                         <ncml:const name="Aalpha_a" value="4.88826" />
@@ -129,7 +129,6 @@
                         <ncml:const name="K_ainf" value="-19.8" />
                         <ncml:const name="V0_binf" value="-78.8" />
                         <ncml:const name="K_binf" value="8.4" />
-                        <!-- rate functions -->
                         <ncml:defun name="alpha_a">
                             <ncml:arg>v</ncml:arg>
                             <ncml:body>(Q10 * Aalpha_a * sigm ((v - V0alpha_a) Kalpha_a))
@@ -295,7 +294,7 @@
                             <ncml:arg>v</ncml:arg>
                             <ncml:body>(Q10 * Abeta_n * exp ((v - V0beta_n) / Kbeta_n))</ncml:body>
                         </ncml:defun>
-                        <ncml:hh_ionic_gate name="KM">
+                        <ncml:hh_ionic_gate name="KM"> -->
                             <ncml:initial_m>((alpha_n (v)) / (alpha_n (v) + beta_n (v)))
                             </ncml:initial_m>
                             <ncml:m_power>1</ncml:m_power>
@@ -600,18 +599,15 @@
                 </ncml:component>
                 <!-- Tom's additions below here -->
                 <ionicCurrent id="CGC_Lkg1" />
+                <ionicCurrent id="CGC_Lkg2" />
                 <ionicCurrent id="CGC_Na" />
-                <ionicCurrent id="CGC_Nar" />
                 <ionicCurrent id="CGC_KV" />
                 <ionicCurrent id="CGC_KA" />
                 <ionicCurrent id="CGC_Kir" />
                 <ionicCurrent id="CGC_KCa" />
                 <ionicCurrent id="CGC_CaHVA" />
                 <ionicCurrent id="CGC_Ca" />
-                <ionicCurrent id="CGC_pNa" />
                 <ionicCurrent id="CGC_KM" />
-                <ionicCurrent id="CGC_Lkg2" />
-                <passiveCurrent condDensity="3.0" units="S_per_m2" />
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="na" value="87.39" units="mV" />
                 <reversalPotential species="k" value="-84.69" units="mV" />
@@ -639,7 +635,7 @@
                     <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
                         units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
                 </conductanceSynapse>
-                <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />            
+<!--                 <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />             -->
             </synapses>
         </biophysicalProperties>
     </cell>

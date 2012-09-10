@@ -39,6 +39,13 @@ soma {
 //    ek  = -84.69
 //    
     // For Granule Cell
+    nseg=1
+    diam=11.8
+    L=11.8 
+    Ra=100
+    cm=1
+    celsius = 30
+  
     insert CGC_Lkg1 
     insert CGC_Lkg2
     insert CGC_Na 

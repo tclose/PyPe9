@@ -39,7 +39,7 @@ PARAMETER {
 
 	v (mV) 
 	cai (mM)
-	gkbar= 0.003 (mho/cm2) 
+	gkbar= 0.04 (mho/cm2) 
 	ek = -84.69 (mV) 
 	celsius = 30 (degC) 
 } 
