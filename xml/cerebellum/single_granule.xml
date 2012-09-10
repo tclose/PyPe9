@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <network id="CerebellarGranularLayer">
+        <simulationParams>
+            <temperature value="30" />
+        </simulationParams>
+        <population id="Granules" cell="Granule" size="1"/>
+    </network>
+</nineml>
