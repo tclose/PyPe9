@@ -1,47 +1,36 @@
+TITLE Cerebellum Granule Cell Model
 
+COMMENT
+        Gaba A leakage
+   
+	Author: A. Fontana
+	Last revised: 18.2.99
+ENDCOMMENT
+ 
+NEURON { 
+	SUFFIX CGC_Lkg2 
+	NONSPECIFIC_CURRENT il
+	RANGE egaba, ggaba , i
+} 
+ 
+UNITS { 
+	(mA) = (milliamp) 
+	(mV) = (millivolt) 
+} 
+ 
+PARAMETER { 
+	v (mV) 
+	ggaba = 3e-5 (mho/cm2)  : 2.17e-5 
+	celsius = 30 (degC)
+	egaba = -65 (mV)
+} 
 
-TITLE CGC_Lkg2
-
-
-NEURON {
-  RANGE comp47_egaba, comp47_ggaba
-  RANGE i_Lkg2
-  RANGE e
-  NONSPECIFIC_CURRENT i
+ASSIGNED { 
+	il (mA/cm2) 
+	i (mA/cm2) 
 }
 
-
-PARAMETER {
-  comp47_ggaba  =  2.17e-05
-  Vrest  =  -68.0
-  fix_celsius  =  30.0
-  comp47_egaba  =  -65.0
-}
-
-
-STATE {
-}
-
-
-ASSIGNED {
-  ica
-  cai
-  v
-  i
-  e
-  i_Lkg2
-}
-
-
-BREAKPOINT {
-  i_Lkg2  =  comp47_ggaba * (v - e)
-  i  =  i_Lkg2
-}
-
-
-INITIAL {
-}
-
-
-PROCEDURE print_state () {
-}
+BREAKPOINT { 
+	il = ggaba*(v - egaba) 
+	i =il
+} 

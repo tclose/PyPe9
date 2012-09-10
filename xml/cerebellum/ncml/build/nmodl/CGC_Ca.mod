@@ -1,59 +1,49 @@
+TITLE Cerebellum Granule Cell Model
 
-
-TITLE CGC_Ca
-
+COMMENT
+        Calcium first order kinetics
+   
+	Author: A. Fontana
+	Last revised: 12.12.98
+ENDCOMMENT
 
 NEURON {
-  RANGE comp19_ca
-  RANGE ica, cai
-  USEION ca READ ica WRITE cai
+        SUFFIX CGC_Ca
+        USEION ca READ ica, cao WRITE cai
+        RANGE d, beta, cai0
 }
 
+UNITS {
+        (mV)    = (millivolt)
+        (mA)    = (milliamp)
+	(um)    = (micron)
+	(molar) = (1/liter)
+        (mM)    = (millimolar)
+   	F      = (faraday) (coulomb)
+}
 
 PARAMETER {
-  comp19_d  =  0.2
-  comp19_F  =  96485.0
-  comp19_cao  =  2.0
-  comp19_cai0  =  0.0001
-  comp19_beta  =  1.5
+        ica             (mA/cm2)
+        celsius = 30    (degC)
+        d = .2          (um)
+        cao = 2.        (mM)         
+        cai0 = 1e-4     (mM)         
+        beta = 1.5        (/ms)
 }
-
 
 STATE {
-  comp19_ca
+	cai (mM)
 }
-
-
-ASSIGNED {
-  ica
-  cai
-  v
-}
-
-
-PROCEDURE pools () {
-  cai = comp19_ca
-}
-
-
-BREAKPOINT {
-  SOLVE states METHOD derivimplicit
-  pools ()
-}
-
-
-DERIVATIVE states {
-  comp19_ca'  =  
-  (-(ica)) / (2.0 * comp19_F * comp19_d) + 
-    -(comp19_beta * (cai + -(comp19_cai0)))
-}
-
 
 INITIAL {
-  comp19_ca  =  0.0001
+        cai = cai0 
 }
 
-
-PROCEDURE print_state () {
-  printf ("NMODL state: t = %g v = %g comp19_ca = %g\n" , t, v,  comp19_ca)
+BREAKPOINT {
+       SOLVE conc METHOD derivimplicit
 }
+
+DERIVATIVE conc {    
+	cai' = -ica/(2*F*d)*(1e4) - beta*(cai-cai0)
+}
+

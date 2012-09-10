@@ -1,97 +1,93 @@
+TITLE Cerebellum Granule Cell Model
 
+COMMENT
+        KM channel
+   
+	Author: A. Fontana
+	CoAuthor: T.Nieus Last revised: 20.11.99
+	
+ENDCOMMENT
+ 
+NEURON { 
+	SUFFIX CGC_KM 
+	USEION k READ ek WRITE ik 
+	RANGE gkbar, ik, g, alpha_n, beta_n 
+	RANGE Aalpha_n, Kalpha_n, V0alpha_n
+	RANGE Abeta_n, Kbeta_n, V0beta_n
+	RANGE V0_ninf, B_ninf
+	RANGE n_inf, tau_n 
+} 
+ 
+UNITS { 
+	(mA) = (milliamp) 
+	(mV) = (millivolt) 
+} 
+ 
+PARAMETER { 
+	Aalpha_n = 0.0033 (/ms)
+	Kalpha_n = 40 (mV)
 
-TITLE CGC_KM
+	V0alpha_n = -30 (mV)
+	Abeta_n = 0.0033 (/ms)
+	Kbeta_n = -20 (mV)
 
+	V0beta_n = -30 (mV)
+	V0_ninf = -35 (mV)	:-30
+	B_ninf = 6 (mV)		:6:4 rimesso a 6 dopo calibrazione febbraio 2003	
+	v (mV) 
+	gkbar= 0.00025 (mho/cm2) :0.0001
+	ek = -84.69 (mV) 
+	celsius = 30 (degC) 
+} 
 
-NEURON {
-  RANGE KM_m, comp235_vcbdur, comp235_vchdur, comp235_vcsteps, comp235_vcinc, comp235_vcbase, comp235_vchold, comp47_e, comp47_gbar
-  RANGE i_KM
-  RANGE ik
-  RANGE ek
-  USEION k READ ek WRITE ik
-}
+STATE { 
+	n 
+} 
 
-
-FUNCTION comp47_alpha_n (v) {
-  comp47_alpha_n  =  
-  comp47_Q10 * comp47_Aalpha_n * 
-    exp((v + -(comp47_V0alpha_n)) / comp47_Kalpha_n)
-}
-
-
-FUNCTION comp47_beta_n (v) {
-  comp47_beta_n  =  
-  comp47_Q10 * comp47_Abeta_n * 
-    exp((v + -(comp47_V0beta_n)) / comp47_Kbeta_n)
-}
-
-
-PARAMETER {
-  comp47_Kalpha_n  =  40.0
-  comp235_vchold  =  -71.0
-  comp47_V0beta_n  =  -30.0
-  comp47_V0_ninf  =  -30.0
-  comp47_Kbeta_n  =  -20.0
-  Vrest  =  -68.0
-  comp235_vchdur  =  30.0
-  comp47_gbar  =  0.00035
-  comp47_B_ninf  =  6.0
-  fix_celsius  =  30.0
-  comp235_vcbdur  =  100.0
-  comp235_vcbase  =  -69.0
-  comp47_e  =  -84.69
-  comp235_vcinc  =  10.0
-  comp235_vcsteps  =  8.0
-  comp47_Aalpha_n  =  0.0033
-  comp47_V0alpha_n  =  -30.0
-  comp47_Abeta_n  =  0.0033
-  comp47_Q10  =  2.40822468528069
-}
-
-
-STATE {
-  KM_m
-}
-
-
-ASSIGNED {
-  KM_m_inf
-  KM_m_tau
-  ica
-  cai
-  v
-  ik
-  ek
-  i_KM
-}
-
-
-PROCEDURE asgns () {
-  KM_m_tau  =  1.0 / (comp47_alpha_n(v) + comp47_beta_n(v))
-  KM_m_inf  =  1.0 / (1.0 + exp(-(v + -(comp47_V0_ninf)) / comp47_B_ninf))
-}
-
-
-BREAKPOINT {
-  SOLVE states METHOD derivimplicit
-  i_KM  =  (comp47_gbar * KM_m) * (v - ek)
-  ik  =  i_KM
-}
-
-
-DERIVATIVE states {
-  asgns ()
-  KM_m'  =  (KM_m_inf + -(KM_m)) / KM_m_tau
-}
-
-
-INITIAL {
-  asgns ()
-  KM_m  =  (comp47_alpha_n(v)) / (comp47_alpha_n(v) + comp47_beta_n(v))
-  ek  =  comp47_e
-}
-
-
-PROCEDURE print_state () {
-  printf ("NMODL state: t = %g v = %g KM_m = %g\n" , t, v,  KM_m)
-}
+ASSIGNED { 
+	ik (mA/cm2) 
+	n_inf 
+	tau_n (ms) 
+	g (mho/cm2) 
+	alpha_n (/ms) 
+	beta_n (/ms) 
+} 
+ 
+INITIAL { 
+	rate(v) 
+	n = n_inf 
+} 
+ 
+BREAKPOINT { 
+	SOLVE states METHOD derivimplicit 
+	g = gkbar*n 
+	ik = g*(v - ek) 
+	alpha_n = alp_n(v) 
+	beta_n = bet_n(v) 
+} 
+ 
+DERIVATIVE states { 
+	rate(v) 
+	n' =(n_inf - n)/tau_n 
+} 
+ 
+FUNCTION alp_n(v(mV))(/ms) { LOCAL Q10
+	Q10 = 3^((celsius-22(degC))/10(degC)) 
+	alp_n = Q10*Aalpha_n*exp((v-V0alpha_n)/Kalpha_n) 
+} 
+ 
+FUNCTION bet_n(v(mV))(/ms) { LOCAL Q10
+	Q10 = 3^((celsius-22(degC))/10(degC)) 
+	bet_n = Q10*Abeta_n*exp((v-V0beta_n)/Kbeta_n) 
+} 
+ 
+PROCEDURE rate(v (mV)) {LOCAL a_n, b_n 
+	TABLE n_inf, tau_n 
+	DEPEND Aalpha_n, Kalpha_n, V0alpha_n, 
+	       Abeta_n, Kbeta_n, V0beta_n, V0_ninf, B_ninf, celsius FROM -100 TO 30 WITH 13000 
+	a_n = alp_n(v)  
+	b_n = bet_n(v) 
+	tau_n = 1/(a_n + b_n) 
+:	n_inf = a_n/(a_n + b_n) 
+	n_inf = 1/(1+exp(-(v-V0_ninf)/B_ninf))
+} 

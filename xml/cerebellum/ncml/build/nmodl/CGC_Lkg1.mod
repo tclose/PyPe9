@@ -1,47 +1,37 @@
+TITLE Cerebellum Granule Cell Model
 
+COMMENT
+        Leakage
+   
+	Author: A. Fontana
+	Last revised: 18.12.98
+ENDCOMMENT
+ 
+NEURON { 
+	SUFFIX CGC_Lkg1 
+	NONSPECIFIC_CURRENT il
+	RANGE el, gl,i
+} 
+ 
+UNITS { 
+	(mA) = (milliamp) 
+	(mV) = (millivolt) 
+} 
+ 
+PARAMETER { 
+	v (mV) 
+	gl = 5.68e-5 (mho/cm2)
+	celsius = 30 (degC)
+	el =  -16.5 (mV) : resting at -70 mV	:-11 resting at -68 mV
+	: -58 : to make it 
+} 
 
-TITLE CGC_Lkg1
-
-
-NEURON {
-  RANGE comp47_e, comp47_gbar
-  RANGE i_Lkg1
-  RANGE e
-  NONSPECIFIC_CURRENT i
+ASSIGNED { 
+	il (mA/cm2) 
+	i (mA/cm2) 
 }
-
-
-PARAMETER {
-  Vrest  =  -68.0
-  comp47_gbar  =  5.68e-05
-  fix_celsius  =  30.0
-  comp47_e  =  -58.0
-}
-
-
-STATE {
-}
-
-
-ASSIGNED {
-  ica
-  cai
-  v
-  i
-  e
-  i_Lkg1
-}
-
-
-BREAKPOINT {
-  i_Lkg1  =  comp47_gbar * (v - e)
-  i  =  i_Lkg1
-}
-
-
-INITIAL {
-}
-
-
-PROCEDURE print_state () {
-}
+  
+BREAKPOINT { 
+	il = gl*(v - el) 
+	i = il
+} 

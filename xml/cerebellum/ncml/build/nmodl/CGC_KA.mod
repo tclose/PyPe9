@@ -1,144 +1,152 @@
+TITLE Cerebellum Granule Cell Model
 
+COMMENT
+        KA channel
+   
+	Author: E.D'Angelo, T.Nieus, A. Fontana
+	Last revised: Egidio 3.12.2003
+ENDCOMMENT
 
-TITLE CGC_KA
+NEURON { 
+	SUFFIX CGC_KA
+	USEION k READ ek WRITE ik 
+	RANGE gkbar, ik, g, alpha_a, beta_a, alpha_b, beta_b
+	RANGE Aalpha_a, Kalpha_a, V0alpha_a
+	RANGE Abeta_a, Kbeta_a, V0beta_a
+	RANGE Aalpha_b, Kalpha_b, V0alpha_b
+	RANGE Abeta_b, Kbeta_b, V0beta_b
+	RANGE V0_ainf, K_ainf, V0_binf, K_binf
+	RANGE a_inf, tau_a, b_inf, tau_b 
+} 
+ 
+UNITS { 
+	(mA) = (milliamp) 
+	(mV) = (millivolt) 
+} 
+ 
+PARAMETER { 
+	Aalpha_a = 0.8147 (/ms) :4.88826
+	Kalpha_a = -23.32708 (mV)
+	V0alpha_a = -9.17203 (mV)
+	Abeta_a = 0.1655 (/ms)   : 0.99285	
+	Kbeta_a = 19.47175 (mV)
+	V0beta_a = -18.27914 (mV)
 
+	Aalpha_b = 0.0368 (/ms)  : 0.11042 
+	Kalpha_b = 12.8433 (mV)
+	V0alpha_b = -111.33209 (mV)   
+	Abeta_b = 0.0345(/ms)   : 0.10353 
+	Kbeta_b = -8.90123 (mV)
+	V0beta_b = -49.9537 (mV)
 
-NEURON {
-  RANGE KA_h, KA_m, comp393_vcbdur, comp393_vchdur, comp393_vcsteps, comp393_vcinc, comp393_vcbase, comp393_vchold, comp63_e, comp63_gbar
-  RANGE i_KA
-  RANGE ik
-  RANGE ek
-  USEION k READ ek WRITE ik
+	V0_ainf = -38(mV)
+	K_ainf = -17(mV)
+
+	V0_binf = -78.8 (mV)
+	K_binf = 8.4 (mV)
+	v (mV) 
+	gkbar= 0.0032 (mho/cm2) :0.003 
+	ek = -84.69 (mV) 
+	celsius = 30 (degC) 
+} 
+
+STATE { 
+	a
+	b 
+} 
+
+ASSIGNED { 
+	ik (mA/cm2) 
+	a_inf 
+	b_inf 
+	tau_a (ms) 
+	tau_b (ms) 
+	g (mho/cm2) 
+	alpha_a (/ms)
+	beta_a (/ms)
+	alpha_b (/ms)
+	beta_b (/ms)
+} 
+ 
+INITIAL { 
+	rate(v) 
+	a = a_inf 
+	b = b_inf 
+} 
+ 
+BREAKPOINT { 
+	SOLVE states METHOD derivimplicit 
+	g = gkbar*a*a*a*b 
+	ik = g*(v - ek)
+	alpha_a = alp_a(v)
+	beta_a = bet_a(v) 
+	alpha_b = alp_b(v)
+	beta_b = bet_b(v) 
+} 
+ 
+DERIVATIVE states { 
+	rate(v) 
+	a' =(a_inf - a)/tau_a 
+	b' =(b_inf - b)/tau_b 
+} 
+ 
+FUNCTION alp_a(v(mV))(/ms) { LOCAL Q10
+	Q10 = 3^((celsius-25.5(degC))/10(degC))
+:	alp_a = Q10*Aalpha_a*exp(Kalpha_a*(v-V0alpha_a)) 
+:	alp_a = -0.04148(/mV-ms)*linoid(v+67.697(mV),-3.857(mV))
+	alp_a = Q10*Aalpha_a*sigm(v-V0alpha_a,Kalpha_a)
+} 
+ 
+FUNCTION bet_a(v(mV))(/ms) { LOCAL Q10
+	Q10 = 3^((celsius-25.5(degC))/10(degC))
+:	bet_a = Q10*Abeta_a*exp(Kbeta_a*(v-V0beta_a)) 
+:	bet_a = 0.0359(/mV-ms)*linoid(v+45.878(mV),23.654(mV))
+	bet_a = Q10*Abeta_a/(exp((v-V0beta_a)/Kbeta_a))
+} 
+ 
+FUNCTION alp_b(v(mV))(/ms) { LOCAL Q10
+	Q10 = 3^((celsius-25.5(degC))/10(degC))
+:	alp_b = Q10*Aalpha_b*exp(Kalpha_b*(v-V0alpha_b)) 
+:	alp_b = 0.356(/mV-ms)*linoid(v+231.03(mV),17.8(mV))
+	alp_b = Q10*Aalpha_b*sigm(v-V0alpha_b,Kalpha_b)
+} 
+ 
+FUNCTION bet_b(v(mV))(/ms) { LOCAL Q10
+	Q10 = 3^((celsius-25.5(degC))/10(degC))
+:	bet_b = Q10*Abeta_b*exp(Kbeta_b*(v-V0beta_b)) 
+:	bet_b = -0.00825(/mV-ms)*linoid(v+43.284(mV),-8.927(mV))
+	bet_b = Q10*Abeta_b*sigm(v-V0beta_b,Kbeta_b)
+} 
+ 
+PROCEDURE rate(v (mV)) {LOCAL a_a, b_a, a_b, b_b 
+	TABLE a_inf, tau_a, b_inf, tau_b 
+	DEPEND Aalpha_a, Kalpha_a, V0alpha_a, 
+	       Abeta_a, Kbeta_a, V0beta_a,
+               Aalpha_b, Kalpha_b, V0alpha_b,
+               Abeta_b, Kbeta_b, V0beta_b, celsius FROM -100 TO 30 WITH 13000 
+	a_a = alp_a(v)  
+	b_a = bet_a(v) 
+	a_b = alp_b(v)  
+	b_b = bet_b(v) 
+	a_inf = 1/(1+exp((v-V0_ainf)/K_ainf)) 
+	tau_a = 1/(a_a + b_a) 
+	b_inf = 1/(1+exp((v-V0_binf)/K_binf))
+	tau_b = 1/(a_b + b_b) 
+: Bardoni Belluzzi data
+:	a_inf = 1/(1+exp(-(v+46.7)/19.8))
+:	tau_a = 0.41*exp(-(v+43.5)/42.8)+0.167
+:	b_inf = 1/(1+exp((v+78.8)/8.4))
+:	tau_b = 10.8 + 0.03*v + 1/(57.9*exp(0.127*v)+0.000134*exp(-0.059*v))
 }
 
+FUNCTION linoid(x (mV),y (mV)) (mV) {
+        if (fabs(x/y) < 1e-6) {
+                linoid = y*(1 - x/y/2)
+        }else{
+                linoid = x/(exp(x/y) - 1)
+        }
+} 
 
-FUNCTION comp63_alpha_b (v) {
-  comp63_alpha_b  =  
-  comp63_Q10 * comp63_Aalpha_b * 
-    sigm(v + -(comp63_V0alpha_b), comp63_Kalpha_b)
-}
-
-
-FUNCTION comp63_alpha_a (v) {
-  comp63_alpha_a  =  
-  comp63_Q10 * comp63_Aalpha_a * 
-    sigm(v + -(comp63_V0alpha_a), comp63_Kalpha_a)
-}
-
-
-FUNCTION comp63_beta_b (v) {
-  comp63_beta_b  =  
-  comp63_Q10 * comp63_Abeta_b * 
-    sigm(v + -(comp63_V0beta_b), comp63_Kbeta_b)
-}
-
-
-FUNCTION comp63_beta_a (v) {
-  comp63_beta_a  =  
-  comp63_Q10 * 
-    comp63_Abeta_a / exp((v + -(comp63_V0beta_a)) / comp63_Kbeta_a)
-}
-
-
-FUNCTION sigm (x, y) {
-  sigm  =  1.0 / (exp(x / y) + 1.0)
-}
-
-
-PARAMETER {
-  comp63_Kalpha_b  =  12.8433
-  comp63_Kalpha_a  =  -23.32708
-  comp63_V0beta_b  =  -49.9537
-  comp63_V0beta_a  =  -18.27914
-  comp63_e  =  -84.69
-  comp393_vcbdur  =  100.0
-  comp63_Kbeta_b  =  -8.90123
-  comp63_Kbeta_a  =  19.47175
-  Vrest  =  -68.0
-  comp393_vcbase  =  -69.0
-  comp63_gbar  =  0.004
-  fix_celsius  =  30.0
-  comp63_K_binf  =  8.4
-  comp63_Q10  =  3.0
-  comp393_vcsteps  =  8.0
-  comp63_V0_binf  =  -78.8
-  comp63_K_ainf  =  -19.8
-  comp63_Aalpha_b  =  0.11042
-  comp63_Aalpha_a  =  4.88826
-  comp393_vchold  =  -71.0
-  comp63_V0_ainf  =  -46.7
-  comp63_V0alpha_b  =  -111.33209
-  comp63_V0alpha_a  =  -9.17203
-  comp63_Abeta_b  =  0.10353
-  comp63_Abeta_a  =  0.99285
-  comp393_vchdur  =  30.0
-  comp393_vcinc  =  10.0
-}
-
-
-STATE {
-  KA_h
-  KA_m
-}
-
-
-ASSIGNED {
-  KA_m_tau
-  KA_m_inf
-  KA_h_tau
-  comp63_b_inf
-  comp63_tau_b
-  comp63_tau_a
-  KA_h_inf
-  comp63_a_inf
-  ica
-  cai
-  v
-  ik
-  ek
-  i_KA
-}
-
-
-PROCEDURE asgns () {
-  comp63_a_inf  =  
-  1.0 / (1.0 + exp((v + -(comp63_V0_ainf)) / comp63_K_ainf))
-  comp63_tau_a  =  1.0 / (comp63_alpha_a(v) + comp63_beta_a(v))
-  comp63_tau_b  =  1.0 / (comp63_alpha_b(v) + comp63_beta_b(v))
-  comp63_b_inf  =  
-  1.0 / (1.0 + exp((v + -(comp63_V0_binf)) / comp63_K_binf))
-  KA_h_inf  =  comp63_b_inf
-  KA_h_tau  =  comp63_tau_b
-  KA_m_inf  =  comp63_a_inf
-  KA_m_tau  =  comp63_tau_a
-}
-
-
-BREAKPOINT {
-  LOCAL v535
-  SOLVE states METHOD derivimplicit
-  v535  =  KA_m 
-i_KA  =  (comp63_gbar * v535 * v535 * v535 * KA_h) * (v - ek)
-  ik  =  i_KA
-}
-
-
-DERIVATIVE states {
-  asgns ()
-  KA_m'  =  (KA_m_inf + -(KA_m)) / KA_m_tau
-  KA_h'  =  (KA_h_inf + -(KA_h)) / KA_h_tau
-}
-
-
-INITIAL {
-  asgns ()
-  KA_h  =  (comp63_alpha_b(v)) / (comp63_alpha_b(v) + comp63_beta_b(v))
-  KA_m  =  (comp63_alpha_a(v)) / (comp63_alpha_a(v) + comp63_beta_a(v))
-  ek  =  comp63_e
-}
-
-
-PROCEDURE print_state () {
-  printf ("NMODL state: t = %g v = %g KA_h = %g\n" , t, v,  KA_h)
-  printf ("NMODL state: t = %g v = %g KA_m = %g\n" , t, v,  KA_m)
+FUNCTION sigm(x (mV),y (mV)) {
+                sigm = 1/(exp(x/y) + 1)
 }
