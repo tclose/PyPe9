@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <network id="CerebellarGranularLayer">
-        <defaultSimulationParams>
+        <simulationParams>
             <temperature value="23" />
-        </defaultSimulationParams>
+        </simulationParams>
         <population id="Golgis" cell="Golgi" size="1"/>
     </network>
 </nineml>
