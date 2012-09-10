@@ -25,7 +25,7 @@ args = parser.parse_args()
 dt = 0.025
 
 # Load voltages selectively, if the difference between previous voltage point exceeds args.incr
-dat = numpy.loadtxt('/home/tclose/kbrain/output/run_golgi.dat')
+dat = numpy.loadtxt('/home/tclose/kbrain/output/run_single_cell.dat')
 input_times = dat[:,0]
 input_voltages = dat[:,1]
 voltages = []
