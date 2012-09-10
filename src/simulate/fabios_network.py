@@ -18,17 +18,14 @@ if 'NINEMLP_MPI' in os.environ:
     print "importing MPI"
 import argparse
 import ninemlp
-import math
 import time
-#from pyNN.random import RandomDistribution, NumpyRNG
-import numpy.random
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
-parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
+parser.add_argument('--build', type=str, default=ninemlp._BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres')
@@ -61,58 +58,31 @@ print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.mf_rate
 
-ninemlp.BUILD_MODE = args.build
+ninemlp.set_build_mode(args.build)
 
 exec("from ninemlp.%s import *" % args.simulator)
-#from pyNN.random import RandomDistribution
-
-setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@UndefinedVariable
 
 print "Building network"
+net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@UndefinedVariable
 
-net = Network(network_xml_location) #@UndefinedVariable
+print "Network description"
+net.describe()
 
-if args.build == 'compile_only':
-    print "Compiled Fabio's Network and now exiting ('--build' option was set to 'compile_only')"
-    sys.exit(0)
-
-mossy_fiber_inputs = net.get_population('MossyFiberInputs')
-
-# TODO: Change warning message for incorrect number of connections, using warning module
+if args.save_connections:
+    print "Saving connections"
+    net.save_connections(args.save_connections)
 
 print "Setting up simulation"
-mean_interval = 1000 / args.mf_rate # Convert from Hz to ms
-stim_range = args.time - args.start_input
-if stim_range >= 0.0:
-    num_spikes = stim_range / mean_interval
-    num_spikes = int(num_spikes + math.exp(-num_spikes / 10.0) * 10.0) # Add extra spikes to make sure spike train doesn't stop short
-    mf_spike_intervals = numpy.random.exponential(mean_interval, size=(mossy_fiber_inputs.size, num_spikes))
-    mf_spike_times = numpy.cumsum(mf_spike_intervals, axis=1) + args.start_input
-    mossy_fiber_inputs.tset('spike_times', mf_spike_times)
-else:
-    print "Warning, stimulation start (%f) is after end of experiment (%f)" % \
-                                                                    (args.start_input, args.time)
-# Set up spike recordings
-for pop in net.all_populations():
-    record(pop, args.output_prefix + pop.label + ".spikes") #@UndefinedVariable
+mossy_fiber_inputs = net.get_population('MossyFiberInputs')
+mossy_fiber_inputs.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
+
+print "Setting up recorders"
+net.record_all_spikes(args.output_prefix)
 
 # Set up voltage traces    
-#for pop_name, cell_id in args.volt_traces: 
 if args.volt_trace:
     cell = net.get_population(args.volt_trace[0])[int(args.volt_trace[1])]
     record_v(cell, args.output_prefix + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
-
-print "Final Network is..."
-
-print "Populations:"
-for pop in net.all_populations():
-    print pop.describe()
-
-print "Projections:"
-for proj in net.all_projections():
-    print proj.describe()
-    if args.save_connections:
-        proj.saveConnections(os.path.join(args.save_connections, proj.label))
 
 print "Starting run"
 

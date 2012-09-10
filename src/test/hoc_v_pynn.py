@@ -26,7 +26,7 @@ sys.path.append(os.path.join(project_dir, 'Molecular_Layer'))
 import argparse
 import time
 import ninemlp.utilities.nmodl as nmodl
-from ninemlp import BUILD_MODE, BUILD_MODE_OPTIONS
+from ninemlp import _BUILD_MODE, BUILD_MODE_OPTIONS
 import subprocess
 
 DEFAULT_NINEMLP_TEST = './xml/cerebellum/test.xml'
@@ -38,7 +38,7 @@ parser.add_argument('-t', '--test', type=str, help='The location of the test net
                                                NetworkXML file for NINEML+ and the main.py for Hoc')
 parser.add_argument('-s', '--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
-parser.add_argument('-b', '--build', type=str, default=BUILD_MODE,
+parser.add_argument('-b', '--build', type=str, default=_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % BUILD_MODE_OPTIONS)
 args = parser.parse_args()
