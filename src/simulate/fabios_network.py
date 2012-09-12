@@ -41,8 +41,6 @@ parser.add_argument('--volt_trace', nargs=2, default=[], help='Save voltage trac
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 args = parser.parse_args()
 
-print "in script: " + args.build
-
 if args.debug:
     xml_filename = 'debug_fabios.xml'
 else:
