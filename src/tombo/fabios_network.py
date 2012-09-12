@@ -55,6 +55,7 @@ nrniv mosinit.hoc
 """
     copy_to_output = []
 else:
+    print "line 58 tombo/fabios_network.py"
     #Compile network
     tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
     # Set up command to run the script
