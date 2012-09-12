@@ -15,6 +15,8 @@ import os.path
 import argparse
 import ninemlp
 from neuron import h
+import numpy
+import math
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
@@ -29,7 +31,9 @@ parser.add_argument('--time', type=float, default=2000.0, help='The run time of 
 parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.') , help='The output location of the recording files')
 parser.add_argument('--min_delay', type=float, default=0.05, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
+parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection')
 args = parser.parse_args()
+
 
 network_xml_location = os.path.join(PROJECT_PATH, 'xml', args.xml_filename)
 if not os.path.exists(network_xml_location):
@@ -44,10 +48,26 @@ print "Building network"
 
 net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@UndefinedVariable
 
+# Get population and print the soma section of the single cell.
 pop = net.all_populations()[0]
-cell = pop[0]._cell
-h.psection(sec=cell.soma)
+h.psection(sec=pop[0]._cell.soma)
 
+# Create the input current and times vectors
+if args.inject:
+    inject_type = args.inject[0]
+    if inject_type == 'step':
+        current_source = StepCurrentSource({'amplitudes': [float(args.inject[1])],  #@UndefinedVariable
+                                             'times': [float(args.inject[2])]}) 
+    elif inject_type == 'noise':
+        current_source = NoisyCurrentSource({'mean': float(args.inject[1]),#@UndefinedVariable
+                                             'stdev':float(args.inject[2]),
+                                             'stop': args.time,
+                                             'dt': 1.0}) 
+                                                                            
+    else:
+        raise Exception("Unrecognised current injection type '%s'. Valid values are 'step' or 'noise'" % inject_type)
+    pop[0].inject(current_source)
+    
 pop.record_all(args.output + pop.label)
 print "celsius: " + str(h.celsius)    
 print "Starting run"
