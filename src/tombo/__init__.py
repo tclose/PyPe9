@@ -114,7 +114,6 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
         env = create_env(work_dir)
     else:
         env = copy(env)
-    env['NINEMLP_BUILD_MODE'] = 'compile_only'
     env['NINEMLP_MPI'] = '1'
     # Remove NMODL build directory for pyNN neuron so it can be recompiled in script
     pynn_nmodl_path = os.path.join(work_dir,'pyNN','neuron', 'nmodl', 'x86_64')
@@ -176,7 +175,6 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
 #$ -v PYTHONPATH
 #$ -v LD_LIBRARY_PATH
 #$ -v NINEMLP_SRC_PATH
-#$ -v NINEMLP_BUILD_MODE
 #$ -v NINEMLP_MPI
 #$ -v BREP_DEVEL
 #$ -v PARAMDIR
@@ -191,7 +189,6 @@ export PATH={path}:$PATH
 export PYTHONPATH={pythonpath}
 export LD_LIBRARY_PATH={ld_library_path}
 export NINEMLP_SRC_PATH={ninemlp_src_path}
-export NINEMLP_BUILD_MODE='lazy'
 export NINEMLP_MPI=1
 
 echo "============== Starting mpirun ===============" 

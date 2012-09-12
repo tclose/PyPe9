@@ -61,7 +61,7 @@ else:
     cmd_line = \
 "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ --time {time}  \
 --start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} --simulator {simulator} \
---timestep {timestep} --stim_seed {stim_seed}".format(script_name=SCRIPT_NAME,
+--timestep {timestep} --stim_seed {stim_seed} --build require".format(script_name=SCRIPT_NAME,
                                                       work_dir=work_dir,
                                                       mf_rate=args.mf_rate,
                                                       start_input=args.start_input,
