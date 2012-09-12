@@ -58,12 +58,11 @@ print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.mf_rate
 
-ninemlp.set_build_mode(args.build)
-
 exec("from ninemlp.%s import *" % args.simulator)
 
 print "Building network"
-net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0) #@UndefinedVariable
+net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0,#@UndefinedVariable
+                                                                             build_mode=args.build) 
 
 print "Network description"
 net.describe()
