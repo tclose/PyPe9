@@ -1,3 +1,5 @@
+nrn_load_dll("../../xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
+    
 create soma
 
 soma {
@@ -84,6 +86,12 @@ soma {
         
     psection()
 }
+
+objectvar stim
+soma stim = new IClamp(0.5)
+stim.del = 1000
+stim.dur = 1000
+stim.amp = 0.05
  
 objref rec_v
 rec_v = new Vector()
