@@ -50,7 +50,8 @@ net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_de
 
 # Get population and print the soma section of the single cell.
 pop = net.all_populations()[0]
-h.psection(sec=pop[0]._cell.soma)
+soma = pop[0]._cell.soma
+h.psection(sec=soma)
 
 # Create the input current and times vectors
 if args.inject:
@@ -69,7 +70,14 @@ if args.inject:
     pop[0].inject(current_source)
     
 pop.record_all(args.output + pop.label)
-print "celsius: " + str(h.celsius)    
+print "------Miscellaneous hoc variables to print------"
+potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
+for var in potential_variables:
+    try:
+        print var + ": " + str(getattr(soma, var))
+    except:
+        pass
+print "celsius: " + str(h.celsius)
 print "Starting run"
 
 run(args.time) #@UndefinedVariable

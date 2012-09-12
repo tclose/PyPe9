@@ -87,6 +87,7 @@ soma {
     psection()
 }
 
+printf("eca: %f", eca)
 objectvar stim
 soma stim = new IClamp(0.5)
 stim.del = 1000

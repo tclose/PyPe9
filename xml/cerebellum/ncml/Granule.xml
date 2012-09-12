@@ -611,7 +611,8 @@
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="na" value="87.39" units="mV" />
                 <reversalPotential species="k" value="-84.69" units="mV" />
-                <reversalPotential species="ca" value="129.33" units="mV" />
+                <reversalPotential species="ca" value="132.46" units="mV" />
+                <reversalPotential species="cl" value="-65" units="mV" />
                 <!-- Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
             </membraneProperties>
             <intracellularProperties>
