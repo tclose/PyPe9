@@ -25,7 +25,7 @@ PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
-parser.add_argument('--build', type=str, default=ninemlp._BUILD_MODE,
+parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres')
@@ -40,6 +40,8 @@ parser.add_argument('--para_unsafe', action='store_true', help='If set the netwo
 parser.add_argument('--volt_trace', nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 args = parser.parse_args()
+
+print "in script: " + args.build
 
 if args.debug:
     xml_filename = 'debug_fabios.xml'

@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('xml_filename', type=str, help='The name of the xml file to load the cells from.')
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
-parser.add_argument('--build', type=str, default=ninemlp._BUILD_MODE,
+parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)')
