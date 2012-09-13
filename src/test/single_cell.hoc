@@ -1,9 +1,6 @@
 stim_amp=0.01875
-with_tables=0
 
-// This is the relative path to the NMODL directory from the directory that this file is in 
-nrn_load_dll("../../xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
-// This is the absolute path on my machine (feel free to add your own as it doesn't hurt
+// This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
 nrn_load_dll("/home/tclose/kbrain/xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
 
 create soma
@@ -77,15 +74,14 @@ soma {
   
     beta_CGC_Ca = 1.5
     
-    if (!with_tables) {
-//      usetable_CGC_Na   = 0                 
-      //usetable_CGC_KV   = 0
-      //usetable_CGC_KA   = 0
-      //usetable_CGC_Kir  = 0   
-      //usetable_CGC_KCa  = 0
-      //usetable_CGC_CaHVA  = 0
-      //usetable_CGC_KM   = 0
-    }
+    //usetable_CGC_Na   = 0                 
+    //usetable_CGC_KV   = 0
+    //usetable_CGC_KA   = 0
+    //usetable_CGC_Kir  = 0   
+    usetable_CGC_KCa  = 0
+    //usetable_CGC_CaHVA  = 0
+    //usetable_CGC_KM   = 0
+    
     
     ena = 87.39
     ek = -84.69
