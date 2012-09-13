@@ -87,7 +87,7 @@ FUNCTION bet_d(v(mV))(/ms) { LOCAL Q10
 PROCEDURE rate(v (mV)) {LOCAL a_d, b_d 
 	TABLE d_inf, tau_d  
 	DEPEND Aalpha_d, Kalpha_d, V0alpha_d, 
-	       Abeta_d, Kbeta_d, V0beta_d, celsius FROM -100 TO 30 WITH 13000 
+	       Abeta_d, Kbeta_d, V0beta_d, celsius FROM -150 TO 100 WITH 13000 
 	a_d = alp_d(v)  
 	b_d = bet_d(v) 
 	tau_d = 1/(a_d + b_d) 
