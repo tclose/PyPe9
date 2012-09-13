@@ -1,96 +1,98 @@
-TITLE Cerebellum Granule Cell Model
 
-COMMENT
-        Kir channel
-   
-	Author: E.D'Angelo, T.Nieus, A. Fontana
-	Last revised: 8.10.2000
-	Old values:
-			gkbar = 0.0003 (mho/cm2) 
-			
-ENDCOMMENT
- 
-NEURON { 
-	SUFFIX CGC_Kir
-	USEION k READ ek WRITE ik 
-	RANGE gkbar, ik, g, alpha_d, beta_d 
-	RANGE Aalpha_d, Kalpha_d, V0alpha_d
-	RANGE Abeta_d, Kbeta_d, V0beta_d
-	RANGE d_inf, tau_d 
-} 
- 
-UNITS { 
-	(mA) = (milliamp) 
-	(mV) = (millivolt) 
-} 
- 
-PARAMETER { 
-	Aalpha_d = 0.13289 (/ms)
 
-	:Kalpha_d = -0.041 (/mV)
-	Kalpha_d = -24.3902 (mV)
+TITLE CGC_Kir
 
-	V0alpha_d = -83.94 (mV)
-	Abeta_d = 0.16994 (/ms)
 
-	:Kbeta_d = 0.028 (/mV)
-	Kbeta_d = 35.714 (mV)
+NEURON {
+  RANGE Kir_m, comp207_vcbdur, comp207_vchdur, comp207_vcsteps, comp207_vcinc, comp207_vcbase, comp207_vchold, comp47_e, comp47_gbar
+  RANGE i_Kir
+  RANGE ik
+  RANGE ek
+  USEION k READ ek WRITE ik
+}
 
-	V0beta_d = -83.94 (mV)
-	v (mV) 
-	gkbar = 0.0009 (mho/cm2) 
-	ek = -84.69 (mV) 
-	celsius = 30 (degC) 
-} 
 
-STATE { 
-	d 
-} 
+FUNCTION comp47_alpha_d (v) {
+  comp47_alpha_d  =  
+  comp47_Q10 * comp47_Aalpha_d * 
+    exp((v + -(comp47_V0alpha_d)) / comp47_Kalpha_d)
+}
 
-ASSIGNED { 
-	ik (mA/cm2) 
-	d_inf 
-	tau_d (ms) 
-	g (mho/cm2) 
-	alpha_d (/ms) 
-	beta_d (/ms) 
-} 
- 
-INITIAL { 
-	rate(v) 
-	d = d_inf 
-} 
- 
-BREAKPOINT { 
-	SOLVE states METHOD derivimplicit
-	g = gkbar*d   : primo ordine!!!
-	ik = g*(v - ek) 
-	alpha_d = alp_d(v) 
-	beta_d = bet_d(v) 
-} 
- 
-DERIVATIVE states { 
-	rate(v) 
-	d' =(d_inf - d)/tau_d 
-} 
- 
-FUNCTION alp_d(v(mV))(/ms) { LOCAL Q10
-	Q10 = 3^((celsius-20(degC))/10(degC))
-	alp_d = Q10*Aalpha_d*exp((v-V0alpha_d)/Kalpha_d) 
-} 
- 
-FUNCTION bet_d(v(mV))(/ms) { LOCAL Q10
-	Q10 = 3^((celsius-20(degC))/10(degC))
-	bet_d = Q10*Abeta_d*exp((v-V0beta_d)/Kbeta_d) 
-} 
- 
-PROCEDURE rate(v (mV)) {LOCAL a_d, b_d 
-	TABLE d_inf, tau_d  
-	DEPEND Aalpha_d, Kalpha_d, V0alpha_d, 
-	       Abeta_d, Kbeta_d, V0beta_d, celsius FROM -100 TO 30 WITH 13000 
-	a_d = alp_d(v)  
-	b_d = bet_d(v) 
-	tau_d = 1/(a_d + b_d) 
-	d_inf = a_d/(a_d + b_d) 
-} 
 
+FUNCTION comp47_beta_d (v) {
+  comp47_beta_d  =  
+  comp47_Q10 * comp47_Abeta_d * 
+    exp((v + -(comp47_V0beta_d)) / comp47_Kbeta_d)
+}
+
+
+PARAMETER {
+  comp47_Kalpha_d  =  -24.3902
+  comp47_V0beta_d  =  -83.94
+  comp207_vcbdur  =  100.0
+  comp47_Kbeta_d  =  35.714
+  Vrest  =  -68.0
+  comp207_vcbase  =  -69.0
+  comp207_vcinc  =  10.0
+  comp47_gbar  =  0.0009
+  fix_celsius  =  30.0
+  comp47_e  =  -84.69
+  comp207_vcsteps  =  8.0
+  comp47_Aalpha_d  =  0.13289
+  comp207_vchold  =  -71.0
+  comp47_V0alpha_d  =  -83.94
+  comp47_Abeta_d  =  0.16994
+  comp47_Q10  =  3.0
+  comp207_vchdur  =  30.0
+}
+
+
+STATE {
+  Kir_mC
+  Kir_mO
+  Kir_m
+}
+
+
+ASSIGNED {
+  ica
+  cai
+  v
+  ik
+  ek
+  i_Kir
+}
+
+
+PROCEDURE reactions () {
+  Kir_m  =  Kir_mO
+}
+
+
+BREAKPOINT {
+  SOLVE states METHOD derivimplicit
+  reactions ()
+  i_Kir  =  (comp47_gbar * Kir_m) * (v - ek)
+  ik  =  i_Kir
+}
+
+
+DERIVATIVE states {
+  LOCAL v336
+  v336  =  Kir_mO 
+Kir_mO'  =  
+    -(Kir_mO * comp47_beta_d(v)) + (1 - v336) * (comp47_alpha_d(v))
+}
+
+
+INITIAL {
+  Kir_m  =  (comp47_alpha_d(v)) / (comp47_alpha_d(v) + comp47_beta_d(v))
+  Kir_mO  =  Kir_m
+  ek  =  comp47_e
+}
+
+
+PROCEDURE print_state () {
+  printf ("NMODL state: t = %g v = %g Kir_mO = %g\n" , t, v,  Kir_mO)
+  printf ("NMODL state: t = %g v = %g Kir_m = %g\n" , t, v,  Kir_m)
+}
