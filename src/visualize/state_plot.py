@@ -20,6 +20,13 @@ import argparse
 COLOR_SEQUENCE=['b','g','r','m','c','y','k']
 PATTERN_SEQUENCE=['-','--',':','-.']
 
+def quit_figure(event):
+    """
+    Creates a shortcut to close the current window with the key 'q'
+    """
+    if event.key == 'q':
+        plt.close(event.canvas.figure)
+
 parser = argparse.ArgumentParser(description='A script to plot spike activity')
 parser.add_argument('filename', help='The file to plot the spikes from')
 parser.add_argument('--time_start', type=float, default=None, help='The start of the plot')
@@ -100,6 +107,7 @@ for ID in last_x.keys():
 legend = []
 line_count = 0
 fig = plt.figure()
+cid = fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure    
 ax = plt.subplot(111)
 for ID in sorted(states.keys()):
     state = states[ID]
@@ -130,4 +138,5 @@ plt.setp(plt.gca().get_legend().get_texts(), fontsize='small')
 plt.title('States v Time (%s)' % args.filename)
 plt.xlabel('Time (ms)')
 # Show the plot
+
 plt.show()

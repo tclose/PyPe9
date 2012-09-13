@@ -20,6 +20,13 @@ from mpl_toolkits.mplot3d import Axes3D #@UnusedImport
 from common import tube_mesh, ellipse_tube_mesh
 from copy import copy
 
+def quit_figure(event):
+    """
+    Creates a shortcut to close the current window with the key 'q'
+    """
+    if event.key == 'q':
+        plt.close(event.canvas.figure)
+
 PROJ_TUPLE_LENGTH = 5
 
 PROJECT_PATH = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..', '..'))
@@ -121,6 +128,7 @@ elif args.preset == 'Gr-Go':
 proxies = {}
 
 fig = plt.figure()
+cid = fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure    
 ax = fig.add_subplot(111, projection='3d')
 
 min_bound = float('inf')

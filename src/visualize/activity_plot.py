@@ -28,6 +28,13 @@ def generate_subplots(num_subplots):
         axes.append(fig.add_subplot(num_high, num_wide,i))
     return fig, axes
 
+def quit_figure(event):
+    """
+    Creates a shortcut to close the current window with the key 'q'
+    """
+    if event.key == 'q':
+        plt.close(event.canvas.figure)
+
 parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
 parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
 parser.add_argument('--time_start', type=float, default=None, help='The start of the plot')
@@ -54,10 +61,13 @@ for filename in args.filenames:
 num_unique_currents = len(unique_currents)     
 if num_spike_trains:    
     spike_fig, spike_axes = generate_subplots(num_spike_trains)
+    #Assign quit shortcut to figure
+    spike_cid = spike_fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure    
     spike_legend = []
 if num_v + num_currents:
     if args.combine:
         combine_fig = plt.figure()
+        combine_cid = combine_fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure
         combine_axis = combine_fig.subplot(111)
         combine_legend = []
         # Test to see if there are two type of variables that are to be combined.
@@ -67,6 +77,7 @@ if num_v + num_currents:
             rescale = False
     else:
         var_fig, var_axes = generate_subplots(num_v + num_currents)
+        var_cid = var_fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure
         rescale = False
 spike_train_count = 0
 var_count = 0

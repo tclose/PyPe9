@@ -18,14 +18,20 @@ import matplotlib.pyplot as plt
 import argparse
 import math
 
+def quit_figure(event):
+    """
+    Creates a shortcut to close the current window with the key 'q'
+    """
+    if event.key == 'q':
+        plt.close(event.canvas.figure)
+
 parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
 parser.add_argument('--incr', type=float, default=0.1, help='The minimum increment required before the next step in the voltage trace is plotted')
 args = parser.parse_args()
 
 dt = 0.025
-
 # Load voltages selectively, if the difference between previous voltage point exceeds args.incr
-dat = numpy.loadtxt('/home/tclose/kbrain/output/run_single_cell.dat')
+dat = numpy.loadtxt('/home/tclose/kbrain/output/single_cell_hoc.dat')
 input_times = dat[:,0]
 input_voltages = dat[:,1]
 voltages = []
@@ -46,4 +52,5 @@ plt.plot(times, voltages)
 plt.title('Run golgi - Voltage v Time')
 plt.xlabel('Time (ms)')
 plt.ylabel('Soma Voltage (V)')
+cid = plt.gcf().canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure    
 plt.show()
