@@ -1,98 +1,108 @@
-TITLE Cerebellum Granule Cell Model
+TITLE CGC_KV
 
-COMMENT
-        KDr channel
-	Gutfreund parametrization
-   
-	Author: A. Fontana
-	Last revised: 12.12.98
-ENDCOMMENT
 
-NEURON { 
-	SUFFIX CGC_KV 
-	USEION k READ ek WRITE ik 
-	RANGE gkbar, ik, g, alpha_n, beta_n 
-	RANGE Aalpha_n, Kalpha_n, V0alpha_n
-	RANGE Abeta_n, Kbeta_n, V0beta_n
-	RANGE n_inf, tau_n 
-} 
- 
-UNITS { 
-	(mA) = (milliamp) 
-	(mV) = (millivolt) 
-} 
- 
-PARAMETER { 
-	:Kbeta_n = -0.0125 (/mV)
-	
-	Aalpha_n = -0.01 (/ms-mV)
-	Kalpha_n = -10 (mV)
-	V0alpha_n = -25 (mV)
-	Abeta_n = 0.125 (/ms)
-	
-	Kbeta_n = -80 (mV)
-	V0beta_n = -35 (mV)
-	v (mV)  
-	gkbar= 0.003 (mho/cm2) : 0.0015
-	ek = -84.69 (mV) 
-	celsius = 30 (degC) 
-} 
+NEURON {
+  RANGE KV_m, comp223_vcbdur, comp223_vchdur, comp223_vcsteps, comp223_vcinc, comp223_vcbase, comp223_vchold, comp63_e, comp63_gbar
+  RANGE i_KV
+  RANGE ik
+  RANGE ek
+  USEION k READ ek WRITE ik
+}
 
-STATE { 
-	n 
-} 
 
-ASSIGNED { 
-	ik (mA/cm2) 
-	n_inf 
-	tau_n (ms) 
-	g (mho/cm2) 
-	alpha_n (/ms) 
-	beta_n (/ms) 
-} 
- 
-INITIAL { 
-	rate(v) 
-	n = n_inf 
-} 
- 
-BREAKPOINT { 
-	SOLVE states METHOD derivimplicit 
-	g = gkbar*n*n*n*n 
-	ik = g*(v - ek) 
-	alpha_n = alp_n(v) 
-	beta_n = bet_n(v) 
-} 
- 
-DERIVATIVE states { 
-	rate(v) 
-	n' =(n_inf - n)/tau_n 
-} 
- 
-FUNCTION alp_n(v(mV))(/ms) { LOCAL Q10
-	Q10 = 3^((celsius-6.3(degC))/10(degC)) 
-	alp_n = Q10*Aalpha_n*linoid(v-V0alpha_n, Kalpha_n)
-} 
- 
-FUNCTION bet_n(v(mV))(/ms) { LOCAL Q10
-	Q10 = 3^((celsius-6.3(degC))/10(degC)) 
-	bet_n = Q10*Abeta_n*exp((v-V0beta_n)/Kbeta_n) 
-} 
- 
-PROCEDURE rate(v (mV)) {LOCAL a_n, b_n 
-	TABLE n_inf, tau_n 
-	DEPEND Aalpha_n, Kalpha_n, V0alpha_n, 
-               Abeta_n, Kbeta_n, V0beta_n, celsius FROM -150 TO 100 WITH 13000 
-	a_n = alp_n(v)  
-	b_n = bet_n(v) 
-	tau_n = 1/(a_n + b_n) 
-	n_inf = a_n/(a_n + b_n) 
-} 
+FUNCTION comp63_alpha_n (v) {
+  comp63_alpha_n  =  
+  comp63_Q10 * comp63_Aalpha_n * 
+    linoid(v + -(comp63_V0alpha_n), comp63_Kalpha_n)
+}
 
-FUNCTION linoid(x (mV),y (mV)) (mV) {
-        if (fabs(x/y) < 1e-6) {
-                linoid = y*(1 - x/y/2)
-        }else{
-                linoid = x/(exp(x/y) - 1)
-        }
+
+FUNCTION comp63_beta_n (v) {
+  comp63_beta_n  =  
+  comp63_Q10 * comp63_Abeta_n * 
+    exp((v + -(comp63_V0beta_n)) / comp63_Kbeta_n)
+}
+
+
+FUNCTION linoid (x, y) {
+  LOCAL v354
+  if 
+    (fabs(x / y) < 1e-06) 
+     {v354  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v354  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v354
+}
+
+
+PARAMETER {
+  comp63_Kalpha_n  =  -10.0
+  comp63_V0beta_n  =  -35.0
+  comp63_e  =  -84.69
+  comp223_vcbdur  =  100.0
+  comp63_Kbeta_n  =  -80.0
+  Vrest  =  -68.0
+  comp223_vcbase  =  -69.0
+  comp63_gbar  =  0.003
+  fix_celsius  =  30.0
+  comp63_Q10  =  13.5137964673603
+  comp223_vcsteps  =  8.0
+  comp63_Aalpha_n  =  -0.01
+  comp223_vchold  =  -71.0
+  comp223_vcinc  =  10.0
+  comp63_V0alpha_n  =  -25.0
+  comp63_Abeta_n  =  0.125
+  comp223_vchdur  =  30.0
+}
+
+
+STATE {
+  KV_mC
+  KV_mO
+  KV_m
+}
+
+
+ASSIGNED {
+  ica
+  cai
+  v
+  ik
+  ek
+  i_KV
+}
+
+
+PROCEDURE reactions () {
+  KV_m  =  KV_mO
+}
+
+
+BREAKPOINT {
+  LOCAL v356
+  SOLVE states METHOD derivimplicit
+  reactions ()
+  v356  =  KV_m 
+i_KV  =  (comp63_gbar * v356 * v356 * v356 * v356) * (v - ek)
+  ik  =  i_KV
+}
+
+
+DERIVATIVE states {
+  LOCAL v352
+  v352  =  KV_mO 
+KV_mO'  =  
+    -(KV_mO * comp63_beta_n(v)) + (1 - v352) * (comp63_alpha_n(v))
+}
+
+
+INITIAL {
+  KV_m  =  (comp63_alpha_n(v)) / (comp63_alpha_n(v) + comp63_beta_n(v))
+  KV_mO  =  KV_m
+  ek  =  comp63_e
+}
+
+
+PROCEDURE print_state () {
+  printf ("NMODL state: t = %g v = %g KV_mO = %g\n" , t, v,  KV_mO)
+  printf ("NMODL state: t = %g v = %g KV_m = %g\n" , t, v,  KV_m)
 }

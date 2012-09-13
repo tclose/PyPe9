@@ -1,99 +1,89 @@
-TITLE Cerebellum Granule Cell Model
+TITLE CGC_KCa
 
-COMMENT
-        KCa channel
-   
-	Author: E.D'Angelo, T.Nieus, A. Fontana
-	Last revised: 8.5.2000
-ENDCOMMENT
- 
-NEURON { 
-	SUFFIX CGC_KCa
-	USEION k READ ek WRITE ik 
-	USEION ca READ cai
-	RANGE gkbar, ik, ica, g, alpha_c, beta_c
-	RANGE Aalpha_c, Balpha_c, Kalpha_c
-	RANGE Abeta_c, Bbeta_c, Kbeta_c 
-	RANGE c_inf, tau_c 
-} 
- 
-UNITS { 
-	(mA) = (milliamp) 
-	(mV) = (millivolt) 
-	(molar) = (1/liter)
-	(mM) = (millimolar)
-} 
- 
-PARAMETER { 
-	Aalpha_c = 2.5 (/ms)
-	Balpha_c = 1.5e-3 (mM)
 
-	:Kalpha_c = -0.085 (/mV)
-	Kalpha_c =  -11.765 (mV)
+NEURON {
+  RANGE KCa_m, comp47_e, comp47_gbar
+  RANGE i_KCa
+  RANGE ik
+  RANGE ek
+  USEION k READ ek WRITE ik
+}
 
-	Abeta_c = 1.5 (/ms)
-	Bbeta_c = 0.15e-3 (mM)
 
-	:Kbeta_c = -0.085 (/mV)
-	Kbeta_c = -11.765 (mV)
+FUNCTION comp47_alpha_c (v, cai) {
+  comp47_alpha_c  =  
+  (comp47_Q10 * comp47_Aalpha_c) / 
+    (1.0 + (comp47_Balpha_c * exp(v / comp47_Kalpha_c)) / cai)
+}
 
-	v (mV) 
-	cai (mM)
-	gkbar= 0.04 (mho/cm2) 
-	ek = -84.69 (mV) 
-	celsius = 30 (degC) 
-} 
 
-STATE { 
-	c 
-} 
+FUNCTION comp47_beta_c (v, cai) {
+  comp47_beta_c  =  
+  (comp47_Q10 * comp47_Abeta_c) / 
+    (1.0 + cai / (comp47_Bbeta_c * exp(v / comp47_Kbeta_c)))
+}
 
-ASSIGNED { 
-	ik (mA/cm2) 
-	ica (mA/cm2)
 
-	c_inf 
-	tau_c (ms) 
-	g (mho/cm2) 
-	alpha_c (/ms) 
-	beta_c (/ms) 
-} 
- 
-INITIAL { 
-	rate(v) 
-	c = c_inf 
-} 
- 
-BREAKPOINT { 
-	SOLVE states METHOD derivimplicit 
-	g = gkbar*c 
-	ik = g*(v - ek) 
-	alpha_c = alp_c(v) 
-	beta_c = bet_c(v) 
-} 
- 
-DERIVATIVE states { 
-	rate(v) 
-	c' =(c_inf - c)/tau_c 
-} 
- 
-FUNCTION alp_c(v(mV))(/ms) { LOCAL Q10
-	Q10 = 3^((celsius-30(degC))/10(degC))
-	alp_c = Q10*Aalpha_c/(1+(Balpha_c*exp(v/Kalpha_c)/cai)) 
-} 
- 
-FUNCTION bet_c(v(mV))(/ms) { LOCAL Q10
-	Q10 = 3^((celsius-30(degC))/10(degC))
-	bet_c = Q10*Abeta_c/(1+cai/(Bbeta_c*exp(v/Kbeta_c))) 
-} 
- 
-PROCEDURE rate(v (mV)) {LOCAL a_c, b_c 
-	TABLE c_inf, tau_c 
-	DEPEND Aalpha_c, Balpha_c, Kalpha_c, 
-	       Abeta_c, Bbeta_c, Kbeta_c, celsius FROM -150 TO 100 WITH 13000 
-	a_c = alp_c(v)  
-	b_c = bet_c(v) 
-	tau_c = 1/(a_c + b_c) 
-	c_inf = a_c/(a_c + b_c) 
-} 
+PARAMETER {
+  comp47_Kalpha_c  =  -11.765
+  comp47_Kbeta_c  =  -11.765
+  comp47_Balpha_c  =  0.0015
+  Vrest  =  -68.0
+  comp47_gbar  =  0.004
+  fix_celsius  =  30.0
+  comp47_e  =  -84.69
+  comp47_Aalpha_c  =  2.5
+  comp47_Bbeta_c  =  0.00015
+  comp47_Abeta_c  =  1.5
+  comp47_Q10  =  1.0
+}
 
+
+STATE {
+  KCa_m
+}
+
+
+ASSIGNED {
+  KCa_m_tau
+  KCa_m_inf
+  ica
+  cai
+  v
+  ik
+  ek
+  i_KCa
+}
+
+
+PROCEDURE asgns () {
+  KCa_m_inf  =  comp47_alpha_c(v, cai)
+  KCa_m_tau  =  comp47_beta_c(v, cai)
+}
+
+
+BREAKPOINT {
+  SOLVE states METHOD derivimplicit
+  i_KCa  =  (comp47_gbar * KCa_m) * (v - ek)
+  ik  =  i_KCa
+}
+
+
+DERIVATIVE states {
+  asgns ()
+  KCa_m'  =  (KCa_m_inf + -(KCa_m)) / KCa_m_tau
+}
+
+
+INITIAL {
+  asgns ()
+  KCa_m  =  
+  (comp47_alpha_c(v, cai)) / 
+    (comp47_alpha_c(v, cai) + comp47_beta_c(v, cai))
+  ek  =  comp47_e
+}
+
+
+PROCEDURE print_state () {
+  printf ("NMODL state: t = %g v = %g KCa_m = %g\n" , t, v,  KCa_m)
+}
