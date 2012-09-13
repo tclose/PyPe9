@@ -60,8 +60,8 @@ soma {
     insert CGC_KA
     insert CGC_Kir 
     insert CGC_KCa 
-    insert CGC_Ca
     insert CGC_CaHVA
+    insert CGC_Ca
     insert CGC_KM 
   
     gl_CGC_Lkg1=5.68e-5   //2009 model
@@ -92,7 +92,11 @@ soma {
     psection()
 }
 
+printf("ena: %f", ena)
+printf("ek: %f", ek)
 printf("eca: %f", eca)
+printf("ecl: %f", ecl)
+printf("celsius: %f", celsius)
 objectvar stim
 soma stim = new IClamp(0.5)
 stim.del = 1000
