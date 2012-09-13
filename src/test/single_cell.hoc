@@ -1,9 +1,9 @@
+stim_amp=0.00875
+
 // This is the relative path to the NMODL directory from the directory that this file is in 
 nrn_load_dll("../../xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt
 nrn_load_dll("/home/tclose/kbrain/xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
-
-stim_amp=0.005
 
 create soma
 
