@@ -169,8 +169,8 @@ def main():
     parser = argparse.ArgumentParser(description='Compare two mechanisms by plotting the different response to an \
                                                     arbitrary current injection. NB: The simulated activity from the \
                                                     second mechanism will be interpolated to the time-scale of the first.')
-    parser.add_argument('-o', '--old', nargs=2, help="first mechanism name, followed by simulator name (either 'neuron' or 'nest')")
-    parser.add_argument('-n', '--new', nargs=2, help="second mechanism name, followed by simulator name (either 'neuron' or 'nest')")
+    parser.add_argument('-o', '--old', nargs=2, metavar=('MECH_NAME', 'SIMULATOR'), help="first mechanism name, followed by simulator name (either 'neuron' or 'nest')")
+    parser.add_argument('-n', '--new', nargs=2, metavar=('MECH_NAME', 'SIMULATOR'), help="second mechanism name, followed by simulator name (either 'neuron' or 'nest')")
     parser.add_argument('-r', '--save_recording', nargs=1, help='location to (optionally) save the recording')
     parser.add_argument('-p', '--plot', nargs=1, help='instead of simulating a recording, plot a saved recording from the given file location')
     parser.add_argument('-s', '--save_plot', nargs=1, type=str, default='', help='Location to save the plot (and close afterwards)')
