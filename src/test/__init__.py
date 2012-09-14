@@ -32,6 +32,13 @@ import collections
 ##     - state_legend [list(String)]: Legend for plotting the recorded states
 Recording = collections.namedtuple('Recording', 'times voltages currents states volt_legend curr_legend state_legend')
 
+def quit_figure(event):
+    """
+    Creates a shortcut to close the current window with the key 'q'
+    """
+    if event.key == 'q':
+        plt.close(event.canvas.figure)
+
 def plot_simulation(recording, time_window=None,
                     trigger_times=list(), volt_title='Recorded Voltages',
                     curr_title='Recorded Currents', state_title='Recorded States',
@@ -53,8 +60,11 @@ def plot_simulation(recording, time_window=None,
     @param fig_num [String]: Specifies the figure number to use
     """
 
+    shortcut_events = []
+
     if recording.voltages.shape[1]:
         plt.figure(fig_num)     # plt.figure(1)
+        shortcut_events.append(plt.gcf().canvas.mpl_connect('key_press_event', quit_figure)) # Register the 'q' -> close shortcut key with the current figure
         plt.plot(recording.times, recording.voltages)
         plt.title(volt_title)
         plt.xlabel("Time (" + time_units + ")")
@@ -74,6 +84,7 @@ def plot_simulation(recording, time_window=None,
     if recording.currents.shape[1]:
         # Plot the currents using MatPlotLib
         plt.figure(fig_num)
+        shortcut_events.append(plt.gcf().canvas.mpl_connect('key_press_event', quit_figure)) # Register the 'q' -> close shortcut key with the current figure        
         plt.plot(recording.times, recording.currents)
         plt.title(curr_title)
         plt.xlabel("Time (" + time_units + ")")
@@ -88,6 +99,7 @@ def plot_simulation(recording, time_window=None,
     if recording.states.shape[1]:
         # Plot the states using MatPlotLib
         plt.figure(fig_num)
+        shortcut_events.append(plt.gcf().canvas.mpl_connect('key_press_event', quit_figure)) # Register the 'q' -> close shortcut key with the current figure        
         plt.plot(recording.times, recording.states)
         plt.title(state_title)
         plt.xlabel("Time (" + time_units + ")")
