@@ -27,7 +27,7 @@ def quit_figure(event):
 
 parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
 parser.add_argument('datafile', type=str, nargs='?', default=os.path.join(SRC_PATH, '..', 'output', 'single_cell_hoc.dat'), help='The file from which the data is plotted (if it is ommitted it defaults to %(default)s)')
-parser.add_argument('--incr', type=float, default=0.1, help='The minimum increment required before the next step in the voltage trace is plotted')
+parser.add_argument('--incr', type=float, default=0.0, help='The minimum increment required before the next step in the voltage trace is plotted')
 args = parser.parse_args()
 
 dt = 0.025

@@ -39,7 +39,7 @@ parser = argparse.ArgumentParser(description='A script to plot activity recorded
 parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
 parser.add_argument('--time_start', type=float, default=None, help='The start of the plot')
 parser.add_argument('--time_stop', type=float, default=None, help='The stop of the plot')
-parser.add_argument('--incr', type=float, default=0.01, help='The minimum increment required before the next step in the variable trace is plotted')
+parser.add_argument('--incr', type=float, default=0.0, help='The minimum increment required before the next step in the variable trace is plotted')
 parser.add_argument('--extra_label', type=str, default='', help='Additional label information')
 parser.add_argument('--combine', action='store_true', help='Plot the variable figures on a single combined axis')
 args = parser.parse_args()
