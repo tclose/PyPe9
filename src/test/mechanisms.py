@@ -31,12 +31,13 @@ default_nmodl_path = os.path.join(SRC_PATH, 'test', 'mechs')
 from test import plot_simulation, Recording
 import neuron
 
-def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_time=5000, dt=1, input_shape='random', plot=True, save_plot=None):
+def current_clamp(old, new, min_input=0, max_input=1, start_time=3000, end_time=5000, dt=1, 
+         input_shape='random', plot=True, save_plot=None, no_new_tables=False, no_old_tables=False):
     """
     Tests the responses of two versions of the same mechanism with an arbitrary current clamp.
     
-    @param first [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the first mechanism
-    @param second [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the second mechanism
+    @param old [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the old mechanism
+    @param new [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the new mechanism
     @param min_input [float]: Minimum value of the input current(ranges from 0 -> max_input) (nA)
     @param max_input [float]: Maximum value of the input current (ranges from 0 -> max_input) (nA)
     @param start_time [float]: Start time of the input (ms)
@@ -45,7 +46,7 @@ def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_
     @param input_shape [String]: If 'step' uses a step input from 'min_input' to 'max_input', or if 'random' uses a input drawn from a uniform distribution between 'min_input' and 'max_input'.
     @param plot [bool]: A flag that determines whether to plot the recordings or not    
     
-    @return [tuple(list(Recording), tuple(float,float), list(String))]: A tuple containing: a list containing a Recording namedtuple for the first mechanism, the second mechanism and the difference between them, a 2-tuple with the start and end time of the experiment, and the list of plot titles
+    @return [tuple(list(Recording), tuple(float,float), list(String))]: A tuple containing: a list containing a Recording namedtuple for the old mechanism, the new mechanism and the difference between them, a 2-tuple with the start and end time of the experiment, and the list of plot titles
     """
 
     # Calculate the number of time steps for the input vector
@@ -72,21 +73,24 @@ def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_
     imported_simulators = []
 
     # Simulate the mechanism for both mechanisms
-    for experiment in (first, second):
+    for exp_name, experiment in (('old', old), ('new', new)):
 
         mech_name = experiment[0]
         simulator_name = experiment[1]
         import_name = str.upper(simulator_name)
 
         if simulator_name not in imported_simulators:
-            exec('import %s' % import_name)
-            exec('from %s import test' % import_name)
-            exec('from %s.cells import OneCompartmentCell as NeuronTestCell' % import_name)
+            exec('import test.%s' % import_name)
+            exec('from test.%s import simulate' % import_name)
+            exec('from test.%s.cells import OneCompartmentCell as NeuronTestCell' % import_name)
             imported_simulators.append(simulator_name)
 
         cell = NeuronTestCell(mech_name) #@UndefinedVariable
 
         cell.inject_soma_current(input_current, times)
+
+        if exp_name == 'old' and no_old_tables or exp_name == 'new' and no_new_tables:
+            neuron.h('usetable_%s = 0' % mech_name, sec=cell.soma)
 
         # Run the recording and append it to the recordings list
         if simulator_name == 'neuron':
@@ -96,7 +100,7 @@ def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_
         else:
             raise Exception ("Unrecognised simulator name '%s'" % simulator_name)
 
-        recs.append(test(end_time, record_v=record_v))
+        recs.append(simulate(end_time, record_v=record_v)) #@UndefinedVariable
         titles.append(("Mech: " + mech_name + ", Sim: " + simulator_name))
 
         if plot and not save_plot:
@@ -105,10 +109,10 @@ def current_clamp(first, second, min_input=0, max_input=1, start_time=3000, end_
 
         exp_i = exp_i + 1
 
-    interp_second_volts = np.interp(np.squeeze(recs[0].times), np.squeeze(recs[1].times), np.squeeze(recs[1].voltages))
+    interp_new_volts = np.interp(np.squeeze(recs[0].times), np.squeeze(recs[1].times), np.squeeze(recs[1].voltages))
 
-    # Calculate the difference between the two recordings, first interpolating the second recording to the times of the first.
-    diff_voltages = np.squeeze(recs[0].voltages) - interp_second_volts
+    # Calculate the difference between the two recordings, old interpolating the new recording to the times of the old.
+    diff_voltages = np.squeeze(recs[0].voltages) - interp_new_volts
     diff_voltages = diff_voltages.reshape((len(diff_voltages), 1))
 
     # Store the difference in its own Recording tuple so it can be plotted by simulation.plot
@@ -181,8 +185,10 @@ def main():
     parser.add_argument('-e', '--end_time', type=float, default=5000, help='stimulation end time')
     parser.add_argument('-t', '--dt', type=float, default=1, help='time step between input changes')
     parser.add_argument('-l', '--lazy', action='store_true', help='Only lazily build the files in the new path')
-    parser.add_argument('--old_path', type=str, default='', help='Directories from which to load the old NMODL files from (mod files won''t be recompiled unless they are missing')
-    parser.add_argument('--new_path', type=str, default=default_nmodl_path, help='Directories from which to load the old NMODL files from (mod files are always recompiled')
+    parser.add_argument('--old_path', type=str, default='', help='Directories from which to load the old NMODL files from (mod files won''t be recompiled unless they are missing)')
+    parser.add_argument('--new_path', type=str, default=default_nmodl_path, help='Directories from which to load the old NMODL files from (mod files are always recompiled)')
+    parser.add_argument('--no_new_tables', action='store_true', help='Turns off tables for new mechanism')
+    parser.add_argument('--no_old_tables', action='store_true', help='Turns off tables for old mechanism')    
     args = parser.parse_args()
 
     if args.old_path:
@@ -227,7 +233,9 @@ def main():
                                                                  dt=args.dt,
                                                                  input_shape=input_shape,
                                                                  plot=not args.save_recording,
-                                                                 save_plot=save_plot)
+                                                                 save_plot=save_plot,
+                                                                 no_new_tables=args.no_new_tables,
+                                                                 no_old_tables=args.no_old_tables)
         # Save the location of the file 
         if args.save_recording:
             output = open(args.save_recording[0], 'wb')
