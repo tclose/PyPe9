@@ -35,11 +35,12 @@ parser.add_argument('--timestep', type=float, default=0.025, help='The timestep 
 parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection. If TYPE is ''step'' ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' ARG1=mean and ARG2=stdev', metavar=('TYPE', 'ARG1', 'ARG2'))
 args = parser.parse_args()
 
-
-network_xml_location = os.path.join(PROJECT_PATH, 'xml', args.xml_filename)
-if not os.path.exists(network_xml_location):
-    raise Exception("Could not find xml file at '<kbrain-home>/xml/cerebellum/%s (note passed \
-filename needs to be is relative to xml directory)" % args.xml_filename)
+if os.path.exists(args.xml_filename):
+    network_xml_location = args.xml_filename
+elif os.path.exists(os.path.join(PROJECT_PATH, 'xml', args.xml_filename)):
+    network_xml_location = os.path.join(PROJECT_PATH, 'xml', args.xml_filename)
+else:
+    raise Exception("Could not find xml file either as a full path or relative to the cwd and '<kbrain-home>/xml/cerebellum' directories")
 
 ninemlp.BUILD_MODE = args.build
 

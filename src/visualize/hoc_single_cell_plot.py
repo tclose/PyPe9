@@ -26,12 +26,13 @@ def quit_figure(event):
         plt.close(event.canvas.figure)
 
 parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
+parser.add_argument('datafile', type=str, nargs='?', default=os.path.join(SRC_PATH, '..', 'output', 'single_cell_hoc.dat'), help='The file from which the data is plotted (if it is ommitted it defaults to %(default)s)')
 parser.add_argument('--incr', type=float, default=0.1, help='The minimum increment required before the next step in the voltage trace is plotted')
 args = parser.parse_args()
 
 dt = 0.025
 # Load voltages selectively, if the difference between previous voltage point exceeds args.incr
-dat = numpy.loadtxt(os.path.join(SRC_PATH, '..', 'output', 'single_cell_hoc.dat'))
+dat = numpy.loadtxt(args.datafile)
 input_times = dat[:,0]
 input_voltages = dat[:,1]
 voltages = []

@@ -51,21 +51,21 @@ soma {
     cm=1
     celsius = 30
   
-    insert CGC_Lkg1 
-    insert CGC_Lkg2
-    insert CGC_Na 
-    insert CGC_KV
-    insert CGC_KA
+//    insert CGC_Lkg1 
+//    insert CGC_Lkg2
+//    insert CGC_Na 
+//    insert CGC_KV
+//    insert CGC_KA 
     insert CGC_Kir 
     insert CGC_KCa 
     insert CGC_CaHVA
     insert CGC_Ca
     insert CGC_KM 
   
-    gl_CGC_Lkg1=5.68e-5   //2009 model
-    ggaba_CGC_Lkg2 = 3e-05    //2009 model
-    gkbar_CGC_KV= 0.003    //2009 model
-    gkbar_CGC_KA = 0.0032   //2009 model
+//    gl_CGC_Lkg1=5.68e-5   //2009 model
+//    ggaba_CGC_Lkg2 = 3e-05    //2009 model
+//    gkbar_CGC_KV= 0.003    //2009 model
+//    gkbar_CGC_KA = 0.0032   //2009 model
     gkbar_CGC_Kir = 0.0009  //2009 model
     gkbar_CGC_KM= 0.00025   //0.0001  //2009 model
     gnabar_CGC_Na= 0.013     //2009 model  
