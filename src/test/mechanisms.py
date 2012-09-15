@@ -29,10 +29,10 @@ from ninemlp.utilities.nmodl import build as build_nmodl
 from ninemlp import SRC_PATH
 default_nmodl_path = os.path.join(SRC_PATH, 'test', 'mechs')
 from test import plot_simulation, Recording
-import neuron
 
-def current_clamp(old, new, min_input=0, max_input=1, start_time=3000, end_time=5000, dt=1, 
-         input_shape='random', plot=True, save_plot=None, no_new_tables=False, no_old_tables=False):
+def current_clamp(old_mechs, new_mechs, min_input=0, max_input=1, start_time=3000, end_time=5000, dt=1,
+         input_shape='random', plot=True, save_plot=None, no_new_tables=False, no_old_tables=False,
+         new_sim='neuron', old_sim='neuron'):
     """
     Tests the responses of two versions of the same mechanism with an arbitrary current clamp.
     
@@ -73,10 +73,8 @@ def current_clamp(old, new, min_input=0, max_input=1, start_time=3000, end_time=
     imported_simulators = []
 
     # Simulate the mechanism for both mechanisms
-    for exp_name, experiment in (('old', old), ('new', new)):
+    for exp_name, mech_names, simulator_name, usetable in (('old', old_mechs, old_sim, not no_old_tables), ('new', new_mechs, new_sim, not no_new_tables)):
 
-        mech_name = experiment[0]
-        simulator_name = experiment[1]
         import_name = str.upper(simulator_name)
 
         if simulator_name not in imported_simulators:
@@ -85,23 +83,22 @@ def current_clamp(old, new, min_input=0, max_input=1, start_time=3000, end_time=
             exec('from test.%s.cells import OneCompartmentCell as NeuronTestCell' % import_name)
             imported_simulators.append(simulator_name)
 
-        cell = NeuronTestCell(mech_name) #@UndefinedVariable
+        cell = NeuronTestCell(mech_names, usetable) #@UndefinedVariable
 
         cell.inject_soma_current(input_current, times)
-
-        if exp_name == 'old' and no_old_tables or exp_name == 'new' and no_new_tables:
-            neuron.h('usetable_%s = 0' % mech_name, sec=cell.soma)
 
         # Run the recording and append it to the recordings list
         if simulator_name == 'neuron':
             record_v = [(cell.soma, 0.5)]
+            import neuron
+            neuron.h.psection(sec=cell.soma)
         elif simulator_name == 'nest':
             record_v = [cell]
         else:
             raise Exception ("Unrecognised simulator name '%s'" % simulator_name)
 
         recs.append(simulate(end_time, record_v=record_v)) #@UndefinedVariable
-        titles.append(("Mech: " + mech_name + ", Sim: " + simulator_name))
+        titles.append(("Mech: " + ','.join(mech_names) + ", Sim: " + simulator_name))
 
         if plot and not save_plot:
             # Plot the simulation
@@ -156,8 +153,6 @@ def plot_recordings(file_location, save_plot):
     if not save_plot:
         plt.show()
 
-
-
 def main():
     """
     Runs the current clamp test on the given mechanisms
@@ -169,50 +164,26 @@ def main():
         is the location to save the data (supresses plotting of recording, use 'none' to skip), and the optional fourth
         argument is the input shape, which can be changed to a step input by supplying 'step'.
     """
-
     parser = argparse.ArgumentParser(description='Compare two mechanisms by plotting the different response to an \
                                                     arbitrary current injection. NB: The simulated activity from the \
                                                     second mechanism will be interpolated to the time-scale of the first.')
-    parser.add_argument('-o', '--old', nargs=2, metavar=('MECH_NAME', 'SIMULATOR'), help="first mechanism name, followed by simulator name (either 'neuron' or 'nest')")
-    parser.add_argument('-n', '--new', nargs=2, metavar=('MECH_NAME', 'SIMULATOR'), help="second mechanism name, followed by simulator name (either 'neuron' or 'nest')")
-    parser.add_argument('-r', '--save_recording', nargs=1, help='location to (optionally) save the recording')
-    parser.add_argument('-p', '--plot', nargs=1, help='instead of simulating a recording, plot a saved recording from the given file location')
-    parser.add_argument('-s', '--save_plot', nargs=1, type=str, default='', help='Location to save the plot (and close afterwards)')
+    parser.add_argument('-o', '--old', nargs='+', metavar='MECH_NAMES', help="first mechanism name, followed by simulator name (either 'neuron' or 'nest')")
+    parser.add_argument('-n', '--new', nargs='+', metavar='MECH_NAMES', help="second mechanism name, followed by simulator name (either 'neuron' or 'nest')")
+    parser.add_argument('-r', '--save_recording', help='location to (optionally) save the recording')
+    parser.add_argument('-p', '--plot', help='instead of simulating a recording, plot a saved recording from the given file location')
+    parser.add_argument('-s', '--save_plot', type=str, default='', help='Location to save the plot (and close afterwards)')
     parser.add_argument('--step', action='store_true', help='use a step input current rather than uniformly distributed current')
     parser.add_argument('-m', '--min_input', type=float, default=0, help="minimum input value or pre-step value, depending on whether '--step' option is supplied")
     parser.add_argument('-x', '--max_input', type=float, default=1, help="maximum input value or post-step value, depending on whether '--step' option is supplied")
     parser.add_argument('-b', '--begin_time', type=float, default=3000, help='stimulation start time')
     parser.add_argument('-e', '--end_time', type=float, default=5000, help='stimulation end time')
     parser.add_argument('-t', '--dt', type=float, default=1, help='time step between input changes')
-    parser.add_argument('-l', '--lazy', action='store_true', help='Only lazily build the files in the new path')
-    parser.add_argument('--old_path', type=str, default='', help='Directories from which to load the old NMODL files from (mod files won''t be recompiled unless they are missing)')
-    parser.add_argument('--new_path', type=str, default=default_nmodl_path, help='Directories from which to load the old NMODL files from (mod files are always recompiled)')
+    parser.add_argument('--build', type=str, default='lazy', help='The build mode for the NMODL directories')
+    parser.add_argument('--new_simulator', type=str, default='neuron', help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
+    parser.add_argument('--old_simulator', type=str, default='neuron', help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--no_new_tables', action='store_true', help='Turns off tables for new mechanism')
-    parser.add_argument('--no_old_tables', action='store_true', help='Turns off tables for old mechanism')    
+    parser.add_argument('--no_old_tables', action='store_true', help='Turns off tables for old mechanism')
     args = parser.parse_args()
-
-    if args.old_path:
-        nmodl_paths = [args.old_path, args.new_path]
-    else:
-        nmodl_paths = [args.new_path]
-
-    if isinstance(args.save_plot, list): # Not quite sure why but save_plot sometimes turns out to be a list
-        save_plot = args.save_plot[0]
-    else:
-        save_plot = args.save_plot
-
-    for nmodl_path in nmodl_paths:
-        if nmodl_path == args.new_path and not args.lazy:
-            build_mode = 'force'
-        else:
-            build_mode = 'lazy'
-        build_nmodl(nmodl_path, build_mode=build_mode)
-        try:
-            print "Loading mechanisms from '%s'" % nmodl_path
-            neuron.load_mechanisms(nmodl_path)
-        except:
-            raise Exception("Could not load mechanisms from provided NMODL path '%s'" % nmodl_path)
-
     if args.old:
         if not args.new:
             raise Exception ("If the first mechanism argument is supplied than the second must be also")
@@ -223,9 +194,39 @@ def main():
         else:
             input_shape = 'random'
         print "Recording activity for %s injected current" % input_shape
+        # Strip preceding path and '.mod' extension from mechanism names if present (to allow bash wildcard matching)
+        old_mechs = []
+        new_mechs = []
+        all_mechs = []
+        if args.old_simulator == 'neuron':
+            all_mechs.append(args.old)
+            new_start_index = len(args.old)
+        else:
+            new_start_index = 0
+        loaded_mech_dirs = []            
+        if args.new_simulator == 'neuron':
+            all_mechs.append(args.new)
+        for i, mech_path in enumerate(args.old + args.new):
+            mech = os.path.basename(mech_path)
+            if mech.endswith('.mod'):
+                mech = mech[0:-4]
+            if i < new_start_index:
+                old_mechs.append(mech)
+            else:
+                new_mechs.append(mech)
+            mech_dir = os.path.normpath(os.path.dirname(mech_path))
+            if mech_dir not in loaded_mech_dirs:
+                build_nmodl(mech_dir, build_mode=args.build)
+                try:
+                    print "Loading mechanisms from '%s'" % mech_dir
+                    import neuron
+                    neuron.load_mechanisms(mech_dir)
+                except:
+                    raise Exception("Could not load mechanisms from provided NMODL path '%s'" % mech_dir)            
+                loaded_mech_dirs.append(mech_dir)
         # Run the experiment
-        (recs, (start_time, end_time), titles) = current_clamp(args.old,
-                                                                 args.new,
+        (recs, (start_time, end_time), titles) = current_clamp(old_mechs,
+                                                                 new_mechs,
                                                                  min_input=args.min_input,
                                                                  max_input=args.max_input,
                                                                  start_time=args.begin_time,
@@ -233,20 +234,21 @@ def main():
                                                                  dt=args.dt,
                                                                  input_shape=input_shape,
                                                                  plot=not args.save_recording,
-                                                                 save_plot=save_plot,
+                                                                 save_plot=args.save_plot,
                                                                  no_new_tables=args.no_new_tables,
-                                                                 no_old_tables=args.no_old_tables)
+                                                                 no_old_tables=args.no_old_tables,
+                                                                 new_sim=args.new_simulator,
+                                                                 old_sim=args.old_simulator)
         # Save the location of the file 
         if args.save_recording:
             output = open(args.save_recording[0], 'wb')
             pickle.dump((recs, (start_time, end_time), titles), output)
             print "\nSaved recording to '" + args.save_recording[0] + "'"
-
         print "\nFinished simulation successfully!"
     elif args.new:
         raise Exception ("If the second mechanism argument is supplied than the first must be also")
     elif args.plot:
-        plot_recordings(args.plot[0], save_plot)
+        plot_recordings(args.plot[0], args.save_plot)
     else:
         raise Exception ("At least one option needs to be passed to the test parameter see usage (--help option)")
 

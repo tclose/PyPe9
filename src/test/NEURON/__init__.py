@@ -647,7 +647,10 @@ class _BaseCell(object):
 #            try:
 #                eval('tmp = sec.' + mech_name)
 #            except AttributeError:
-            sec.insert(mech_name)
+            try:
+                sec.insert(mech_name)
+            except:
+                raise Exception("Could not insert mechanisms '%s'" % mech_name)
 
         return self
 
