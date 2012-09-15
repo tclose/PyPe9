@@ -598,21 +598,21 @@
                     <ncml:output name="vcbdur" />
                 </ncml:component>
                 <!-- Tom's additions below here -->
-                <!-- <ionicCurrent id="CGC_Lkg1" />
+                <!-- <ionicCurrent id="CGC_Lkg1" /> -->
                 <ionicCurrent id="CGC_Lkg2" />
-                <ionicCurrent id="CGC_Na" />
+                <!-- <ionicCurrent id="CGC_Na" />
                 <ionicCurrent id="CGC_KV" />
                 <ionicCurrent id="CGC_KA" />
-                <ionicCurrent id="CGC_Kir" /> -->
+                <ionicCurrent id="CGC_Kir" />
                 <ionicCurrent id="CGC_KCa" />
-                <!-- <ionicCurrent id="CGC_CaHVA" />
+                <ionicCurrent id="CGC_CaHVA" />
                 <ionicCurrent id="CGC_Ca" />
-                <ionicCurrent id="CGC_KM" /> -->
-                 <specificCapacitance value="1.0" units="uF_per_cm2" />
-<!--                 <reversalPotential species="na" value="87.39" units="mV" /> 
-                <reversalPotential species="k" value="-84.69" units="mV" />  -->
-<!--                 <reversalPotential species="ca" value="132.46" units="mV" />
+                <ionicCurrent id="CGC_KM" />
+                <reversalPotential species="na" value="87.39" units="mV" /> 
+                <reversalPotential species="k" value="-84.69" units="mV" />
+                <reversalPotential species="ca" value="132.46" units="mV" />
                 <reversalPotential species="cl" value="-65" units="mV" /> -->
+                <specificCapacitance value="1.0" units="uF_per_cm2" />
             </membraneProperties>
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
