@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 """
-  This script creates and runs the Granular network that Fabio created for his 2011 paper.
+  This script creates and runs a minimal network in the NINEML+ framework with only one cell 
+  in it
 
   @author Tom Close
-
+  @date 17/9/2012
 """
 
 #######################################################################################
@@ -14,14 +15,13 @@
 import os.path
 import argparse
 import ninemlp
-from neuron import h
 import numpy
 import math
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('xml_filename', type=str, help='The name of the xml file to load the cells from.')
+parser.add_argument('xml_filename', type=str, help='The name of the xml file to load the cell from.')
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
 parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE, 
@@ -34,6 +34,8 @@ parser.add_argument('--min_delay', type=float, default=0.05, help='The minimum s
 parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
 parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection. If TYPE is ''step'' ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' ARG1=mean and ARG2=stdev', metavar=('TYPE', 'ARG1', 'ARG2'))
 args = parser.parse_args()
+
+from neuron import h
 
 if os.path.exists(args.xml_filename):
     network_xml_location = args.xml_filename
