@@ -598,12 +598,12 @@
                     <ncml:output name="vcbdur" />
                 </ncml:component>
                 <!-- Tom's additions below here -->
-                <!-- <ionicCurrent id="CGC_Lkg1" /> -->
+                <!-- <ionicCurrent id="CGC_Lkg1" />
                 <ionicCurrent id="CGC_Lkg2" />
-                <!-- <ionicCurrent id="CGC_Na" />
-                <ionicCurrent id="CGC_KV" />
+                <ionicCurrent id="CGC_Na" />
+                <ionicCurrent id="CGC_KV" /> -->
                 <ionicCurrent id="CGC_KA" />
-                <ionicCurrent id="CGC_Kir" />
+                <!-- <ionicCurrent id="CGC_Kir" />
                 <ionicCurrent id="CGC_KCa" />
                 <ionicCurrent id="CGC_CaHVA" />
                 <ionicCurrent id="CGC_Ca" />

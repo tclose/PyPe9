@@ -30,7 +30,7 @@ from ninemlp import SRC_PATH
 default_nmodl_path = os.path.join(SRC_PATH, 'test', 'mechs')
 from test import plot_simulation, Recording
 
-def current_clamp(old_mechs, new_mechs, cm=1.0, Ra=100, length=11.8, diam=11.8,
+def current_clamp(old_mechs, new_mechs, celsius=30.0, cm=1.0, Ra=100, length=11.8, diam=11.8,
                             mean_input=0, stdev_input=1, start_time=3000, end_time=5000, dt=1,
          step=None, plot=True, save_plot=None, no_new_tables=False, no_old_tables=False,
          new_sim='neuron', old_sim='neuron'):
@@ -102,7 +102,7 @@ def current_clamp(old_mechs, new_mechs, cm=1.0, Ra=100, length=11.8, diam=11.8,
         else:
             raise Exception ("Unrecognised simulator name '%s'" % simulator_name)
 
-        recs.append(simulate(end_time, record_v=record_v)) #@UndefinedVariable
+        recs.append(simulate(end_time, record_v=record_v, celsius=celsius)) #@UndefinedVariable
         titles.append(("Mech: " + ','.join(mech_names) + ", Sim: " + simulator_name))
 
         if plot and not save_plot:
@@ -174,6 +174,7 @@ def main():
                                                     second mechanism will be interpolated to the time-scale of the first.')
     parser.add_argument('-o', '--old', nargs='+', metavar='MECH_NAMES', help="first mechanism name, followed by simulator name (either 'neuron' or 'nest')")
     parser.add_argument('-n', '--new', nargs='+', metavar='MECH_NAMES', help="second mechanism name, followed by simulator name (either 'neuron' or 'nest')")
+    parser.add_argument('--celsius', type=float, default=30.0, help='The temperature at which to run the simulations')    
     parser.add_argument('--cm', type=float, default=1.0, help='Membrane capacitance (default: %(default)s)')
     parser.add_argument('--Ra', type=float, default=100, help='Axial resistance (default: %(default)s)')
     parser.add_argument('--length', type=float, default=11.8, help='Length of the compartment (default: %(default)s)')
@@ -236,6 +237,7 @@ def main():
         # Run the experiment
         (recs, (start_time, end_time), titles) = current_clamp(old_mechs,
                                                                  new_mechs,
+                                                                 celsius=args.celsius,
                                                                  cm=args.cm,
                                                                  Ra=args.Ra,
                                                                  length=args.length,

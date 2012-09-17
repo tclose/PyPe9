@@ -15,7 +15,7 @@ PARAMETER {
   Vrest  =  -68.0
   comp47_gbar  =  5.68e-05
   fix_celsius  =  30.0
-  comp47_e  =  -58.0
+  comp47_e  =  -16.5
 }
 
 

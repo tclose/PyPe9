@@ -68,7 +68,7 @@ if num_v + num_currents:
     if args.combine:
         combine_fig = plt.figure()
         combine_cid = combine_fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure
-        combine_axis = combine_fig.subplot(111)
+        combine_axis = combine_fig.add_subplot(111)
         combine_legend = []
         # Test to see if there are two type of variables that are to be combined.
         if num_unique_currents + num_v > 1: 
@@ -224,9 +224,9 @@ for filename in args.filenames:
             sorted_IDs.append(ID)
         if args.combine:
             for ID in sorted_IDs:
-                leg = '{variable_name} - {ID}'.format(variable_name.capitalize(), ID)
+                leg = '{variable_name} - {ID}'.format(variable_name=variable_name.capitalize(), ID=ID)
                 if rescale:
-                    leg += ' x10^{order_of_mag}'.format(order_of_mag)
+                    leg += ' x10^{order_of_mag}'.format(order_of_mag=order_of_mag)
                 combine_legend.append(leg)
         else:
 #            var_axes[var_count].legend(sorted_IDs)
@@ -242,10 +242,10 @@ for filename in args.filenames:
             plt.show()            
 if args.combine:
     combine_axis.legend(combine_legend)
-    combine_axis.axis.title('{label}{extra_label} - Mixed Variables vs Time'.format(
+    combine_axis.get_axes().set_title('{label}{extra_label} - Assorted variables vs Time'.format(
                                                                  label=header['label'], extra_label=args.extra_label))
     combine_axis.set_xlabel('Time (ms)')
-    combine_axis.set_ylabel('Scaled to -1<->1')
+    combine_axis.set_ylabel('Sci. notation (see legend for magnitude)')
 # Show the plot
 plt.show()
 

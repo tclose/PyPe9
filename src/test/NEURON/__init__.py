@@ -15,8 +15,8 @@
 
 # General imports
 import collections
-from neuron import h as nrn, init as nrn_init, \
-    run as nrn_run
+from neuron import h, init as neuron_init, \
+    run as neuron_run
 from test import Recording as Recording
 import math
 import numpy as np
@@ -150,12 +150,12 @@ class _BaseCell(object):
             self._name = cell_type + '_' + _rand_string(_BaseCell.ID_STRING_LENGTH)
 
             ## Soma of the neuron model
-            self.soma = nrn.Section(name=self._name + '_soma')
+            self.soma = h.Section(name=self._name + '_soma')
         else:
             # The cell=self is used in the connection of the Python class to a GID, therefore name_sections should be False if
             # it is required. They are exclusive because it causes NEURON to quite suddenly if they are both used simulataneously
             # (to the best of my knowledge)
-            self.soma = nrn.Section(cell=self)
+            self.soma = h.Section(cell=self)
 
             self._name = ''
 
@@ -179,10 +179,10 @@ class _BaseCell(object):
         @param times [np.array]: The time points corresponding to the amplitudes vector
         """
 
-        amp_v = nrn.Vector(amplitudes)
-        times_v = nrn.Vector(times)
+        amp_v = h.Vector(amplitudes)
+        times_v = h.Vector(times)
 
-        curr_clamp = nrn.IClamp(self.soma(0.5))
+        curr_clamp = h.IClamp(self.soma(0.5))
 
         # Setting recording paradigm
         curr_clamp.delay = min(times)
@@ -395,7 +395,7 @@ class _BaseCell(object):
 
         for sec in self._sections:
 
-            nrn.psection(sec=sec)
+            h.psection(sec=sec)
 
         print '---------------------\n'
 
@@ -430,22 +430,22 @@ class _BaseCell(object):
         @return [float]: The input resistance (MOhms) 
         """
 
-        stim = nrn.IClamp(self.soma(0.5))
+        stim = h.IClamp(self.soma(0.5))
         stim.amp = stim_amp
         stim.delay = stim_delay
         stim.dur = stim_dur
 
         end_time = stim.delay + stim.dur * 2
 
-        time_v = nrn.Vector()
-        time_v.record(nrn._ref_t)
+        time_v = h.Vector()
+        time_v.record(h._ref_t)
 
-        voltage_v = nrn.Vector()
+        voltage_v = h.Vector()
         voltage_v.record(self.soma(0.5)._ref_v)
 
-        nrn.finitialize(-65)
-        nrn_init()
-        nrn_run(end_time)
+        h.finitialize(-65)
+        neuron_init()
+        neuron_run(end_time)
 
         times = np.array(time_v)
         voltages = np.array(voltage_v)
@@ -486,22 +486,22 @@ class _BaseCell(object):
         @return [float]: The time constant of the neuron (ms)
         """
 
-        stim = nrn.IClamp(self.soma(0.5))
+        stim = h.IClamp(self.soma(0.5))
         stim.amp = stim_amp
         stim.delay = stim_delay
         stim.dur = stim_dur
 
         end_time = stim.delay + stim.dur + exp_time
 
-        time_v = nrn.Vector()
-        time_v.record(nrn._ref_t)
+        time_v = h.Vector()
+        time_v.record(h._ref_t)
 
-        voltage_v = nrn.Vector()
+        voltage_v = h.Vector()
         voltage_v.record(self.soma(0.5)._ref_v)
 
-        nrn.finitialize(-65)
-        nrn_init()
-        nrn_run(end_time)
+        h.finitialize(-65)
+        neuron_init()
+        neuron_run(end_time)
 
         times = np.array(time_v)
         voltages = np.array(voltage_v)
@@ -604,13 +604,13 @@ class _BaseCell(object):
         """
         Inserts a Exp2Syn receptor into a section of the Purkinje cell
         
-        @param sec [nrn.Section]: Section in which to insert the receptor (must belong to the same purkinje object)
+        @param sec [h.Section]: Section in which to insert the receptor (must belong to the same purkinje object)
         @param rise_t [float]: Rise time constant (ms)
         @param decay_t [float]: Decay time constant (ms)
         @param reverse_v [float]: Reversal potential (mV)
         @param pos [float]: Position along the section to insert the receptor
         
-        @return [tuple(nrn.Exp2Syn,Location)]: A 2-tuple containing Reference to the inserted receptor and its location
+        @return [tuple(h.Exp2Syn,Location)]: A 2-tuple containing Reference to the inserted receptor and its location
         """
 
         if self._verbose:
@@ -620,7 +620,7 @@ class _BaseCell(object):
             raise Exception ('Given section does not belong to this Purkinje instance')
 
         #Insert receptor as specified position along the given section
-        receptor = nrn.Exp2Syn(pos, sec=sec)
+        receptor = h.Exp2Syn(pos, sec=sec)
         receptor.tau1 = rise_t
         receptor.tau2 = decay_t
         receptor.e = reverse_v
@@ -660,7 +660,7 @@ class _BaseCell(object):
         """ 
         Returns a list of all receptors inserted into the cell
         
-        @return [list(nrn.*Syn)]: List of receptors connected to the cell
+        @return [list(h.*Syn)]: List of receptors connected to the cell
         """
 
         return self._receptors()
@@ -678,14 +678,14 @@ class _BaseCell(object):
         """
         Adds a spike train to a given receptor.
         
-        @param receptor [nrn.Exp2Syn]: The receptor to provide input to (must belong to the given Purkinje cell)
+        @param receptor [h.Exp2Syn]: The receptor to provide input to (must belong to the given Purkinje cell)
         @param spike_start [float]: Time when the spike(s) begin (ms)
         @param weight [float]: The peak conductance assigned to the receptor during its connection (uS) 
         @param num_spikes [int]: The number of spikes to input
         @param spike_interval [float]: The mean time interval between spikes (ms)
         @param randomness [float]: How deterministic the spike interval is (0 deterministic, 1 random)
         
-        @return [tuple(nrn.NetCon,nrn.NetStim)]: Connection and stimulation NEURON objects
+        @return [tuple(h.NetCon,h.NetStim)]: Connection and stimulation NEURON objects
         """
 
         if self._verbose:
@@ -695,7 +695,7 @@ class _BaseCell(object):
             raise Exception ('Synapse does not belong to this Purkinje cell')
 
         # Create the net stim to the purkinje cell
-        stim = nrn.NetStim()
+        stim = h.NetStim()
 
         stim.start = spike_start #start
         stim.number = num_spikes # number
@@ -703,7 +703,7 @@ class _BaseCell(object):
         stim.noise = randomness # level of randomness (0 deterministic, 1 poisson)
 
         # Connect the net stim to the receptor and set its weight
-        netcon = nrn.NetCon(stim, receptor)
+        netcon = h.NetCon(stim, receptor)
 
         # Set the weight of the receptor
         netcon.weight[0] = weight
@@ -749,7 +749,7 @@ class _BaseCell(object):
         
         @param spike_trains [list[N](np.array(float))]: List of N spike trains to stimulate the purkinje receptors.
         @param weights [np.array[N](float)]: N Weights assigned to each connection
-        @param receptors [list[N](nrn.Exp2syn)]: N receptors to connect the spike trains to. If left empty they are randomly selected from the self.receptors list.
+        @param receptors [list[N](h.Exp2syn)]: N receptors to connect the spike trains to. If left empty they are randomly selected from the self.receptors list.
         @param spike_width [float]: The width of the spikes
         @param spike_on [float]: Voltage of the input neuron membrane, when a spike is to have occured (mV)
         @param spike_off [float]: Voltage of the input neuron membrane, when a spike is not occuring (mV)
@@ -772,7 +772,7 @@ class _BaseCell(object):
             num_spikes = len(spike_train)
 
             # Create an "input neuron" (a basic section) to drive the receptor
-            input_neuron = nrn.Section() #name=self._name + '_arbitrary_input_' + str(len(self._arbitrary_inputs)))
+            input_neuron = h.Section() #name=self._name + '_arbitrary_input_' + str(len(self._arbitrary_inputs)))
 
             # Create NEURON Nx2 arrays (to be flattened into 2Nx1 vectors) to hold the spike 'on' and 'off' times and values
             times_arr = np.zeros((num_spikes, 2))
@@ -794,14 +794,14 @@ class _BaseCell(object):
             input_v[0] = spike_off
             input_v[1:(2 * num_spikes + 1)] = input_arr.flatten()
 
-            times_vector = nrn.Vector(times_v)
-            input_vector = nrn.Vector(input_v)
+            times_vector = h.Vector(times_v)
+            input_vector = h.Vector(input_v)
 
             # "play" the spike time vectors into the state of the integrate-and-fire input neuron
             input_vector.play(input_neuron(0.5)._ref_v, times_vector)
 
             # Connect the new netcon to the same receptor as the original poisson connection
-            netcon = nrn.NetCon(input_neuron(0.5)._ref_v, receptor, sec=input_neuron)
+            netcon = h.NetCon(input_neuron(0.5)._ref_v, receptor, sec=input_neuron)
 
             # Set the same weight for the connection as the original poisson connection
             netcon.weight[0] = weight
@@ -828,7 +828,7 @@ class _BaseCell(object):
         @param barrage_times [list(float)]: The fraction of neurons active during the barrage
         @param num_stims [int]: The number stimulations to be placed on the Purkinje leaves (corresponds to number of "modelled receptors")
         @param weights [list[N](float)]: The synaptic weights applied to each of the "modelled receptors"
-        @param receptors [list[N](nrn.Exp2Syn)]: The list of "NEURON receptors" on which to attach the "modelled receptors"
+        @param receptors [list[N](h.Exp2Syn)]: The list of "NEURON receptors" on which to attach the "modelled receptors"
         @param barrage_fractions [list(float)]: The fraction of neurons active during the barrage
         @param spike_start [float]: The start of the stimulation (ms)
         @param spike_dur [float]: The length of the spike recording (ms)
@@ -895,7 +895,7 @@ class _BaseCell(object):
 
 
 
-def simulate(run_time, initial_v= -65, record_v=list(), record_i=list(), record_m=list()):
+def simulate(run_time, celsius=37, initial_v= -65, record_v=list(), record_i=list(), record_m=list()):
     """
     Runs the simulation and records the specified locations, returning them in numpy arrays contained within a 
     named Tuple ('Recording') along with legends to be used for plotting. Rows of the np.arrays correspond to 
@@ -903,9 +903,9 @@ def simulate(run_time, initial_v= -65, record_v=list(), record_i=list(), record_
     
     @param run_time [float]: Length of the run
     @param initial_v [float]: The initial voltage for the simulation
-    @param record_v [list(tuple(nrn.Section,float))]: List of nrn.Sections to record voltage from
-    @param record_i [list(nrn.*Syn)]: List of nrn.*Syn to record from (should be added with 'poisson_stimulation()').
-    @param record_m [list(nrn.IntFire*)]: List of nrn.IntFire* from which to record their states.
+    @param record_v [list(tuple(h.Section,float))]: List of h.Sections to record voltage from
+    @param record_i [list(h.*Syn)]: List of h.*Syn to record from (should be added with 'poisson_stimulation()').
+    @param record_m [list(h.IntFire*)]: List of h.IntFire* from which to record their states.
     @param record_times [list(float)]; Times to record into the recording list. If none then return all the recording.
     
     @return [Recording]: Returns the recorded voltages, currents and states in a named tuple
@@ -918,9 +918,9 @@ def simulate(run_time, initial_v= -65, record_v=list(), record_i=list(), record_
     if not num_volt_rec and not num_current_rec and not num_state_rec:
         raise Exception ('No recordings specified (see input parameters ''record_v'', ''record_i'', and ''record_m'')')
 
-    # Record Time from NEURON (nrn._ref_t)
-    time = nrn.Vector()
-    time.record(nrn._ref_t)
+    # Record Time from NEURON (h._ref_t)
+    time = h.Vector()
+    time.record(h._ref_t)
 
     # Set up recordings from the list of sections to record voltages from
     volt_rec = list()
@@ -930,7 +930,7 @@ def simulate(run_time, initial_v= -65, record_v=list(), record_i=list(), record_
     for (sec, pos) in record_v:
 
         # Record Voltage from the soma
-        volt_rec.append(nrn.Vector())
+        volt_rec.append(h.Vector())
         volt_rec[len(volt_rec) - 1].record(sec(pos)._ref_v)
         volt_legend.append('Voltage: %d' % count)
 #        volt_legend.append(sec_name(sec, 2) + ':' + str(pos))
@@ -944,7 +944,7 @@ def simulate(run_time, initial_v= -65, record_v=list(), record_i=list(), record_
     for syn in record_i:
 
         # Record Voltage from the soma
-        current_rec.append(nrn.Vector())
+        current_rec.append(h.Vector())
         current_rec[len(current_rec) - 1].record(syn._ref_i)
         curr_legend.append('Current: %d' % count)
         count = count + 1
@@ -955,17 +955,18 @@ def simulate(run_time, initial_v= -65, record_v=list(), record_i=list(), record_
 
     count = 0;
     for intfire in record_m:
-        state_rec.append(nrn.Vector())
+        state_rec.append(h.Vector())
         state_rec[len(state_rec) - 1].record(intfire._ref_m)
         state_legend.append('Input neuron: %d' % count)
         count = count + 1
 
 
-
+    h.celsius = celsius
+    print "Simulating at %fC" % celsius
     # Initialises the neuron environment 
-    nrn.finitialize(initial_v)
-    nrn_init()
-    nrn_run(run_time)
+    h.finitialize(initial_v)
+    neuron_init()
+    neuron_run(run_time)
 
     # get values for times from NEURON vectors format into Python format
     times = np.array(time)
