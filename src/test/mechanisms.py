@@ -37,8 +37,8 @@ def current_clamp(old_mechs, new_mechs, celsius=30.0, cm=1.0, Ra=100, length=11.
     """
     Tests the responses of two versions of the same mechanism with an arbitrary current clamp.
     
-    @param old [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the old mechanism
-    @param new [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the new mechanism
+    @param old [tuple(String,String)]: A tuple containing the mechanism name (or path) and the simulator name for the old mechanism. Note that if the path to the mod file is used (full or relative) mechanisms will be loaded from the directory
+    @param new [tuple(String,String)]: A tuple containing the mechanism name (or path) and the simulator name for the new mechanism
     @param mean_input [float]: Mean value of the input current (nA)
     @param stdev_input [float]: Standard deviation of the input current (nA)
     @param start_time [float]: Start time of the input (ms)
@@ -75,7 +75,7 @@ def current_clamp(old_mechs, new_mechs, celsius=30.0, cm=1.0, Ra=100, length=11.
     imported_simulators = []
 
     # Simulate the mechanism for both mechanisms
-    for exp_name, mech_names, simulator_name, usetable in (('old', old_mechs, old_sim, not no_old_tables), ('new', new_mechs, new_sim, not no_new_tables)):
+    for exp_name, mech_names, simulator_name, usetable in (('Old', old_mechs, old_sim, not no_old_tables), ('New', new_mechs, new_sim, not no_new_tables)):
 
         import_name = str.upper(simulator_name)
 
@@ -103,7 +103,7 @@ def current_clamp(old_mechs, new_mechs, celsius=30.0, cm=1.0, Ra=100, length=11.
             raise Exception ("Unrecognised simulator name '%s'" % simulator_name)
 
         recs.append(simulate(end_time, record_v=record_v, celsius=celsius)) #@UndefinedVariable
-        titles.append(("Mech: " + ','.join(mech_names) + ", Sim: " + simulator_name))
+        titles.append((exp_name + " mech: " + ','.join(mech_names) + ", sim: " + simulator_name))
 
         if plot and not save_plot:
             # Plot the simulation
@@ -209,14 +209,14 @@ def main():
         new_mechs = []
         all_mechs = []
         if args.old_simulator == 'neuron':
-            all_mechs.append(args.old)
+            all_mechs += args.old
             new_start_index = len(args.old)
         else:
             new_start_index = 0
         loaded_mech_dirs = []
         if args.new_simulator == 'neuron':
-            all_mechs.append(args.new)
-        for i, mech_path in enumerate(args.old + args.new):
+            all_mechs += args.new
+        for i, mech_path in enumerate(all_mechs):
             mech = os.path.basename(mech_path)
             if mech.endswith('.mod'):
                 mech = mech[0:-4]
@@ -224,16 +224,18 @@ def main():
                 old_mechs.append(mech)
             else:
                 new_mechs.append(mech)
-            mech_dir = os.path.normpath(os.path.dirname(mech_path))
-            if mech_dir not in loaded_mech_dirs:
-                build_nmodl(mech_dir, build_mode=args.build)
-                try:
-                    print "Loading mechanisms from '%s'" % mech_dir
-                    import neuron
-                    neuron.load_mechanisms(mech_dir)
-                except:
-                    raise Exception("Could not load mechanisms from provided NMODL path '%s'" % mech_dir)
-                loaded_mech_dirs.append(mech_dir)
+            mech_dir = os.path.dirname(mech_path)
+            if mech_dir:
+                mech_dir = os.path.abspath(mech_dir)
+                if mech_dir not in loaded_mech_dirs:
+                    build_nmodl(mech_dir, build_mode=args.build)
+                    try:
+                        print "Loading mechanisms from '%s'" % mech_dir
+                        import neuron
+                        neuron.load_mechanisms(mech_dir)
+                    except:
+                        raise Exception("Could not load mechanisms from provided NMODL path '%s'" % mech_dir)
+                    loaded_mech_dirs.append(mech_dir)
         # Run the experiment
         (recs, (start_time, end_time), titles) = current_clamp(old_mechs,
                                                                  new_mechs,
