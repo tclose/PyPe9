@@ -12,7 +12,7 @@ NEURON {
 
 
 PARAMETER {
-  comp47_ggaba  =  2.17e-05
+  comp47_ggaba  =  3e-05
   Vrest  =  -68.0
   fix_celsius  =  30.0
   comp47_egaba  =  -65.0
