@@ -30,35 +30,37 @@ from ninemlp import SRC_PATH
 default_nmodl_path = os.path.join(SRC_PATH, 'test', 'mechs')
 from test import plot_simulation, Recording
 
-def current_clamp(old_mechs, new_mechs, min_input=0, max_input=1, start_time=3000, end_time=5000, dt=1,
-         input_shape='random', plot=True, save_plot=None, no_new_tables=False, no_old_tables=False,
+def current_clamp(old_mechs, new_mechs, cm=1.0, Ra=100, length=11.8, diam=11.8,
+                            mean_input=0, stdev_input=1, start_time=3000, end_time=5000, dt=1,
+         step=None, plot=True, save_plot=None, no_new_tables=False, no_old_tables=False,
          new_sim='neuron', old_sim='neuron'):
     """
     Tests the responses of two versions of the same mechanism with an arbitrary current clamp.
     
     @param old [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the old mechanism
     @param new [tuple(String,String)]: A tuple containing the mechanism name and the simulator name for the new mechanism
-    @param min_input [float]: Minimum value of the input current(ranges from 0 -> max_input) (nA)
-    @param max_input [float]: Maximum value of the input current (ranges from 0 -> max_input) (nA)
+    @param mean_input [float]: Mean value of the input current (nA)
+    @param stdev_input [float]: Standard deviation of the input current (nA)
     @param start_time [float]: Start time of the input (ms)
     @param end_time [float]: End time of the input and the recording (ms)
     @param dt [float]: Time steps between changes in input (ms)
-    @param input_shape [String]: If 'step' uses a step input from 'min_input' to 'max_input', or if 'random' uses a input drawn from a uniform distribution between 'min_input' and 'max_input'.
+    @param step [tuple]: If provided needs to be a tuple containing the step amplitude and step time
     @param plot [bool]: A flag that determines whether to plot the recordings or not    
     
     @return [tuple(list(Recording), tuple(float,float), list(String))]: A tuple containing: a list containing a Recording namedtuple for the old mechanism, the new mechanism and the difference between them, a 2-tuple with the start and end time of the experiment, and the list of plot titles
     """
 
+    time_range = end_time - start_time
     # Calculate the number of time steps for the input vector
-    num_time_steps = int(round((end_time - start_time) / dt))
+    num_time_steps = int(round(time_range / dt))
 
     # Create the input current and times vectors
-    if input_shape == 'step':
-        input_current = np.append(np.ones((math.floor(num_time_steps / 2))) * min_input, np.ones((math.ceil(num_time_steps / 2))) * max_input)
-    elif input_shape == 'random':
-        input_current = np.random.uniform(min_input, max_input, num_time_steps)
+    if step:
+        num_down_steps = int(math.floor(step[1] / dt))
+        num_up_steps = num_time_steps - num_down_steps
+        input_current = np.append(np.ones(num_down_steps) * 0.0, np.ones(num_up_steps) * step[0])
     else:
-        raise Exception ("Invalid input shape '" + str(input_shape) + "'")
+        input_current = np.random.normal(mean_input, stdev_input, num_time_steps)
 
     times = np.arange(start_time, end_time, dt)
 
@@ -84,6 +86,9 @@ def current_clamp(old_mechs, new_mechs, min_input=0, max_input=1, start_time=300
             imported_simulators.append(simulator_name)
 
         cell = NeuronTestCell(mech_names, usetable) #@UndefinedVariable
+        cell.set_membrane_capacitance(cm)
+        cell.set_axial_resistance(Ra)
+        cell.set_soma_morphology(length, diam)
 
         cell.inject_soma_current(input_current, times)
 
@@ -169,15 +174,19 @@ def main():
                                                     second mechanism will be interpolated to the time-scale of the first.')
     parser.add_argument('-o', '--old', nargs='+', metavar='MECH_NAMES', help="first mechanism name, followed by simulator name (either 'neuron' or 'nest')")
     parser.add_argument('-n', '--new', nargs='+', metavar='MECH_NAMES', help="second mechanism name, followed by simulator name (either 'neuron' or 'nest')")
-    parser.add_argument('-r', '--save_recording', help='location to (optionally) save the recording')
+    parser.add_argument('--cm', type=float, default=1.0, help='Membrane capacitance (default: %(default)s)')
+    parser.add_argument('--Ra', type=float, default=100, help='Axial resistance (default: %(default)s)')
+    parser.add_argument('--length', type=float, default=11.8, help='Length of the compartment (default: %(default)s)')
+    parser.add_argument('--diam', type=float, default=11.8, help='Diameter of the compartment (default: %(default)s)')
+    parser.add_argument('--save_recording', help='location to (optionally) save the recording')
     parser.add_argument('-p', '--plot', help='instead of simulating a recording, plot a saved recording from the given file location')
-    parser.add_argument('-s', '--save_plot', type=str, default='', help='Location to save the plot (and close afterwards)')
-    parser.add_argument('--step', action='store_true', help='use a step input current rather than uniformly distributed current')
-    parser.add_argument('-m', '--min_input', type=float, default=0, help="minimum input value or pre-step value, depending on whether '--step' option is supplied")
-    parser.add_argument('-x', '--max_input', type=float, default=1, help="maximum input value or post-step value, depending on whether '--step' option is supplied")
-    parser.add_argument('-b', '--begin_time', type=float, default=3000, help='stimulation start time')
-    parser.add_argument('-e', '--end_time', type=float, default=5000, help='stimulation end time')
-    parser.add_argument('-t', '--dt', type=float, default=1, help='time step between input changes')
+    parser.add_argument('--save_plot', type=str, default='', help='Location to save the plot (and close afterwards)')
+    parser.add_argument('--step', nargs=2, type=float, help='Use a step input current rather than uniformly distributed current')
+    parser.add_argument('--mean_input', type=float, default=0.01, help="Mean input value")
+    parser.add_argument('--stdev_input', type=float, default=0.0025, help="Standard deviation of the input value")
+    parser.add_argument('--start_time', type=float, default=3000, help='stimulation start time')
+    parser.add_argument('--end_time', type=float, default=5000, help='stimulation end time')
+    parser.add_argument('--dt', type=float, default=1, help='time step between input changes')
     parser.add_argument('--build', type=str, default='lazy', help='The build mode for the NMODL directories')
     parser.add_argument('--new_simulator', type=str, default='neuron', help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--old_simulator', type=str, default='neuron', help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
@@ -203,7 +212,7 @@ def main():
             new_start_index = len(args.old)
         else:
             new_start_index = 0
-        loaded_mech_dirs = []            
+        loaded_mech_dirs = []
         if args.new_simulator == 'neuron':
             all_mechs.append(args.new)
         for i, mech_path in enumerate(args.old + args.new):
@@ -222,17 +231,21 @@ def main():
                     import neuron
                     neuron.load_mechanisms(mech_dir)
                 except:
-                    raise Exception("Could not load mechanisms from provided NMODL path '%s'" % mech_dir)            
+                    raise Exception("Could not load mechanisms from provided NMODL path '%s'" % mech_dir)
                 loaded_mech_dirs.append(mech_dir)
         # Run the experiment
         (recs, (start_time, end_time), titles) = current_clamp(old_mechs,
                                                                  new_mechs,
-                                                                 min_input=args.min_input,
-                                                                 max_input=args.max_input,
-                                                                 start_time=args.begin_time,
+                                                                 cm=args.cm,
+                                                                 Ra=args.Ra,
+                                                                 length=args.length,
+                                                                 diam=args.diam,
+                                                                 mean_input=args.mean_input,
+                                                                 stdev_input=args.stdev_input,
+                                                                 start_time=args.start_time,
                                                                  end_time=args.end_time,
                                                                  dt=args.dt,
-                                                                 input_shape=input_shape,
+                                                                 step=args.step,
                                                                  plot=not args.save_recording,
                                                                  save_plot=args.save_plot,
                                                                  no_new_tables=args.no_new_tables,
