@@ -41,6 +41,7 @@ parser.add_argument('-s', '--simulator', type=str, default='neuron',
 parser.add_argument('-b', '--build', type=str, default=DEFAULT_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % BUILD_MODE_OPTIONS)
+parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
 args = parser.parse_args()
 
 
@@ -63,7 +64,7 @@ if args.method == 'ninemlp':
         test_loc = os.path.join(project_dir, DEFAULT_NINEMLP_TEST)
 
     start_ninemlp = time.clock()
-    net = Network(test_loc, build_mode=args.build)
+    net = Network(test_loc, build_mode=args.build, silent_build=args.silent_build)
     elapsed_ninemlp = time.clock() - start_ninemlp
 
     print "Time for NINEMLP: %f" % elapsed_ninemlp

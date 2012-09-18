@@ -39,6 +39,7 @@ parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
 parser.add_argument('--volt_trace', nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
+parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
 args = parser.parse_args()
 
 if args.debug:
@@ -62,7 +63,7 @@ exec("from ninemlp.%s import *" % args.simulator)
 
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0,#@UndefinedVariable
-                                                                             build_mode=args.build) 
+                                             build_mode=args.build, silent_build=args.silent_build) 
 
 print "Network description"
 net.describe()

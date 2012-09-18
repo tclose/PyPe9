@@ -193,6 +193,7 @@ def main():
     parser.add_argument('--old_simulator', type=str, default='neuron', help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--no_new_tables', action='store_true', help='Turns off tables for new mechanism')
     parser.add_argument('--no_old_tables', action='store_true', help='Turns off tables for old mechanism')
+    parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')    
     args = parser.parse_args()
     if args.old:
         if not args.new:
@@ -228,7 +229,7 @@ def main():
             if mech_dir:
                 mech_dir = os.path.abspath(mech_dir)
                 if mech_dir not in loaded_mech_dirs:
-                    build_nmodl(mech_dir, build_mode=args.build)
+                    build_nmodl(mech_dir, build_mode=args.build, silent=args.silent_build)
                     try:
                         print "Loading mechanisms from '%s'" % mech_dir
                         import neuron
