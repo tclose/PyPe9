@@ -17,6 +17,7 @@ import numpy
 import matplotlib.pyplot as plt
 import argparse
 import math
+import os.path
 
 def generate_subplots(num_subplots):
     fig = plt.figure()
@@ -53,7 +54,7 @@ for filename in args.filenames:
     ext = filename.split('.')[-1]
     if ext == 'spikes': 
         num_spike_trains += 1
-    elif ext == 'v': 
+    elif ext == 'v' or ext == 'dat': 
         num_v += 1
     else:
         num_currents += 1
@@ -81,33 +82,35 @@ if num_v + num_currents:
         rescale = False
 spike_train_count = 0
 var_count = 0
+dat_count = 0 # Counts the number of 'dat' files that are plotted to give them an index
 for filename in args.filenames:
-    #Read Header
-    header = {}
-    f = open(filename)
-    for line in f:
-        if line[0] != '#': # Check to see if the line is a comment
-            break
-        split_line = line.split()
-        key = split_line[1]
-        value = split_line[3]
-        # Try to convert to numeric value
-        try:
-            value = float(value)
-        except ValueError:
-            try:
-                value = int(value)
-            except ValueError:
-                pass
-        header[key] = value
-    f.close()
-    # Check loaded header
-    if not header:
-        raise Exception("Did not load a header from the passed file '%s', is it a pyNN output file?" % filename)
-    if not header.has_key('label'):
-        raise Exception("Required header field 'label' was not found in file header.")
-    # Get the type of variable recorded via the file's extension
     variable_name = filename.split('.')[-1]
+    if variable_name != 'dat':
+        #Read Header
+        header = {}
+        f = open(filename)
+        for line in f:
+            if line[0] != '#': # Check to see if the line is a comment
+                break
+            split_line = line.split()
+            key = split_line[1]
+            value = split_line[3]
+            # Try to convert to numeric value
+            try:
+                value = float(value)
+            except ValueError:
+                try:
+                    value = int(value)
+                except ValueError:
+                    pass
+            header[key] = value
+        f.close()
+        # Check loaded header
+        if not header:
+            raise Exception("Did not load a header from the passed file '%s', is it a pyNN output file?" % filename)
+        if not header.has_key('label'):
+            raise Exception("Required header field 'label' was not found in file header.")
+    # Get the type of variable recorded via the file's extension
     if variable_name == 'spikes':
         # Load spikes
         spikes_n_ids = numpy.loadtxt(filename)
@@ -137,109 +140,127 @@ for filename in args.filenames:
         ax.set_ylim(-2, max_id + 2)
         spike_train_count += 1
     else:
-        try:
-            dt = header['dt']
-        except KeyError:
-            raise Exception("Required header field 'dt' was not found in file header.")       
-        f = open(filename)
-        if variable_name == 'v' and not rescale:
-            # 100 is a rough estimate of the range of the voltage variable to save having to 
-            # determine it from the max and minimum values
-            var_range = 100 
+        if variable_name == 'dat':
+            t_data = numpy.loadtxt(filename)
+            t = t_data[:,0]
+            data = t_data[:,1]
+            leg = '{variable_name} - ID{ID}'.format(
+                         variable_name=os.path.splitext(os.path.basename(filename))[0].capitalize(), 
+                         ID=dat_count)
+            if rescale:
+                abs_max = max(abs(numpy.min(data)), abs(numpy.max(data)))
+                order_of_mag = 10.0 ** math.floor(math.log(abs_max,10.0))
+                leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
+                data /= order_of_mag
+            if args.combine:
+                combine_axis.plot(t,data)
+                combine_legend.append(leg)
+            else:
+                var_axes[var_count].plot(t,data)
+            dat_count += 1                
         else:
-            max_var = float('-inf')
-            min_var = float('inf')            
+            try:
+                dt = header['dt']
+            except KeyError:
+                raise Exception("Required header field 'dt' was not found in file header.")       
+            f = open(filename)
+            if variable_name == 'v' and not rescale:
+                # 100 is a rough estimate of the range of the voltage variable to save having to 
+                # determine it from the max and minimum values
+                var_range = 100 
+            else:
+                max_var = float('-inf')
+                min_var = float('inf')            
+                for line in f:
+                    if line[0] != '#':
+                        try:
+                            var, ID = line.split()
+                        except ValueError:
+                            raise Exception("Incorrectly formatted line '%s', should be 'value ID'." % line)
+                        var = float(var)
+                        if var > max_var:
+                            max_var = var
+                        if var < min_var:
+                            min_var = var
+                f.seek(0)
+                if max_var == 0 and min_var == 0:
+                    order_of_mag = 1.0
+                    var_range = 1.0
+                else:
+                    abs_max = max(abs(min_var), abs(max_var))
+                    order_of_mag = 10.0 ** math.floor(math.log(abs_max,10.0))
+                    var_range = max_var - min_var
+            if rescale:
+                incr = args.incr
+            else:
+                incr = var_range * args.incr       
+            time_i = 0
+            # Make sure the the prev_var variable starts from a value that will always be at least 
+            # 'incr' away from the first variable read
+            prev_ID = None
+            variables = []
+            times = []
+            IDs = []
+            # Load variables selectively, if the difference between previous variable point exceeds args.incr
             for line in f:
-                if line[0] != '#':
+                if line[0] != '#': # Check to see if the line is a comment
                     try:
                         var, ID = line.split()
                     except ValueError:
-                        raise Exception("Incorrectly formatted line '%s', should be 'value ID'." % line)
-                    var = float(var)
-                    if var > max_var:
-                        max_var = var
-                    if var < min_var:
-                        min_var = var
-            f.seek(0)
-            if max_var == 0 and min_var == 0:
-                order_of_mag = 1.0
-                var_range = 1.0
-            else:
-                abs_max = max(abs(min_var), abs(max_var))
-                order_of_mag = 10.0 ** math.floor(math.log(abs_max,10.0))
-                var_range = max_var - min_var
-        if rescale:
-            incr = args.incr
-        else:
-            incr = var_range * args.incr       
-        time_i = 0
-        # Make sure the the prev_var variable starts from a value that will always be at least 
-        # 'incr' away from the first variable read
-        prev_ID = None
-        variables = []
-        times = []
-        IDs = []
-        # Load variables selectively, if the difference between previous variable point exceeds args.incr
-        for line in f:
-            if line[0] != '#': # Check to see if the line is a comment
-                try:
-                    var, ID = line.split()
-                except ValueError:
-                    raise Exception("Incorrectly formatted line '%s', should be 'value ID'." % line)                
-                if rescale:
-                    var = float(var) / order_of_mag
-                else:
-                    var = float(var)
-                # If the ID signifies the start of a new cell reset the time index
-                if ID != prev_ID:
-                    # If not in the initial loop, append last value/time pair to fill out the plot of the previous ID out to the right 
-                    if prev_ID != None:
+                        raise Exception("Incorrectly formatted line '%s', should be 'value ID'." % line)                
+                    if rescale:
+                        var = float(var) / order_of_mag
+                    else:
+                        var = float(var)
+                    # If the ID signifies the start of a new cell reset the time index
+                    if ID != prev_ID:
+                        # If not in the initial loop, append last value/time pair to fill out the plot of the previous ID out to the right 
+                        if prev_ID != None:
+                            variables[-1].append(var)
+                            times[-1].append(time_i * dt)
+                        time_i = 0
+                        prev_var = var - 2.0 * args.incr
+                        prev_ID = ID
+                        variables.append([])
+                        times.append([])
+                        IDs.append(int(float(ID)))
+                    # If the variable change is greater than the specified incr add it to the vector
+                    if abs(var - prev_var) > args.incr:
                         variables[-1].append(var)
                         times[-1].append(time_i * dt)
-                    time_i = 0
-                    prev_var = var - 2.0 * args.incr
-                    prev_ID = ID
-                    variables.append([])
-                    times.append([])
-                    IDs.append(int(float(ID)))
-                # If the variable change is greater than the specified incr add it to the vector
-                if abs(var - prev_var) > args.incr:
-                    variables[-1].append(var)
-                    times[-1].append(time_i * dt)
-                    prev_var = var
-                time_i += 1
-        # Append last value/time pair to fill out plot of the final ID to the right
-        variables[-1].append(var)
-        times[-1].append(time_i * dt)
-        if not variables:
-            print "No trace was loaded from file"
-            sys.exit(0)
-        # Plot variables sorted in order of their IDs
-        sorted_IDs = []
-        for t, var, ID in sorted(zip(times, variables, IDs), key=lambda tup: int(float(tup[2]))):
+                        prev_var = var
+                    time_i += 1
+            # Append last value/time pair to fill out plot of the final ID to the right
+            variables[-1].append(var)
+            times[-1].append(time_i * dt)
+            if not variables:
+                print "No trace was loaded from file"
+                sys.exit(0)
+            # Plot variables sorted in order of their IDs
+            sorted_IDs = []
+            for t, var, ID in sorted(zip(times, variables, IDs), key=lambda tup: int(float(tup[2]))):
+                if args.combine:
+                    combine_axis.plot(t,var)
+                else:
+                    var_axes[var_count].plot(t,var)
+                sorted_IDs.append(ID)
             if args.combine:
-                combine_axis.plot(t,var)
+                for ID in sorted_IDs:
+                    leg = '{variable_name} - ID{ID}'.format(variable_name=variable_name.capitalize(), ID=ID)
+                    if rescale:
+                        leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
+                    combine_legend.append(leg)
             else:
-                var_axes[var_count].plot(t,var)
-            sorted_IDs.append(ID)
-        if args.combine:
-            for ID in sorted_IDs:
-                leg = '{variable_name} - {ID}'.format(variable_name=variable_name.capitalize(), ID=ID)
-                if rescale:
-                    leg += ' x10^{order_of_mag}'.format(order_of_mag=order_of_mag)
-                combine_legend.append(leg)
-        else:
-#            var_axes[var_count].legend(sorted_IDs)
-#            var_axes[var_count].title = '{label}{extra_label} - {variable_name} vs Time'.format(
-#                                     label=header['label'], extra_label=args.extra_label, variable_name=header['variable'])
-#            var_axes[var_count].set_xlabel('Time (ms)')
-#            if variable_name == 'v':
-#                ylabel = 'Voltage (mV)'
-#            else:
-#                ylabel = variable_name.capitalize()
-#            var_axes[var_count].set_ylabel(ylabel)
-            var_count += 1
-            plt.show()            
+                var_axes[var_count].legend(sorted_IDs)
+                var_axes[var_count].title = '{label}{extra_label} - {variable_name} vs Time'.format(
+                                         label=header['label'], extra_label=args.extra_label, variable_name=header['variable'])
+                var_axes[var_count].set_xlabel('Time (ms)')
+                if variable_name == 'v':
+                    ylabel = 'Voltage (mV)'
+                else:
+                    ylabel = variable_name.capitalize()
+                var_axes[var_count].set_ylabel(ylabel)
+                var_count += 1
 if args.combine:
     combine_axis.legend(combine_legend)
     combine_axis.get_axes().set_title('{label}{extra_label} - Assorted variables vs Time'.format(
@@ -248,5 +269,3 @@ if args.combine:
     combine_axis.set_ylabel('Sci. notation (see legend for magnitude)')
 # Show the plot
 plt.show()
-
-
