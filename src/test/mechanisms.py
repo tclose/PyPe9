@@ -258,16 +258,20 @@ def main():
                                                                  old_sim=args.old_simulator)
         # Save the location of the file 
         if args.save_recording:
-            file_prefix, file_ext = os.path.splitext(args.save_recording)
-            if file_ext == '.dat':
+            split_on_dot = args.save_recording.split('.')
+            file_ext = split_on_dot[-1]
+            file_prefix = '.'.join(split_on_dot[0:-1])
+            if file_ext == 'dat':
                 for rec, title in zip(recs,titles):
                     combined_data = np.concatenate((np.reshape(rec.times, rec.times.shape +(1,)),
                                                                               rec.voltages), axis=1)
-                    np.savetxt(file_prefix + '.' + title + file_ext, combined_data)
+                    file_path = file_prefix + title.replace(' ', '_') + '.' + file_ext
+                    np.savetxt(file_path, combined_data)
+                    print "\nSaved recording to '" + file_path + "'"
             else:
                 output = open(args.save_recording[0], 'wb')
                 pickle.dump((recs, (start_time, end_time), titles), output)
-            print "\nSaved recording to '" + args.save_recording + "'"
+                print "\nSaved recording to '" + args.save_recording + "'"
         print "\nFinished simulation successfully!"
     elif args.new:
         raise Exception ("If the second mechanism argument is supplied than the first must be also")
