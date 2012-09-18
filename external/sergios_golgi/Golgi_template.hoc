@@ -6,7 +6,7 @@ Data Analysis: Sergio Solinas
 
 Work Progress: April 2004 - May 2007
 
-Developed At:  Università Degli Studi Di Pavia
+Developed At:  Universitï¿½ Degli Studi Di Pavia
 	       Dipartimento Di Scienze Fisiologiche
 	       Pavia - Italia
 	       
@@ -68,20 +68,20 @@ proc init() {
 	insert Golgi_BK
  	insert Golgi_SK2
 	
-        insert Golgi_hcn1
-        insert Golgi_hcn2
+  insert Golgi_hcn1
+  insert Golgi_hcn2
 
 	insert Golgi_CALC
 	insert Golgi_CALC_ca2
 	
- 	usetable_Golgi_LVA = 1
- 	usetable_Golgi_HVA = 1
- 	usetable_Golgi_KA = 1
- 	usetable_Golgi_KV = 1
- 	usetable_Golgi_NaR = 1
- 	usetable_Golgi_KM = 1
- 	usetable_Golgi_Na = 1
- 	usetable_Golgi_NaP = 1
+ 	usetable_Golgi_LVA = 0
+ 	usetable_Golgi_HVA = 0
+ 	usetable_Golgi_KA = 0
+ 	usetable_Golgi_KV = 0
+ 	usetable_Golgi_NaR = 0
+ 	usetable_Golgi_KM = 0
+ 	usetable_Golgi_Na = 0
+ 	usetable_Golgi_NaP = 0
 	
 	cai0_ca_ion = 50e-6
 	ca2i0_ca2_ion = cai0_ca_ion
