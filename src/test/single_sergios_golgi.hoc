@@ -1,16 +1,17 @@
 stim_amp=0.01875
 
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
-nrn_load_dll("/home/tclose/kbrain/xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain2/xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
 
 create soma
 
 soma {
     
+    // For Golgi Cell  
     nseg = 1
-    diam = 27
+    diam = 27 // 22 pF Dieudonne98
     L = 27
-    Ra = 100
+    Ra = 100 // From Roth&Hausser2000
     celsius = 23
 
     insert Golgi_Ca
@@ -41,18 +42,6 @@ soma {
 
     ena =  87.39
     ek  = -84.69
-    
-    insert na_conc
-    nai0_na_ion = 5
-    nai = nai0_na_ion
-    nai0_na_conc = nai0_na_ion
-    beta_na_conc=0.075
-    
-    insert k_conc
-    ki0_k_ion = 140
-    ki = ki0_k_ion
-    ki0_k_conc = ki0_k_ion
-    beta_k_conc=0.075
         
     psection()
 }

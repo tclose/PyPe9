@@ -265,8 +265,8 @@ def plot(arguments):
                     var_count += 1
     if args.combine:
         combine_axis.legend(combine_legend)
-        combine_axis.get_axes().set_title('{label}{extra_label} - Assorted variables vs Time'.format(
-                                                                     label=header['label'], extra_label=args.extra_label))
+        combine_axis.get_axes().set_title('{extra_label} - Assorted variables vs Time'.format(
+                                                                    extra_label=args.extra_label))
         combine_axis.set_xlabel('Time (ms)')
         combine_axis.set_ylabel('Sci. notation (see legend for magnitude)')
     # Show the plot
