@@ -227,7 +227,7 @@ def plot(arguments):
                             times.append([])
                             IDs.append(int(float(ID)))
                         # If the variable change is greater than the specified incr add it to the vector
-                        if abs(var - prev_var) > args.incr:
+                        if abs(var - prev_var) >= args.incr:
                             variables[-1].append(var)
                             times[-1].append(time_i * dt)
                             prev_var = var
