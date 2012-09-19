@@ -45,6 +45,7 @@ def plot(arguments):
     parser.add_argument('--incr', type=float, default=0.0, help='The minimum increment required before the next step in the variable trace is plotted')
     parser.add_argument('--extra_label', type=str, default='', help='Additional label information')
     parser.add_argument('--combine', action='store_true', help='Plot the variable figures on a single combined axis')
+    parser.add_argument('--no_show', action='store_true', help='Don''t show the plots initially (waiting for other plots to be plotted')
     args = parser.parse_args(arguments)
     
     # Set up the common axis to plot the results on
@@ -270,7 +271,8 @@ def plot(arguments):
         combine_axis.set_xlabel('Time (ms)')
         combine_axis.set_ylabel('Sci. notation (see legend for magnitude)')
     # Show the plot
-    plt.show()
+    if not args.no_show:
+        plt.show()
     
 def activity_plot(arg_string):
     plot(arg_string.split())
