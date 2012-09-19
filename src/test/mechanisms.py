@@ -21,6 +21,7 @@ import math
 import test.mechs #@UnusedImport
 import numpy as np
 import pickle
+import sys
 try:
     import matplotlib.pyplot as plt
 except:
@@ -33,7 +34,7 @@ from test import plot_simulation, Recording
 def current_clamp(old_mechs, new_mechs, celsius=30.0, cm=1.0, Ra=100, length=11.8, diam=11.8,
                             mean_input=0, stdev_input=1, start_time=3000, end_time=5000, dt=1,
          step=None, plot=True, save_plot=None, no_new_tables=False, no_old_tables=False,
-         new_sim='neuron', old_sim='neuron'):
+         new_sim='neuron', old_sim='neuron', init_vars = []):
     """
     Tests the responses of two versions of the same mechanism with an arbitrary current clamp.
     
@@ -85,7 +86,7 @@ def current_clamp(old_mechs, new_mechs, celsius=30.0, cm=1.0, Ra=100, length=11.
             exec('from test.%s.cells import OneCompartmentCell as NeuronTestCell' % import_name)
             imported_simulators.append(simulator_name)
 
-        cell = NeuronTestCell(mech_names, usetable) #@UndefinedVariable
+        cell = NeuronTestCell(mech_names, usetable, init_vars=init_vars) #@UndefinedVariable
         cell.set_membrane_capacitance(cm)
         cell.set_axial_resistance(Ra)
         cell.set_soma_morphology(length, diam)
@@ -158,7 +159,7 @@ def plot_recordings(file_location, save_plot):
     if not save_plot:
         plt.show()
 
-def main():
+def main(arguments):
     """
     Runs the current clamp test on the given mechanisms
     
@@ -193,8 +194,9 @@ def main():
     parser.add_argument('--old_simulator', type=str, default='neuron', help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--no_new_tables', action='store_true', help='Turns off tables for new mechanism')
     parser.add_argument('--no_old_tables', action='store_true', help='Turns off tables for old mechanism')
-    parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')    
-    args = parser.parse_args()
+    parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
+    parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME','INITIAL_VALUE'), action='append', help='Used to initialise reversal potentials and the like')
+    args = parser.parse_args(arguments)
     if args.old:
         if not args.new:
             raise Exception ("If the first mechanism argument is supplied than the second must be also")
@@ -256,7 +258,8 @@ def main():
                                                                  no_new_tables=args.no_new_tables,
                                                                  no_old_tables=args.no_old_tables,
                                                                  new_sim=args.new_simulator,
-                                                                 old_sim=args.old_simulator)
+                                                                 old_sim=args.old_simulator,
+                                                                 init_vars=args.init_var)
         # Save the location of the file 
         if args.save_recording:
             split_on_dot = args.save_recording.split('.')
@@ -281,9 +284,12 @@ def main():
     else:
         raise Exception ("At least one option needs to be passed to the test parameter see usage (--help option)")
 
+def mechanisms(arguments):
+    import shlex
+    main(shlex.split(arguments))
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
 
 
 

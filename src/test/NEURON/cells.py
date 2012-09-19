@@ -73,7 +73,7 @@ class OneCompartmentCell(_BaseCell):
     #=====================================================================================================================
 
 
-    def __init__(self, mech_names, usetables=None, segment_length=None, verbose=False, name_sections=True):
+    def __init__(self, mech_names, usetables=None, segment_length=None, verbose=False, name_sections=True, init_vars=[]):
         """
         Initialises the _BaseCell cell for use in testing general functions, should not be called by derived functions _base_init()
         should be used instead.
@@ -96,6 +96,8 @@ class OneCompartmentCell(_BaseCell):
             if not usetables:
                 neuron.h('usetable_%s = 0' % mech_name, sec=self.soma)
 
+        for init_var in init_vars:
+            setattr(self.soma, init_var[0], float(init_var[1]))
 
         # Set initialised to true (needs to be set to False again in derived base classes)
         self._initialised = True
