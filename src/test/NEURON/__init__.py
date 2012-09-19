@@ -161,8 +161,6 @@ class _BaseCell(object):
 
         self._sections.append(self.soma)
 
-        ## Holds the fixed length of the neuron segments. 
-        self._segment_length = segment_length
 
 
     #=====================================================================================================================
@@ -171,27 +169,7 @@ class _BaseCell(object):
 
 
 
-    def inject_soma_current(self, amplitudes, times):
-        """
-        Injects an arbitrary current into the soma of the cell
-        
-        @param amplitudes [np.array]: The amplitudes of the current to be injected
-        @param times [np.array]: The time points corresponding to the amplitudes vector
-        """
 
-        amp_v = h.Vector(amplitudes)
-        times_v = h.Vector(times)
-
-        curr_clamp = h.IClamp(self.soma(0.5))
-
-        # Setting recording paradigm
-        curr_clamp.delay = min(times)
-        curr_clamp.dur = max(times)
-
-        # "play" the input vector into current of the test cell
-        amp_v.play(curr_clamp._ref_amp, times_v)
-
-        self._devices.append((curr_clamp, amp_v, times_v))
 
 
 
@@ -221,80 +199,11 @@ class _BaseCell(object):
 
 
 
-    def _set_soma_morphology(self, length, diam):
-        """
-        Sets the length and diameter of the soma
-        
-        @param length [float]: Soma length (um)
-        @param diam [float]: Soma diameter (um)
-        """
-
-        self.soma.L = length
-        self.soma.diam = diam
-
-        #If the neuron is already initialised recalculate the number of segments per section (kind of overkill to reset 
-        #the whole tree but can't be bothered separating out soma section).
-        if self._initialised:
-            self.set_segment_length(self._segment_length)
 
 
 
-    def _set_segment_length(self, segment_length=None, d_lambda=0.1, freq=100):
-        """
-        Sets the number of segments per branch either by explicit segment length (if segment_length > 0) or by the 
-        "d_lambda" method as described in <a href="http://nro.sagepub.com/content/7/2/123.short">Hines and Carnevalle 2001</a>.
+
     
-        @param segment_length [float]: The length of each section. If <= 0 the default d_lambda rule is used instead (see below)
-        @param d_lambda [float]: The 'd_lambda' value (see reference)
-        @param freq [float]: The frequency the length constant is calculated at for the "d_lambda" rule.
-        @return [bool]: Whether the number of segments have been altered
-        
-        From the header of the original hoc code explaining the d_lambda rule:
-            "Sets nseg in each section to an odd value so that its segments are no longer than
-                d_lambda * the AC length constant at frequency freq in that section. Be sure to specify your own Ra and cm 
-            
-            To understand why this works, and the advantages of using an odd value for nseg,
-                see    Hines, M.L. and Carnevale, N.T.
-                     NEURON: a tool for neuroscientists.
-                     The Neuroscientist 7:123 - 135, 2001."    
-    
-        """
-
-        # Whether the number of segments have beed updated
-        num_seg_updated = False
-
-        #Check to see if number of segments needs to be recalculated
-        if not self._initialised or not segment_length or self._segment_length != segment_length:
-
-            if self._connections:
-                raise Exception('Cannot recalculate number of segments as there are already connections attached to the receptors \
-                                                    that will be relocated. NB: The number of segments per section is implicitly recalculated \
-                                                    when the diameter, capacitance or axial resistance is changed, in the case that d_lambda \
-                                                    rule is used, which is the default.')
-
-            if self._initialised:
-                print 'Recalculating number of segments per section for %s...' % self._name
-
-            #Loop through all sections and set the number of segments according to the desired d_lambda fraction of the 
-            #length constant of the specified frequency
-            for sec in self._sections:
-
-                if segment_length <= 0:
-                    #Calculate the 'd_lambda' fraction of the length constant for the supplied frequency, given the sections axial resistance and capacitance
-                    sec_segment_length = d_lambda * 1e5 * math.sqrt(sec.diam / (4 * math.pi * freq * sec.Ra * sec.cm))
-                else:
-                    sec_segment_length = segment_length
-
-                #Set the number of segments so that the lenght of each section is a fraction, 'd_lambda' of the length constant. 
-                sec.nseg = int((sec.L / sec_segment_length + 0.9) / 2) * 2 + 1
-
-            #Save specified segment length for future reference
-            self._segment_length = segment_length
-
-            num_seg_updated = True
-
-        return num_seg_updated
-
 
 
     def set_segment_length(self, segment_length=None, d_lambda=0.1, freq=100):
@@ -416,58 +325,7 @@ class _BaseCell(object):
 
 
 
-    def input_resistance(self, stim_amp= -0.05, stim_delay=10000, stim_dur=10000, buffer_time=5000, plot=False, peak=False):
-        """
-        Calculates the input resistance of the Purkinje model as per Roth and Hausser 2001
-        
-        @param stim_amp [float]: The amplitude of the current stimulus (nA)
-        @param stim_delay [float]: The delay before stimulating (ms)
-        @param stim_dur [float]: The duration of the stimulation and the following unstimulated periods (ms)
-        @param buffer_time [float]: The time allowed for transients to decay after the stimulation starts and stops (ms)
-        @param plot [bool]: If set the voltage traces are plotted for sanity check, otherwise just the estimated values are returned
-        @param peak [bool]: If set the peak voltage for comparison is used instead of the steady state during the pulse
-        
-        @return [float]: The input resistance (MOhms) 
-        """
 
-        stim = h.IClamp(self.soma(0.5))
-        stim.amp = stim_amp
-        stim.delay = stim_delay
-        stim.dur = stim_dur
-
-        end_time = stim.delay + stim.dur * 2
-
-        time_v = h.Vector()
-        time_v.record(h._ref_t)
-
-        voltage_v = h.Vector()
-        voltage_v.record(self.soma(0.5)._ref_v)
-
-        h.finitialize(-65)
-        neuron_init()
-        neuron_run(end_time)
-
-        times = np.array(time_v)
-        voltages = np.array(voltage_v)
-
-        on_indices = np.nonzero(np.logical_and(times > (stim.delay + buffer_time), times <= (stim.delay + stim.dur)))
-        off_indices = np.nonzero(times > (stim.delay + stim.dur + buffer_time))
-
-        if peak:
-            input_R = (np.min(voltages) - np.average(voltages[off_indices])) / stim_amp
-        else:
-            input_R = (np.average(voltages[on_indices]) - np.average(voltages[off_indices])) / stim_amp
-
-        if plot:
-            try:
-
-                plt.figure()
-                plt.plot(times, voltages)
-                plt.show()
-            except:
-                print "Could not import matplotlib, so could not plot input resistance"
-
-        return input_R
 
 
 
@@ -534,63 +392,6 @@ class _BaseCell(object):
 
 
 
-    def _set_membrane_capacitance(self, cm):
-        """
-        Sets the capacitance for each section of the neuron.
-        
-        @param cm [float]: Membrane capacitance (F/cm^2)
-        """
-
-        for sec in self._sections:
-            sec.cm = cm
-
-        #If the cell is already initialised recalculate the number of segments per section.
-        if self._initialised:
-            self.set_segment_length(self._segment_length)
-
-        return self
-
-
-
-    def _set_passive_conductance(self, rm):
-        """
-        Sets the membrane for each section of the neuron.
-        
-        @param rm [float]: Membrane resistance (Ohm    cm^2)
-        """
-
-        g = rm
-
-        for sec in self._sections:
-
-            # Test to see if the current section has an passive conductance, if not add them
-            try:
-                tmp = sec.pas #@UnusedVariable, used only to test if the section is present or not
-            except AttributeError:
-                sec.insert('pas')
-
-            for seg in sec:
-                seg.pas.g = g
-
-        return self
-
-
-
-    def _set_axial_resistance (self, ra):
-        """
-        Sets the resistance for each section of the neuron.
-        
-        @param ra [float]: Axial (or intracellular) resistance (Ohm cm)
-        """
-
-        for sec in self._sections:
-            sec.Ra = ra
-
-        #If the cell is already initialised recalculate the number of segments per section.
-        if self._initialised:
-            self.set_segment_length(self._segment_length)
-
-        return self
 
 
 
@@ -634,25 +435,7 @@ class _BaseCell(object):
 
 
 
-    def insert_mechanism(self, mech_name):
-        """
-        Inserts a mechanism into the cell
-        
-        @param mech_name [String]: Mechanism name
-        """
-        print 'inserting ' + mech_name
-        for sec in self._sections:
 
-            # Test to see if the current section has an 'h' current, if not add one
-#            try:
-#                eval('tmp = sec.' + mech_name)
-#            except AttributeError:
-            try:
-                sec.insert(mech_name)
-            except:
-                raise Exception("Could not insert mechanisms '%s'" % mech_name)
-
-        return self
 
 
 
@@ -895,100 +678,3 @@ class _BaseCell(object):
 
 
 
-def simulate(run_time, celsius=37, initial_v= -65, record_v=list(), record_i=list(), record_m=list()):
-    """
-    Runs the simulation and records the specified locations, returning them in numpy arrays contained within a 
-    named Tuple ('Recording') along with legends to be used for plotting. Rows of the np.arrays correspond to 
-    different recording locations, and columns correspond to common time points in the simulation.
-    
-    @param run_time [float]: Length of the run
-    @param initial_v [float]: The initial voltage for the simulation
-    @param record_v [list(tuple(h.Section,float))]: List of h.Sections to record voltage from
-    @param record_i [list(h.*Syn)]: List of h.*Syn to record from (should be added with 'poisson_stimulation()').
-    @param record_m [list(h.IntFire*)]: List of h.IntFire* from which to record their states.
-    @param record_times [list(float)]; Times to record into the recording list. If none then return all the recording.
-    
-    @return [Recording]: Returns the recorded voltages, currents and states in a named tuple
-    """
-
-    num_volt_rec = len(record_v)
-    num_current_rec = len(record_i)
-    num_state_rec = len(record_m)
-
-    if not num_volt_rec and not num_current_rec and not num_state_rec:
-        raise Exception ('No recordings specified (see input parameters ''record_v'', ''record_i'', and ''record_m'')')
-
-    # Record Time from NEURON (h._ref_t)
-    time = h.Vector()
-    time.record(h._ref_t)
-
-    # Set up recordings from the list of sections to record voltages from
-    volt_rec = list()
-    volt_legend = list()
-
-    count = 0;
-    for (sec, pos) in record_v:
-
-        # Record Voltage from the soma
-        volt_rec.append(h.Vector())
-        volt_rec[len(volt_rec) - 1].record(sec(pos)._ref_v)
-        volt_legend.append('Voltage: %d' % count)
-#        volt_legend.append(sec_name(sec, 2) + ':' + str(pos))
-#        count = count + 1
-
-    # Set up recordings from the list of sections to record voltages from
-    current_rec = list()
-    curr_legend = list()
-
-    count = 0;
-    for syn in record_i:
-
-        # Record Voltage from the soma
-        current_rec.append(h.Vector())
-        current_rec[len(current_rec) - 1].record(syn._ref_i)
-        curr_legend.append('Current: %d' % count)
-        count = count + 1
-
-    state_rec = list()
-    state_legend = list()
-
-
-    count = 0;
-    for intfire in record_m:
-        state_rec.append(h.Vector())
-        state_rec[len(state_rec) - 1].record(intfire._ref_m)
-        state_legend.append('Input neuron: %d' % count)
-        count = count + 1
-
-
-    h.celsius = celsius
-    print "Simulating at %fC" % celsius
-    # Initialises the neuron environment 
-    h.finitialize(initial_v)
-    neuron_init()
-    neuron_run(run_time)
-
-    # get values for times from NEURON vectors format into Python format
-    times = np.array(time)
-    time_length = times.shape[0]
-
-    # get values for voltages from NEURON vectors format into Python format
-    voltages = np.zeros((time_length, num_volt_rec))
-
-    for sec_i in range(num_volt_rec):
-        voltages[:, sec_i] = np.array(volt_rec[sec_i])
-
-    # get values for synaptic current from NEURON vectors format into Python format
-    currents = np.zeros((time_length, num_current_rec))
-
-    for sec_i in range(num_current_rec):
-        currents[:, sec_i] = np.array(current_rec[sec_i])
-
-    # get values for synaptic state from NEURON vectors format into Python format
-    states = np.zeros((time_length, num_state_rec))
-
-    for sec_i in range(num_state_rec):
-        states[:, sec_i] = np.array(state_rec[sec_i])
-
-    #Return times, voltages, currents, states, volt_legend, curr_legend, state_legend in a namedtuple
-    return Recording(times, voltages, currents, states, volt_legend, curr_legend, state_legend)

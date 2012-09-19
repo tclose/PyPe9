@@ -37,7 +37,7 @@ def quit_figure(event):
         plt.close(event.canvas.figure)
 
 
-def plot(arguments):
+def main(arguments):
     parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
     parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
     parser.add_argument('--time_start', type=float, default=None, help='The start of the plot')
@@ -274,8 +274,9 @@ def plot(arguments):
     if not args.no_show:
         plt.show()
     
-def activity_plot(arg_string):
-    plot(arg_string.split())
+def activity_plot(arguments):
+    import shlex
+    main(shlex.split(arguments))
     
 if __name__ == '__main__':
-    plot(sys.argv[1:])
+    main(sys.argv[1:])
