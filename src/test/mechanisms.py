@@ -99,6 +99,7 @@ def main(arguments):
         pid = os.fork()
         if pid: # Parent process
             os.wait() # Parent process just waits for child process to finish before continuing
+                #raise Exception('There was a problem with the simulation, exited with nonzero return status')
         else: # Child process
             if simulator == 'neuron':
                 import neuron as simulator_module #@UnusedImport
