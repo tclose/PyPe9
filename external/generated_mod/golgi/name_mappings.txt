@@ -1,0 +1,19 @@
+#---------------------------
+# Original Generated
+#---------------------------
+Golgi_BK  Golgi_KCa
+Golgi_Ca_HVA Golgi_CaHVA
+Golgi_CALC_ca2 Golgi_Ca2
+Golgi_CALC Golgi_Ca
+Golgi_Ca_LVA Golgi_CaLVA
+Golgi_hcn1 Golgi_HCN1
+Golgi_hcn2 Golgi_HCN2
+Golgi_KA Golgi_KA
+Golgi_KM Golgi_KM
+Golgi_KV Golgi_KV
+Golgi_lkg Golgi_Lkg 
+Golgi_Na Golgi_Na
+Golgi_NaP Golgi_NaP
+Golgi_NaR Golgi_NaR
+Golgi_SK2 Golgi_SK2
+

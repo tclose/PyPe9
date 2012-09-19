@@ -1,5 +1,5 @@
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
-nrn_load_dll("/home/tclose/kbrain/external/original_mod/sergios_golgi/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain/external/generated_mod/golgi/x86_64/.libs/libnrnmech.so")
 
 objref SpikeTrain, netcon, nil
 objref exc[78], inh[27], synapses
@@ -14,25 +14,25 @@ soma {
     L = 27
     Ra = 100 // From Roth&Hausser2000
     celsius = 23
-    
-    insert Golgi_lkg
-    insert Golgi_Na
-    insert Golgi_NaR
-    insert Golgi_NaP
-    insert Golgi_Ca_HVA
-    insert Golgi_Ca_LVA
-    insert Golgi_KV
-    insert Golgi_KM
+
+    insert Golgi_KCa
+    insert Golgi_CaHVA
+    insert Golgi_Ca2
+    insert Golgi_Ca
+    insert Golgi_CaLVA
+    insert Golgi_HCN1
+    insert Golgi_HCN2
     insert Golgi_KA
-    insert Golgi_BK
+    insert Golgi_KM
+    insert Golgi_KV
+    insert Golgi_Lkg
+    insert Golgi_Na
+    insert Golgi_NaP
+    insert Golgi_NaR
     insert Golgi_SK2
-    insert Golgi_hcn1
-    insert Golgi_hcn2
-    insert Golgi_CALC
-    insert Golgi_CALC_ca2
     
-    usetable_Golgi_LVA = 0
-    usetable_Golgi_HVA = 0
+    usetable_GolgiLVA = 0
+    usetable_GolgiHVA = 0
     usetable_Golgi_KA = 0
     usetable_Golgi_KV = 0
     usetable_Golgi_NaR = 0
@@ -45,8 +45,8 @@ soma {
     cai = cai0_ca_ion
     ca2i = cai
     ca2o = cao
-    cai0_Golgi_CALC = cai0_ca_ion
-    ca2i0_Golgi_CALC_ca2 = cai0_ca_ion
+    cai0_Golgi_Ca = cai0_ca_ion
+    ca2i0_Golgi_Ca2 = cai0_ca_ion
     
     ena=87.39
     ek=-84.69
@@ -70,7 +70,7 @@ for i=0,2 {
         Ra = 100
         celsius = 23
         
-        insert Golgi_lkg
+        insert Golgi_Lkg
         for k=0, 25 {
             exc[(i*26)+k] = new Synapse(0.5)
         }
@@ -90,7 +90,7 @@ axon {
   L = 1200
   Ra = 100
   celsius = 23
-  insert Golgi_lkg
+  insert Golgi_Lkg
 }
 connect axon(0), soma(0)
     
@@ -142,8 +142,8 @@ run()
 
 objref output_file
 output_file = new File()
-printf("Writing output to 'output/single_sergios_golgi_hoc.dat'")
-output_file.wopen("output/single_sergios_golgi_hoc.dat")
+printf("Writing output to 'output/single_generated_golgi_hoc.dat'")
+output_file.wopen("output/single_generated_golgi_hoc.dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }
