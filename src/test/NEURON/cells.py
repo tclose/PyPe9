@@ -72,33 +72,24 @@ class OneCompartmentCell(_BaseCell):
     # Initialisation of member variables
     #=====================================================================================================================
 
-
-    def __init__(self, mech_names, usetables=None, segment_length=None, verbose=False, name_sections=True, init_vars=[]):
+    def __init__(self, mech_names, cm, Ra, length, diam, segment_length=None, verbose=False, name_sections=True, init_vars=[]):
         """
         Initialises the _BaseCell cell for use in testing general functions, should not be called by derived functions _base_init()
         should be used instead.
         """
-
         _BaseCell.__init__(self, 'Test', segment_length=segment_length, verbose=verbose, name_sections=name_sections)
-
-        ## Set soma morphology using defaults
-        self.set_soma_morphology()
-
-#        self.set_passive_conductance() Shouldn't be included by default as some models have their own mechanisms for this
-        self.set_membrane_capacitance()
-        self.set_axial_resistance()
-
+        ## Set morphology and passive properties
+        self.set_soma_morphology(length, diam)
+        self.set_membrane_capacitance(cm)
+        self.set_axial_resistance(Ra)
         #If 'None', the number of segments is determined from the d_lambda rule as describe in the NEURON book by Hines and Carnevale 2001
         self.set_segment_length(segment_length)
-
+        #Insert mechanisms into cell
         for mech_name in mech_names:
             self.insert_mechanism(mech_name)
-            if not usetables:
-                neuron.h('usetable_%s = 0' % mech_name, sec=self.soma)
-
+        #Initialise vars
         for init_var in init_vars:
             setattr(self.soma, init_var[0], float(init_var[1]))
-
         # Set initialised to true (needs to be set to False again in derived base classes)
         self._initialised = True
 

@@ -18,7 +18,6 @@
 import os.path
 import argparse
 import math
-import test.mechs #@UnusedImport
 import numpy as np
 import sys
 from visualize.activity_plot import activity_plot
@@ -74,7 +73,7 @@ def main(arguments):
     parser.add_argument('--build', type=str, default='lazy', help='The build mode for the NMODL directories')
     parser.add_argument('--simulator', type=str, nargs=2, metavar=('OLD','NEW'), default=('neuron', 'neuron'), help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
-    parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME','INITIAL_VALUE'), action='append', help='Used to initialise reversal potentials and the like')
+    parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME','INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like')
     args = parser.parse_args(arguments)
     # Set up common input stimulation
     if args.step:
@@ -104,7 +103,7 @@ def main(arguments):
             mech_names.append(os.path.splitext(os.path.basename(mech_path))[0])
             mech_dir = os.path.dirname(mech_path)
             if mech_dir not in loaded_mech_dirs:
-                build_mechs(mech_dir, simulator, args.build_mode, args.silent_build)
+                build_mechs(mech_dir, simulator, args.build, args.silent_build)
                 loaded_mech_dirs.append(mech_dir)
         plot_titles.append((name + " mech: " + ','.join(mech_names) + ", sim: " + simulator))                
         # Import appropriate modules for selected simulator        
@@ -114,32 +113,33 @@ def main(arguments):
         if pid: # Parent process
             os.wait() # Parent process just waits for child process to finish before continuing
         else: # Child process
-            sim_import_name = str.upper(simulator)
-            exec('import test.%s' % sim_import_name)
-            exec('from test.%s import simulate' % sim_import_name)
-            exec('from test.%s.cells import OneCompartmentCell as TestCell' % sim_import_name)
+            if simulator == 'neuron':
+                from neuron import h
+                from test.NEURON import simulate #@UnusedImport
+                from test.NEURON.cells import OneCompartmentCell as TestCell #@UnusedImport
+            elif simulator == 'nest':
+                from test.NEST import simulate #@ImportRedefinition
+                from test.NEST.cells import OneCompartmentCell as TestCell #@ImportRedefinition
             # Create test cell and set properties
-            cell = TestCell(mech_names, usetable, init_vars=init_vars) #@UndefinedVariable
-            cell.set_membrane_capacitance(args.cm)
-            cell.set_axial_resistance(args.Ra)
-            cell.set_soma_morphology(args.length, args.diam)
+            cell = TestCell(mech_names, cm=args.cm, Ra=args.Ra, length=args.length, diam=args.diam,  #@UndefinedVariable
+                                                                        init_vars=args.init_var)
             cell.inject_soma_current(input_current, times)
             # Run the recording and append it to the recordings list
             if simulator == 'neuron':
-                record_v = [(cell.soma, 0.5)]
+                record_v = [(cell.soma, 0.5)]    
                 # Print generated test cell with loaded mechanisms
-                test.NEURON.h.psection(sec=cell.soma) #@UndefinedVariable
+                h.psection(sec=cell.soma) #@UndefinedVariable
             elif simulator == 'nest':
                 record_v = [cell]
             else:
                 raise Exception ("Unrecognised simulator name '%s'" % simulator)
-            rec = simulate(end_time, record_v=record_v, celsius=celsius) #@UndefinedVariable
+            rec = simulate(args.end_time, record_v=record_v, celsius=args.celsius) #@UndefinedVariable
             t_v = np.concatenate((np.reshape(rec.times, rec.times.shape +(1,)),
                                                                       rec.voltages), axis=1)
             save_path = args.save_prefix + '.' + name + '.dat' 
             np.savetxt(save_path, t_v)
             print "\nSaved recording to '" + save_path + "'"
-            sys.exit(0)
+            sys.exit(0) # Exit child process (and return control to parent process)
     old_t_v = np.loadtxt(args.save_prefix + '.old.dat')   
     new_t_v = np.loadtxt(args.save_prefix + '.new.dat')
     old_t = old_t_v[:,0]
