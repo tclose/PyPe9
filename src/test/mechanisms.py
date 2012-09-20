@@ -193,12 +193,15 @@ def run_test(args):
     else:
         raise Exception('Unrecognised simulator ''%s''' % simulator_name)
     # Create test cell and set properties
+    print "Creating %s cell..." % test_name
     cell = TestCell(simulator, mechs, cm=sim_params['cm'], Ra=sim_params['Ra'], 
                                     length=sim_params['length'], diam=sim_params['diam'], 
                                     init_vars=sim_params['init_vars'],verbose=True)
     cell.inject_soma_current(inject.current, inject.times)
     # Run the recording and append it to the recordings list
+    print "Starting simulation of '%s'..." % test_name    
     rec = cell.simulate(sim_params['end_time'], celsius=sim_params['celsius']) #@UndefinedVariable
+    print "Finished simulation of '%s'" % test_name    
     if save_prefix:
         save_recording(rec.times, rec.voltages, save_prefix, test_name)    
     if stdout_lock:
