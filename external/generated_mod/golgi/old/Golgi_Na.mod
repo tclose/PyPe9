@@ -12,16 +12,10 @@ NEURON {
 }
 
 
-FUNCTION comp35_beta_m (v, Q10) {
-  comp35_beta_m  =  
-  Q10 * comp35_Abeta_m * exp((v + -(comp35_V0beta_m)) / comp35_Kbeta_m)
-}
-
-
-FUNCTION comp35_beta_h (v, Q10) {
-  comp35_beta_h  =  
-  (Q10 * comp35_Abeta_h) / 
-    (1.0 + exp((v + -(comp35_V0beta_h)) / comp35_Kbeta_h))
+FUNCTION comp35_alpha_m (v, Q10) {
+  comp35_alpha_m  =  
+  Q10 * comp35_Aalpha_m * 
+    linoid(v + -(comp35_V0alpha_m), comp35_Kalpha_m)
 }
 
 
@@ -32,10 +26,16 @@ FUNCTION comp35_alpha_h (v, Q10) {
 }
 
 
-FUNCTION comp35_alpha_m (v, Q10) {
-  comp35_alpha_m  =  
-  Q10 * comp35_Aalpha_m * 
-    linoid(v + -(comp35_V0alpha_m), comp35_Kalpha_m)
+FUNCTION comp35_beta_m (v, Q10) {
+  comp35_beta_m  =  
+  Q10 * comp35_Abeta_m * exp((v + -(comp35_V0beta_m)) / comp35_Kbeta_m)
+}
+
+
+FUNCTION comp35_beta_h (v, Q10) {
+  comp35_beta_h  =  
+  (Q10 * comp35_Abeta_h) / 
+    (1.0 + exp((v + -(comp35_V0beta_h)) / comp35_Kbeta_h))
 }
 
 
@@ -50,26 +50,26 @@ linoid  =  v447
 
 
 PARAMETER {
-  comp35_Abeta_h  =  3.0
-  comp35_Abeta_m  =  12.0
-  comp35_e  =  87.39
+  comp35_Kalpha_m  =  -10.0
+  comp35_Kalpha_h  =  -3.333
+  comp299_vchold  =  -71.0
+  comp35_V0beta_m  =  -50.0
+  comp35_V0beta_h  =  -17.0
+  comp35_Kbeta_m  =  -18.182
+  comp35_Kbeta_h  =  -5.0
+  comp299_vchdur  =  30.0
+  comp299_vcbdur  =  100.0
+  comp299_vcbase  =  -60.0
+  comp299_vcinc  =  10.0
   comp299_vcsteps  =  9.0
   comp35_Aalpha_m  =  0.3
   comp35_Aalpha_h  =  0.21
-  comp299_vchdur  =  30.0
-  comp299_vcbdur  =  100.0
-  comp299_vcinc  =  10.0
-  comp35_gbar  =  0.048
-  comp35_V0beta_h  =  -17.0
-  comp299_vcbase  =  -60.0
-  comp35_V0beta_m  =  -50.0
-  comp299_vchold  =  -71.0
-  comp35_Kalpha_h  =  -3.333
-  comp35_Kalpha_m  =  -10.0
-  comp35_Kbeta_m  =  -18.182
-  comp35_Kbeta_h  =  -5.0
+  comp35_e  =  87.39
   comp35_V0alpha_m  =  -25.0
   comp35_V0alpha_h  =  -50.0
+  comp35_Abeta_m  =  12.0
+  comp35_Abeta_h  =  3.0
+  comp35_gbar  =  0.048
 }
 
 

@@ -12,6 +12,20 @@ NEURON {
 }
 
 
+FUNCTION comp19_alpha_u (v, Q10) {
+  comp19_alpha_u  =  
+  Q10 * comp19_Aalpha_u * 
+    exp((v + -(comp19_V0alpha_u)) / comp19_Kalpha_u)
+}
+
+
+FUNCTION comp19_alpha_s (v, Q10) {
+  comp19_alpha_s  =  
+  Q10 * comp19_Aalpha_s * 
+    exp((v + -(comp19_V0alpha_s)) / comp19_Kalpha_s)
+}
+
+
 FUNCTION comp19_beta_u (v, Q10) {
   comp19_beta_u  =  
   Q10 * comp19_Abeta_u * exp((v + -(comp19_V0beta_u)) / comp19_Kbeta_u)
@@ -24,41 +38,27 @@ FUNCTION comp19_beta_s (v, Q10) {
 }
 
 
-FUNCTION comp19_alpha_s (v, Q10) {
-  comp19_alpha_s  =  
-  Q10 * comp19_Aalpha_s * 
-    exp((v + -(comp19_V0alpha_s)) / comp19_Kalpha_s)
-}
-
-
-FUNCTION comp19_alpha_u (v, Q10) {
-  comp19_alpha_u  =  
-  Q10 * comp19_Aalpha_u * 
-    exp((v + -(comp19_V0alpha_u)) / comp19_Kalpha_u)
-}
-
-
 PARAMETER {
-  comp283_vchdur  =  30.0
-  comp19_gbar  =  0.00046
-  comp283_vchold  =  -71.0
-  comp19_Abeta_s  =  0.08298
-  comp19_Abeta_u  =  0.0013
-  comp19_V0beta_s  =  -18.66
-  comp19_V0beta_u  =  -48.0
-  comp283_vcbase  =  -69.0
-  comp19_Aalpha_s  =  0.04944
-  comp19_Aalpha_u  =  0.0013
+  comp19_Kalpha_u  =  -18.183
+  comp19_Kalpha_s  =  15.87301587302
   comp19_e  =  129.33
-  comp19_V0alpha_u  =  -48.0
-  comp19_V0alpha_s  =  -29.06
+  comp19_V0beta_u  =  -48.0
+  comp19_V0beta_s  =  -18.66
+  comp283_vcbdur  =  100.0
   comp19_Kbeta_u  =  83.33
   comp19_Kbeta_s  =  -25.641
-  comp283_vcbdur  =  100.0
-  comp283_vcsteps  =  8.0
+  comp283_vcbase  =  -69.0
   comp283_vcinc  =  10.0
-  comp19_Kalpha_s  =  15.87301587302
-  comp19_Kalpha_u  =  -18.183
+  comp283_vcsteps  =  8.0
+  comp19_Aalpha_u  =  0.0013
+  comp19_Aalpha_s  =  0.04944
+  comp283_vchold  =  -71.0
+  comp19_gbar  =  0.00046
+  comp19_V0alpha_u  =  -48.0
+  comp19_V0alpha_s  =  -29.06
+  comp19_Abeta_u  =  0.0013
+  comp19_Abeta_s  =  0.08298
+  comp283_vchdur  =  30.0
 }
 
 
@@ -70,10 +70,10 @@ STATE {
 
 ASSIGNED {
   CaHVA_m_tau
-  comp19_Q10
-  CaHVA_h_inf
   CaHVA_m_inf
+  comp19_Q10
   CaHVA_h_tau
+  CaHVA_h_inf
   celsius
   v
   ica
@@ -84,14 +84,14 @@ ASSIGNED {
 
 PROCEDURE asgns () {
   comp19_Q10  =  3.0 ^ ((celsius + -20.0) / 10.0)
+  CaHVA_h_inf  =  
+  (comp19_alpha_u(v, comp19_Q10)) / 
+    (comp19_alpha_u(v, comp19_Q10) + comp19_beta_u(v, comp19_Q10))
   CaHVA_h_tau  =  
   1.0 / (comp19_alpha_u(v, comp19_Q10) + comp19_beta_u(v, comp19_Q10))
   CaHVA_m_inf  =  
   (comp19_alpha_s(v, comp19_Q10)) / 
     (comp19_alpha_s(v, comp19_Q10) + comp19_beta_s(v, comp19_Q10))
-  CaHVA_h_inf  =  
-  (comp19_alpha_u(v, comp19_Q10)) / 
-    (comp19_alpha_u(v, comp19_Q10) + comp19_beta_u(v, comp19_Q10))
   CaHVA_m_tau  =  
   1.0 / (comp19_alpha_s(v, comp19_Q10) + comp19_beta_s(v, comp19_Q10))
 }

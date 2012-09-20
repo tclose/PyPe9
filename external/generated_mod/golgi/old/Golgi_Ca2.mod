@@ -11,12 +11,12 @@ NEURON {
 
 
 PARAMETER {
-  comp19_beta  =  1.3
-  comp19_valence  =  2.0
   comp19_d  =  0.2
   comp19_F  =  96485.0
+  comp19_valence  =  2.0
   comp19_ca2i0  =  5e-05
   comp19_ca2o  =  2.0
+  comp19_beta  =  1.3
 }
 
 
