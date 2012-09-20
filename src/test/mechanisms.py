@@ -116,12 +116,13 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
         load_dirs_list.append(list(load_dirs))        
     # Since I am already doing multiprocessing for the simulations to use a clean process each time
     # I thought it wouldn't hurt to do the NMODL building in parallel as well
-    num_procs = len(build_dirs)
-    build_pool = mp.Pool(processes=num_procs)
-    build_pool.map(build_mech_dir, zip(list(build_dirs), [args.build] * num_procs,
-                                                                 [args.silent_build] * num_procs))
-    build_pool.close()
-    build_pool.join()
+    if args.build != 'require':
+        num_procs = len(build_dirs)
+        build_pool = mp.Pool(processes=num_procs)
+        build_pool.map(build_mech_dir, zip(list(build_dirs), [args.build] * num_procs,
+                                                                     [args.silent_build] * num_procs))
+        build_pool.close()
+        build_pool.join()
     if args.reference:
         test_names = ('new', 'ref', 'diff')    
         # Encapsulate the simulator code within a separate process so that mechanisms can be loaded with 
