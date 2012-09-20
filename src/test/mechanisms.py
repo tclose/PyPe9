@@ -57,6 +57,7 @@ def main(arguments):
     parser.add_argument('--build', type=str, default='lazy', help='The build mode for the NMODL directories')
     parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR [REF_SIMULATOR]', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
+    parser.add_argument('--no_tables', action='store_true', help='Turn off tables')
     parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME','INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like')
     args = parser.parse_args(arguments)
     no_plot = args.no_plot or not loaded_matplotlib
@@ -134,7 +135,8 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
 #        stdout_lock = None
         new_rec, ref_rec = simulate_pool.map(run_test, zip(test_names, mechs_list, load_dirs_list, 
                                                    simulators,  [sim_params] * 2, [inject] * 2, 
-                                                   [args.save_prefix] * 2, [stdout_lock] * 2))
+                                                   [args.save_prefix] * 2, [stdout_lock] * 2, 
+                                                   [args.no_tables] * 2))
         build_pool.close()
         build_pool.join()
         # Calculate the difference between the two recordings, old interpolating the new recording to the times of the old.
@@ -145,7 +147,7 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
     else:
         test_names = ('test',)
         recs = (run_test((test_names[0], mechs_list[0], load_dirs_list[0], args.simulator[0], 
-                                                    sim_params, inject, args.save_prefix, None,)),)
+                                    sim_params, inject, args.save_prefix, None,args.no_tables)),)
     # Set up plot titles
     if not no_plot:
         main_fig = plt.figure() #@UnusedVariable
@@ -178,7 +180,7 @@ def build_mech_dir(args):
     build_nmodl(mech_dir, build_mode=build_mode, silent=silent)
         
 def run_test(args):    
-    test_name, mechs, mech_dirs, simulator_name, sim_params, inject, save_prefix, stdout_lock = args
+    test_name, mechs, mech_dirs, simulator_name, sim_params, inject, save_prefix, stdout_lock, no_tables = args
     if simulator_name == 'neuron':
         import neuron as simulator #@UnusedImport
         for mech_dir in mech_dirs:
@@ -196,7 +198,7 @@ def run_test(args):
     print "Creating %s cell..." % test_name
     cell = TestCell(simulator, mechs, cm=sim_params['cm'], Ra=sim_params['Ra'], 
                                     length=sim_params['length'], diam=sim_params['diam'], 
-                                    init_vars=sim_params['init_vars'],verbose=True)
+                                    init_vars=sim_params['init_vars'],verbose=True, no_tables=no_tables)
     cell.inject_soma_current(inject.current, inject.times)
     # Run the recording and append it to the recordings list
     print "Starting simulation of '%s'..." % test_name    
@@ -233,7 +235,7 @@ def quit_figure(event):
 class NeuronTestCell(object):
 
     def __init__(self, neuron_module, mech_names, cm, Ra, length, diam, segment_length=None, 
-                                                                    verbose=False, init_vars=[]):
+                                                    verbose=False, init_vars=[], no_tables=False):
         """
         Initialises the _BaseCell cell for use in testing general functions, should not be called by derived functions _base_init()
         should be used instead.
@@ -258,6 +260,11 @@ class NeuronTestCell(object):
                 self.soma.insert(mech_name)
             except:
                 raise Exception("Could not insert mechanisms '%s'" % mech_name)
+            if no_tables:
+                try:
+                    self.h('usetable_{mech_name} = 0'.format(mech_name=mech_name))
+                except:
+                    print "Could not disable tables in %s mechanism" % mech_name
         #Initialise vars
         for init_var in init_vars:
             setattr(self.soma, init_var[0], float(init_var[1]))
