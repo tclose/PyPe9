@@ -55,7 +55,7 @@ def main(arguments):
     parser.add_argument('--end_time', type=float, default=5000, help='stimulation end time')
     parser.add_argument('--dt', type=float, default=1, help='time step between input changes')
     parser.add_argument('--build', type=str, default='lazy', help='The build mode for the NMODL directories')
-    parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR_NAME', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
+    parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR [REF_SIMULATOR]', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
     parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME','INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like')
     args = parser.parse_args(arguments)
@@ -64,8 +64,8 @@ def main(arguments):
         raise Exception('If the ''--no_plot'' option is given (or matplotlib could not be loaded) \
 you probably want to specify a save location (''--save_prefix'') because otherwise what is the point?')
     # Put all the simulation params in a dict for convenience
-    cell_params = {'cm': args.cm, 'Ra': args.Ra, 'celsius': args.celsius, 'length': args.length, 
-                                                     'diam': args.diam, 'init_vars': args.init_var}
+    sim_params = {'cm': args.cm, 'Ra': args.Ra, 'celsius': args.celsius, 'length': args.length, 
+                                     'end_time': args.end_time, 'diam': args.diam, 'init_vars': args.init_var}
     if args.reference:
         #Duplicate the simulator for both tests
         if len(args.simulator) == 1:
@@ -101,13 +101,13 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
     load_dirs_list = []
     build_dirs = set()
     # Strip preceding path and '.mod' extension from mechanism names if present (to allow bash wildcard matching)
-    for mech_paths, simulator in zip((args.reference, args.mech_paths), simulators):
+    for mech_paths, simulator in zip((args.mech_paths, args.reference), simulators):
         # Parse mechanism names and build and load mechanisms
         mechs = []
         load_dirs = set()
         for mech_path in mech_paths:
             mechs.append(os.path.splitext(os.path.basename(mech_path))[0])
-            mech_dir = os.path.dirname(mech_path)
+            mech_dir = os.path.abspath(os.path.dirname(mech_path))
             if mech_dir:
                 load_dirs.add(mech_dir)
                 if simulator == 'neuron':
@@ -118,49 +118,66 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
     # I thought it wouldn't hurt to do the NMODL building in parallel as well
     num_procs = len(build_dirs)
     build_pool = mp.Pool(processes=num_procs)
-    build_pool.apply_async(build_mech_dir, zip(list(build_dirs), [args.build] * num_procs,
+    build_pool.map(build_mech_dir, zip(list(build_dirs), [args.build] * num_procs,
                                                                  [args.silent_build] * num_procs))
-    del build_pool
+    build_pool.close()
+    build_pool.join()
     if args.reference:
-        test_names = ('reference', 'new')    
+        test_names = ('new', 'ref', 'diff')    
         # Encapsulate the simulator code within a separate process so that mechanisms can be loaded with 
         # the same name can be loaded into the environment without conflicts. Since we need separate 
         # processes, we might as well do it in parallel.
         simulate_pool = mp.Pool(processes=2)
-#        stdout_lock = mp.Lock()
-        stdout_lock = None
-        old_rec, new_rec = simulate_pool.map(run_test, zip(test_names, mechs_list, load_dirs_list, 
-                                                   args.simulator,  [cell_params] * 2, [inject] * 2, 
+        mp_manager = mp.Manager()
+        stdout_lock = mp_manager.Lock()
+#        stdout_lock = None
+        new_rec, ref_rec = simulate_pool.map(run_test, zip(test_names, mechs_list, load_dirs_list, 
+                                                   simulators,  [sim_params] * 2, [inject] * 2, 
                                                    [args.save_prefix] * 2, [stdout_lock] * 2))
-        del simulate_pool
+        build_pool.close()
+        build_pool.join()
         # Calculate the difference between the two recordings, old interpolating the new recording to the times of the old.
-        diff_voltages = old_rec.voltages - np.interp(old_rec.times, new_rec.times, new_rec.voltages)
+        diff_voltages = ref_rec.voltages - np.interp(ref_rec.times, new_rec.times, new_rec.voltages)
         if args.save_prefix:
-            save_recording(old_rec.times, diff_voltages, args.save_prefix, 'diff')
-        recs = (old_rec, new_rec, Recording(old_rec.times, diff_voltages))
-        test_names += ('difference',)
+            save_recording(ref_rec.times, diff_voltages, args.save_prefix, test_names[2])
+        recs = (new_rec, ref_rec, Recording(ref_rec.times, diff_voltages))
     else:
         test_names = ('test',)
-        recs = (run_test(test_names[0], mechs_list[0], load_dirs_list[0], args.simulator[0], 
-                                                            cell_params, inject, args.save_prefix),)
+        recs = (run_test((test_names[0], mechs_list[0], load_dirs_list[0], args.simulator[0], 
+                                                    sim_params, inject, args.save_prefix, None,)),)
     # Set up plot titles
-    plot_titles = []
-    plot_titles.append((test_names[0] + " mech: " + ','.join(mechs_list[0]) + ", sim: " + simulators[0]))
-    if args.reference:    
-        plot_titles.append((test_names[1] + " mech: " + ','.join(mechs_list[1]) + ", sim: " + simulators[1]))
-        plot_titles.append('Difference')
     if not no_plot:
-        for rec, plot_title in enumerate(zip(recs, plot_titles)):
-            plt.plot(rec.times, rec.voltages)
-            plt.title(plot_title)
+        main_fig = plt.figure() #@UnusedVariable
+        # Register the 'q' -> close shortcut key with the current figure                
+        main_cid = main_fig.canvas.mpl_connect('key_press_event', quit_figure) #@UnusedVariable        
+        plt.plot(recs[0].times, recs[0].voltages)
+        plot_title = test_names[0].capitalize()+ ' [' + simulators[0].upper() + ']: {' + ', '.join(mechs_list[0]) + '}'
+        if args.reference:
+            plt.plot(recs[1].times, recs[1].voltages)        
+            plot_title += ' -- Reference [' + simulators[1].upper() + ']: {' + ', '.join(mechs_list[1]) + '}'
+        plt.title(plot_title)
+        plt.xlabel('Time (ms)')
+        plt.ylabel('Membrane voltage (mV)')
+        plt.legend(('New', 'Reference'))
+        if args.reference:
+            diff_fig = plt.figure() 
+            # Register the 'q' -> close shortcut key with the current figure                
+            diff_cid = diff_fig.canvas.mpl_connect('key_press_event', quit_figure) #@UnusedVariable
+            plt.plot(recs[2].times, recs[2].voltages)
+            plt.title(plot_title + ' - Difference')
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Membrane voltage (mV)')            
         plt.show()
+    print "Finished testing mechanisms."
 
-def build_mech_dir(mech_dirs, build_mode, silent):
+def build_mech_dir(args):
+    mech_dir, build_mode, silent = args
     from ninemlp.utilities.nmodl import build as build_nmodl
-    for mech_dir in mech_dirs:
-        build_nmodl(mech_dir, build_mode=build_mode, silent=silent)
-
-def run_test(test_name, mechs, mech_dirs, simulator_name, cell_params, inject, save_prefix, stdout_lock=None):
+    print "Build mechanisms in '%s' directory" % mech_dir
+    build_nmodl(mech_dir, build_mode=build_mode, silent=silent)
+        
+def run_test(args):    
+    test_name, mechs, mech_dirs, simulator_name, sim_params, inject, save_prefix, stdout_lock = args
     if simulator_name == 'neuron':
         import neuron as simulator #@UnusedImport
         for mech_dir in mech_dirs:
@@ -175,12 +192,12 @@ def run_test(test_name, mechs, mech_dirs, simulator_name, cell_params, inject, s
     else:
         raise Exception('Unrecognised simulator ''%s''' % simulator_name)
     # Create test cell and set properties
-    cell = TestCell(simulator, mechs, cm=cell_params['cm'], Ra=cell_params['Ra'], 
-                                    length=cell_params['length'], diam=cell_params['diam'], 
-                                    init_vars=cell_params['init_var'],verbose=True)
+    cell = TestCell(simulator, mechs, cm=sim_params['cm'], Ra=sim_params['Ra'], 
+                                    length=sim_params['length'], diam=sim_params['diam'], 
+                                    init_vars=sim_params['init_vars'],verbose=True)
     cell.inject_soma_current(inject.current, inject.times)
     # Run the recording and append it to the recordings list
-    rec = cell.simulate(args.end_time, celsius=args.celsius) #@UndefinedVariable
+    rec = cell.simulate(sim_params['end_time'], celsius=sim_params['celsius']) #@UndefinedVariable
     if save_prefix:
         save_recording(rec.times, rec.voltages, save_prefix, test_name)    
     if stdout_lock:
@@ -199,6 +216,12 @@ def save_recording(times, voltages, save_prefix, test_name):
     np.savetxt(save_path, t_v)
     print "\nSaved %s recording to '%s'" % (test_name, save_path)
         
+def quit_figure(event):
+    """
+    Creates a shortcut to close the current window with the key 'q'
+    """
+    if event.key == 'q':
+        plt.close(event.canvas.figure)
 #===================================================================================================
 # Neuron Test cell class
 #===================================================================================================
@@ -237,8 +260,6 @@ class NeuronTestCell(object):
         # Set initialised to true (needs to be set to False again in derived base classes)
         self._devices = []
         self._initialised = True
-        if self.verbose:
-            self.h.psection(sec=self.soma)
         
     def inject_soma_current(self, amplitudes, times):
         """
