@@ -57,7 +57,7 @@ def run(cmd):
     try:
         output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        output = e.output
+        output = 'Return Code: {0}\n{1}'.format(e.returncode, e.output)
     print output
     
 def clear_output_dir(*files):
@@ -66,4 +66,7 @@ def clear_output_dir(*files):
             os.remove(os.path.join(PROJECT_DIR, 'output', f))
         except OSError:
             pass
-    print os.listdir(os.path.join(PROJECT_DIR, 'output'))
+    print "Remaining files in output directory"
+    print "-----------------------------------"
+    print '\n'.join(os.listdir(os.path.join(PROJECT_DIR, 'output')))
+    print "-----------------------------------"    
