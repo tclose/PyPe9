@@ -49,6 +49,7 @@ def main(arguments):
     parser.add_argument('--save_prefix', type=str, help='location to (optionally) save the recording')
     parser.add_argument('--no_plot', action='store_true', help='Don''t plot the simulations')
     parser.add_argument('--step', nargs=2, type=float, help='Use a step input current rather than uniformly distributed current')
+    parser.add_argument('--no_input', action='store_true', help='Switch off the input into the cell')
     parser.add_argument('--mean_input', type=float, default=0.01, help="Mean input value")
     parser.add_argument('--stdev_input', type=float, default=0.0025, help="Standard deviation of the input value")
     parser.add_argument('--start_time', type=float, default=3000, help='stimulation start time')
@@ -81,23 +82,26 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
         else:
             raise Exception('The number of specified simulators (%d) doesn''t match the number of tests (1)' % len(args.simulator))            
     # Set up common input stimulation
-    if args.step:
-        input_shape = 'step'
+    if args.no_input:
+        inject = None
     else:
-        input_shape = 'random'
-    time_range = args.end_time - args.start_time
-    # Calculate the number of time steps for the input vector
-    num_time_steps = int(round(time_range / args.dt))
-    # Create the input current and times vectors
-    if args.step:
-        num_down_steps = int(math.floor(args.step[1] / args.dt))
-        num_up_steps = num_time_steps - num_down_steps
-        current = np.append(np.ones(num_down_steps) * 0.0, np.ones(num_up_steps) * args.step[0])
-    else:
-        current = np.random.normal(args.mean_input, args.stdev_input, num_time_steps)
-    times = np.arange(args.start_time, args.end_time, args.dt)        
-    inject = Inject(times, current)
-    print "Recording activity for %s injected current" % input_shape
+        if args.step:
+            input_shape = 'step'
+        else:
+            input_shape = 'random'
+        time_range = args.end_time - args.start_time
+        # Calculate the number of time steps for the input vector
+        num_time_steps = int(round(time_range / args.dt))
+        # Create the input current and times vectors
+        if args.step:
+            num_down_steps = int(math.floor(args.step[1] / args.dt))
+            num_up_steps = num_time_steps - num_down_steps
+            current = np.append(np.ones(num_down_steps) * 0.0, np.ones(num_up_steps) * args.step[0])
+        else:
+            current = np.random.normal(args.mean_input, args.stdev_input, num_time_steps)
+        times = np.arange(args.start_time, args.end_time, args.dt)        
+        inject = Inject(times, current)
+        print "Recording activity for %s injected current" % input_shape
     mechs_list = []
     load_dirs_list = []
     build_dirs = set()
@@ -199,7 +203,8 @@ def run_test(args):
     cell = TestCell(simulator, mechs, cm=sim_params['cm'], Ra=sim_params['Ra'], 
                                     length=sim_params['length'], diam=sim_params['diam'], 
                                     init_vars=sim_params['init_vars'],verbose=True, no_tables=no_tables)
-    cell.inject_soma_current(inject.current, inject.times)
+    if inject:
+        cell.inject_soma_current(inject.current, inject.times)
     # Run the recording and append it to the recordings list
     print "Starting simulation of '%s'..." % test_name    
     rec = cell.simulate(sim_params['end_time'], celsius=sim_params['celsius']) #@UndefinedVariable
