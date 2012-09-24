@@ -40,7 +40,7 @@ def main(arguments):
                                                     arbitrary current injection. NB: The simulated activity from the \
                                                     second mechanism will be interpolated to the time-scale of the first.')
     parser.add_argument('mech_paths', nargs='+', metavar='MECH_NAMES', help="Mechanisms names to include in the test cell")
-    parser.add_argument('-r', '--reference', nargs='+', default=[], metavar='REF_MECH_NAMES', help="Mechanisms names to include in the reference test cell")
+    parser.add_argument('-r', '--reference', nargs='+', default=[], metavar='MECH_NAME', help="Mechanisms names to include in the reference test cell")
     parser.add_argument('--celsius', type=float, default=30.0, help='The temperature at which to run the simulations')
     parser.add_argument('--cm', type=float, default=1.0, help='Membrane capacitance (default: %(default)s)')
     parser.add_argument('--Ra', type=float, default=100, help='Axial resistance (default: %(default)s)')
@@ -54,17 +54,17 @@ def main(arguments):
     parser.add_argument('--stdev_input', type=float, default=0.0025, help="Standard deviation of the input value")
     parser.add_argument('--start_input', type=float, default=1000, help='stimulation start time')
     parser.add_argument('--end_time', type=float, default=2000, help='stimulation end time')
-    parser.add_argument('--dt', type=float, default=1, help='time step between input changes')
+    parser.add_argument('--input_dt', metavar='TIMESTEP', type=float, default=1, help='time step between input changes')
     parser.add_argument('--build', type=str, default='lazy', help='The build mode for the NMODL directories')
-    parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR [REF_SIMULATOR]', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
+    parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
     parser.add_argument('--no_tables', action='store_true', help='Turn off tables')
-    parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like')
+    parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like, eg. --init_var ek "-84.69" (NB: don''t forget to quote negative numbers)')
     args = parser.parse_args(arguments)
     no_plot = args.no_plot or not loaded_matplotlib
-    if no_plot and not args.save_prefix:
+    if no_plot and not args.save_prefix and args.build != 'compile_only':
         raise Exception('If the ''--no_plot'' option is given (or matplotlib could not be loaded) \
-you probably want to specify a save location (''--save_prefix'') because otherwise what is the point?')
+you probably want to specify a save location (''--save_prefix'') because otherwise what is the point unless you are just compiling?')
     # Put all the simulation params in a dict for convenience
     sim_params = {'cm': args.cm, 'Ra': args.Ra, 'celsius': args.celsius, 'length': args.length,
                                      'end_time': args.end_time, 'diam': args.diam, 'init_vars': args.init_var}
@@ -90,14 +90,14 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
             print "WARNING!! Input start ({0}) is after end of simulation ({1})".format(args.start_input, args.end_time)
             inject = None
         else:
-            num_time_steps = int(round(stim_range / args.dt))
+            num_time_steps = int(round(stim_range / args.input_dt))
             # Create the input current and times vectors
             if args.step:
                 current = np.ones(num_time_steps) * args.step
             else:
                 # Calculate the number of time steps for the input vector               
                 current = np.random.normal(args.mean_input, args.stdev_input, num_time_steps)
-            times = np.arange(args.start_input, args.end_time, args.dt)
+            times = np.arange(args.start_input, args.end_time, args.input_dt)
             inject = Inject(times, current)
 
     if inject:            
@@ -131,6 +131,9 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
                                                                      [args.silent_build] * num_procs))
         build_pool.close()
         build_pool.join()
+    if args.build == 'compile_only':
+        print "Finished compiling, now exiting because '--build' was set to 'compile_only'"
+        sys.exit(0)
     if args.reference:
         test_names = ('new', 'ref', 'diff')
         print 'Mechanisms inserted into ''%s'': ' % test_names[0] + ', '.join(mechs_list[0])
@@ -146,8 +149,8 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
                                                    simulators, [sim_params] * 2, [inject] * 2,
                                                    [args.save_prefix] * 2, [stdout_lock] * 2,
                                                    [args.no_tables] * 2))
-        build_pool.close()
-        build_pool.join()
+        simulate_pool.close()
+        simulate_pool.join()
         # Calculate the difference between the two recordings, old interpolating the new recording to the times of the old.
         diff_voltages = ref_rec.voltages - np.interp(ref_rec.times, new_rec.times, new_rec.voltages)
         if args.save_prefix:
