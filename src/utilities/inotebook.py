@@ -47,7 +47,7 @@ def diff(ref_file, new_file):
     for line in context_diff(ref_file_contents, new_file_contents):
         sys.stdout.write(line)
         
-def run(cmd):
+def bash(cmd, silent=False):
     """
     Runs a command in subprocess in a bash shell and returns the output along with the stderr even
     if there is an exception thrown
@@ -58,7 +58,9 @@ def run(cmd):
         output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         output = 'Return Code: {0}\n{1}'.format(e.returncode, e.output)
-    print output
+        silent = False
+    if not silent:
+        print output
     
 def clear_output_dir(*files):
     for f in files:

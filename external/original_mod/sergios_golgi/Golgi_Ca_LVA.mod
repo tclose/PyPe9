@@ -127,15 +127,20 @@ PROCEDURE evaluate_fct(v(mV)) {
 :
 :   Time constants were obtained from J. Huguenard
 :
-        phi_m = 5.0 ^ ((celsius-24)/10)
-        phi_h = 3.0 ^ ((celsius-24)/10)
+    phi_m = 5.0 ^ ((celsius-24)/10)
+    phi_h = 3.0 ^ ((celsius-24)/10)
+
+    tau_m = ( C_tau_m + A_tau_m / ( exp((v+shift - v0_tau_m1)/ k_tau_m1) + exp((v+shift - v0_tau_m2)/k_tau_m2) ) ) / phi_m
+    tau_h = ( C_tau_h + A_tau_h / ( exp((v+shift - v0_tau_h1)/k_tau_h1) + exp((v+shift - v0_tau_h2)/k_tau_h2) ) ) / phi_h
+
+    m_inf = 1.0 / ( 1 + exp((v + shift - v0_m_inf)/k_m_inf) )
+    h_inf = 1.0 / ( 1 + exp((v + shift - v0_h_inf)/k_h_inf) )
+
+
 	
-	TABLE m_inf, tau_m, h_inf, tau_h
-	DEPEND shift, phi_m, phi_h FROM -100 TO 30 WITH 13000 
-        m_inf = 1.0 / ( 1 + exp((v + shift - v0_m_inf)/k_m_inf) )
-        h_inf = 1.0 / ( 1 + exp((v + shift - v0_h_inf)/k_h_inf) )
+:	TABLE m_inf, tau_m, h_inf, tau_h
+:	DEPEND shift, phi_m, phi_h FROM -100 TO 30 WITH 13000 
 	
-        tau_m = ( C_tau_m + A_tau_m / ( exp((v+shift - v0_tau_m1)/ k_tau_m1) + exp((v+shift - v0_tau_m2)/k_tau_m2) ) ) / phi_m
-        tau_h = ( C_tau_h + A_tau_h / ( exp((v+shift - v0_tau_h1)/k_tau_h1) + exp((v+shift - v0_tau_h2)/k_tau_h2) ) ) / phi_h
+
 }
 UNITSON
