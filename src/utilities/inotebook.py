@@ -47,7 +47,7 @@ def diff(ref_file, new_file):
     for line in context_diff(ref_file_contents, new_file_contents):
         sys.stdout.write(line)
         
-def bash(cmd, silent=False):
+def bash(cmd, silent=False, save_output=None):
     """
     Runs a command in subprocess in a bash shell and returns the output along with the stderr even
     if there is an exception thrown
@@ -61,13 +61,23 @@ def bash(cmd, silent=False):
         silent = False
     if not silent:
         print output
+    if save_output:
+        f = open(save_output,'w')
+        f.write(output)
+        f.close()
     
 def clear_output_dir(*files):
+    if not len(files):
+        print "No files provided, clearing all files in output directory"
+        files = os.listdir('output')
     for f in files:
         try:
             os.remove(os.path.join(PROJECT_DIR, 'output', f))
+            print "Removed {file} from output directory".format(file=f)
         except OSError:
             pass
+    print ""
+    print "-----------------------------------"        
     print "Remaining files in output directory"
     print "-----------------------------------"
     print '\n'.join(os.listdir(os.path.join(PROJECT_DIR, 'output')))

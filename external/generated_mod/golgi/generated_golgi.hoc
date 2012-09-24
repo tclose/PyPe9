@@ -142,8 +142,8 @@ run()
 
 objref output_file
 output_file = new File()
-printf("Writing output to 'output/single_generated_golgi_hoc.dat'")
-output_file.wopen("output/single_generated_golgi_hoc.dat")
+printf("Writing output to 'output/generated_golgi_hoc.dat'")
+output_file.wopen("output/generated_golgi_hoc.dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }
