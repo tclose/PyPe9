@@ -82,3 +82,6 @@ def clear_output_dir(*files):
     print "-----------------------------------"
     print '\n'.join(os.listdir(os.path.join(PROJECT_DIR, 'output')))
     print "-----------------------------------"    
+    
+if __name__ == "__main__":
+    bash(' '.join(sys.argv[1:]))
