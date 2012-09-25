@@ -54,7 +54,8 @@ def main(arguments):
     parser.add_argument('--stdev_input', type=float, default=0.0025, help="Standard deviation of the input value")
     parser.add_argument('--start_input', type=float, default=1000, help='stimulation start time')
     parser.add_argument('--end_time', type=float, default=2000, help='stimulation end time')
-    parser.add_argument('--input_dt', metavar='TIMESTEP', type=float, default=1, help='time step between input changes')
+    parser.add_argument('--input_dt', metavar='INPUT_TIMESTEP', type=float, default=1, help='time step between input changes')
+    parser.add_argument('--timestep', metavar='TIMESTEP', type=float, default=0.025, help='Timestep for the numerical simulation')
     parser.add_argument('--build', type=str, default='lazy', help='The build mode for the NMODL directories')
     parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
@@ -160,7 +161,7 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
         test_names = ('test',)
         print 'Mechanisms inserted into ''%s'': ' % test_names[0] + ', '.join(mechs_list[0])
         recs = (run_test((test_names[0], mechs_list[0], load_dirs_list[0], args.simulator[0],
-                                    sim_params, inject, args.save_prefix, None, args.no_tables)),)
+                                    sim_params, inject, args.save_prefix, None, args.no_tables, args.timestep)),)
     # Set up plot titles
     if not no_plot:
         main_fig = plt.figure() #@UnusedVariable
@@ -193,7 +194,7 @@ def build_mech_dir(args):
     build_nmodl(mech_dir, build_mode=build_mode, silent=silent)
 
 def run_test(args):
-    test_name, mechs, mech_dirs, simulator_name, sim_params, inject, save_prefix, stdout_lock, no_tables = args
+    test_name, mechs, mech_dirs, simulator_name, sim_params, inject, save_prefix, stdout_lock, no_tables, timestep = args
     if simulator_name == 'neuron':
         import neuron as simulator #@UnusedImport
         for mech_dir in mech_dirs:
@@ -217,7 +218,7 @@ def run_test(args):
         cell.inject_soma_current(inject.current, inject.times)
     # Run the recording and append it to the recordings list
     print "Starting simulation of '%s'..." % test_name
-    rec = cell.simulate(sim_params['end_time'], celsius=sim_params['celsius']) #@UndefinedVariable
+    rec = cell.simulate(sim_params['end_time'], celsius=sim_params['celsius'], timestep=timestep) #@UndefinedVariable
     print "Finished simulation of '%s'" % test_name
     if save_prefix:
         save_recording(rec.times, rec.voltages, save_prefix, test_name)
@@ -339,7 +340,7 @@ class NeuronTestCell(object):
         #'d_lambda' of the length constant. 
         self.soma.nseg = int((self.soma.L / sec_segment_length + 0.9) / 2) * 2 + 1
 
-    def simulate(self, run_time, celsius=37, initial_v= -65):
+    def simulate(self, run_time, celsius=37, initial_v= -65, timestep= 0.025):
         """
         Runs the simulation and records the specified locations, returning them in numpy arrays contained within a 
         named Tuple ('Recording') along with legends to be used for plotting. Rows of the np.arrays correspond to 
@@ -362,6 +363,7 @@ class NeuronTestCell(object):
         volt_rec.record(self.soma(0.5)._ref_v)
         # Set up recordings from the list of sections to record voltages from
         self.h.celsius = celsius
+        self.h.dt = timestep
         print "Simulating at %fC" % celsius
         # Initialises the neuron environment 
         self.h.finitialize(initial_v)

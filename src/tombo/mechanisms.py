@@ -34,6 +34,7 @@ parser.add_argument('--stdev_input', type=float, default=0.0025, help="Standard 
 parser.add_argument('--start_input', type=float, default=1000, help='stimulation start time')
 parser.add_argument('--end_time', type=float, default=2000, help='stimulation end time')
 parser.add_argument('--input_dt', metavar='INPUT_TIMESTEP', type=float, default=1, help='time step between input changes')
+parser.add_argument('--timestep', metavar='TIMESTEP', type=float, default=0.025, help='The timestep of the numerical simulation')
 parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
 parser.add_argument('--no_tables', action='store_true', help='Turn off tables')
 parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like, eg. --init_var ek "-84.69" (NB: don''t forget to quote negative numbers)')
@@ -56,24 +57,26 @@ cmd_line = \
 "time mpirun python src/test/{script_name}.py {mech_paths} --celsius {celsius} \
 --cm {cm} --Ra {Ra} --length {length} --diam {diam} --save_prefix {work_dir}/output/traces --no_plot \
 --mean_input {mean_input} --stdev_input {stdev_input} --start_input {start_input} --end_time {end_time} \
---input_dt {input_dt} --build require --simulator {simulator}".format(script_name=SCRIPT_NAME,
-                                                            mech_paths=' '.join(args.mech_paths),
-                                                            work_dir=work_dir,
-                                                            celsius=args.celsius,
-                                                            cm=args.cm,
-                                                            Ra=args.Ra,
-                                                            length=args.length,
-                                                            diam=args.diam,
-                                                            save_prefix=args.save_prefix,
-                                                            no_plot=args.no_plot,
-                                                            step=args.step,
-                                                            no_input=args.no_input,
-                                                            mean_input=args.mean_input,
-                                                            stdev_input=args.stdev_input,
-                                                            start_input=args.start_input,
-                                                            end_time=args.end_time,
-                                                            input_dt=args.input_dt,
-                                                            simulator=' '.join(args.simulator))
+--input_dt {input_dt} --build require \
+--simulator {simulator} --timestep {timestep}".format(script_name=SCRIPT_NAME,
+                                                        mech_paths=' '.join(args.mech_paths),
+                                                        work_dir=work_dir,
+                                                        celsius=args.celsius,
+                                                        cm=args.cm,
+                                                        Ra=args.Ra,
+                                                        length=args.length,
+                                                        diam=args.diam,
+                                                        save_prefix=args.save_prefix,
+                                                        no_plot=args.no_plot,
+                                                        step=args.step,
+                                                        no_input=args.no_input,
+                                                        mean_input=args.mean_input,
+                                                        stdev_input=args.stdev_input,
+                                                        start_input=args.start_input,
+                                                        end_time=args.end_time,
+                                                        input_dt=args.input_dt,
+                                                        simulator=' '.join(args.simulator),
+                                                        timestep=args.timestep)
 if args.reference:
     cmd_line += ' --reference ' + ' '.join(args.reference) 
 for init_var in args.init_var:
