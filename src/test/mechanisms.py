@@ -149,7 +149,8 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
         new_rec, ref_rec = simulate_pool.map(run_test, zip(test_names, mechs_list, load_dirs_list,
                                                    simulators, [sim_params] * 2, [inject] * 2,
                                                    [args.save_prefix] * 2, [stdout_lock] * 2,
-                                                   [args.no_tables] * 2))
+                                                   [args.no_tables] * 2,
+                                                   [args.timestep] * 2))
         simulate_pool.close()
         simulate_pool.join()
         # Calculate the difference between the two recordings, old interpolating the new recording to the times of the old.
