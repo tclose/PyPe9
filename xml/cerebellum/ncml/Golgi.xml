@@ -416,8 +416,7 @@
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="ca" value="129.33" units="mV" segmentGroup="soma_group"/>
                 <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma_group"/>
-                <reversalPotential species="k" value="-84.69" units="mV" segmentGroup="soma_group"/>                
-                <!-- FIXME: Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->   
+                <reversalPotential species="k" value="-84.69" units="mV" segmentGroup="soma_group"/>
             </membraneProperties>
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
@@ -442,6 +441,11 @@
                 </conductanceSynapse>
                  <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />
             </synapses>            
+            <initalConditions>
+                <membranePotential value='-65 mV'/>
+                <ionConcentration species="ca" value="50e-6" />
+                <ionConcentration species="ca2" value="50e-6" />                    
+            </initalConditions>                          
         </biophysicalProperties>
     </cell>
 </neuroml>
