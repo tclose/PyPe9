@@ -51,12 +51,12 @@ soma {
     ena=87.39
     ek=-84.69
       
-    SpikeTrain = new Vector()
-    netcon = new NetCon(&v(0.5),nil)
-    netcon.threshold=-20
-    netcon.record(SpikeTrain)
-    
-    RT_Vm.record(&v(0.5))
+//    SpikeTrain = new Vector()
+//    netcon = new NetCon(&v(0.5),nil)
+//    netcon.threshold=-20
+//    netcon.record(SpikeTrain)
+//    
+//    RT_Vm.record(&v(0.5))
     
 }
     
