@@ -38,6 +38,7 @@ parser.add_argument('--timestep', metavar='TIMESTEP', type=float, default=0.025,
 parser.add_argument('--simulator', type=str, nargs='+', metavar='SIMULATOR', default=['neuron'], help='Sets the simulator for the new nmodl path (either ''neuron'' or ''nest'', ''default %(default)s''')
 parser.add_argument('--no_tables', action='store_true', help='Turn off tables')
 parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like, eg. --init_var ek "-84.69" (NB: don''t forget to quote negative numbers)')
+parser.add_argument('--init_mech_var', nargs=3, metavar=('MECH_NAME', 'VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise mechanism variables, calcium concentrations and the like, eg. --init_var ek "-84.69" (NB: don''t forget to quote negative numbers)')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to(default: %(default)s)')
 args = parser.parse_args()
@@ -79,8 +80,10 @@ cmd_line = \
                                                         timestep=args.timestep)
 if args.reference:
     cmd_line += ' --reference ' + ' '.join(args.reference) 
-for init_var in args.init_var:
-    cmd_line += ' --init_var ' + init_var[0] + ' ' + init_var[1] 
+for var_name, value in args.init_var:
+    cmd_line += ' --init_var ' + var_name + ' ' + value
+for var_name, value in args.init_mech_var:
+    cmd_line += ' --init_mech_var ' + var_name + ' ' + value
 if args.step:
     cmd_line += ' --step ' + args.step
 if args.no_input:

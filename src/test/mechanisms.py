@@ -61,6 +61,7 @@ def main(arguments):
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
     parser.add_argument('--no_tables', action='store_true', help='Turn off tables')
     parser.add_argument('--init_var', nargs=2, metavar=('VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise reversal potentials and the like, eg. --init_var ek "-84.69" (NB: don''t forget to quote negative numbers)')
+    parser.add_argument('--init_mech_var', nargs=3, metavar=('MECH_NAME', 'VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise mechanism variables, calcium concentrations and the like, eg. --init_var ek "-84.69" (NB: don''t forget to quote negative numbers)')
     args = parser.parse_args(arguments)
     no_plot = args.no_plot or not loaded_matplotlib
     if no_plot and not args.save_prefix and args.build != 'compile_only':
@@ -68,7 +69,9 @@ def main(arguments):
 you probably want to specify a save location (''--save_prefix'') because otherwise what is the point unless you are just compiling?')
     # Put all the simulation params in a dict for convenience
     sim_params = {'cm': args.cm, 'Ra': args.Ra, 'celsius': args.celsius, 'length': args.length,
-                                     'end_time': args.end_time, 'diam': args.diam, 'init_vars': args.init_var}
+                  'end_time': args.end_time, 'diam': args.diam, 'init_vars': args.init_var,
+                  'timestep': args.timestep, 'init_mech_vars': args.init_mech_var, 
+                  'no_tables': args.no_tables}
     if args.reference:
         #Duplicate the simulator for both tests
         if len(args.simulator) == 1:
@@ -106,6 +109,7 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
                                                 'step' if args.step else 'Gaussian-white-noise', args.start_input)
     else:
         print "No current injected"
+    sim_params['inject'] = inject
     mechs_list = []
     load_dirs_list = []
     build_dirs = set()
@@ -147,10 +151,8 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
         stdout_lock = mp_manager.Lock()
 #        stdout_lock = None
         new_rec, ref_rec = simulate_pool.map(run_test, zip(test_names, mechs_list, load_dirs_list,
-                                                   simulators, [sim_params] * 2, [inject] * 2,
-                                                   [args.save_prefix] * 2, [stdout_lock] * 2,
-                                                   [args.no_tables] * 2,
-                                                   [args.timestep] * 2))
+                                                   simulators, [sim_params] * 2,
+                                                   [args.save_prefix] * 2, [stdout_lock] * 2))
         simulate_pool.close()
         simulate_pool.join()
         # Calculate the difference between the two recordings, old interpolating the new recording to the times of the old.
@@ -162,7 +164,7 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
         test_names = ('test',)
         print 'Mechanisms inserted into ''%s'': ' % test_names[0] + ', '.join(mechs_list[0])
         recs = (run_test((test_names[0], mechs_list[0], load_dirs_list[0], args.simulator[0],
-                                    sim_params, inject, args.save_prefix, None, args.no_tables, args.timestep)),)
+                                    sim_params, args.save_prefix, None)),)
     # Set up plot titles
     if not no_plot:
         main_fig = plt.figure() #@UnusedVariable
@@ -195,7 +197,8 @@ def build_mech_dir(args):
     build_nmodl(mech_dir, build_mode=build_mode, silent=silent)
 
 def run_test(args):
-    test_name, mechs, mech_dirs, simulator_name, sim_params, inject, save_prefix, stdout_lock, no_tables, timestep = args
+    assert(len(args) == 7)
+    test_name, mechs, mech_dirs, simulator_name, sim_params, save_prefix, stdout_lock = args
     if simulator_name == 'neuron':
         import neuron as simulator #@UnusedImport
         for mech_dir in mech_dirs:
@@ -214,12 +217,16 @@ def run_test(args):
     print "Creating %s cell..." % test_name
     cell = TestCell(simulator, mechs, cm=sim_params['cm'], Ra=sim_params['Ra'],
                                     length=sim_params['length'], diam=sim_params['diam'],
-                                    init_vars=sim_params['init_vars'], verbose=True, no_tables=no_tables)
-    if inject:
-        cell.inject_soma_current(inject.current, inject.times)
+                                    init_vars=sim_params['init_vars'], 
+                                    init_mech_vars=sim_params['init_mech_vars'],
+                                    verbose=True, 
+                                    no_tables=sim_params['no_tables'])
+    if sim_params['inject']:
+        cell.inject_soma_current(sim_params['inject'].current, sim_params['inject'].times)
     # Run the recording and append it to the recordings list
     print "Starting simulation of '%s'..." % test_name
-    rec = cell.simulate(sim_params['end_time'], celsius=sim_params['celsius'], timestep=timestep) #@UndefinedVariable
+    rec = cell.simulate(sim_params['end_time'], celsius=sim_params['celsius'], #@UndefinedVariable
+                                                timestep=sim_params['timestep']) 
     print "Finished simulation of '%s'" % test_name
     if save_prefix:
         save_recording(rec.times, rec.voltages, save_prefix, test_name)
@@ -252,7 +259,7 @@ def quit_figure(event):
 class NeuronTestCell(object):
 
     def __init__(self, neuron_module, mech_names, cm, Ra, length, diam, segment_length=None,
-                                                    verbose=False, init_vars=[], no_tables=False):
+                                    verbose=False, init_vars=[], init_mech_vars=[], no_tables=False):
         """
         Initialises the _BaseCell cell for use in testing general functions, should not be called by derived functions _base_init()
         should be used instead.
@@ -283,8 +290,15 @@ class NeuronTestCell(object):
                 except:
                     print "Could not disable tables in %s mechanism" % mech_name
         #Initialise vars
-        for init_var in init_vars:
-            setattr(self.soma, init_var[0], float(init_var[1]))
+        for var_name, value in init_vars:
+            setattr(self.soma, var_name, float(value))
+            print "{var_name} = {value}".format(var_name=var_name, value=value)
+        for mech_name, var_name, value in init_mech_vars:       
+            hoc_str = '{var_name}_{mech_name} = {value}'.format(mech_name=mech_name,
+                                                             var_name=var_name,
+                                                             value=value)
+            print hoc_str
+            self.h(hoc_str, sec=self.soma)
         # Set initialised to true (needs to be set to False again in derived base classes)
         self._devices = []
         self._initialised = True
