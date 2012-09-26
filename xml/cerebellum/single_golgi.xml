@@ -4,6 +4,6 @@
         <simulationParams>
             <temperature value="23" />
         </simulationParams>
-        <population id="Golgis" cell="Golgi" size="1"/>
+        <population id="Golgis" cell="TestGolgi" size="1"/>
     </network>
 </nineml>
