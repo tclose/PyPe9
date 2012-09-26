@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
 
 NEURON {
-        SUFFIX na_conc
+        SUFFIX NaConc
         USEION na READ ina, nao, nai WRITE nai, nao
         RANGE d, beta, nai0, nao0
         THREADSAFE
