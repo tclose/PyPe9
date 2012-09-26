@@ -34,6 +34,7 @@ def main(arguments):
     parser.add_argument('--min_delay', type=float, default=0.05, help='The minimum synaptic delay in the network')
     parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
     parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection. If TYPE is ''step'' ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' ARG1=mean and ARG2=stdev', metavar=('TYPE', 'ARG1', 'ARG2'))
+    parser.add_argument('--print_all', action='store_true', help='Prints details for all sections instead of just soma')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
     args = parser.parse_args(arguments)
     
@@ -58,9 +59,13 @@ def main(arguments):
     
     # Get population and print the soma section of the single cell.
     pop = net.all_populations()[0]
-    soma = pop[0]._cell.soma
-    h.psection(sec=soma)
-    
+    cell = pop[0]._cell
+    soma = cell.soma
+    if args.print_all:
+        for seg in cell.get_segments():
+            h.psection(sec=seg)
+    else:
+        h.psection(sec=soma)
     # Create the input current and times vectors
     if args.inject:
         inject_type = args.inject[0]
