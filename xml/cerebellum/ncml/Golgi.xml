@@ -132,7 +132,7 @@
                 <distal x="0" y="113.0" z="13.5" diameter="3" />
             </segment>
             <segment id="axon_0">
-                <parent segment="soma" />
+                <parent segment="soma" fractionAlong="0.5" />
                 <distal x="0.0" y="-12.0" z="13.5" diameter="2.4" />
             </segment>
             <segment id="axon_1">
