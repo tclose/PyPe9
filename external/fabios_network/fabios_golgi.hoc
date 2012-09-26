@@ -9,7 +9,7 @@ Modified from :
 
 
 ********************************************/
-nrn_load_dll("/home/tclose/kbrain/external/original_mod/golgi/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain/external/fabios_network/x86_64/.libs/libnrnmech.so")
 
 create soma
 create axon
@@ -126,9 +126,9 @@ soma {
   synAMPA2.e=0     // mV reversal potential (Maex)
   
   //counting spikes
-  spikecount=new APCount(0.5)
-  spikecount.thresh=-20
-  spikecount.record(spiketimes)
+//  spikecount=new APCount(0.5)
+//  spikecount.thresh=-20
+//  spikecount.record(spiketimes)
   
   //Saving Vm
   //voltagem.record(&v(0.5))

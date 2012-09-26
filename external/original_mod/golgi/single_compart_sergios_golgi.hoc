@@ -1,5 +1,5 @@
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
-nrn_load_dll("/home/tclose/kbrain/external/original_mod/sergios_golgi/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain/external/original_mod/golgi/x86_64/.libs/libnrnmech.so")
 
 objref SpikeTrain, netcon, nil
 objref exc[78], inh[27], synapses
