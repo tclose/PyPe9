@@ -40,13 +40,13 @@ soma {
     usetable_Golgi_Na = 0
     usetable_Golgi_NaP = 0
     
-//    cai0_ca_ion = 50e-6
-//    ca2i0_ca2_ion = cai0_ca_ion
-//    cai = cai0_ca_ion
-//    ca2i = cai
-//    ca2o = cao
-//    cai0_Golgi_Ca = cai0_ca_ion
-//    ca2i0_Golgi_Ca2 = cai0_ca_ion
+    cai0_ca_ion = 50e-6
+    ca2i0_ca2_ion = cai0_ca_ion
+    cai = cai0_ca_ion
+    ca2i = cai
+    ca2o = cao
+    cai0_Golgi_Ca = cai0_ca_ion
+    ca2i0_Golgi_Ca2 = cai0_ca_ion
     
     ena=87.39
     ek=-84.69
