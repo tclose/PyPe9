@@ -1,33 +1,46 @@
 load_file("nrngui.hoc")
-load_file("mechanisms.hoc")
 load_file("OFF_ON_OFF.ses")
 
+// Load the Golgi cell template
+xopen("Golgi_template.hoc")
+objref Golgi[1]
+Golgi[0] = new GoC()
+
+
 prelength = 1000
-mainlength = 1500
+mainlength = 2000
 
-
-access soma
 
 //**********************************************************************
-proc simulate() { local preDT, mainDT
+proc simulate() { local preDT, mainDT, logsize  localobj logfile, tlog, Vlog, iklog, inalog, icalog, ica2log
     
-mainDT = 0.025
-preDT = 0.025
-
-dt = preDT
-tstop = prelength
-run()
-
-
-if ( stoprun == 1) return
-
-dt = mainDT
-continuerun(prelength + mainlength)
-if ( stoprun == 1) return
-
-for i=0,$o1.size()-1 {
-    $o3.printf("%g %g\n", $o1.x[i], $o2.x[i])
-}
+    mainDT = 0.025
+    preDT = 0.025
+    
+    dt = preDT
+    tstop = prelength
+    run()
+    
+    
+    if ( stoprun == 1) return
+    
+    dt = mainDT
+    continuerun(prelength + mainlength)
+    if ( stoprun == 1) return
+    
+    logfile=$o1
+    tlog=$o2
+    Vlog=$o3
+    iklog=$o4
+    inalog=$o5
+    icalog=$o6
+    ica2log=$o7
+    
+    logsize = tlog.size()
+    
+    for i=0,tlog.size()-1 {
+	logfile.printf("%g %g %g %g %g\n", tlog.x[i], Vlog.x[i], iklog.x[i], inalog.x[i], icalog.x[i], ica2log.x[i])
+    }
 
 }
 
@@ -49,9 +62,26 @@ xpanel()
 
 vec_sizes = (prelength+mainlength)/dt + 1	// recorded traces are all this size
 
+
+objref  iklog
+iklog = new Vector(vec_sizes)
+iklog.record (&Golgi.soma.ik(0.5))
+
+objref  inalog
+inalog = new Vector(vec_sizes)
+inalog.record (&Golgi.soma.ina(0.5))
+
+objref  icalog
+icalog = new Vector(vec_sizes)
+icalog.record (&Golgi.soma.ica(0.5))
+
+objref  ica2log
+ica2log = new Vector(vec_sizes)
+ica2log.record (&Golgi.soma.ica2(0.5))
+
 objref  Vlog
 Vlog = new Vector(vec_sizes)
-Vlog.record (&soma.v(0.5))
+Vlog.record (&Golgi.soma.v(0.5))
 
 objref tlog
 tlog = new Vector(vec_sizes,0)
@@ -61,10 +91,9 @@ objref logfile
 logfile = new File()
 logfile.wopen ( "OFF_ON_OFF.dat" )
 
-simulate(tlog,Vlog,logfile)
+simulate(logfile,tlog,Vlog,iklog,inalog,icalog,ica2log)
 logfile.close()
 
 
-//quit()
+quit()
 
- 
