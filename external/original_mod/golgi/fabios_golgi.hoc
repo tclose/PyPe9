@@ -1,0 +1,202 @@
+/*******Cerebellar Golgi Cell Model **********
+	       
+Modified from : 
+             Sergio M. Solinas, Lia Forti, Elisabetta Cesana, 
+             Jonathan Mapelli, Erik De Schutter and Egidio D`Angelo (2008)
+             Computational reconstruction of pacemaking and intrinsic 
+             electroresponsiveness in cerebellar golgi cells
+             Frontiers in Cellular Neuroscience 2:2
+
+
+********************************************/
+nrn_load_dll("/home/tclose/kbrain/external/original_mod/golgi/x86_64/.libs/libnrnmech.so")
+
+create soma
+create axon
+create elec,seal
+create dend[3]
+
+objref exc[78], inh[27], synapses
+
+objectvar syn
+
+
+//object variable will refer to a list that will hold an arbitrary number of NetCon objects.
+
+
+objectvar synAMPA1,synAMPA2
+
+
+
+x=0
+y=0
+z=0
+
+    
+
+create soma
+soma {
+
+
+ pt3dclear()
+ pt3dadd(x,y,z,10)	//set position of cell
+ pt3dadd(x,y,z+10,10)
+	nseg = 1
+	diam = 27
+	L = 27
+	Ra = 100 
+	celsius = 23
+
+	insert Golgi_lkg
+	
+	insert Golgi_Na
+	insert Golgi_NaR
+	insert Golgi_NaP
+	
+	insert Golgi_Ca_HVA
+	insert Golgi_Ca_LVA
+		
+	insert Golgi_KV
+	insert Golgi_KM
+	insert Golgi_KA
+	
+	insert Golgi_BK
+ 	insert Golgi_SK2
+	
+        insert Golgi_hcn1
+        insert Golgi_hcn2
+
+	insert Golgi_CALC
+	insert Golgi_CALC_ca2
+	
+ 	usetable_Golgi_LVA = 1
+ 	usetable_Golgi_HVA = 1
+ 	usetable_Golgi_KA = 1
+ 	usetable_Golgi_KV = 1
+ 	usetable_Golgi_NaR = 1
+ 	usetable_Golgi_KM = 1
+ 	usetable_Golgi_Na = 1
+ 	usetable_Golgi_NaP = 1
+	
+	cai0_ca_ion = 50e-6
+	ca2i0_ca2_ion = cai0_ca_ion
+	
+	cai = cai0_ca_ion
+	
+	ca2i = cai
+	ca2o = cao
+	
+	cai0_Golgi_CALC = cai0_ca_ion
+	ca2i0_Golgi_CALC_ca2 = cai0_ca_ion
+	
+ 	ena=87.39
+	ek=-84.69
+	
+	insert na_conc
+	nai0_na_ion = 5
+	nai = nai0_na_ion
+	nai0_na_conc = nai0_na_ion
+	beta_na_conc=0.075
+ 
+	insert k_conc
+	ki0_k_ion = 140
+	ki = ki0_k_ion
+	ki0_k_conc = ki0_k_ion
+	beta_k_conc=0.075
+
+	//Ionic Concentrations for a typical Mammalian cell (Johnston and Wu)
+ 	nao_nakpump=145 
+	ko_nakpump=5 
+	Nai_inf_nakpump=5
+	Ki_inf_nakpump=140
+	ATPi_nakpump=5     // 0 mM  
+	
+
+	//nclist=new List()
+
+  //Synapses
+  synAMPA1=new Exp2Syn(0.5) //Adding synapse with rise and decay time
+  synAMPA1.tau1=0.03  // ms rise time (Maex)
+  synAMPA1.tau2=0.5  // ms decay time (Maex)
+  synAMPA1.e=0     // mV reversal potential (Maex)
+  
+  synAMPA2=new Exp2Syn(0.5) //Adding synapse with rise and decay time
+  synAMPA2.tau1=0.03  // ms rise time (Maex)
+  synAMPA2.tau2=0.5  // ms decay time (Maex)
+  synAMPA2.e=0     // mV reversal potential (Maex)
+  
+  //counting spikes
+  spikecount=new APCount(0.5)
+  spikecount.thresh=-20
+  spikecount.record(spiketimes)
+  
+  //Saving Vm
+  //voltagem.record(&v(0.5))
+
+
+}
+    
+create dend[3]
+for i=0,2 {
+	dend[i] {
+	    nseg = 10
+	    diam = 3
+	    L = 113
+	    Ra = 100
+	    celsius = 23
+
+	    insert Golgi_lkg
+
+	}
+	connect dend[i](0), soma(1)	
+}
+    
+    
+//    create axon
+//    axon {
+////	nseg = 100
+//	nseg = 1
+//	diam = 2.4 // gives 90 pF to get to the 145 pF Forti06
+//	L = 1200
+//	Ra = 100
+//	celsius = 23
+
+
+//	insert Golgi_lkg
+//    }
+    
+//    connect axon(0), soma(0)
+  
+
+    
+access soma    
+psection()
+
+printf("ena: %f", ena)
+printf("ek: %f", ek)
+printf("eca: %f", eca)
+printf("celsius: %f", celsius)
+objectvar stim
+ 
+objref rec_v
+rec_v = new Vector()
+rec_v.record (&soma.v(0.5))
+
+objref rec_t
+rec_t = new Vector()
+rec_t.record (&t)
+
+dt = 0.025
+tstop = 2000
+run()
+
+objref output_file
+output_file = new File()
+printf("Writing output to 'output/fabios_golgi_hoc.dat'")
+output_file.wopen("output/fabios_golgi_hoc.dat")
+for (i=0; i < rec_v.size(); i=i+1) {
+  output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
+}
+output_file.close()
+quit()
+
