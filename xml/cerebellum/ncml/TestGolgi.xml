@@ -3,7 +3,7 @@
     xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 ../Schemas/NeuroML2/NeuroML_v2alpha.xsd"
     id="NML2_FullCell">
     <!--<include href="SimpleIonChannel.xml"/> Contains ionChannel NaConductance -->
-    <cell id="Golgi">
+    <cell id="TestGolgi">
         <notes>A model of a Golgi cell</notes>
         <morphology id="GolgiMorph">
             <!-- Segments -->
@@ -411,8 +411,8 @@
                 </ionicCurrent>
                 <ionicCurrent id="Golgi_Ca" segmentGroup="soma_group" />
                 <ionicCurrent id="Golgi_Ca2" segmentGroup="soma_group" />
-                <ionicCurrent id="Na_conc" segmentGroup="soma_group" /> <!-- FIXME: Don't know what the tag for this should be. -->
-                <ionicCurrent id="K_conc" segmentGroup="soma_group" /> <!-- FIXME: Don't know what the tag for this should be. -->
+               <!-- <ionicCurrent id="NaConc" segmentGroup="soma_group" />  FIXME: Don't know what the tag for this should be. -->
+               <!--  <ionicCurrent id="KConc" segmentGroup="soma_group" />  FIXME: Don't know what the tag for this should be. -->
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="ca" value="129.33" units="mV" segmentGroup="soma_group"/>
                 <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma_group"/>
