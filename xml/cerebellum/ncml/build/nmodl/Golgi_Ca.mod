@@ -11,11 +11,11 @@ NEURON {
 
 
 PARAMETER {
+  comp19_beta  =  1.3
+  comp19_cai0  =  5e-05
   comp19_d  =  0.2
   comp19_F  =  96485.0
   comp19_cao  =  2.0
-  comp19_cai0  =  5e-05
-  comp19_beta  =  1.3
 }
 
 
@@ -25,9 +25,9 @@ STATE {
 
 
 ASSIGNED {
-  ica
   cai
   v
+  ica
 }
 
 
