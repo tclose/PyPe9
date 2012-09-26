@@ -125,7 +125,7 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
                 load_dirs.add(mech_dir)
                 if simulator == 'neuron':
                     build_dirs.add(mech_dir)
-        mechs_list.append(mechs)
+        mechs_list.append(sorted(mechs))
         load_dirs_list.append(list(load_dirs))
     # Since I am already doing multiprocessing for the simulations to use a clean process each time
     # I thought it wouldn't hurt to do the NMODL building in parallel as well
