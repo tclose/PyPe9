@@ -14,22 +14,22 @@ soma {
     L = 27
     Ra = 100 // From Roth&Hausser2000
     celsius = 23
-    
+
+    insert Golgi_BK
+    insert Golgi_Ca_HVA
+    insert Golgi_Ca_LVA
+    insert Golgi_CALC
+    insert Golgi_CALC_ca2
+    insert Golgi_hcn1
+    insert Golgi_hcn2
+    insert Golgi_KA
+    insert Golgi_KM
+    insert Golgi_KV
     insert Golgi_lkg
     insert Golgi_Na
     insert Golgi_NaR
     insert Golgi_NaP
-    insert Golgi_Ca_HVA
-    insert Golgi_Ca_LVA
-    insert Golgi_KV
-    insert Golgi_KM
-    insert Golgi_KA
-    insert Golgi_BK
     insert Golgi_SK2
-    insert Golgi_hcn1
-    insert Golgi_hcn2
-    insert Golgi_CALC
-    insert Golgi_CALC_ca2
     
     usetable_Golgi_LVA = 0
     usetable_Golgi_HVA = 0
