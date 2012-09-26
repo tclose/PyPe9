@@ -17,6 +17,7 @@ import argparse
 import ninemlp
 import numpy
 import math
+from operator import itemgetter
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
@@ -62,7 +63,8 @@ def main(arguments):
     cell = pop[0]._cell
     soma = cell.soma
     if args.print_all:
-        for seg in cell.get_segments():
+        for seg_id, seg in sorted(cell.segments.items(), key=itemgetter(0)):
+            print "ID: {0}".format(seg_id)
             h.psection(sec=seg)
     else:
         h.psection(sec=soma)
