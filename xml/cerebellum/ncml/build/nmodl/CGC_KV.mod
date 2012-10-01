@@ -1,8 +1,10 @@
+
+
 TITLE CGC_KV
 
 
 NEURON {
-  RANGE KV_m, comp223_vcbdur, comp223_vchdur, comp223_vcsteps, comp223_vcinc, comp223_vcbase, comp223_vchold, comp63_e, comp63_gbar
+  RANGE KV_m, comp2373_e, comp2373_gbar, comp2288_vcbdur, comp2288_vchdur, comp2288_vcsteps, comp2288_vcinc, comp2288_vcbase, comp2288_vchold
   RANGE i_KV
   RANGE ik
   RANGE ek
@@ -10,48 +12,52 @@ NEURON {
 }
 
 
-FUNCTION comp63_alpha_n (v) {
-  comp63_alpha_n  =  
-  comp63_Q10 * comp63_Aalpha_n * 
-    linoid(v + -(comp63_V0alpha_n), comp63_Kalpha_n)
-}
-
-
-FUNCTION comp63_beta_n (v) {
-  comp63_beta_n  =  
-  comp63_Q10 * comp63_Abeta_n * 
-    exp((v + -(comp63_V0beta_n)) / comp63_Kbeta_n)
-}
-
-
 FUNCTION linoid (x, y) {
-  LOCAL v354
+  LOCAL v4142
   if 
     (fabs(x / y) < 1e-06) 
-     {v354  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v354  =  x / (exp(x / y) + -1.0)} 
-linoid  =  v354
+     {v4142  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v4142  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v4142
+}
+
+
+FUNCTION comp2373_alpha_n (v) {
+  comp2373_alpha_n  =  
+  comp2373_Q10 * comp2373_Aalpha_n * 
+    linoid(v + -(comp2373_V0alpha_n), comp2373_Kalpha_n)
+}
+
+
+FUNCTION comp2373_beta_n (v) {
+  comp2373_beta_n  =  
+  comp2373_Q10 * comp2373_Abeta_n * 
+    exp((v + -(comp2373_V0beta_n)) / comp2373_Kbeta_n)
+}
+
+
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
 }
 
 
 PARAMETER {
-  comp63_Kalpha_n  =  -10.0
-  comp63_V0beta_n  =  -35.0
-  comp63_e  =  -84.69
-  comp223_vcbdur  =  100.0
-  comp63_Kbeta_n  =  -80.0
-  Vrest  =  -68.0
-  comp223_vcbase  =  -69.0
-  comp63_gbar  =  0.003
+  comp2373_V0beta_n  =  -35.0
+  comp2288_vchdur  =  30.0
+  comp2373_Kbeta_n  =  -80.0
+  comp2373_e  =  -84.69
+  comp2288_vchold  =  -71.0
+  comp2373_gbar  =  0.003
+  comp2373_Kalpha_n  =  -10.0
+  comp2373_V0alpha_n  =  -25.0
+  comp2373_Q10  =  13.5137964673603
+  comp2373_Aalpha_n  =  -0.01
+  comp2288_vcbase  =  -69.0
+  comp2288_vcinc  =  10.0
+  comp2288_vcbdur  =  100.0
+  comp2373_Abeta_n  =  0.125
   fix_celsius  =  30.0
-  comp63_Q10  =  13.5137964673603
-  comp223_vcsteps  =  8.0
-  comp63_Aalpha_n  =  -0.01
-  comp223_vchold  =  -71.0
-  comp223_vcinc  =  10.0
-  comp63_V0alpha_n  =  -25.0
-  comp63_Abeta_n  =  0.125
-  comp223_vchdur  =  30.0
+  comp2288_vcsteps  =  8.0
 }
 
 
@@ -63,8 +69,6 @@ STATE {
 
 
 ASSIGNED {
-  ica
-  cai
   v
   ik
   ek
@@ -78,27 +82,28 @@ PROCEDURE reactions () {
 
 
 BREAKPOINT {
-  LOCAL v356
+  LOCAL v4144
   SOLVE states METHOD derivimplicit
   reactions ()
-  v356  =  KV_m 
-i_KV  =  (comp63_gbar * v356 * v356 * v356 * v356) * (v - ek)
+  v4144  =  KV_m 
+i_KV  =  (comp2373_gbar * v4144 * v4144 * v4144 * v4144) * (v - ek)
   ik  =  i_KV
 }
 
 
 DERIVATIVE states {
-  LOCAL v352
-  v352  =  KV_mO 
+  LOCAL v4140
+  v4140  =  KV_mO 
 KV_mO'  =  
-    -(KV_mO * comp63_beta_n(v)) + (1 - v352) * (comp63_alpha_n(v))
+    -(KV_mO * comp2373_beta_n(v)) + (1 - v4140) * (comp2373_alpha_n(v))
 }
 
 
 INITIAL {
-  KV_m  =  (comp63_alpha_n(v)) / (comp63_alpha_n(v) + comp63_beta_n(v))
+  KV_m  =  
+  (comp2373_alpha_n(v)) / (comp2373_alpha_n(v) + comp2373_beta_n(v))
   KV_mO  =  KV_m
-  ek  =  comp63_e
+  ek  =  comp2373_e
 }
 
 

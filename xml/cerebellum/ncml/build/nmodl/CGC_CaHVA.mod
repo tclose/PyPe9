@@ -1,8 +1,10 @@
+
+
 TITLE CGC_CaHVA
 
 
 NEURON {
-  RANGE CaHVA_h, CaHVA_m, comp307_vcbdur, comp307_vchdur, comp307_vcsteps, comp307_vcinc, comp307_vcbase, comp307_vchold, comp33_e, comp33_gbar
+  RANGE CaHVA_h, CaHVA_m, comp295_e, comp295_gbar, comp210_vcbdur, comp210_vchdur, comp210_vcsteps, comp210_vcinc, comp210_vcbase, comp210_vchold
   RANGE i_CaHVA
   RANGE ica
   RANGE eca
@@ -10,67 +12,82 @@ NEURON {
 }
 
 
-FUNCTION comp33_alpha_u (v) {
-  comp33_alpha_u  =  
-  comp33_Q10 * comp33_Aalpha_u * 
-    exp((v + -(comp33_V0alpha_u)) / comp33_Kalpha_u)
+FUNCTION linoid (x, y) {
+  LOCAL v4119
+  if 
+    (fabs(x / y) < 1e-06) 
+     {v4119  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v4119  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v4119
 }
 
 
-FUNCTION comp33_alpha_s (v) {
-  comp33_alpha_s  =  
-  comp33_Q10 * comp33_Aalpha_s * 
-    exp((v + -(comp33_V0alpha_s)) / comp33_Kalpha_s)
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
 }
 
 
-FUNCTION comp33_beta_u (v) {
-  comp33_beta_u  =  
-  comp33_Q10 * comp33_Abeta_u * 
-    exp((v + -(comp33_V0beta_u)) / comp33_Kbeta_u)
+FUNCTION comp295_beta_s (v) {
+  comp295_beta_s  =  
+  comp295_Q10 * comp295_Abeta_s * 
+    exp((v + -(comp295_V0beta_s)) / comp295_Kbeta_s)
 }
 
 
-FUNCTION comp33_beta_s (v) {
-  comp33_beta_s  =  
-  comp33_Q10 * comp33_Abeta_s * 
-    exp((v + -(comp33_V0beta_s)) / comp33_Kbeta_s)
+FUNCTION comp295_beta_u (v) {
+  comp295_beta_u  =  
+  comp295_Q10 * comp295_Abeta_u * 
+    exp((v + -(comp295_V0beta_u)) / comp295_Kbeta_u)
+}
+
+
+FUNCTION comp295_alpha_u (v) {
+  comp295_alpha_u  =  
+  comp295_Q10 * comp295_Aalpha_u * 
+    exp((v + -(comp295_V0alpha_u)) / comp295_Kalpha_u)
+}
+
+
+FUNCTION comp295_alpha_s (v) {
+  comp295_alpha_s  =  
+  comp295_Q10 * comp295_Aalpha_s * 
+    exp((v + -(comp295_V0alpha_s)) / comp295_Kalpha_s)
 }
 
 
 PARAMETER {
-  comp33_Kalpha_u  =  -18.183
-  comp33_Kalpha_s  =  15.87301587302
-  comp33_V0beta_u  =  -48.0
-  comp33_V0beta_s  =  -18.66
-  comp307_vcbdur  =  100.0
-  comp33_Kbeta_u  =  83.33
-  comp33_Kbeta_s  =  -25.641
-  comp307_vcbase  =  -69.0
-  comp307_vcinc  =  10.0
+  comp295_Q10  =  3.0
+  comp295_V0beta_s  =  -18.66
+  comp295_V0beta_u  =  -48.0
+  comp210_vcbdur  =  100.0
+  comp295_Abeta_s  =  0.08298
+  comp295_Abeta_u  =  0.0013
+  comp210_vcsteps  =  8.0
+  comp210_vchold  =  -71.0
+  comp295_Aalpha_u  =  0.0013
+  comp295_Aalpha_s  =  0.04944
+  comp210_vcbase  =  -69.0
+  comp210_vcinc  =  10.0
+  comp295_V0alpha_s  =  -29.06
+  comp295_V0alpha_u  =  -48.0
   fix_celsius  =  30.0
-  comp307_vcsteps  =  8.0
-  comp33_gbar  =  0.00046
-  comp33_Aalpha_u  =  0.0013
-  comp33_Aalpha_s  =  0.04944
-  comp33_e  =  129.33
-  comp307_vchold  =  -71.0
-  comp33_V0alpha_u  =  -48.0
-  comp33_V0alpha_s  =  -29.06
-  comp33_Abeta_u  =  0.0013
-  comp33_Abeta_s  =  0.08298
-  comp307_vchdur  =  30.0
-  comp33_Q10  =  3.0
+  comp295_gbar  =  0.00046
+  comp210_vchdur  =  30.0
+  comp295_Kalpha_u  =  -18.183
+  comp295_Kalpha_s  =  15.87301587302
+  comp295_Kbeta_s  =  -25.641
+  comp295_Kbeta_u  =  83.33
+  comp295_e  =  129.33
 }
 
 
 STATE {
-  CaHVA_hC
-  CaHVA_hO
   CaHVA_mC
   CaHVA_mO
-  CaHVA_h
+  CaHVA_hC
+  CaHVA_hO
   CaHVA_m
+  CaHVA_h
 }
 
 
@@ -83,38 +100,40 @@ ASSIGNED {
 
 
 PROCEDURE reactions () {
-  CaHVA_h  =  CaHVA_hO
   CaHVA_m  =  CaHVA_mO
+  CaHVA_h  =  CaHVA_hO
 }
 
 
 BREAKPOINT {
-  LOCAL v455
+  LOCAL v4121
   SOLVE states METHOD derivimplicit
   reactions ()
-  v455  =  CaHVA_m 
-i_CaHVA  =  (comp33_gbar * v455 * v455 * CaHVA_h) * (v - eca)
+  v4121  =  CaHVA_m 
+i_CaHVA  =  (comp295_gbar * v4121 * v4121 * CaHVA_h) * (v - eca)
   ica  =  i_CaHVA
 }
 
 
 DERIVATIVE states {
-  LOCAL v450, v453
-  v450  =  CaHVA_mO 
-CaHVA_mO'  =  
-    -(CaHVA_mO * comp33_beta_s(v)) + (1 - v450) * (comp33_alpha_s(v))
-  v453  =  CaHVA_hO 
+  LOCAL v4114, v4117
+  v4114  =  CaHVA_hO 
 CaHVA_hO'  =  
-    -(CaHVA_hO * comp33_beta_u(v)) + (1 - v453) * (comp33_alpha_u(v))
+    -(CaHVA_hO * comp295_beta_u(v)) + (1 - v4114) * (comp295_alpha_u(v))
+  v4117  =  CaHVA_mO 
+CaHVA_mO'  =  
+    -(CaHVA_mO * comp295_beta_s(v)) + (1 - v4117) * (comp295_alpha_s(v))
 }
 
 
 INITIAL {
-  CaHVA_h  =  (comp33_alpha_u(v)) / (comp33_alpha_u(v) + comp33_beta_u(v))
-  CaHVA_hO  =  CaHVA_h
-  CaHVA_m  =  (comp33_alpha_s(v)) / (comp33_alpha_s(v) + comp33_beta_s(v))
+  CaHVA_m  =  
+  (comp295_alpha_s(v)) / (comp295_alpha_s(v) + comp295_beta_s(v))
   CaHVA_mO  =  CaHVA_m
-  eca  =  comp33_e
+  CaHVA_h  =  
+  (comp295_alpha_u(v)) / (comp295_alpha_u(v) + comp295_beta_u(v))
+  CaHVA_hO  =  CaHVA_h
+  eca  =  comp295_e
 }
 
 

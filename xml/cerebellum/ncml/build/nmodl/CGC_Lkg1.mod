@@ -4,18 +4,32 @@ TITLE CGC_Lkg1
 
 
 NEURON {
-  RANGE comp47_e, comp47_gbar
+  RANGE comp2635_e, comp2635_gbar
   RANGE i_Lkg1
   RANGE e
   NONSPECIFIC_CURRENT i
 }
 
 
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
+}
+
+
+FUNCTION linoid (x, y) {
+  LOCAL v4146
+  if 
+    (fabs(x / y) < 1e-06) 
+     {v4146  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v4146  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v4146
+}
+
+
 PARAMETER {
-  Vrest  =  -68.0
-  comp47_gbar  =  5.68e-05
+  comp2635_gbar  =  5.68e-05
+  comp2635_e  =  -16.5
   fix_celsius  =  30.0
-  comp47_e  =  -16.5
 }
 
 
@@ -24,8 +38,6 @@ STATE {
 
 
 ASSIGNED {
-  ica
-  cai
   v
   i
   e
@@ -34,13 +46,13 @@ ASSIGNED {
 
 
 BREAKPOINT {
-  i_Lkg1  =  comp47_gbar * (v - e)
+  i_Lkg1  =  comp2635_gbar * (v - comp2635_e)
   i  =  i_Lkg1
 }
 
 
 INITIAL {
-  e  =  comp47_e
+  e  =  comp2635_e
 }
 
 
