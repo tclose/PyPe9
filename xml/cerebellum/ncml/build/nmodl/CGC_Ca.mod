@@ -1,38 +1,56 @@
 
 
-TITLE CGC_Ca
+TITLE CGC_ca
 
 
 NEURON {
-  RANGE comp19_ca
+  RANGE comp65_ca
   RANGE ica, cai
   USEION ca READ ica WRITE cai
 }
 
 
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
+}
+
+
+FUNCTION linoid (x, y) {
+  LOCAL v4111
+  if 
+    (fabs(x / y) < 1e-06) 
+     {v4111  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v4111  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v4111
+}
+
+
 PARAMETER {
-  comp19_d  =  0.2
-  comp19_F  =  96485.0
-  comp19_cao  =  2.0
-  comp19_cai0  =  0.0001
-  comp19_beta  =  1.5
+  comp65_cai0  =  0.0001
+  comp65_beta  =  1.5
+  comp65_d  =  0.2
+  comp65_F  =  96485.0
+  fix_celsius  =  30.0
+  comp65_cao  =  2.0
 }
 
 
 STATE {
-  comp19_ca
+  comp65_ca
 }
 
 
 ASSIGNED {
+  comp65_ica
+  comp65_cai
+  v
   ica
   cai
-  v
 }
 
 
 PROCEDURE pools () {
-  cai = comp19_ca
+  cai = comp65_ca
 }
 
 
@@ -43,17 +61,21 @@ BREAKPOINT {
 
 
 DERIVATIVE states {
-  comp19_ca'  =  
-  (-(ica)) / (2.0 * comp19_F * comp19_d) + 
-    -(comp19_beta * (cai + -(comp19_cai0)))
+  comp65_cai  =  cai
+  comp65_ica  =  ica
+  comp65_ca'  =  
+  (-(comp65_ica)) / (2.0 * comp65_F * comp65_d) + 
+    -(comp65_beta * (comp65_cai + -(comp65_cai0)))
 }
 
 
 INITIAL {
-  comp19_ca  =  0.0001
+  comp65_cai  =  cai
+  comp65_ica  =  ica
+  comp65_ca  =  0.0001
 }
 
 
 PROCEDURE print_state () {
-  printf ("NMODL state: t = %g v = %g comp19_ca = %g\n" , t, v,  comp19_ca)
+  printf ("NMODL state: t = %g v = %g comp65_ca = %g\n" , t, v,  comp65_ca)
 }
