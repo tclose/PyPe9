@@ -1,7 +1,7 @@
 stim_amp=0.01875
 
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
-nrn_load_dll("/home/tclose/kbrain/external/original_mod/fabios_granule/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain/xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
 
 public soma
 public x,y,z
@@ -50,38 +50,37 @@ soma {
     
     Area = PI*soma.diam*soma.L*1e-8
     
-    insert GRC_LKG1 
-    insert GRC_LKG2
-    insert GRC_NA 
-    insert GRC_KV
-    insert GRC_KA
-    insert GRC_KIR 
-    insert GRC_KCA 
-    insert GRC_CALC
-    //insert GrC_CaHVA
-    insert GRC_CA
-    insert GRC_KM 
+    insert CGC_Lkg1
+    insert CGC_Lkg2
+    insert CGC_Na 
+    insert CGC_KV
+    insert CGC_KA
+    insert CGC_Kir 
+    insert CGC_KCa 
+    insert CGC_Ca
+    insert CGC_CaHVA
+    insert CGC_KM 
     
-    gl_GRC_LKG1=5.68e-5   //2009 model
-    ggaba_GRC_LKG2 = 3e-05    //2009 model
-    gkbar_GRC_KV= 0.003    //2009 model
-    gkbar_GRC_KA = 0.0032   //2009 model
-    gkbar_GRC_KIR = 0.0009  //2009 model
-    gkbar_GRC_KM= 0.00025   //0.0001  //2009 model
-    gnabar_GRC_NA= 0.013     //2009 model  
-    gcabar_GRC_CA= 0.00046    //2009 model
-    gkbar_GRC_KCA = 0.04   //ajusted Version 3
+    gl_CGC_Lkg1=5.68e-5   //2009 model
+    ggaba_CGC_Lkg2 = 3e-05    //2009 model
+    gkbar_CGC_KV= 0.003    //2009 model
+    gkbar_CGC_KA = 0.0032   //2009 model
+    gkbar_CGC_KIR = 0.0009  //2009 model
+    gkbar_CGC_KM= 0.00025   //0.0001  //2009 model
+    gnabar_CGC_Na= 0.013     //2009 model  
+    gcabar_CGC_Ca= 0.00046    //2009 model
+    gkbar_CGC_KCa = 0.04   //ajusted Version 3
     
-    beta_GRC_CALC = 1.5
+    beta_GRC_Ca = 1.5
     
     
-    usetable_GRC_NA   = 0                 
-    usetable_GRC_KV   = 0
-    usetable_GRC_KA   = 0
-    usetable_GRC_KIR  = 0   
-    usetable_GRC_KCA  = 0
-    usetable_GRC_CA   = 0
-    usetable_GRC_KM   = 0
+    usetable_CGC_Na   = 0                 
+    usetable_CGC_KV   = 0
+    usetable_CGC_KA   = 0
+    usetable_CGC_Kir  = 0   
+    usetable_CGC_KCa  = 0
+    usetable_CGC_Ca   = 0
+    usetable_CGC_KM   = 0
     
     ena = 87.39
     ek = -84.69
@@ -163,7 +162,7 @@ run()
 
 objref output_file
 output_file = new File()
-output_file.wopen("/home/tclose/kbrain/output/single_fabios_granule_hoc.dat")
+output_file.wopen("/home/tclose/kbrain/output/generated_granule_hoc.dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }
