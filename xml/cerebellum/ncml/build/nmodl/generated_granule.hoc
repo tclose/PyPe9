@@ -3,23 +3,16 @@ stim_amp=0.01875
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
 nrn_load_dll("/home/tclose/kbrain/xml/cerebellum/ncml/build/nmodl/x86_64/.libs/libnrnmech.so")
 
-public soma
-public x,y,z
-
 //object variable will refer to a list that will hold an arbitrary number of NetCon objects.
 
-public nclist
 objectvar nclist  
 
 //synapses         
-public synAMPA,synNMDA,synGABAa1,synGABAa2 
 objectvar synAMPA,synNMDA,synGABAa1,synGABAa2 
 
 //counting spikes
-public spiketimes,spikecount
 objref spiketimes,spikecount
 
-public voltagem
 objref voltagem
 
 tmax=1000   
@@ -49,17 +42,17 @@ soma {
     celsius = 30
     
     Area = PI*soma.diam*soma.L*1e-8
-    
+
+    insert CGC_Ca
+    insert CGC_CaHVA    
+    insert CGC_KA
+    insert CGC_KCa 
+    insert CGC_Kir 
+    insert CGC_KM 
+    insert CGC_KV    
     insert CGC_Lkg1
     insert CGC_Lkg2
     insert CGC_Na 
-    insert CGC_KV
-    insert CGC_KA
-    insert CGC_Kir 
-    insert CGC_KCa 
-    insert CGC_Ca
-    insert CGC_CaHVA
-    insert CGC_KM 
     
     gl_CGC_Lkg1=5.68e-5   //2009 model
     ggaba_CGC_Lkg2 = 3e-05    //2009 model
