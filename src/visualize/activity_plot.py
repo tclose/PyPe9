@@ -23,7 +23,9 @@ def generate_subplots(num_subplots):
     fig = plt.figure()
     #Determine the most even dimensions that can fit all the required subplots
     num_high = int(round(math.sqrt(num_subplots)))
-    num_wide = num_subplots // num_high + 1
+    num_wide = num_subplots // num_high
+    if num_subplots % num_high:
+        num_wide += 1
     axes = []
     for i in xrange(num_subplots):
         axes.append(fig.add_subplot(num_high, num_wide,i))
@@ -42,10 +44,13 @@ def main(arguments):
     parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
     parser.add_argument('--time_start', type=float, default=None, help='The start of the plot')
     parser.add_argument('--time_stop', type=float, default=None, help='The stop of the plot')
-    parser.add_argument('--incr', type=float, default=0.0, help='The minimum increment required before the next step in the variable trace is plotted')
+    parser.add_argument('--incr', type=float, default=0.0, help='The minimum increment required \
+before the next step in the variable trace is plotted')
     parser.add_argument('--extra_label', type=str, default='', help='Additional label information')
-    parser.add_argument('--combine', action='store_true', help='Plot the variable figures on a single combined axis')
-    parser.add_argument('--no_show', action='store_true', help='Don''t show the plots initially (waiting for other plots to be plotted')
+    parser.add_argument('--combine', action='store_true', help='Plot the variable figures on a \
+single combined axis')
+    parser.add_argument('--no_show', action='store_true', help='Don''t show the plots initially \
+(waiting for other plots to be plotted')
     args = parser.parse_args(arguments)
     
     # Set up the common axis to plot the results on
@@ -66,12 +71,14 @@ def main(arguments):
     if num_spike_trains:    
         spike_fig, spike_axes = generate_subplots(num_spike_trains)
         #Assign quit shortcut to figure
-        spike_cid = spike_fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure    
+        # Register the 'q' -> close shortcut key with the current figure    
+        spike_cid = spike_fig.canvas.mpl_connect('key_press_event', quit_figure) 
         spike_legend = []
     if num_v + num_currents:
         if args.combine:
             combine_fig = plt.figure()
-            combine_cid = combine_fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure
+            # Register the 'q' -> close shortcut key with the current figure
+            combine_cid = combine_fig.canvas.mpl_connect('key_press_event', quit_figure) 
             combine_axis = combine_fig.add_subplot(111)
             combine_legend = []
             # Test to see if there are two type of variables that are to be combined.
@@ -81,7 +88,8 @@ def main(arguments):
                 rescale = False
         else:
             var_fig, var_axes = generate_subplots(num_v + num_currents)
-            var_cid = var_fig.canvas.mpl_connect('key_press_event', quit_figure) # Register the 'q' -> close shortcut key with the current figure
+            # Register the 'q' -> close shortcut key with the current figure
+            var_cid = var_fig.canvas.mpl_connect('key_press_event', quit_figure) 
             rescale = False
     spike_train_count = 0
     var_count = 0
@@ -110,7 +118,8 @@ def main(arguments):
             f.close()
             # Check loaded header
             if not header:
-                raise Exception("Did not load a header from the passed file '%s', is it a pyNN output file?" % filename)
+                raise Exception("Did not load a header from the passed file '%s', is it a pyNN \
+output file?" % filename)
             if not header.has_key('label'):
                 raise Exception("Required header field 'label' was not found in file header.")
         # Get the type of variable recorded via the file's extension
@@ -148,8 +157,8 @@ def main(arguments):
                 t = t_data[:,0]
                 data = t_data[:,1]
                 leg = '{variable_name} - ID{ID}'.format(
-                             variable_name=os.path.splitext(os.path.basename(filename))[0].capitalize(), 
-                             ID=dat_count)
+                        variable_name=os.path.splitext(os.path.basename(filename))[0].capitalize(), 
+                        ID=dat_count)
                 if rescale:
                     abs_max = max(abs(numpy.min(data)), abs(numpy.max(data)))
                     order_of_mag = 10.0 ** math.floor(math.log(abs_max,10.0))
@@ -179,7 +188,8 @@ def main(arguments):
                             try:
                                 var, ID = line.split()
                             except ValueError:
-                                raise Exception("Incorrectly formatted line '%s', should be 'value ID'." % line)
+                                raise Exception("Incorrectly formatted line '%s', should be \
+'value ID'." % line)
                             var = float(var)
                             if var > max_var:
                                 max_var = var
@@ -198,26 +208,29 @@ def main(arguments):
                 else:
                     incr = var_range * args.incr       
                 time_i = 0
-                # Make sure the the prev_var variable starts from a value that will always be at least 
-                # 'incr' away from the first variable read
+                # Make sure the the prev_var variable starts from a value that will always be at
+                #  least 'incr' away from the first variable read
                 prev_ID = None
                 variables = []
                 times = []
                 IDs = []
-                # Load variables selectively, if the difference between previous variable point exceeds args.incr
+                # Load variables selectively, if the difference between previous variable point 
+                # exceeds args.incr
                 for line in f:
                     if line[0] != '#': # Check to see if the line is a comment
                         try:
                             var, ID = line.split()
                         except ValueError:
-                            raise Exception("Incorrectly formatted line '%s', should be 'value ID'." % line)                
+                            raise Exception("Incorrectly formatted line '%s', should be 'value ID'."
+                                                                                             % line)                
                         if rescale:
                             var = float(var) / order_of_mag
                         else:
                             var = float(var)
                         # If the ID signifies the start of a new cell reset the time index
                         if ID != prev_ID:
-                            # If not in the initial loop, append last value/time pair to fill out the plot of the previous ID out to the right 
+                            # If not in the initial loop, append last value/time pair to fill out 
+                            # the plot of the previous ID out to the right 
                             if prev_ID != None:
                                 variables[-1].append(var)
                                 times[-1].append(time_i * dt)
@@ -227,7 +240,8 @@ def main(arguments):
                             variables.append([])
                             times.append([])
                             IDs.append(int(float(ID)))
-                        # If the variable change is greater than the specified incr add it to the vector
+                        # If the variable change is greater than the specified incr add it to the 
+                        # vector
                         if abs(var - prev_var) >= args.incr:
                             variables[-1].append(var)
                             times[-1].append(time_i * dt)
@@ -241,7 +255,8 @@ def main(arguments):
                     sys.exit(0)
                 # Plot variables sorted in order of their IDs
                 sorted_IDs = []
-                for t, var, ID in sorted(zip(times, variables, IDs), key=lambda tup: int(float(tup[2]))):
+                for t, var, ID in sorted(zip(times, variables, IDs), key=lambda tup: 
+                                                                                int(float(tup[2]))):
                     if args.combine:
                         combine_axis.plot(t,var)
                     else:
@@ -249,14 +264,17 @@ def main(arguments):
                     sorted_IDs.append(ID)
                 if args.combine:
                     for ID in sorted_IDs:
-                        leg = '{variable_name} - ID{ID}'.format(variable_name=variable_name.capitalize(), ID=ID)
+                        leg = '{variable_name} - ID{ID}'.
+                                            format(variable_name=variable_name.capitalize(), ID=ID)
                         if rescale:
                             leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
                         combine_legend.append(leg)
                 else:
                     var_axes[var_count].legend(sorted_IDs)
-                    var_axes[var_count].title = '{label}{extra_label} - {variable_name} vs Time'.format(
-                                             label=header['label'], extra_label=args.extra_label, variable_name=header['variable'])
+                    var_axes[var_count].set_title('{label}{extra_label} - {variable_name} vs Time'.
+                                                  format(label=header['label'], 
+                                                  extra_label=args.extra_label, 
+                                                  variable_name=header['variable']))
                     var_axes[var_count].set_xlabel('Time (ms)')
                     if variable_name == 'v':
                         ylabel = 'Voltage (mV)'
