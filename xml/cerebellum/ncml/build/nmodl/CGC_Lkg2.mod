@@ -4,7 +4,7 @@ TITLE CGC_Lkg2
 
 
 NEURON {
-  RANGE comp2726_egaba, comp2726_ggaba
+  RANGE comp2726_ggaba, comp2726_egaba
   RANGE i_Lkg2
   RANGE e
   NONSPECIFIC_CURRENT i
@@ -28,8 +28,8 @@ FUNCTION sigm (x, y) {
 
 PARAMETER {
   fix_celsius  =  30.0
-  comp2726_ggaba  =  3e-05
   comp2726_egaba  =  -65.0
+  comp2726_ggaba  =  3e-05
 }
 
 

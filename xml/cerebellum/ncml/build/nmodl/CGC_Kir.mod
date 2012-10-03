@@ -4,7 +4,7 @@ TITLE CGC_Kir
 
 
 NEURON {
-  RANGE Kir_m, comp1651_e, comp1651_gbar, comp1566_vcbdur, comp1566_vchdur, comp1566_vcsteps, comp1566_vcinc, comp1566_vcbase, comp1566_vchold
+  RANGE comp1566_vchold, comp1566_vcbase, comp1566_vcinc, comp1566_vcsteps, comp1566_vchdur, comp1566_vcbdur, comp1651_gbar, comp1651_e, Kir_m
   RANGE i_Kir
   RANGE ik
   RANGE ek
@@ -42,22 +42,22 @@ linoid  =  v4135
 
 
 PARAMETER {
-  comp1651_Kbeta_d  =  35.714
-  comp1651_Abeta_d  =  0.16994
-  comp1651_e  =  -84.69
+  fix_celsius  =  30.0
+  comp1651_Kalpha_d  =  -24.3902
   comp1566_vchold  =  -71.0
-  comp1566_vcsteps  =  8.0
-  comp1651_gbar  =  0.0009
   comp1566_vcinc  =  10.0
+  comp1651_gbar  =  0.0009
+  comp1566_vcsteps  =  8.0
+  comp1651_e  =  -84.69
+  comp1566_vchdur  =  30.0
+  comp1651_Q10  =  3.0
+  comp1566_vcbdur  =  100.0
+  comp1651_V0alpha_d  =  -83.94
+  comp1566_vcbase  =  -69.0
+  comp1651_Abeta_d  =  0.16994
+  comp1651_Kbeta_d  =  35.714
   comp1651_Aalpha_d  =  0.13289
   comp1651_V0beta_d  =  -83.94
-  comp1566_vcbdur  =  100.0
-  comp1651_Q10  =  3.0
-  comp1651_Kalpha_d  =  -24.3902
-  comp1566_vcbase  =  -69.0
-  fix_celsius  =  30.0
-  comp1651_V0alpha_d  =  -83.94
-  comp1566_vchdur  =  30.0
 }
 
 

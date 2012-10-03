@@ -1,17 +1,12 @@
 
 
-TITLE CGC_ca
+TITLE CGC_Ca
 
 
 NEURON {
   RANGE comp65_ca
   RANGE ica, cai
   USEION ca READ ica WRITE cai
-}
-
-
-FUNCTION sigm (x, y) {
-  sigm  =  1.0 / (exp(x / y) + 1.0)
 }
 
 
@@ -25,13 +20,18 @@ linoid  =  v4111
 }
 
 
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
+}
+
+
 PARAMETER {
-  comp65_cai0  =  0.0001
   comp65_beta  =  1.5
-  comp65_d  =  0.2
-  comp65_F  =  96485.0
-  fix_celsius  =  30.0
   comp65_cao  =  2.0
+  comp65_cai0  =  0.0001
+  fix_celsius  =  30.0
+  comp65_F  =  96485.0
+  comp65_d  =  0.2
 }
 
 
@@ -42,8 +42,8 @@ STATE {
 
 ASSIGNED {
   comp65_ica
-  comp65_cai
   v
+  comp65_cai
   ica
   cai
 }
@@ -64,7 +64,7 @@ DERIVATIVE states {
   comp65_cai  =  cai
   comp65_ica  =  ica
   comp65_ca'  =  
-  (-(comp65_ica)) / (2.0 * comp65_F * comp65_d) + 
+  (-(comp65_ica)) / (2.0 * comp65_F * comp65_d) * 10000.0 + 
     -(comp65_beta * (comp65_cai + -(comp65_cai0)))
 }
 
