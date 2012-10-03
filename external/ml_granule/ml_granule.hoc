@@ -1,0 +1,98 @@
+stim_amp=0.01875
+
+// This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
+nrn_load_dll("/home/tclose/kbrain/external/ml_granule/x86_64/.libs/libnrnmech.so")
+
+objref netcon, nil, MFID, MFdel,GoCID, spiketime, AP, spikecount,MFT,MFI
+objref ampa, gaba, NMDA, synapses,GoCdel,spikecount,AP, cellID
+
+ampa = new List()
+gaba = new List()
+NMDA = new List()
+create soma
+soma {
+  nseg = 1 
+  diam = 9.76 
+  L = 9.76 
+  cm = 1
+  Ra = 100
+  celsius = 30 
+
+  insert GRC_LKG1
+  insert GRC_Na
+  insert GRC_Nar
+  insert GRC_KV
+  insert GRC_KA
+  insert GRC_KIR
+  insert GRC_KCA
+  insert GRC_CaHVA
+  insert Calc
+  insert GRC_pNa
+  insert GRC_KM
+  insert GRC_LKG2
+
+  usetable_GrG_Na = 0
+  usetable_GrC_pNa = 0
+  usetable_GrC_CaHVA = 0
+  usetable_GrG_KV = 0
+  usetable_GrC_KA = 0
+  usetable_GrC_Kir = 0
+  usetable_GrC_KCa = 0
+  usetable_GrG_KM = 0
+  
+  ena  = 87.39
+  ek  = -84.69
+  eca = 129.33
+  ecl = -65
+    
+    
+}
+
+/*
+ General settings
+*/ 
+v_init = -70
+
+tstop = 1000 //for IClamp
+dt = 0.025
+
+secondorder=0  //method implicit backward euler
+
+celsius = 30
+SogliaSpike=0
+
+access soma
+psection()
+
+printf("ena: %f", ena)
+printf("ek: %f", ek)
+printf("eca: %f", eca)
+printf("ecl: %f", ecl)
+printf("celsius: %f", celsius)
+objectvar stim
+soma stim = new IClamp(0.5)
+stim.del = 1000
+stim.dur = 1000
+stim.amp = stim_amp
+ 
+objref rec_v
+rec_v = new Vector()
+rec_v.record (&soma.v(0.5))
+
+objref rec_t
+rec_t = new Vector()
+rec_t.record (&t)
+
+dt = 0.025
+tstop = 2000
+run()
+
+objref output_file
+output_file = new File()
+printf("Saving file to '/home/tclose/kbrain/output/ml_granule_hoc.dat'")
+output_file.wopen("/home/tclose/kbrain/output/ml_granule_hoc.dat")
+for (i=0; i < rec_v.size(); i=i+1) {
+  output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
+}
+output_file.close()
+quit()

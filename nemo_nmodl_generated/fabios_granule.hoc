@@ -1,7 +1,6 @@
 stim_amp=0.01875
 
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
-nrn_load_dll("/home/tclose/kbrain/external/original_mod/granule/x86_64/.libs/libnrnmech.so")
 
 //object variable will refer to a list that will hold an arbitrary number of NetCon objects.
 
@@ -45,16 +44,16 @@ soma {
     
     Area = PI*soma.diam*soma.L*1e-8
 
-    insert GRC_CA
-    insert GRC_CALC
-    insert GRC_KA
-    insert GRC_KCA 
-    insert GRC_KIR    
-    insert GRC_KM
-    insert GRC_KV 
-    insert GRC_LKG1 
-    insert GRC_LKG2
-    insert GRC_NA 
+    insert CGC_ca
+    insert CGC_CaHVA    
+    insert CGC_KA
+    insert CGC_KCa 
+    insert CGC_KM
+    insert CGC_KV
+    insert CGC_Kir
+    insert CGC_Lkg1
+    insert CGC_Lkg2
+    insert CGC_Na 
 
     gcabar_GRC_CA= 0.00046    //2009 model
     gkbar_GRC_KCA = 0.04   //ajusted Version 3
@@ -123,7 +122,7 @@ dt = 0.025
 
 secondorder=0  //method implicit backward euler
 
-celsius = 30
+celsius = 30 
 SogliaSpike=0
 
 access soma
@@ -155,8 +154,7 @@ run()
 
 objref output_file
 output_file = new File()
-printf("Saving file to '/home/tclose/kbrain/output/fabios_granule_hoc.dat'")
-output_file.wopen("/home/tclose/kbrain/output/fabios_granule_hoc.dat")
+output_file.wopen("fabios_granule_hoc.dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }
