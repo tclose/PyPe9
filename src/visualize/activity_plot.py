@@ -23,7 +23,9 @@ def generate_subplots(num_subplots):
     fig = plt.figure()
     #Determine the most even dimensions that can fit all the required subplots
     num_high = int(round(math.sqrt(num_subplots)))
-    num_wide = num_subplots // num_high + 1
+    num_wide = num_subplots // num_high
+    if num_subplots % num_high:
+        num_wide += 1
     axes = []
     for i in xrange(num_subplots):
         axes.append(fig.add_subplot(num_high, num_wide,i))
@@ -204,7 +206,8 @@ def main(arguments):
                 variables = []
                 times = []
                 IDs = []
-                # Load variables selectively, if the difference between previous variable point exceeds args.incr
+                # Load variables selectively, if the difference between previous variable point 
+                # exceeds args.incr
                 for line in f:
                     if line[0] != '#': # Check to see if the line is a comment
                         try:
@@ -217,7 +220,8 @@ def main(arguments):
                             var = float(var)
                         # If the ID signifies the start of a new cell reset the time index
                         if ID != prev_ID:
-                            # If not in the initial loop, append last value/time pair to fill out the plot of the previous ID out to the right 
+                            # If not in the initial loop, append last value/time pair to fill out 
+                            # the plot of the previous ID out to the right 
                             if prev_ID != None:
                                 variables[-1].append(var)
                                 times[-1].append(time_i * dt)
@@ -227,7 +231,8 @@ def main(arguments):
                             variables.append([])
                             times.append([])
                             IDs.append(int(float(ID)))
-                        # If the variable change is greater than the specified incr add it to the vector
+                        # If the variable change is greater than the specified incr add it to the 
+                        # vector
                         if abs(var - prev_var) >= args.incr:
                             variables[-1].append(var)
                             times[-1].append(time_i * dt)
@@ -255,8 +260,10 @@ def main(arguments):
                         combine_legend.append(leg)
                 else:
                     var_axes[var_count].legend(sorted_IDs)
-                    var_axes[var_count].title = '{label}{extra_label} - {variable_name} vs Time'.format(
-                                             label=header['label'], extra_label=args.extra_label, variable_name=header['variable'])
+                    var_axes[var_count].set_title('{label}{extra_label} - {variable_name} vs Time'.
+                                                  format(label=header['label'], 
+                                                  extra_label=args.extra_label, 
+                                                  variable_name=header['variable']))
                     var_axes[var_count].set_xlabel('Time (ms)')
                     if variable_name == 'v':
                         ylabel = 'Voltage (mV)'
