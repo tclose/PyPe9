@@ -4,7 +4,7 @@ TITLE CGC_KV
 
 
 NEURON {
-  RANGE KV_m, comp2373_e, comp2373_gbar, comp2288_vcbdur, comp2288_vchdur, comp2288_vcsteps, comp2288_vcinc, comp2288_vcbase, comp2288_vchold
+  RANGE comp2288_vchold, comp2288_vcbase, comp2288_vcinc, comp2288_vcsteps, comp2288_vchdur, comp2288_vcbdur, comp2373_gbar, comp2373_e, KV_m
   RANGE i_KV
   RANGE ik
   RANGE ek
@@ -29,6 +29,11 @@ FUNCTION comp2373_alpha_n (v) {
 }
 
 
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
+}
+
+
 FUNCTION comp2373_beta_n (v) {
   comp2373_beta_n  =  
   comp2373_Q10 * comp2373_Abeta_n * 
@@ -36,28 +41,23 @@ FUNCTION comp2373_beta_n (v) {
 }
 
 
-FUNCTION sigm (x, y) {
-  sigm  =  1.0 / (exp(x / y) + 1.0)
-}
-
-
 PARAMETER {
-  comp2373_V0beta_n  =  -35.0
-  comp2288_vchdur  =  30.0
-  comp2373_Kbeta_n  =  -80.0
-  comp2373_e  =  -84.69
-  comp2288_vchold  =  -71.0
-  comp2373_gbar  =  0.003
   comp2373_Kalpha_n  =  -10.0
-  comp2373_V0alpha_n  =  -25.0
+  comp2373_Kbeta_n  =  -80.0
+  comp2373_gbar  =  0.003
+  comp2373_e  =  -84.69
+  fix_celsius  =  30.0
   comp2373_Q10  =  13.5137964673603
-  comp2373_Aalpha_n  =  -0.01
+  comp2288_vcsteps  =  8.0
+  comp2373_Abeta_n  =  0.125
+  comp2288_vchold  =  -71.0
+  comp2288_vcbdur  =  100.0
+  comp2288_vchdur  =  30.0
   comp2288_vcbase  =  -69.0
   comp2288_vcinc  =  10.0
-  comp2288_vcbdur  =  100.0
-  comp2373_Abeta_n  =  0.125
-  fix_celsius  =  30.0
-  comp2288_vcsteps  =  8.0
+  comp2373_V0beta_n  =  -35.0
+  comp2373_V0alpha_n  =  -25.0
+  comp2373_Aalpha_n  =  -0.01
 }
 
 

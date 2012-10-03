@@ -4,13 +4,32 @@ TITLE CGC_KCa
 
 
 NEURON {
-  RANGE KCa_m, comp1301_e, comp1301_gbar, comp1216_vcbdur, comp1216_vchdur, comp1216_vcsteps, comp1216_vcinc, comp1216_vcbase, comp1216_vchold
+  RANGE comp1216_vchold, comp1216_vcbase, comp1216_vcinc, comp1216_vcsteps, comp1216_vchdur, comp1216_vcbdur, comp1301_gbar, comp1301_e, KCa_m
   RANGE i_KCa
   RANGE ik
   RANGE ek
   RANGE cai
   USEION ca READ cai
   USEION k READ ek WRITE ik
+}
+
+
+FUNCTION comp1301_beta_c (v, cai) {
+  comp1301_beta_c  =  
+  (comp1301_Q10 * comp1301_Abeta_c) / 
+    (1.0 + cai / (comp1301_Bbeta_c * exp(v / comp1301_Kbeta_c)))
+}
+
+
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
+}
+
+
+FUNCTION comp1301_alpha_c (v, cai) {
+  comp1301_alpha_c  =  
+  (comp1301_Q10 * comp1301_Aalpha_c) / 
+    (1.0 + (comp1301_Balpha_c * exp(v / comp1301_Kalpha_c)) / cai)
 }
 
 
@@ -24,42 +43,23 @@ linoid  =  v4130
 }
 
 
-FUNCTION sigm (x, y) {
-  sigm  =  1.0 / (exp(x / y) + 1.0)
-}
-
-
-FUNCTION comp1301_beta_c (v, cai) {
-  comp1301_beta_c  =  
-  (comp1301_Q10 * comp1301_Abeta_c) / 
-    (1.0 + cai / (comp1301_Bbeta_c * exp(v / comp1301_Kbeta_c)))
-}
-
-
-FUNCTION comp1301_alpha_c (v, cai) {
-  comp1301_alpha_c  =  
-  (comp1301_Q10 * comp1301_Aalpha_c) / 
-    (1.0 + (comp1301_Balpha_c * exp(v / comp1301_Kalpha_c)) / cai)
-}
-
-
 PARAMETER {
-  comp1301_gbar  =  0.003
-  fix_celsius  =  30.0
-  comp1216_vchdur  =  30.0
-  comp1301_Aalpha_c  =  2.5
-  comp1216_vcbdur  =  100.0
-  comp1301_Kbeta_c  =  -11.765
-  comp1301_Balpha_c  =  0.0015
   comp1216_vcbase  =  -69.0
   comp1216_vchold  =  -71.0
+  fix_celsius  =  30.0
   comp1301_Abeta_c  =  1.5
-  comp1301_e  =  -84.69
-  comp1301_Bbeta_c  =  0.00015
-  comp1216_vcinc  =  10.0
-  comp1216_vcsteps  =  8.0
   comp1301_Q10  =  1.0
+  comp1216_vchdur  =  30.0
+  comp1216_vcsteps  =  8.0
+  comp1301_e  =  -84.69
+  comp1216_vcbdur  =  100.0
+  comp1301_Kbeta_c  =  -11.765
+  comp1216_vcinc  =  10.0
+  comp1301_Bbeta_c  =  0.00015
+  comp1301_Aalpha_c  =  2.5
   comp1301_Kalpha_c  =  -11.765
+  comp1301_gbar  =  0.003
+  comp1301_Balpha_c  =  0.0015
 }
 
 
@@ -71,8 +71,8 @@ STATE {
 
 
 ASSIGNED {
-  v
   comp1301_cai
+  v
   cai
   ik
   ek

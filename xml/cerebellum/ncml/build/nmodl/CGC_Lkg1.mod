@@ -4,7 +4,7 @@ TITLE CGC_Lkg1
 
 
 NEURON {
-  RANGE comp2635_e, comp2635_gbar
+  RANGE comp2635_gbar, comp2635_e
   RANGE i_Lkg1
   RANGE e
   NONSPECIFIC_CURRENT i
@@ -27,8 +27,8 @@ linoid  =  v4146
 
 
 PARAMETER {
-  comp2635_gbar  =  5.68e-05
   comp2635_e  =  -16.5
+  comp2635_gbar  =  5.68e-05
   fix_celsius  =  30.0
 }
 

@@ -4,11 +4,16 @@ TITLE CGC_CaHVA
 
 
 NEURON {
-  RANGE CaHVA_h, CaHVA_m, comp295_e, comp295_gbar, comp210_vcbdur, comp210_vchdur, comp210_vcsteps, comp210_vcinc, comp210_vcbase, comp210_vchold
+  RANGE comp210_vchold, comp210_vcbase, comp210_vcinc, comp210_vcsteps, comp210_vchdur, comp210_vcbdur, comp295_gbar, comp295_e, CaHVA_m, CaHVA_h
   RANGE i_CaHVA
   RANGE ica
   RANGE eca
   USEION ca READ eca WRITE ica
+}
+
+
+FUNCTION sigm (x, y) {
+  sigm  =  1.0 / (exp(x / y) + 1.0)
 }
 
 
@@ -22,8 +27,17 @@ linoid  =  v4119
 }
 
 
-FUNCTION sigm (x, y) {
-  sigm  =  1.0 / (exp(x / y) + 1.0)
+FUNCTION comp295_alpha_s (v) {
+  comp295_alpha_s  =  
+  comp295_Q10 * comp295_Aalpha_s * 
+    exp((v + -(comp295_V0alpha_s)) / comp295_Kalpha_s)
+}
+
+
+FUNCTION comp295_alpha_u (v) {
+  comp295_alpha_u  =  
+  comp295_Q10 * comp295_Aalpha_u * 
+    exp((v + -(comp295_V0alpha_u)) / comp295_Kalpha_u)
 }
 
 
@@ -41,43 +55,29 @@ FUNCTION comp295_beta_u (v) {
 }
 
 
-FUNCTION comp295_alpha_u (v) {
-  comp295_alpha_u  =  
-  comp295_Q10 * comp295_Aalpha_u * 
-    exp((v + -(comp295_V0alpha_u)) / comp295_Kalpha_u)
-}
-
-
-FUNCTION comp295_alpha_s (v) {
-  comp295_alpha_s  =  
-  comp295_Q10 * comp295_Aalpha_s * 
-    exp((v + -(comp295_V0alpha_s)) / comp295_Kalpha_s)
-}
-
-
 PARAMETER {
-  comp295_Q10  =  3.0
+  comp210_vcinc  =  10.0
+  comp210_vcbdur  =  100.0
+  comp295_e  =  129.33
   comp295_V0beta_s  =  -18.66
   comp295_V0beta_u  =  -48.0
-  comp210_vcbdur  =  100.0
-  comp295_Abeta_s  =  0.08298
-  comp295_Abeta_u  =  0.0013
-  comp210_vcsteps  =  8.0
   comp210_vchold  =  -71.0
-  comp295_Aalpha_u  =  0.0013
-  comp295_Aalpha_s  =  0.04944
-  comp210_vcbase  =  -69.0
-  comp210_vcinc  =  10.0
-  comp295_V0alpha_s  =  -29.06
-  comp295_V0alpha_u  =  -48.0
-  fix_celsius  =  30.0
-  comp295_gbar  =  0.00046
-  comp210_vchdur  =  30.0
   comp295_Kalpha_u  =  -18.183
   comp295_Kalpha_s  =  15.87301587302
-  comp295_Kbeta_s  =  -25.641
   comp295_Kbeta_u  =  83.33
-  comp295_e  =  129.33
+  comp295_Kbeta_s  =  -25.641
+  comp295_V0alpha_s  =  -29.06
+  comp295_V0alpha_u  =  -48.0
+  comp295_gbar  =  0.00046
+  comp295_Q10  =  3.0
+  comp210_vcsteps  =  8.0
+  comp295_Aalpha_u  =  0.0013
+  comp295_Aalpha_s  =  0.04944
+  comp210_vchdur  =  30.0
+  fix_celsius  =  30.0
+  comp210_vcbase  =  -69.0
+  comp295_Abeta_u  =  0.0013
+  comp295_Abeta_s  =  0.08298
 }
 
 
