@@ -4,7 +4,7 @@ TITLE CGC_KA
 
 
 NEURON {
-  RANGE comp685_vchold, comp685_vcbase, comp685_vcinc, comp685_vcsteps, comp685_vchdur, comp685_vcbdur, comp770_gbar, comp770_e, KA_m, KA_h
+  RANGE comp633_vchold, comp633_vcbase, comp633_vcinc, comp633_vcsteps, comp633_vchdur, comp633_vcbdur, comp718_gbar, comp718_e, KA_m, KA_h
   RANGE i_KA
   RANGE ik
   RANGE ek
@@ -12,41 +12,40 @@ NEURON {
 }
 
 
-FUNCTION comp770_beta_b (v) {
-  comp770_beta_b  =  
-  comp770_Q10 * comp770_Abeta_b * 
-    sigm(v + -(comp770_V0beta_b), comp770_Kbeta_b)
+FUNCTION comp718_beta_a (v, Q10) {
+  comp718_beta_a  =  
+  Q10 * 
+    comp718_Abeta_a / exp((v + -(comp718_V0beta_a)) / comp718_Kbeta_a)
 }
 
 
-FUNCTION comp770_beta_a (v) {
-  comp770_beta_a  =  
-  comp770_Q10 * 
-    comp770_Abeta_a / exp((v + -(comp770_V0beta_a)) / comp770_Kbeta_a)
+FUNCTION comp718_beta_b (v, Q10) {
+  comp718_beta_b  =  
+  Q10 * comp718_Abeta_b * sigm(v + -(comp718_V0beta_b), comp718_Kbeta_b)
+}
+
+
+FUNCTION comp718_alpha_b (v, Q10) {
+  comp718_alpha_b  =  
+  Q10 * comp718_Aalpha_b * 
+    sigm(v + -(comp718_V0alpha_b), comp718_Kalpha_b)
+}
+
+
+FUNCTION comp718_alpha_a (v, Q10) {
+  comp718_alpha_a  =  
+  Q10 * comp718_Aalpha_a * 
+    sigm(v + -(comp718_V0alpha_a), comp718_Kalpha_a)
 }
 
 
 FUNCTION linoid (x, y) {
-  LOCAL v4123
+  LOCAL v3033
   if 
     (fabs(x / y) < 1e-06) 
-     {v4123  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v4123  =  x / (exp(x / y) + -1.0)} 
-linoid  =  v4123
-}
-
-
-FUNCTION comp770_alpha_a (v) {
-  comp770_alpha_a  =  
-  comp770_Q10 * comp770_Aalpha_a * 
-    sigm(v + -(comp770_V0alpha_a), comp770_Kalpha_a)
-}
-
-
-FUNCTION comp770_alpha_b (v) {
-  comp770_alpha_b  =  
-  comp770_Q10 * comp770_Aalpha_b * 
-    sigm(v + -(comp770_V0alpha_b), comp770_Kalpha_b)
+     {v3033  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v3033  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v3033
 }
 
 
@@ -56,32 +55,30 @@ FUNCTION sigm (x, y) {
 
 
 PARAMETER {
-  fix_celsius  =  30.0
-  comp685_vchdur  =  30.0
-  comp770_Aalpha_a  =  4.88826
-  comp770_Aalpha_b  =  0.11042
-  comp770_gbar  =  0.004
-  comp770_Abeta_a  =  0.99285
-  comp770_Abeta_b  =  0.10353
-  comp770_V0alpha_b  =  -111.33209
-  comp770_V0alpha_a  =  -9.17203
-  comp685_vcbdur  =  100.0
-  comp770_V0_binf  =  -78.8
-  comp770_Kalpha_b  =  12.8433
-  comp770_Kalpha_a  =  -23.32708
-  comp685_vcsteps  =  8.0
-  comp770_K_binf  =  8.4
-  comp770_V0_ainf  =  -46.7
-  comp770_Kbeta_a  =  19.47175
-  comp770_Kbeta_b  =  -8.90123
-  comp685_vchold  =  -71.0
-  comp770_e  =  -84.69
-  comp770_K_ainf  =  -19.8
-  comp770_V0beta_a  =  -18.27914
-  comp770_V0beta_b  =  -49.9537
-  comp685_vcbase  =  -69.0
-  comp770_Q10  =  3.0
-  comp685_vcinc  =  10.0
+  comp633_vchdur  =  30.0
+  comp718_K_binf  =  8.4
+  comp633_vcsteps  =  8.0
+  comp718_Kbeta_b  =  -8.90123
+  comp718_Kbeta_a  =  19.47175
+  comp633_vchold  =  -71.0
+  comp718_Kalpha_a  =  -23.32708
+  comp718_Kalpha_b  =  12.8433
+  comp633_vcbase  =  -69.0
+  comp718_V0beta_b  =  -49.9537
+  comp718_V0beta_a  =  -18.27914
+  comp633_vcbdur  =  100.0
+  comp718_Abeta_b  =  0.0345
+  comp718_Abeta_a  =  0.1655
+  comp718_K_ainf  =  -17.0
+  comp718_V0_ainf  =  -38.0
+  comp718_V0alpha_a  =  -9.17203
+  comp718_V0alpha_b  =  -111.33209
+  comp718_gbar  =  0.0032
+  comp718_V0_binf  =  -78.8
+  comp718_e  =  -84.69
+  comp633_vcinc  =  10.0
+  comp718_Aalpha_b  =  0.0368
+  comp718_Aalpha_a  =  0.8147
 }
 
 
@@ -92,15 +89,17 @@ STATE {
 
 
 ASSIGNED {
-  KA_m_tau
-  KA_m_inf
+  comp718_tau_a
+  comp718_tau_b
   KA_h_inf
-  comp770_b_inf
-  comp770_tau_b
-  comp770_tau_a
+  comp718_a_inf
+  KA_m_inf
+  KA_m_tau
   KA_h_tau
-  comp770_a_inf
+  comp718_b_inf
+  comp718_Q10
   v
+  celsius
   ik
   ek
   i_KA
@@ -108,24 +107,29 @@ ASSIGNED {
 
 
 PROCEDURE asgns () {
-  comp770_a_inf  =  
-  1.0 / (1.0 + exp((v + -(comp770_V0_ainf)) / comp770_K_ainf))
-  comp770_tau_a  =  1.0 / (comp770_alpha_a(v) + comp770_beta_a(v))
-  comp770_tau_b  =  1.0 / (comp770_alpha_b(v) + comp770_beta_b(v))
-  comp770_b_inf  =  
-  1.0 / (1.0 + exp((v + -(comp770_V0_binf)) / comp770_K_binf))
-  KA_h_tau  =  comp770_tau_b
-  KA_h_inf  =  comp770_b_inf
-  KA_m_inf  =  comp770_a_inf
-  KA_m_tau  =  comp770_tau_a
+  comp718_Q10  =  3.0 ^ ((celsius + -25.5) / 10.0)
+  comp718_b_inf  =  
+  1.0 / (1.0 + exp((v + -(comp718_V0_binf)) / comp718_K_binf))
+  comp718_a_inf  =  
+  1.0 / (1.0 + exp((v + -(comp718_V0_ainf)) / comp718_K_ainf))
+  KA_m_inf  =  comp718_a_inf
+  KA_h_inf  =  comp718_b_inf
+  comp718_tau_b  =  
+  1.0 / 
+    (comp718_alpha_b(v, comp718_Q10) + comp718_beta_b(v, comp718_Q10))
+  comp718_tau_a  =  
+  1.0 / 
+    (comp718_alpha_a(v, comp718_Q10) + comp718_beta_a(v, comp718_Q10))
+  KA_h_tau  =  comp718_tau_b
+  KA_m_tau  =  comp718_tau_a
 }
 
 
 BREAKPOINT {
-  LOCAL v4125
+  LOCAL v3035
   SOLVE states METHOD derivimplicit
-  v4125  =  KA_m 
-i_KA  =  (comp770_gbar * v4125 * v4125 * v4125 * KA_h) * (v - ek)
+  v3035  =  KA_m 
+i_KA  =  (comp718_gbar * v3035 * v3035 * v3035 * KA_h) * (v - ek)
   ik  =  i_KA
 }
 
@@ -139,9 +143,9 @@ DERIVATIVE states {
 
 INITIAL {
   asgns ()
-  KA_h  =  1.0 / (1.0 + exp((v + -(comp770_V0_binf)) / comp770_K_binf))
-  KA_m  =  1.0 / (1.0 + exp((v + -(comp770_V0_ainf)) / comp770_K_ainf))
-  ek  =  comp770_e
+  KA_h  =  1.0 / (1.0 + exp((v + -(comp718_V0_binf)) / comp718_K_binf))
+  KA_m  =  1.0 / (1.0 + exp((v + -(comp718_V0_ainf)) / comp718_K_ainf))
+  ek  =  comp718_e
 }
 
 

@@ -4,7 +4,7 @@ TITLE CGC_Lkg2
 
 
 NEURON {
-  RANGE comp2726_ggaba, comp2726_egaba
+  RANGE comp2532_ggaba, comp2532_egaba
   RANGE i_Lkg2
   RANGE e
   NONSPECIFIC_CURRENT i
@@ -12,12 +12,12 @@ NEURON {
 
 
 FUNCTION linoid (x, y) {
-  LOCAL v4148
+  LOCAL v3049
   if 
     (fabs(x / y) < 1e-06) 
-     {v4148  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v4148  =  x / (exp(x / y) + -1.0)} 
-linoid  =  v4148
+     {v3049  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v3049  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v3049
 }
 
 
@@ -27,9 +27,8 @@ FUNCTION sigm (x, y) {
 
 
 PARAMETER {
-  fix_celsius  =  30.0
-  comp2726_egaba  =  -65.0
-  comp2726_ggaba  =  3e-05
+  comp2532_egaba  =  -65.0
+  comp2532_ggaba  =  3e-05
 }
 
 
@@ -38,6 +37,7 @@ STATE {
 
 
 ASSIGNED {
+  celsius
   v
   i
   e
@@ -46,13 +46,13 @@ ASSIGNED {
 
 
 BREAKPOINT {
-  i_Lkg2  =  comp2726_ggaba * (v - comp2726_egaba)
+  i_Lkg2  =  comp2532_ggaba * (v - comp2532_egaba)
   i  =  i_Lkg2
 }
 
 
 INITIAL {
-  e  =  comp2726_egaba
+  e  =  comp2532_egaba
 }
 
 

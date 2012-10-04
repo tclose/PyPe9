@@ -4,7 +4,7 @@ TITLE CGC_KV
 
 
 NEURON {
-  RANGE comp2288_vchold, comp2288_vcbase, comp2288_vcinc, comp2288_vcsteps, comp2288_vchdur, comp2288_vcbdur, comp2373_gbar, comp2373_e, KV_m
+  RANGE comp2134_vchold, comp2134_vcbase, comp2134_vcinc, comp2134_vcsteps, comp2134_vchdur, comp2134_vcbdur, comp2219_gbar, comp2219_e, KV_m
   RANGE i_KV
   RANGE ik
   RANGE ek
@@ -12,20 +12,10 @@ NEURON {
 }
 
 
-FUNCTION linoid (x, y) {
-  LOCAL v4142
-  if 
-    (fabs(x / y) < 1e-06) 
-     {v4142  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v4142  =  x / (exp(x / y) + -1.0)} 
-linoid  =  v4142
-}
-
-
-FUNCTION comp2373_alpha_n (v) {
-  comp2373_alpha_n  =  
-  comp2373_Q10 * comp2373_Aalpha_n * 
-    linoid(v + -(comp2373_V0alpha_n), comp2373_Kalpha_n)
+FUNCTION comp2219_beta_n (v, Q10) {
+  comp2219_beta_n  =  
+  Q10 * comp2219_Abeta_n * 
+    exp((v + -(comp2219_V0beta_n)) / comp2219_Kbeta_n)
 }
 
 
@@ -34,30 +24,38 @@ FUNCTION sigm (x, y) {
 }
 
 
-FUNCTION comp2373_beta_n (v) {
-  comp2373_beta_n  =  
-  comp2373_Q10 * comp2373_Abeta_n * 
-    exp((v + -(comp2373_V0beta_n)) / comp2373_Kbeta_n)
+FUNCTION linoid (x, y) {
+  LOCAL v3043
+  if 
+    (fabs(x / y) < 1e-06) 
+     {v3043  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v3043  =  x / (exp(x / y) + -1.0)} 
+linoid  =  v3043
+}
+
+
+FUNCTION comp2219_alpha_n (v, Q10) {
+  comp2219_alpha_n  =  
+  Q10 * comp2219_Aalpha_n * 
+    linoid(v + -(comp2219_V0alpha_n), comp2219_Kalpha_n)
 }
 
 
 PARAMETER {
-  comp2373_Kalpha_n  =  -10.0
-  comp2373_Kbeta_n  =  -80.0
-  comp2373_gbar  =  0.003
-  comp2373_e  =  -84.69
-  fix_celsius  =  30.0
-  comp2373_Q10  =  13.5137964673603
-  comp2288_vcsteps  =  8.0
-  comp2373_Abeta_n  =  0.125
-  comp2288_vchold  =  -71.0
-  comp2288_vcbdur  =  100.0
-  comp2288_vchdur  =  30.0
-  comp2288_vcbase  =  -69.0
-  comp2288_vcinc  =  10.0
-  comp2373_V0beta_n  =  -35.0
-  comp2373_V0alpha_n  =  -25.0
-  comp2373_Aalpha_n  =  -0.01
+  comp2219_V0beta_n  =  -35.0
+  comp2134_vcbdur  =  100.0
+  comp2134_vcinc  =  10.0
+  comp2134_vchold  =  -71.0
+  comp2134_vchdur  =  30.0
+  comp2134_vcbase  =  -69.0
+  comp2134_vcsteps  =  8.0
+  comp2219_Kalpha_n  =  -10.0
+  comp2219_gbar  =  0.003
+  comp2219_Aalpha_n  =  -0.01
+  comp2219_e  =  -84.69
+  comp2219_V0alpha_n  =  -25.0
+  comp2219_Abeta_n  =  0.125
+  comp2219_Kbeta_n  =  -80.0
 }
 
 
@@ -69,10 +67,17 @@ STATE {
 
 
 ASSIGNED {
+  comp2219_Q10
+  celsius
   v
   ik
   ek
   i_KV
+}
+
+
+PROCEDURE asgns () {
+  comp2219_Q10  =  3.0 ^ ((celsius + -6.3) / 10.0)
 }
 
 
@@ -82,32 +87,34 @@ PROCEDURE reactions () {
 
 
 BREAKPOINT {
-  LOCAL v4144
-  SOLVE states METHOD derivimplicit
+  LOCAL v3045
+  SOLVE kstates METHOD sparse
   reactions ()
-  v4144  =  KV_m 
-i_KV  =  (comp2373_gbar * v4144 * v4144 * v4144 * v4144) * (v - ek)
+  v3045  =  KV_m 
+i_KV  =  (comp2219_gbar * v3045 * v3045 * v3045 * v3045) * (v - ek)
   ik  =  i_KV
 }
 
 
-DERIVATIVE states {
-  LOCAL v4140
-  v4140  =  KV_mO 
-KV_mO'  =  
-    -(KV_mO * comp2373_beta_n(v)) + (1 - v4140) * (comp2373_alpha_n(v))
+KINETIC kstates {
+  asgns ()
+  ~ KV_mC <-> KV_mO (comp2219_alpha_n(v, comp2219_Q10) , comp2219_beta_n(v, comp2219_Q10))
+  CONSERVE KV_mC + KV_mO = 1
 }
 
 
 INITIAL {
+  asgns ()
   KV_m  =  
-  (comp2373_alpha_n(v)) / (comp2373_alpha_n(v) + comp2373_beta_n(v))
+  (comp2219_alpha_n(v, comp2219_Q10)) / 
+    (comp2219_alpha_n(v, comp2219_Q10) + 
+        comp2219_beta_n(v, comp2219_Q10))
   KV_mO  =  KV_m
-  ek  =  comp2373_e
+  SOLVE kstates STEADYSTATE sparse
+  ek  =  comp2219_e
 }
 
 
 PROCEDURE print_state () {
-  printf ("NMODL state: t = %g v = %g KV_mO = %g\n" , t, v,  KV_mO)
   printf ("NMODL state: t = %g v = %g KV_m = %g\n" , t, v,  KV_m)
 }
