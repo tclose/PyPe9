@@ -264,8 +264,8 @@ output file?" % filename)
                     sorted_IDs.append(ID)
                 if args.combine:
                     for ID in sorted_IDs:
-                        leg = '{variable_name} - ID{ID}'.
-                                            format(variable_name=variable_name.capitalize(), ID=ID)
+                        leg = '{variable_name} - ID{ID}'.format(
+                                                    variable_name=variable_name.capitalize(), ID=ID)
                         if rescale:
                             leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
                         combine_legend.append(leg)
