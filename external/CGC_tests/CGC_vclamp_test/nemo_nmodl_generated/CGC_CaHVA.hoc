@@ -1,0 +1,19 @@
+create soma
+access soma
+
+insert CGC_CaHVA
+
+soma {
+	nseg = 1 
+
+	diam = 9.76 
+
+	L = 9.76 
+
+	cm = 1
+
+	Ra = 100
+	
+	eca = 129.33
+    }
+

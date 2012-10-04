@@ -1,0 +1,18 @@
+create soma
+access soma
+
+insert CGC_Kir
+
+soma {
+	nseg = 1 
+
+	diam = 9.76 
+
+	L = 9.76 
+
+	cm = 1
+
+	Ra = 100
+	
+	ek = -84.69
+}

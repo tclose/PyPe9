@@ -1,0 +1,58 @@
+load_file("nrngui.hoc")
+load_file( "CGC_KV.hoc" )
+objref stim
+objref g[ 1 ] // graph objects
+objref vgraphbox, hgraphbox[ 1 ]
+vgraphbox=new VBox()
+vgraphbox.intercept(1)
+hgraphbox[ 0 ]=new HBox()
+hgraphbox[ 0 ].intercept(1)
+i =  0
+g[i]=new Graph()
+g[i].exec_menu("Keep Lines")
+hgraphbox[ 0 ].intercept(0)
+hgraphbox[ 0 ].map()
+
+vgraphbox.intercept(0)
+
+vec_sizes = tstop/dt + 1	// recorded traces are all this size
+
+stim=new IClamp(0.5)
+
+dt = 0.001
+
+proc icrun() {
+	
+	stim.del = 1
+	stim.dur = 0.1
+	stim.amp = 10
+
+	init()
+
+	run()
+	$o2.line(g[$1], dt)
+
+        for i=0,$o2.size()-1 {
+	    $o4.printf("%g %g\n", $o3.x[i], $o2.x[i])
+        }
+
+	if (stoppedrun()) {
+		break
+	}
+}
+print "generating  KV "
+objref  KV
+KV = new Vector(vec_sizes)
+KV.record (&soma.ik_CGC_KV( 0.5 ))
+objref tlog
+tlog = new Vector(vec_sizes,0)
+tlog.record (&t)
+objref logfile
+logfile = new File()
+logfile.wopen ( "KV.dat" )
+icrun( 0 ,  KV , tlog, logfile)
+g[ 0 ].label(.5,.85," KV ")
+logfile.close()
+i=0
+g[i].exec_menu("View = plot")
+vgraphbox.map()
