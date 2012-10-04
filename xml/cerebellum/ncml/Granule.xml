@@ -6,8 +6,8 @@
     <morphology id="GranuleMorph">
       <!-- Segments -->
       <segment id="soma">
-        <proximal x="0" y="0" z="0" diameter="9.76" />
-        <distal x="9.76" y="0" z="0" diameter="9.76" />
+        <proximal x="0" y="0" z="0" diameter="11.8" />
+        <distal x="11.8" y="0" z="0" diameter="11.8" />
       </segment>
       <segmentGroup id="soma_group">
         <member segment="soma" />

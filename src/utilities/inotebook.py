@@ -92,17 +92,31 @@ def compare_psections(psection_str, ref_psection_str=None):
     @param ref_psection [str]: a string containing a reference psection (if omitted two psections \
 will be searched for in the first string
     """
-    PSECTION_REGEX="""\n.*{([^}]*\n)*(.*{[^}]*}\n)+([^}]*\n)*.*}"""
-    psections = re.findall(PSECTION_REGEX, psection_str)
-    if not psections:
-        raise Exception("psection output was not found in psection string '{}'".format(psection_str))
+    PSECTION_REGEX="""\n.*{([^}]*\n)*(.*{[^}]*}\n)+([^}]*\n)*.*}"""   
+    match = re.search(PSECTION_REGEX, psection_str)
+    if not match:
+        raise Exception('Did not find a psection in the psection_string')
+    else:
+        psection = match.group(0)
+    
+    
+    print psection_str[match.endpos:]    
+        
     if ref_psection_str:
-        psections += re.findall(PSECTION_REGEX, ref_psection_str)
-    if len(psections) != 2:
-        raise Exception("Two psections required, {} found:\n\n{}'".format(len(psections), psections))
-    for name, psection in zip(('ref', 'new'), psections):
-        key_vals = re.findall('a', psection)
-        print '\n'.join(key_vals)
+        ref_match = re.search(PSECTION_REGEX, psection_str)
+        if not ref_match:
+            raise Exception('Did not find a psection in the reference psection string')
+        ref_psection = ref_match.group(0)
+    else:
+        ref_match = re.search(PSECTION_REGEX, psection_str[match.endpos:])
+        if not ref_match:
+            raise Exception('Did not find a second psection in the psection string')
+        else:
+            ref_psection = ref_match.group(0)
+    print psection
+    print '-----------------'
+    print ref_psection
+    
 
 if __name__ == "__main__":
     psection_str = """
