@@ -1,6 +1,6 @@
 
 
-TITLE CGC_ca
+TITLE CGC_Ca
 
 
 NEURON {
