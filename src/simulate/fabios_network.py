@@ -59,6 +59,8 @@ print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.mf_rate
 
+# Set the build mode for pyNN before importing the simulator specific modules
+ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
 
 print "Building network"
