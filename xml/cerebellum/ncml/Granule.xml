@@ -609,7 +609,6 @@
         <ionicCurrent id="CGC_Ca" />
         <ionicCurrent id="CGC_KM" />
         <ionicCurrent id="CGC_Lkg2" />
-        <passiveCurrent condDensity="3.0" units="S_per_m2" />
         <specificCapacitance value="1.0" units="uF_per_cm2" />
         <reversalPotential species="na" value="87.39" units="mV" />
         <reversalPotential species="k" value="-84.69" units="mV" />
