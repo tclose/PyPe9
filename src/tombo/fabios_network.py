@@ -7,13 +7,12 @@
  Author: Tom Close (tclose@oist.jp)
  Created: 6/8/2012
 """
-
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'fabios_network'
-
+# Required imports
 import tombo
 import argparse
-
+# Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
@@ -30,23 +29,22 @@ parser.add_argument('--debug', action='store_true', help='Loads a stripped down 
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
 parser.add_argument('--legacy_hoc', action="store_true", help="Run fabios original hoc model instead of the pyNN version")
 args = parser.parse_args()
-
+# Set the required directories to copy to the work directory depending on whether the legacy hoc code is used or not
 if args.legacy_hoc:
-    required_dirs  = ['external']
+    required_dirs = ['external']
 else:
-    required_dirs = ['src', 'xml']    
-
+    required_dirs = ['src', 'xml']
 # Create work directory and get path for output directory
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
-
+# Run existing hoc code instead of PyNN code if 'legacy_hoc' flag is used
 if args.legacy_hoc:
     import subprocess
     import os.path
     try:
         nrnivmodl_path = subprocess.check_output('which nrnivmodl', shell=True)
     except subprocess.CalledProcessError:
-        raise Exception('Could not find nrnivmodl on system path')        
-    os.chdir(os.path.join(work_dir, 'external','fabios_network'))    
+        raise Exception('Could not find nrnivmodl on system path')
+    os.chdir(os.path.join(work_dir, 'external', 'fabios_network'))
     subprocess.check_call('nrnivmodl', shell=True)
     cmd_line = \
 """
@@ -73,10 +71,9 @@ else:
     if args.debug:
         cmd_line += " --debug"
     if args.volt_trace:
-        cmd_line += " --volt_trace {volt_pop} {volt_cellid}".format(volt_pop=args.volt_trace[0], 
+        cmd_line += " --volt_trace {volt_pop} {volt_cellid}".format(volt_pop=args.volt_trace[0],
                                                                     volt_cellid=args.volt_trace[1])
-    copy_to_output= ['xml']
-                                                                  
+    copy_to_output = ['xml']
 # Submit job to que
 tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output,
                                                                              que_name=args.que_name)
