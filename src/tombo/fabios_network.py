@@ -29,6 +29,7 @@ parser.add_argument('--volt_trace', nargs=2, default=None, help="The population 
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
 parser.add_argument('--legacy_hoc', action="store_true", help="Run fabios original hoc model instead of the pyNN version")
+parser.add_argument('--dont_copy', action="store_true", help="Don't copy or move any files from the work directory so they can be run again")
 args = parser.parse_args()
 
 if args.legacy_hoc:
@@ -79,4 +80,4 @@ else:
                                                                   
 # Submit job to que
 tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output,
-                                                                             que_name=args.que_name)
+                                                                             que_name=args.que_name, strip_build_from_copy=(not args.dont_copy))
