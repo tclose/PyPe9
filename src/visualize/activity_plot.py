@@ -28,7 +28,7 @@ def generate_subplots(num_subplots):
         num_wide += 1
     axes = []
     for i in xrange(num_subplots):
-        axes.append(fig.add_subplot(num_high, num_wide,i))
+        axes.append(fig.add_subplot(num_high, num_wide, i))
     return fig, axes
 
 def quit_figure(event):
@@ -52,7 +52,7 @@ single combined axis')
     parser.add_argument('--no_show', action='store_true', help='Don''t show the plots initially \
 (waiting for other plots to be plotted')
     args = parser.parse_args(arguments)
-    
+
     # Set up the common axis to plot the results on
     num_spike_trains = 0
     num_v = 0
@@ -60,36 +60,36 @@ single combined axis')
     unique_currents = set()
     for filename in args.filenames:
         ext = filename.split('.')[-1]
-        if ext == 'spikes': 
+        if ext == 'spikes':
             num_spike_trains += 1
-        elif ext == 'v' or ext == 'dat': 
+        elif ext == 'v' or ext == 'dat':
             num_v += 1
         else:
             num_currents += 1
             unique_currents.add(ext)
-    num_unique_currents = len(unique_currents)     
-    if num_spike_trains:    
+    num_unique_currents = len(unique_currents)
+    if num_spike_trains:
         spike_fig, spike_axes = generate_subplots(num_spike_trains)
         #Assign quit shortcut to figure
         # Register the 'q' -> close shortcut key with the current figure    
-        spike_cid = spike_fig.canvas.mpl_connect('key_press_event', quit_figure) 
+        spike_cid = spike_fig.canvas.mpl_connect('key_press_event', quit_figure)
         spike_legend = []
     if num_v + num_currents:
         if args.combine:
             combine_fig = plt.figure()
             # Register the 'q' -> close shortcut key with the current figure
-            combine_cid = combine_fig.canvas.mpl_connect('key_press_event', quit_figure) 
+            combine_cid = combine_fig.canvas.mpl_connect('key_press_event', quit_figure)
             combine_axis = combine_fig.add_subplot(111)
             combine_legend = []
             # Test to see if there are two type of variables that are to be combined.
-            if num_unique_currents + num_v > 1: 
+            if num_unique_currents + num_v > 1:
                 rescale = True
             else:
                 rescale = False
         else:
             var_fig, var_axes = generate_subplots(num_v + num_currents)
             # Register the 'q' -> close shortcut key with the current figure
-            var_cid = var_fig.canvas.mpl_connect('key_press_event', quit_figure) 
+            var_cid = var_fig.canvas.mpl_connect('key_press_event', quit_figure)
             rescale = False
     spike_train_count = 0
     var_count = 0
@@ -146,7 +146,7 @@ output file?" % filename)
             # Set axis labels and limits
             ax.set_xlabel("Time (ms)")
             ax.set_ylabel("Neuron #")
-            plt.title(header['label'] + ' ' + args.label + ' - Spike Times')
+            plt.title(header['label'] + ' ' + args.extra_label + ' - Spike Times')
             max_id = numpy.max(ids)
             ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
             ax.set_ylim(-2, max_id + 2)
@@ -154,35 +154,35 @@ output file?" % filename)
         else:
             if variable_name == 'dat':
                 t_data = numpy.loadtxt(filename)
-                t = t_data[:,0]
-                data = t_data[:,1]
+                t = t_data[:, 0]
+                data = t_data[:, 1]
                 leg = '{variable_name} - ID{ID}'.format(
-                        variable_name=os.path.splitext(os.path.basename(filename))[0].capitalize(), 
+                        variable_name=os.path.splitext(os.path.basename(filename))[0].capitalize(),
                         ID=dat_count)
                 if rescale:
                     abs_max = max(abs(numpy.min(data)), abs(numpy.max(data)))
-                    order_of_mag = 10.0 ** math.floor(math.log(abs_max,10.0))
+                    order_of_mag = 10.0 ** math.floor(math.log(abs_max, 10.0))
                     leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
                     data /= order_of_mag
                 if args.combine:
-                    combine_axis.plot(t,data)
+                    combine_axis.plot(t, data)
                     combine_legend.append(leg)
                 else:
-                    var_axes[var_count].plot(t,data)
-                dat_count += 1                
+                    var_axes[var_count].plot(t, data)
+                dat_count += 1
             else:
                 try:
                     dt = header['dt']
                 except KeyError:
-                    raise Exception("Required header field 'dt' was not found in file header.")       
+                    raise Exception("Required header field 'dt' was not found in file header.")
                 f = open(filename)
                 if variable_name == 'v' and not rescale:
                     # 100 is a rough estimate of the range of the voltage variable to save having to 
                     # determine it from the max and minimum values
-                    var_range = 100 
+                    var_range = 100
                 else:
                     max_var = float('-inf')
-                    min_var = float('inf')            
+                    min_var = float('inf')
                     for line in f:
                         if line[0] != '#':
                             try:
@@ -201,12 +201,12 @@ output file?" % filename)
                         var_range = 1.0
                     else:
                         abs_max = max(abs(min_var), abs(max_var))
-                        order_of_mag = 10.0 ** math.floor(math.log(abs_max,10.0))
+                        order_of_mag = 10.0 ** math.floor(math.log(abs_max, 10.0))
                         var_range = max_var - min_var
                 if rescale:
                     incr = args.incr
                 else:
-                    incr = var_range * args.incr       
+                    incr = var_range * args.incr
                 time_i = 0
                 # Make sure the the prev_var variable starts from a value that will always be at
                 #  least 'incr' away from the first variable read
@@ -222,7 +222,7 @@ output file?" % filename)
                             var, ID = line.split()
                         except ValueError:
                             raise Exception("Incorrectly formatted line '%s', should be 'value ID'."
-                                                                                             % line)                
+                                                                                             % line)
                         if rescale:
                             var = float(var) / order_of_mag
                         else:
@@ -255,12 +255,12 @@ output file?" % filename)
                     sys.exit(0)
                 # Plot variables sorted in order of their IDs
                 sorted_IDs = []
-                for t, var, ID in sorted(zip(times, variables, IDs), key=lambda tup: 
+                for t, var, ID in sorted(zip(times, variables, IDs), key=lambda tup:
                                                                                 int(float(tup[2]))):
                     if args.combine:
-                        combine_axis.plot(t,var)
+                        combine_axis.plot(t, var)
                     else:
-                        var_axes[var_count].plot(t,var)
+                        var_axes[var_count].plot(t, var)
                     sorted_IDs.append(ID)
                 if args.combine:
                     for ID in sorted_IDs:
@@ -272,8 +272,8 @@ output file?" % filename)
                 else:
                     var_axes[var_count].legend(sorted_IDs)
                     var_axes[var_count].set_title('{label}{extra_label} - {variable_name} vs Time'.
-                                                  format(label=header['label'], 
-                                                  extra_label=args.extra_label, 
+                                                  format(label=header['label'],
+                                                  extra_label=args.extra_label,
                                                   variable_name=header['variable']))
                     var_axes[var_count].set_xlabel('Time (ms)')
                     if variable_name == 'v':
@@ -291,10 +291,10 @@ output file?" % filename)
     # Show the plot
     if not args.no_show:
         plt.show()
-    
+
 def activity_plot(arguments):
     import shlex
     main(shlex.split(arguments))
-    
+
 if __name__ == '__main__':
     main(sys.argv[1:])
