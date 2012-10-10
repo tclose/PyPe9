@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <network id="CerebellarGranularLayer">
-         <extensions>
+        <parameters>
+            <flags>
+                <flag id="NMDA" default="True" />
+            </flags>
+            <simulationDefaults>
+                <temperature value="23" />
+            </simulationDefaults>
+        </parameters>
+        <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
-        <simulationParams>
-            <temperature value="23" />
-        </simulationParams>
         <population id="Granules" cell="Granule">
             <layout type="Extension" engine="Brep" id="debug_Granules" />
         </population>
@@ -31,8 +36,8 @@
             <source id="MossyFiberInputs" />
             <destination id="MossyFibers" synapse="excitatory" segment="source_section" />
             <connection pattern="OneToOne" />
-            <weight pattern="Constant" value="1"/>
-            <delay pattern="Constant" value="0.05"/>            
+            <weight pattern="Constant" value="1" />
+            <delay pattern="Constant" value="0.05" />
         </projection>
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
@@ -43,7 +48,7 @@
                 rate="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
         </projection>
-        <projection id="MossyFibers_Granules_NMDA">
+        <projection id="MossyFibers_Granules_NMDA" flags="NMDA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="NMDA" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
@@ -56,6 +61,6 @@
             <source id="Granules" />
             <destination id="Golgis" synapse="GABA" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="debug_Granule-Golgi" />
-        </projection>     
+        </projection>
     </network>
 </nineml>
