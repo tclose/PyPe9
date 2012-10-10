@@ -37,7 +37,7 @@ parser.add_argument('--timestep', type=float, default=0.001, help='The timestep 
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
-parser.add_argument('--volt_trace', nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
+parser.add_argument('--volt_trace', metavar='POPULATION INDEX', nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
 args = parser.parse_args()
