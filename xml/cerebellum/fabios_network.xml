@@ -4,7 +4,7 @@
     <network id="CerebellarGranularLayer">
         <parameters>
             <flags>
-                <flag id="includeGap" default="True"/>
+                <flag id="includeGap" default="False"/>
             </flags>
             <scalars>
             </scalars>

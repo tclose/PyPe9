@@ -19,9 +19,9 @@ if 'NINEMLP_MPI' in os.environ:
 import argparse
 import ninemlp
 import time
-
+# Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
-
+# Parse the input options
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
@@ -40,56 +40,50 @@ parser.add_argument('--para_unsafe', action='store_true', help='If set the netwo
 parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
+parser.add_argument('--include_gap', action='store_true', help='Includes gap junctions into the network')
 args = parser.parse_args()
-
+# Set the network xml location
 if args.debug:
     xml_filename = 'debug_fabios.xml'
 else:
     xml_filename = 'fabios_network.xml'
-    
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)
-
+# Set the stimulation random seed
 if not args.stim_seed:
     stim_seed = long(time.time() * 256)
     print "Stimulation seed is %d" % stim_seed
 else:
     stim_seed = int(args.stim_seed)
- 
+# Print out basic parameters of the simulation
 print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.mf_rate
-
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
-
+# Set flags for the construction of the network
+flags = []
+if args.includ_gap:
+    flags.append('includeGap')
+# Build the network
 print "Building network"
-net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0,#@UndefinedVariable
-                                             build_mode=args.build, silent_build=args.silent_build) 
-
+net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
+                             build_mode=args.build, silent_build=args.silent_build, flags=flags)
 print "Network description"
 net.describe()
-
 if args.save_connections:
     print "Saving connections"
     net.save_connections(args.save_connections)
-
 print "Setting up simulation"
 mossy_fiber_inputs = net.get_population('MossyFiberInputs')
 mossy_fiber_inputs.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
-
 print "Setting up recorders"
 net.record_all_spikes(args.output_prefix)
-
 # Set up voltage traces    
 if args.volt_trace:
     cell = net.get_population(args.volt_trace[0])[int(args.volt_trace[1])]
     record_v(cell, args.output_prefix + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
-
 print "Starting run"
-
 run(args.time) #@UndefinedVariable
-
 end() #@UndefinedVariable
-
 print "Simulated Fabio's Network for %f milliseconds" % args.time
