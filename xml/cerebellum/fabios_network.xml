@@ -2,12 +2,20 @@
 <nineml>
     <!-- The base network from which to build the main network -->
     <network id="CerebellarGranularLayer">
+        <parameters>
+            <flags>
+                <flag id="includeGap" default="True"/>
+            </flags>
+            <scalars>
+            </scalars>
+            <simulationDefaults>
+                <temperature value="23" />
+                <timeStep value="0.001" />
+            </simulationDefaults>            
+        </parameters>
         <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
-        <simulationParams>
-            <temperature value="23" />
-        </simulationParams>
         <!-- Populations -->
         <population id="Granules" cell="Granule">
             <layout type="Extension" engine="Brep" id="Granules" />
@@ -101,7 +109,7 @@
                 estimating the number of granule cells via density 2. multiplying that number by 400
             </comment>
         </projection>
-        <projection id="Golgis_Golgis_Gap">
+        <projection id="Golgis_Golgis_Gap" flags="includeGap">
             <source id="Golgis" />
             <destination id="Golgis" synapse="Gap" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
