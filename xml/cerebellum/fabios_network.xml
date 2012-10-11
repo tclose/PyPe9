@@ -23,12 +23,10 @@
         <population id="MossyFibers" cell="HH_cond_exp">
             <layout type="Extension" engine="Brep" id="MossyFibers" />
             <cellParameters>
-                <const name="gbar_Na" value="0.25 S/cm2" />
-                <const name="g_leak" value="0.0001666 S/cm2" />
-                <const name="e_rev_leak" value="-60 mV" />
-                <const name="diameter" value="10.0 um" />
-                <const name="length" value="1.0 um" />
-                <const name="Ra" value="123 Ohm/cm" />
+                <const name="gbar_Na" value="0.25" units="S/cm2" />
+                <const name="g_leak" value="0.0001666" units="S/cm2" />
+                <const name="e_rev_leak" value="-60" units="mV" />
+                <const name="Ra" value="123" units="Ohm/cm" />
             </cellParameters>
         </population>
         <population id="MossyFiberInputs" cell="SpikeSourceArray">

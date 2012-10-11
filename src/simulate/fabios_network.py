@@ -63,7 +63,7 @@ ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
 # Set flags for the construction of the network
 flags = []
-if args.includ_gap:
+if args.include_gap:
     flags.append('includeGap')
 # Build the network
 print "Building network"
