@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-  This script creates and runs the Granular network that Fabio created for his 2011 paper.
+  This script creates and runs the simple gap junctions 
 
   @author Tom Close
 
@@ -25,6 +25,7 @@ parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
+parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output'), help='The output location the files will be written to')
 parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
 parser.add_argument('--time', type=float, default=100.0, help='The run time of the simulation (ms)')
 parser.add_argument('--input_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres')
@@ -47,7 +48,7 @@ if not args.stim_seed:
 else:
     stim_seed = int(args.stim_seed)
 # Print out basic parameters of the simulation
-setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=args.max_delay, quit_on_end=True)
+setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=4.0, quit_on_end=True)
 print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.input_rate
@@ -62,21 +63,15 @@ for pair_i in xrange(args.num_pairs):
         gap_junction = pair[i].soma.Gap
         gap_junction.g = args.ggap
         simulator.state.parallel_context.target_var(target.soma.Gap._ref_vgap, source_var_gid)
-        simulator.state.parallel_context.source_var(source._cell.source_section(0.5)._ref_v, source_var_gid)
+        simulator.state.parallel_context.source_var(source.soma(0.5)._ref_v, source_var_gid)
         source_var_gid += 1
     golgi_pairs.append(pair)
-#neuron.h.psection(sec=g1.soma)
-
-#print "Setting up simulation"
-#mossy_fiber_inputs = net.get_population('MossyFiberInputs')
-#mossy_fiber_inputs.set_poisson_spikes(args.input_rate, args.start_input, args.time)
-#print "Setting up recorders"
-#net.record_all_spikes(args.output_prefix)
-## Set up voltage traces    
-#if args.volt_trace:
-#    cell = net.get_population(args.volt_trace[0])[int(args.volt_trace[1])]
-#    record_v(cell, args.output_prefix + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
+test_golgi = golgi_pairs[0][0]
+neuron.h.psection(sec=test_golgi.soma)
+output_path=os.path.join(args.output, "test_golgi.v")
+test_golgi.record_v(output_path) #@UndefinedVariable
 print "Starting run"
 run(args.time) #@UndefinedVariable
 end() #@UndefinedVariable
-print "Simulated Fabio's Network for %f milliseconds" % args.time
+print "Simulated Sungho's gap junction test for {time} milliseconds, written to {output}".format(
+                                                                 time=args.time, output=output_path)

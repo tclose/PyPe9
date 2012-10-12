@@ -11,7 +11,6 @@
 #    Copyright 2011 Okinawa Institute of Science and Technology (OIST), Okinawa, Japan
 #
 #######################################################################################
-import sys
 import os.path
 if 'NINEMLP_MPI' in os.environ:
     import mpi4py #@UnresolvedImport @UnusedImport
