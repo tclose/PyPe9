@@ -69,7 +69,7 @@ for pair_i in xrange(args.num_pairs):
 test_golgi = golgi_pairs[0][0]
 neuron.h.psection(sec=test_golgi.soma)
 output_path=os.path.join(args.output, "test_golgi.v")
-test_golgi.record_v(output_path) #@UndefinedVariable
+test_golgi.record('v', output_path) #@UndefinedVariable
 print "Starting run"
 run(args.time) #@UndefinedVariable
 end() #@UndefinedVariable
