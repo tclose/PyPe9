@@ -8,10 +8,10 @@
             </flags>
             <scalars>
             </scalars>
-            <simulationDefaults>
+            <simulationParams>
                 <temperature value="23" />
                 <timeStep value="0.001" />
-            </simulationDefaults>            
+            </simulationParams>            
         </parameters>
         <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
