@@ -29,14 +29,14 @@ parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres')
 parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)')
-parser.add_argument('--output_prefix', type=str, default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.') , help='The output location of the recording files')
+parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.') , help='The output location of the recording files')
 parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation')
 parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
-parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
+parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs=2, default=[], action='append', help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
 parser.add_argument('--include_gap', action='store_true', help='Includes gap junctions into the network')
@@ -77,11 +77,11 @@ print "Setting up simulation"
 mossy_fiber_inputs = net.get_population('MossyFiberInputs')
 mossy_fiber_inputs.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
 print "Setting up recorders"
-net.record_all_spikes(args.output_prefix)
+net.record_all_spikes(args.output)
 # Set up voltage traces    
-if args.volt_trace:
-    cell = net.get_population(args.volt_trace[0])[int(args.volt_trace[1])]
-    record_v(cell, args.output_prefix + args.volt_trace[0] + "." + args.volt_trace[1] + ".v") #@UndefinedVariable
+for pop_id, cell_id in args.volt_trace:
+    cell = net.get_population(pop_id)[int(cell_id)]
+    record_v(cell, args.output + pop_id + "." + cell_id + ".v") #@UndefinedVariable
 print "Starting run"
 run(args.time) #@UndefinedVariable
 end() #@UndefinedVariable
