@@ -5,10 +5,10 @@
             <flags>
                 <flag id="NMDA" default="True" />
             </flags>
-            <simulationDefaults>
-                <temperature value="23" />
-            </simulationDefaults>
         </parameters>
+        <simulationDefaults>
+            <temperature value="23" />
+        </simulationDefaults>
         <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
