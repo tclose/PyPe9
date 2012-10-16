@@ -192,9 +192,9 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
 
 def build_mech_dir(args):
     mech_dir, build_mode, silent = args
-    from ninemlp.utilities.nmodl import build as build_nmodl
+    from ninemlp.neuron.build import build_modl
     print "Build mechanisms in '%s' directory" % mech_dir
-    build_nmodl(mech_dir, build_mode=build_mode, silent=silent)
+    compile_nmodl(mech_dir, build_mode=build_mode, silent=silent)
 
 def run_test(args):
     assert(len(args) == 7)
