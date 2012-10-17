@@ -25,7 +25,7 @@ libdir= @libdir@/nest
 lib_LTLIBRARIES=      mymodule.la libmymodule.la
 
 mymodule_la_CXXFLAGS= @AM_CXXFLAGS@
-mymodule_la_SOURCES=  mymodule.cpp      mymodule.h      \
+mymodule_la_SOURCES=  mymodule.cpp      mymodule.h \
                       pif_psc_alpha.cpp pif_psc_alpha.h \
                       drop_odd_spike_connection.h
 mymodule_la_LDFLAGS=  -module
@@ -41,10 +41,10 @@ AM_CPPFLAGS= @NEST_CPPFLAGS@ \
 .PHONY: install-slidoc
 
 nobase_pkgdata_DATA=\
-	sli/mymodule.sli
+sli/mymodule.sli
 
 install-slidoc:
-	NESTRCFILENAME=/dev/null $(DESTDIR)$(NEST_PREFIX)/bin/sli --userargs="@HELPDIRS@" $(NEST_PREFIX)/share/nest/sli/install-help.sli
+NESTRCFILENAME=/dev/null $(DESTDIR)$(NEST_PREFIX)/bin/sli --userargs="@HELPDIRS@" $(NEST_PREFIX)/share/nest/sli/install-help.sli
 
 install-data-hook: install-exec install-slidoc
 
