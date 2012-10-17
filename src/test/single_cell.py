@@ -38,9 +38,7 @@ def main(arguments):
     parser.add_argument('--print_all', action='store_true', help='Prints details for all sections instead of just soma')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
     args = parser.parse_args(arguments)
-    
-    from neuron import h
-    
+       
     if os.path.exists(args.xml_filename):
         network_xml_location = args.xml_filename
     elif os.path.exists(os.path.join(PROJECT_PATH, 'xml', args.xml_filename)):
@@ -63,11 +61,10 @@ def main(arguments):
     cell = pop[0]._cell
     soma = cell.soma
     if args.print_all:
+        from neuron import h
         for seg_id, seg in sorted(cell.segments.items(), key=itemgetter(0)):
             print "ID: {0}".format(seg_id)
             h.psection(sec=seg)
-    else:
-        h.psection(sec=soma)
     # Create the input current and times vectors
     if args.inject:
         inject_type = args.inject[0]
