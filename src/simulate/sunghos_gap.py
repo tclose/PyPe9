@@ -43,7 +43,7 @@ args = parser.parse_args()
 ninemlp.pyNN_build_mode = args.build
 from ninemlp.neuron import * #@UnusedWildImport
 # Set the network xml location
-golgi_xml_location = os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'ncml', 'Golgi.xml')
+xml_location = os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'SunghosNetwork.xml')
 # Set the stimulation random seed
 if not args.stim_seed:
     stim_seed = long(time.time() * 256)
@@ -51,7 +51,9 @@ if not args.stim_seed:
 else:
     stim_seed = int(args.stim_seed)
 # Print out basic parameters of the simulation
-setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=4.0, quit_on_end=True)
+net = Network(xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
+                             build_mode=args.build, silent_build=args.silent_build)
+#setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=4.0, quit_on_end=True)
 print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.input_rate
