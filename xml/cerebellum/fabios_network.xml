@@ -2,17 +2,17 @@
 <nineml>
     <!-- The base network from which to build the main network -->
     <network id="CerebellarGranularLayer">
-        <parameters>
+        <freeParameters>
             <flags>
                 <flag id="includeGap" default="False"/>
             </flags>
             <scalars>
-            </scalars>
-            <simulationDefaults>
-                <temperature value="23" />
-                <timeStep value="0.001" />
-            </simulationDefaults>            
-        </parameters>
+            </scalars>        
+        </freeParameters>
+        <simulationDefaults>
+            <temperature value="23" />
+            <timeStep value="0.001" />
+        </simulationDefaults>           
         <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
@@ -26,7 +26,6 @@
                 <const name="gbar_Na" value="0.25" units="S/cm2" />
                 <const name="g_leak" value="0.0001666" units="S/cm2" />
                 <const name="e_rev_leak" value="-60" units="mV" />
-                <const name="Ra" value="123" units="Ohm/cm" />
             </cellParameters>
         </population>
         <population id="MossyFiberInputs" cell="SpikeSourceArray">

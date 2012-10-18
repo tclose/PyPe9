@@ -25,7 +25,7 @@ project_dir = os.path.join(SRC_PATH, '..')
 sys.path.append(os.path.join(project_dir, 'Molecular_Layer'))
 import argparse
 import time
-import ninemlp.utilities.nmodl as nmodl
+from ninemlp.neuron.build import compile_nmodl
 from ninemlp import DEFAULT_BUILD_MODE, BUILD_MODE_OPTIONS
 import subprocess
 
@@ -80,9 +80,8 @@ elif args.method == 'hoc':
 
     import main as ml_main
 
-
     for mech in ml_main.mechanisms:
-        nmodl.build(os.path.join(project_dir, 'Molecular_Layer', 'mechanisms', mech),
+        compile_nmodl(os.path.join(project_dir, 'Molecular_Layer', 'mechanisms', mech),
                                                                           build_mode=args.build)
 
     if args.build == 'compile_only':

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ncml:model xmlns:ncml="ncml" name="CGC">
+    <!--<include href="SimpleIonChannel.xml"/> -->
+    <cell id="SunghosCell">
+        <notes>A model of a granule cell</notes>
+        <morphology id="GranuleMorph">
+            <!-- Segments -->
+            <segment id="soma">
+                <proximal x="0" y="0" z="0" diameter="11.8" />
+                <distal x="11.8" y="0" z="0" diameter="11.8" />
+            </segment>
+            <segmentGroup id="soma_group">
+                <member segment="soma" />
+            </segmentGroup>
+        </morphology>
+        <biophysicalProperties id="Cerebellar Granule Cell">
+            <actionPotentialThreshold v="-21" />
+            <membraneProperties>
+                <ionicCurrent id="SunghosMech" />
+                <specificCapacitance value="1.0" units="uF_per_cm2" />
+<!--                 <reversalPotential species="na" value="87.39" units="mV" />
+                <reversalPotential species="k" value="-84.69" units="mV" />
+                <reversalPotential species="ca" value="129.33" units="mV" />-->
+            </membraneProperties>
+            <intracellularProperties>
+                <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
+            </intracellularProperties>
+            <synapses>
+                <!-- Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
+                <conductanceSynapse id="AMPA" type="Exp2Syn" segmentGroup="soma_group">
+                    <ncml:arg name="tau1" value="0.3" units="ms" />
+                    <ncml:arg name="tau2" value="0.5" units="ms" />
+                    <ncml:arg name="e" value="0.0" units="mV" />
+                </conductanceSynapse>
+                <conductanceSynapse id="NMDA" type="Exp2Syn" segmentGroup="soma_group">
+                    <ncml:arg name="tau1" value="1" units="ms" />
+                    <ncml:arg name="tau2" value="13.3" units="ms" />
+                    <ncml:arg name="e" value="0.0" units="mV" />
+                </conductanceSynapse>
+                <conductanceSynapse id="GABA" type="Exp2Syn" segmentGroup="soma_group">
+                    <ncml:arg name="tau1_0" value="0.31" units="ms" />
+                    <ncml:arg name="tau2_0" value="8.8" units="ms" />
+                    <ncml:arg name="e_0" value="-75.0" units="mV" />
+                    <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
+                        units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
+                </conductanceSynapse>
+                <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />
+            </synapses>
+        </biophysicalProperties>
+    </cell>
+</ncml:model>

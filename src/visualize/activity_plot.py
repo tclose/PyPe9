@@ -120,8 +120,7 @@ single combined axis')
             if not header:
                 raise Exception("Did not load a header from the passed file '%s', is it a pyNN \
 output file?" % filename)
-            if not header.has_key('label'):
-                raise Exception("Required header field 'label' was not found in file header.")
+            label = header.get('label', '')
         # Get the type of variable recorded via the file's extension
         if variable_name == 'spikes':
             # Load spikes
@@ -146,7 +145,7 @@ output file?" % filename)
             # Set axis labels and limits
             ax.set_xlabel("Time (ms)")
             ax.set_ylabel("Neuron #")
-            plt.title(header['label'] + ' ' + args.extra_label + ' - Spike Times')
+            plt.title(label + ' ' + args.extra_label + ' - Spike Times')
             max_id = numpy.max(ids)
             ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
             ax.set_ylim(-2, max_id + 2)
@@ -272,7 +271,7 @@ output file?" % filename)
                 else:
                     var_axes[var_count].legend(sorted_IDs)
                     var_axes[var_count].set_title('{label}{extra_label} - {variable_name} vs Time'.
-                                                  format(label=header['label'],
+                                                  format(label=label,
                                                   extra_label=args.extra_label,
                                                   variable_name=header['variable']))
                     var_axes[var_count].set_xlabel('Time (ms)')

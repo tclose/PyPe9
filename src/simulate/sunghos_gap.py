@@ -17,6 +17,7 @@ if 'NINEMLP_MPI' in os.environ:
 import argparse
 import ninemlp
 import time
+from operator import itemgetter
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
@@ -35,12 +36,14 @@ parser.add_argument('--para_unsafe', action='store_true', help='If set the netwo
 parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs=2, default=[], help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
 parser.add_argument('--num_pairs', type=int, default=1, help='The number of golgi pairs to create')
 parser.add_argument('--ggap', type=float, default=1e-10, help='Gap junction conductance')
+parser.add_argument('--print_first', action='store_true', help='Print out the sections (via psection) of the first golgi cell')
+parser.add_argument('--temperature', type=float, default=23.0, help='The temperature the experiment is simulated at')
 args = parser.parse_args()
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
 from ninemlp.neuron import * #@UnusedWildImport
 # Set the network xml location
-golgi_xml_location = os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'ncml', 'Golgi.xml')
+xml_location = os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'SunghosNetwork.xml')
 # Set the stimulation random seed
 if not args.stim_seed:
     stim_seed = long(time.time() * 256)
@@ -48,7 +51,9 @@ if not args.stim_seed:
 else:
     stim_seed = int(args.stim_seed)
 # Print out basic parameters of the simulation
-setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=4.0, quit_on_end=True)
+net = Network(xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
+                             build_mode=args.build, silent_build=args.silent_build)
+#setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=4.0, quit_on_end=True)
 print "Simulation time: %f" % args.time
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.input_rate
@@ -66,10 +71,15 @@ for pair_i in xrange(args.num_pairs):
         simulator.state.parallel_context.source_var(source.soma(0.5)._ref_v, source_var_gid)
         source_var_gid += 1
     golgi_pairs.append(pair)
-test_golgi = golgi_pairs[0][0]
-neuron.h.psection(sec=test_golgi.soma)
-output_path=os.path.join(args.output, "test_golgi.v")
-test_golgi.record_v(output_path) #@UndefinedVariable
+first_golgi = golgi_pairs[0][0]
+output_path=os.path.join(args.output, "first_golgi.v")
+first_golgi.record('v', output_path) #@UndefinedVariable
+if args.print_first:
+    for seg_id, seg in sorted(first_golgi.segments.items(), key=itemgetter(0)):
+        print "ID: {0}".format(seg_id)
+        neuron.h.psection(sec=seg)
+# Set simulation temperature
+neuron.h.celsius = args.temperature
 print "Starting run"
 run(args.time) #@UndefinedVariable
 end() #@UndefinedVariable

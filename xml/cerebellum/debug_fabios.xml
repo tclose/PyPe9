@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <network id="CerebellarGranularLayer">
-        <parameters>
+        <freeParameters>
             <flags>
                 <flag id="NMDA" default="True" />
             </flags>
-            <simulationDefaults>
-                <temperature value="23" />
-            </simulationDefaults>
-        </parameters>
+        </freeParameters>
+        <simulationDefaults>
+            <temperature value="23" />
+        </simulationDefaults>
         <extensions>
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>

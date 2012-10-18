@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <network id="CerebellarGranularLayer">
-        <simulationParams>
+        <simulationDefaults>
             <temperature value="30" />
             <timestep value="0.025" />
-        </simulationParams>
+        </simulationDefaults>
         <population id="Granules" cell="Granule" size="1"/>
     </network>
 </nineml>
