@@ -16,7 +16,7 @@ from ninemlp.nest import * #@UnusedWildImport
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 network_xml_location = os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'single_test.xml')
 print "Building network"
-net = Network(network_xml_location,0.0025, min_delay=0.005, max_delay=2.0) 
+net = Network(network_xml_location, timestep=0.001, min_delay=0.004, max_delay=0.9, temperature=23.0) 
 print "Starting run"
 run(1000) 
 end() 
