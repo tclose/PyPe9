@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <network id="CerebellarGranularLayer">
-        <population id="TestCells" cell="mymodule" size="1"/>
+        <population id="TestCells" cell="Granule" size="1"/>
     </network>
 </nineml>
