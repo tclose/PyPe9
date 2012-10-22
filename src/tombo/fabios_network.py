@@ -30,6 +30,7 @@ parser.add_argument('--output_dir', default=None, type=str, help='The parent dir
 parser.add_argument('--legacy_hoc', action="store_true", help="Run fabios original hoc model instead of the pyNN version")
 parser.add_argument('--dont_copy', action="store_true", help="Don't copy or move any files from the work directory so they can be run again")
 parser.add_argument('--include_gap', action='store_true', help='Includes gap junctions into the network')
+parser.add_argument('--no_granule_to_golgi', action='store_true', help='Deactivates the granule to golgi connection in the network.')
 args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc code is used or not
 if args.legacy_hoc:
@@ -78,6 +79,8 @@ else:
                                                                     volt_cellid=args.volt_trace[1])
     if args.include_gap:
         cmd_line += ' --include_gap'
+    if args.no_granule_to_golgi:
+        cmd_line += ' --no_granule_to_golgi'
     copy_to_output = ['xml']
 # Submit job to que
 tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output,
