@@ -2,7 +2,8 @@ load_file("nrngui.hoc")
 /////////////////////////
 //Simulation parameters//
 ////////////////////////
-tmax=150         
+//tmax=150         
+tmax=2000         
 cvode.active(0)  //Fixed time step 
 DT=0.025	
 
