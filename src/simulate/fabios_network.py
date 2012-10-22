@@ -54,10 +54,6 @@ if not args.stim_seed:
     print "Stimulation seed is %d" % stim_seed
 else:
     stim_seed = int(args.stim_seed)
-# Print out basic parameters of the simulation
-print "Simulation time: %f" % args.time
-print "Stimulation start: %f" % args.start_input
-print "MossyFiber firing rate: %f" % args.mf_rate
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
@@ -86,6 +82,11 @@ for pop_id, cell_id in args.volt_trace:
     cell = net.get_population(pop_id)[int(cell_id)]
     record_v(cell, args.output + pop_id + "." + cell_id + ".v") #@UndefinedVariable
 print "Starting run"
+# Print out basic parameters of the simulation
+print "Simulation time: %f" % args.time
+print "Stimulation start: %f" % args.start_input
+print "MossyFiber firing rate: %f" % args.mf_rate
+# Actually run simulation
 run(args.time) #@UndefinedVariable
 end() #@UndefinedVariable
 print "Simulated Fabio's Network for %f milliseconds" % args.time
