@@ -17,8 +17,8 @@ SEED=1
 ///////////////////////////////
 //uncomment gap junction flag//
 //////////////////////////////
-GJ=1      // with GJ between GoCs
-//GJ=0      // without GJ between GoCs
+//GJ=1      // with GJ between GoCs
+GJ=0      // without GJ between GoCs
 
 ///////////////////////////
 //Building Network Layers//
