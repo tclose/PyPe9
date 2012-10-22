@@ -81,4 +81,4 @@ else:
     copy_to_output = ['xml']
 # Submit job to que
 tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output,
-                                                                             que_name=args.que_name, strip_build_from_copy=(not args.dont_copy))
+                                 que_name=args.que_name, strip_build_from_copy=(not args.dont_copy))
