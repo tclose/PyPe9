@@ -4,6 +4,7 @@
         <freeParameters>
             <flags>
                 <flag id="NMDA" default="True" />
+                <flag id="GranuleToGolgi" default="True"/>
             </flags>
         </freeParameters>
         <simulationDefaults>
@@ -15,27 +16,12 @@
         <population id="Granules" cell="Granule">
             <layout type="Extension" engine="Brep" id="debug_Granules" />
         </population>
-        <population id="MossyFibers" cell="HH_cond_exp">
-            <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
-            <cellParameters>
-                <const name="gbar_Na" value="0.25" units="S/cm2" />
-                <const name="g_leak" value="0.0001666" units="S/cm2" />
-                <const name="e_rev_leak" value="-60" units="mV" />
-            </cellParameters>
-        </population>
         <population id="Golgis" cell="Golgi">
             <layout type="Extension" engine="Brep" id="debug_Golgis" />
         </population>
-        <population id="MossyFiberInputs" cell="SpikeSourceArray">
+        <population id="MossyFibers" cell="SpikeSourceArray">
             <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
         </population>
-        <projection id="MossyFiberInputs_MossyFibers">
-            <source id="MossyFiberInputs" />
-            <destination id="MossyFibers" synapse="excitatory" segment="source_section" />
-            <connection pattern="OneToOne" />
-            <weight pattern="Constant" value="1" />
-            <delay pattern="Constant" value="0.05" />
-        </projection>
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />
@@ -54,7 +40,7 @@
                 rate="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
         </projection>
-        <projection id="Granules_Golgis">
+        <projection id="Granules_Golgis" flags="GranuleToGolgi">
             <source id="Granules" />
             <destination id="Golgis" synapse="GABA" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="debug_Granule-Golgi" />
