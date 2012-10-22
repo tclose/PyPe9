@@ -20,28 +20,28 @@
         <population id="Granules" cell="Granule">
             <layout type="Extension" engine="Brep" id="Granules" />
         </population>
-        <population id="MossyFibers" cell="HH_cond_exp">
+<!--    <population id="MossyFibers" cell="HH_cond_exp">
             <layout type="Extension" engine="Brep" id="MossyFibers" />
             <cellParameters>
                 <const name="gbar_Na" value="0.25" units="S/cm2" />
                 <const name="g_leak" value="0.0001666" units="S/cm2" />
                 <const name="e_rev_leak" value="-60" units="mV" />
             </cellParameters>
-        </population>
-        <population id="MossyFiberInputs" cell="SpikeSourceArray">
+        </population>-->
+        <population id="MossyFibers" cell="SpikeSourceArray">
             <layout type="Extension" engine="Brep" id="MossyFibers" />
         </population>
         <population id="Golgis" cell="Golgi">
             <layout type="Extension" engine="Brep" id="Golgis" />
         </population>
         <!-- Projections -->
-        <projection id="MossyFiberInputs_MossyFibers">
+<!--         <projection id="MossyFiberInputs_MossyFibers">
             <source id="MossyFiberInputs" />
             <destination id="MossyFibers" synapse="excitatory" segment="source_section" />
             <connection pattern="OneToOne" />
             <weight pattern="Constant" value="0.01" />
             <delay pattern="Constant" value="0.05" />
-        </projection>
+        </projection>-->
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />

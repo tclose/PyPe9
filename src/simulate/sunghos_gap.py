@@ -16,6 +16,7 @@ if 'NINEMLP_MPI' in os.environ:
     print "importing MPI"
 import argparse
 import ninemlp
+from pyNN.neuron.
 import time
 from operator import itemgetter
 # Set the project path for use in default parameters of the arguments
@@ -54,10 +55,10 @@ else:
 net = Network(xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
                              build_mode=args.build, silent_build=args.silent_build)
 #setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=4.0, quit_on_end=True)
-print "Simulation time: %f" % args.time
-print "Stimulation start: %f" % args.start_input
-print "MossyFiber firing rate: %f" % args.input_rate
-Golgi = ncml.load_cell_type('Golgi', golgi_xml_location)
+inputs = net.get_population('Inputs')
+inputs.set_spikes(spikes_array)
+
+
 golgi_pairs = []
 source_var_gid = 0
 for pair_i in xrange(args.num_pairs):

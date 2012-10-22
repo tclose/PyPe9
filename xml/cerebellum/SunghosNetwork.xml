@@ -5,5 +5,13 @@
             <temperature value="23" />
         </simulationDefaults>
         <population id="TestCells" cell="SunghosCell" size="1"/>
+        <population id="Inputs" cell="SpikeSourceArray" size="1"/>
+        <projection id="Inputs_TestCells">
+            <source id="Inputs" />
+            <destination id="TestCells" synapse="excitatory" segment="soma" />
+            <connection pattern="OneToOne" />
+            <weight pattern="Constant" value="0.01" />
+            <delay pattern="Constant" value="0.05" />
+        </projection>
     </network>
 </nineml>

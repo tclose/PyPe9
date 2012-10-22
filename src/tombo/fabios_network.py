@@ -40,6 +40,7 @@ else:
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
 # Run existing hoc code instead of PyNN code if 'legacy_hoc' flag is used
 if args.legacy_hoc:
+    args.np = 1
     import subprocess
     import os.path
     try:
