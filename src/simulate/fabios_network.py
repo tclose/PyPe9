@@ -74,8 +74,8 @@ if args.save_connections:
     print "Saving connections"
     net.save_connections(args.save_connections)
 print "Setting up simulation"
-mossy_fiber_inputs = net.get_population('MossyFiberInputs')
-mossy_fiber_inputs.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
+mossy_fibers = net.get_population('MossyFibers')
+mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
 print "Setting up recorders"
 net.record_all_spikes(args.output)
 # Set up voltage traces    
