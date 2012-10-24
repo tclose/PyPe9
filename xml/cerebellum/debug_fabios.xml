@@ -6,8 +6,7 @@
                 <flag id="NMDA" default="True" />
                 <flag id="GranuleToGolgi" default="True" />
             </flags>
-            <scalars>
-            </scalars>
+            <scalars />
         </freeParameters>
         <simulationDefaults>
             <temperature value="23" />
@@ -17,19 +16,21 @@
         </extensions>
         <population id="Granules" cell="Granule">
             <layout type="Extension" engine="Brep" id="debug_Granules" />
-            <parameterDistributions>
-                <paramDistr param="v" distr="Uniform" min="-84" max="-56" units="mV" />
-                <paramDistr param="el" distr="Uniform" min="−19.8" max="−13.2" units="nA" />
-                <paramDistr param="diam" segmentGroup="soma" distr="Uniform" min="9.4" max="14.16"
-                    units="um" />
-            </parameterDistributions>                
+            <cellParameters>
+                <distribution param="v" type="uniform" low="-84" high="-56" units="mV" />
+                <distribution param="el" type="uniform" low="-19.8" high="-13.2" units="nA" />
+                <distribution param="diam" type="uniform" low="9.4" high="14.16" units="um"
+                    segmentGroup="soma" />
+            </cellParameters>
         </population>
         <population id="Golgis" cell="Golgi">
             <layout type="Extension" engine="Brep" id="debug_Golgis" />
-            <paramDistr param="v" distr="Uniform" min="-84" max="-56" units="mV" />
-            <paramDistr param="diam" segmentGroup="soma" distr="Uniform" min="21.6" max="32.4"
-                units="um" />
-            <paramDistr param="el" distr="Uniform" min="-66" max="-44" units="nA" />
+            <cellParameters>
+                <distribution param="v" type="uniform" low="-84" high="-56" units="mV" />
+                <distribution param="diam" type="uniform" low="21.6" high="32.4" units="um"
+                    segmentGroup="soma" />
+                <distribution param="el" type="uniform" low="-66" high="-44" units="nA" />
+            </cellParameters>
         </population>
         <population id="MossyFibers" cell="SpikeSourceArray">
             <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
