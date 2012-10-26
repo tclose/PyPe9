@@ -131,7 +131,7 @@
                 <parent segment="dend_2_8" />
                 <distal x="0" y="113.0" z="13.5" diameter="3" />
             </segment> -->
-            <segmentGroup id="soma_group">
+            <segmentGroup id="soma">
                 <member segment="soma" />
             </segmentGroup>
             <!--<segmentGroup id="dendrite_group">
@@ -171,7 +171,7 @@
             <!-- FIXME: celsius = 23 Not sure where to put this -->
             <membraneProperties>
                 <ionicCurrent id="Golgi_Lkg" />            
-                <ionicCurrent id="Golgi_Na" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_Na" segmentGroup="soma">
                     <defun name="alp_m">
                         <arg name="v" />
                         <body> temp_adj * Aalpha_m*linoid(v-V0alpha_m,Kalpha_m)
@@ -200,7 +200,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_NaR" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_NaR" segmentGroup="soma">
                     <defun name="alp_s">
                         <arg name="v" />
                         <body> temp_adj*(Shiftalpha_s+Aalpha_s * ((v+V0alpha_s)/ 1 (mV)
@@ -224,7 +224,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_NaP" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_NaP" segmentGroup="soma">
                     <defun name="alp_m">
                         <arg name="v" />
                         <body> temp_adj * * Aalpha_m*linoid(v-V0alpha_m, Kalpha_m)
@@ -243,7 +243,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma">
                     <defun name="alp_s">
                         <arg name="v" />
                         <body> temp_adj * Aalpha_s*exp((v-V0alpha_s)/Kalpha_s)
@@ -265,8 +265,8 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_KV" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_KV" segmentGroup="soma">
                     <defun name="alp_n">
                         <arg name="v" />
                         <body> tcorr*Aalpha_n*linoid(v-V0alpha_n, Kalpha_n)
@@ -285,7 +285,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_KM" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_KM" segmentGroup="soma">
                     <defun name="alp_n">
                         <arg name="v" />
                         <body> Aalpha_n*exp((v-V0alpha_n)/Kalpha_n)
@@ -297,7 +297,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_KA" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_KA" segmentGroup="soma">
                     <defun name="alp_a">
                         <arg name="v" />
                         <body> alp_a = tcorr*Aalpha_a*sigm(v-V0alpha_a,Kalpha_a)
@@ -332,7 +332,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_KCa" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_KCa" segmentGroup="soma">
                     <defun name="alp_c">
                         <arg name="v" />
                         <body> tcorr*Aalpha_c/(1+(Balpha_c*exp(v/Kalpha_c)/cai))
@@ -344,10 +344,10 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_SK2" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_SK2" segmentGroup="soma">
                     <!-- no functions instead of temperature -->
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_HCN1" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_HCN1" segmentGroup="soma">
                     <defun name="r">
                         <arg name="potential" />
                         <body> rA * potential + rB
@@ -371,7 +371,7 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_HCN2" segmentGroup="soma_group">
+                <ionicCurrent id="Golgi_HCN2" segmentGroup="soma">
                     <defun name="r">
                         <arg name="potential" />
                         <arg name="r1" />
@@ -409,37 +409,37 @@
                         </body>
                     </defun>
                 </ionicCurrent>
-                <ionicCurrent id="Golgi_Ca" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_Ca2" segmentGroup="soma_group" />
-               <!-- <ionicCurrent id="NaConc" segmentGroup="soma_group" />  FIXME: Don't know what the tag for this should be. -->
-               <!--  <ionicCurrent id="KConc" segmentGroup="soma_group" />  FIXME: Don't know what the tag for this should be. -->
+                <ionicCurrent id="Golgi_Ca" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_Ca2" segmentGroup="soma" />
+               <!-- <ionicCurrent id="NaConc" segmentGroup="soma" />  FIXME: Don't know what the tag for this should be. -->
+               <!--  <ionicCurrent id="KConc" segmentGroup="soma" />  FIXME: Don't know what the tag for this should be. -->
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
-                <reversalPotential species="ca" value="129.33" units="mV" segmentGroup="soma_group"/>
-                <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma_group"/>
-                <reversalPotential species="k" value="-84.69" units="mV" segmentGroup="soma_group"/>
+                <reversalPotential species="ca" value="129.33" units="mV" segmentGroup="soma"/>
+                <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma"/>
+                <reversalPotential species="k" value="-84.69" units="mV" segmentGroup="soma"/>
             </membraneProperties>
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
             </intracellularProperties>
             <synapses>
-                <conductanceSynapse id="AMPA" type="Exp2Syn" segmentGroup="soma_group">
+                <conductanceSynapse id="AMPA" type="Exp2Syn" segmentGroup="soma">
                     <arg name="tau1" value="0.3" units="ms" />
                     <arg name="tau2" value="0.5" units="ms" />
                     <arg name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
-                <conductanceSynapse id="NMDA" type="Exp2Syn" segmentGroup="soma_group">
+                <conductanceSynapse id="NMDA" type="Exp2Syn" segmentGroup="soma">
                     <arg name="tau1" value="1" units="ms" />
                     <arg name="tau2" value="13.3" units="ms" />
                     <arg name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
-                <conductanceSynapse id="GABA" type="Exp2Syn" segmentGroup="soma_group">
+                <conductanceSynapse id="GABA" type="Exp2Syn" segmentGroup="soma">
                     <arg name="tau1_0" value="0.31" units="ms" />
                     <arg name="tau2_0" value="8.8" units="ms" />
                     <arg name="e_0" value="-75.0" units="mV" />
                     <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
                         units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
                 </conductanceSynapse>
-                 <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />
+                 <gapJunction id="Gap" type="Gap" segmentGroup="soma" />
             </synapses>            
             <initalConditions>
                 <membranePotential value='-65 mV'/>
