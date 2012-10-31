@@ -19,7 +19,7 @@
             <cellParameters>
                 <distribution component="CGC_Lkg1" param="e" type="uniform" low="-19.8"
                     high="-13.2" units="nA" />
-                <distribution param="diameter" type="uniform" low="9.4" high="14.16"
+                <distribution param="diam" type="uniform" low="9.4" high="14.16"
                     units="um" segmentGroup="soma" />
             </cellParameters>
             <initalConditions>
@@ -29,7 +29,7 @@
         <population id="Golgis" cell="Golgi">
             <layout type="Extension" engine="Brep" id="debug_Golgis" />
             <cellParameters>
-                <distribution param="diameter" type="uniform" low="21.6" high="32.4"
+                <distribution param="diam" type="uniform" low="21.6" high="32.4"
                     units="um" segmentGroup="soma" />
                 <distribution component="Golgi_Lkg" param="e" type="uniform" low="-66"
                     high="-44" units="nA" />

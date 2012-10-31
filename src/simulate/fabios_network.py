@@ -66,7 +66,7 @@ if args.no_granule_to_golgi:
 # Build the network
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
-                             build_mode=args.build, silent_build=args.silent_build, flags=flags)
+                                build_mode=args.build, silent_build=args.silent_build, flags=flags)
 print "Network description"
 net.describe()
 if args.save_connections:
@@ -77,6 +77,9 @@ mossy_fibers = net.get_population('MossyFibers')
 mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
 print "Setting up recorders"
 net.record_all_spikes(args.output)
+golgis = net.get_population('Golgis')
+for id in golgis:
+    neuron.h.psection(sec=id._cell.soma) #UndefinedVariable
 # Set up voltage traces    
 for pop_id, cell_id in args.volt_trace:
     cell = net.get_population(pop_id)[int(cell_id)]
