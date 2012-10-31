@@ -55,7 +55,7 @@ if args.legacy_hoc:
 cd external/fabios_network
 nrniv mosinit.hoc
 """
-    copy_to_output = []
+    copy_to_output = ['data']
 else:
     #Compile network
     tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
