@@ -9,30 +9,30 @@
                 <proximal x="0" y="0" z="0" diameter="27" />
                 <distal x="0" y="0" z="27" diameter="27" />
             </segment>
-            <segmentGroup id="soma_group">
+            <segmentGroup id="soma">
                 <member segment="soma" />
             </segmentGroup>
         </morphology>
         <biophysicalProperties id="GolgiBiophys">
             <membraneProperties>
-                <ionicCurrent id="Golgi_Ca" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_Ca2" segmentGroup="soma_group" />    
-                <ionicCurrent id="Golgi_KCa" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_Lkg" segmentGroup="soma_group" />        
-                <ionicCurrent id="Golgi_NaR" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_NaP" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_Na" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_KV" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_KM" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_KA" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma_group" /> 
-                <ionicCurrent id="Golgi_HCN1" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_HCN2" segmentGroup="soma_group" />                
-                <ionicCurrent id="Golgi_SK2" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma_group" /> 
+                <ionicCurrent id="Golgi_Ca" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_Ca2" segmentGroup="soma" />    
+                <ionicCurrent id="Golgi_KCa" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_Lkg" segmentGroup="soma" />        
+                <ionicCurrent id="Golgi_NaR" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_NaP" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_Na" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_KV" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_KM" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_KA" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma" /> 
+                <ionicCurrent id="Golgi_HCN1" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_HCN2" segmentGroup="soma" />                
+                <ionicCurrent id="Golgi_SK2" segmentGroup="soma" />
+                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma" /> 
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
-                <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma_group"/>
-                <reversalPotential species="k" value="-84.39" units="mV" segmentGroup="soma_group"/>
+                <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma"/>
+                <reversalPotential species="k" value="-84.39" units="mV" segmentGroup="soma"/>
             </membraneProperties>
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
