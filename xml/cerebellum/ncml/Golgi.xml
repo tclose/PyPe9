@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<neuroml xmlns="http://www.neuroml.org/schema/neuroml2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 ../Schemas/NeuroML2/NeuroML_v2alpha.xsd"
-    id="NML2_FullCell">
+<ncml:model xmlns:ncml="ncml" name="Golgi">
     <!--<include href="SimpleIonChannel.xml"/> Contains ionChannel NaConductance -->
     <cell id="Golgi">
         <notes>A model of a Golgi cell</notes>
@@ -667,258 +665,1004 @@
                 <member segment="axon_97" />
                 <member segment="axon_98" />
                 <member segment="axon_99" />
-            </segmentGroup>            
+            </segmentGroup>
         </morphology>
         <biophysicalProperties id="GolgiBiophys">
             <!-- FIXME: celsius = 23 Not sure where to put this -->
             <membraneProperties>
-                <ionicCurrent id="Golgi_Lkg" />            
-                <ionicCurrent id="Golgi_Na" segmentGroup="soma_group">
-                    <defun name="alp_m">
-                        <arg name="v" />
-                        <body> temp_adj * Aalpha_m*linoid(v-V0alpha_m,Kalpha_m)
-                        </body>
-                    </defun>
-                    <defun name="bet_m">
-                        <arg name="v" />
-                        <body> temp_adj * Abeta_m*exp((v-V0beta_m)/Kbeta_m)
-                        </body>
-                    </defun>
-                    <defun name="alp_h">
-                        <arg name="v" />
-                        <body> temp_adj * Aalpha_h*exp((v-V0alpha_h)/Kalpha_h)
-                        </body>
-                    </defun>
-                    <defun name="bet_h">
-                        <arg name="v" />
-                        <body> temp_adj * Abeta_h/(1+exp((v-V0beta_h)/Kbeta_h))
-                        </body>
-                    </defun>
-                    <defun name="linoid">
-                        <arg name="x" />
-                        <arg name="y" />
-                        <body> if (fabs(x/y) &lt; 1e-6) { linoid = y*(1 - x/y/2) } else { linoid = x/(1
-                            - exp(x/y)) }
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_NaR" segmentGroup="soma_group">
-                    <defun name="alp_s">
-                        <arg name="v" />
-                        <body> temp_adj*(Shiftalpha_s+Aalpha_s * ((v+V0alpha_s)/ 1 (mV)
-                            )/(exp((v+V0alpha_s)/Kalpha_s)-1))
-                        </body>
-                    </defun>
-                    <defun name="bet_s">
-                        <arg name="v" />
-                        <body> x1=(v+V0beta_s)/Kbeta_s if (x1>200) {x1=200} bet_s
-                            =temp_adj*(Shiftbeta_s+Abeta_s*((v+V0beta_s)/1 (mV) )/(exp(x1)-1))
-                        </body>
-                    </defun>
-                    <defun name="alp_f">
-                        <arg name="v" />
-                        <body> temp_adj * Aalpha_f * exp( ( v - V0alpha_f ) / Kalpha_f)
-                        </body>
-                    </defun>
-                    <defun name="bet_f">
-                        <arg name="v" />~/Desktop/pyNN_output.txt
-                        <body> temp_adj * Abeta_f * exp( ( v - V0beta_f ) / Kbeta_f )
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_NaP" segmentGroup="soma_group">
-                    <defun name="alp_m">
-                        <arg name="v" />
-                        <body> temp_adj * * Aalpha_m*linoid(v-V0alpha_m, Kalpha_m)
-                        </body>
-                    </defun>
-                    <defun name="bet_m">
-                        <arg name="v" />
-                        <body> temp_adj * * Abeta_m*linoid(v-V0beta_m, Kbeta_m)
-                        </body>
-                    </defun>
-                    <defun name="linoid">
-                        <arg name="x" />
-                        <arg name="y" />
-                        <body> if (fabs(x/y) &lt; 1e-6) { linoid = y*(1 - x/y/2) }else{ linoid =
-                            x/(exp(x/y) - 1) }
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma_group">
-                    <defun name="alp_s">
-                        <arg name="v" />
-                        <body> temp_adj * Aalpha_s*exp((v-V0alpha_s)/Kalpha_s)
-                        </body>
-                    </defun>
-                    <defun name="bet_s">
-                        <arg name="v" />
-                        <body> temp_adj * Abeta_s*exp((v-V0beta_s)/Kbeta_s)
-                        </body>
-                    </defun>
-                    <defun name="alp_u">
-                        <arg name="v" />
-                        <body> temp_adj * Aalpha_u*exp((v-V0alpha_u)/Kalpha_u)
-                        </body>
-                    </defun>
-                    <defun name="bet_u">
-                        <arg name="v" />
-                        <body> temp_adj * Abeta_u*exp((v-V0beta_u)/Kbeta_u)
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_KV" segmentGroup="soma_group">
-                    <defun name="alp_n">
-                        <arg name="v" />
-                        <body> tcorr*Aalpha_n*linoid(v-V0alpha_n, Kalpha_n)
-                        </body>
-                    </defun>
-                    <defun name="bet_n">
-                        <arg name="v" />
-                        <body> tcorr*Abeta_n*exp((v-V0beta_n)/Kbeta_n)
-                        </body>
-                    </defun>
-                    <defun name="linoid">
-                        <arg name="x" />
-                        <arg name="y" />
-                        <body> if (fabs(x/y) &lt; 1e-6) { linoid = y*(1 - x/y/2) }else{ linoid =
-                            x/(exp(x/y) - 1) }
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_KM" segmentGroup="soma_group">
-                    <defun name="alp_n">
-                        <arg name="v" />
-                        <body> Aalpha_n*exp((v-V0alpha_n)/Kalpha_n)
-                        </body>
-                    </defun>
-                    <defun name="bet_n">
-                        <arg name="v" />
-                        <body> Abeta_n*exp((v-V0beta_n)/Kbeta_n)
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_KA" segmentGroup="soma_group">
-                    <defun name="alp_a">
-                        <arg name="v" />
-                        <body> alp_a = tcorr*Aalpha_a*sigm(v-V0alpha_a,Kalpha_a)
-                        </body>
-                    </defun>
-                    <defun name="bet_a">
-                        <arg name="v" />
-                        <body> tcorr*Abeta_a/(exp((v-V0beta_a)/Kbeta_a))
-                        </body>
-                    </defun>
-                    <defun name="alp_b">
-                        <arg name="v" />
-                        <body> tcorr*Aalpha_b*sigm(v-V0alpha_b,Kalpha_b)
-                        </body>
-                    </defun>
-                    <defun name="bet_b">
-                        <arg name="v" />
-                        <body> tcorr*Abeta_b*sigm(v-V0beta_b,Kbeta_b)
-                        </body>
-                    </defun>
-                    <defun name="linoid">
-                        <arg name="x" />
-                        <arg name="y" />
-                        <body> if (fabs(x/y) &lt; 1e-6) { linoid = y*(1 - x/y/2) }else{ linoid =
-                            x/(exp(x/y) - 1) }
-                        </body>
-                    </defun>
-                    <defun name="sigm">
-                        <arg name="x" />
-                        <arg name="y" />
-                        <body> 1/(exp(x/y) + 1)
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_KCa" segmentGroup="soma_group">
-                    <defun name="alp_c">
-                        <arg name="v" />
-                        <body> tcorr*Aalpha_c/(1+(Balpha_c*exp(v/Kalpha_c)/cai))
-                        </body>
-                    </defun>
-                    <defun name="bet_c">
-                        <arg name="v" />
-                        <body> tcorr*Abeta_c/(1+cai/(Bbeta_c*exp(v/Kbeta_c)))
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_SK2" segmentGroup="soma_group">
-                    <!-- no functions instead of temperature -->
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_HCN1" segmentGroup="soma_group">
-                    <defun name="r">
-                        <arg name="potential" />
-                        <body> rA * potential + rB
-                        </body>
-                    </defun>
-                    <defun name="tau">
-                        <arg name="potential" />
-                        <body> exp(((t1 * potential) - t2)*t3)
-                        </body>
-                    </defun>
-                    <defun name="o_inf">
-                        <arg name="potential" />
-                        <arg name="Ehalf" />
-                        <arg name="c" />
-                        <body> 1 / (1 + exp((potential - Ehalf) * c))
-                        </body>
-                    </defun>
-                    <defun name="q10">
-                        <arg name="celcius" />
-                        <body> exp(1.0986 * ((celsius - 33) / 10))
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_HCN2" segmentGroup="soma_group">
-                    <defun name="r">
-                        <arg name="potential" />
-                        <arg name="r1" />
-                        <arg name="r2" />
-                        <body> if (potential &gt;= -64.70) { r = 0 } else{ if (potential &lt;= -108.70) {
-                            r = 1 } else{ r = (r1 * potential) + r2 } }
-                        </body>
-                    </defun>
-                    <defun name="tau_fast">
-                        <arg name="potential" />
-                        <arg name="t1" />
-                        <arg name="t2" />
-                        <arg name="t3" />
-                        <body> exp(t3 * ((t1 * potential) - t2))
-                        </body>
-                    </defun>
-                    <defun name="tau_slow">
-                        <arg name="potential" />
-                        <arg name="t1" />
-                        <arg name="t2" />
-                        <arg name="t3" />
-                        <body> exp(t3 * ((t1 * potential) - t2))
-                        </body>
-                    </defun>
-                    <defun name="o_inf">
-                        <arg name="potential" />
-                        <arg name="Ehalf" />
-                        <arg name="c" />
-                        <body> 1 / (1 + exp((potential - Ehalf) * c))
-                        </body>
-                    </defun>
-                    <defun name="q10">
-                        <arg name="v" />
-                        <body> exp(1.0986 * ((celsius - 33) / 10))
-                        </body>
-                    </defun>
-                </ionicCurrent>
-                <ionicCurrent id="Golgi_Ca" segmentGroup="soma_group" />
-                <ionicCurrent id="Golgi_Ca2" segmentGroup="soma_group" />
-<!--                 <kinetics id="Na_conc" segmentGroup="soma_group" /> --> <!-- FIXME: Don't know what the tag for this should be. -->
-<!--                 <kinetics id="K_conc" segmentGroup="soma_group" />  --> <!-- FIXME: Don't know what the tag for this should be. -->
+                <ncml:input name="v" />
+                <ncml:input name="celsius" />
+                <ncml:const name="ca2o" value="2.0" />
+                <ncml:component type="decaying-pool" name="ca">
+                    <ncml:input name="ica" from="ion-currents" />
+                    <ncml:const name="F" value="96485.3" />
+                    <ncml:const name="d" value="0.2" />
+                    <ncml:const name="cao" value="2.0" />
+                    <ncml:const name="cai0" value="5e-05" />
+                    <ncml:const name="beta" value="1.3" />
+                    <ncml:rate name="ca">
+                        <ncml:expr>((neg (ica) / (2 * F * d)) * 10000.0 - (beta * (ca - cai0)))
+                        </ncml:expr>
+                        <ncml:initial>cai0</ncml:initial>
+                    </ncml:rate>
+                    <ncml:output name="ca" />
+                </ncml:component>
+                <ncml:component type="decaying-pool" name="ca2">
+                    <ncml:input name="ica2" from="ion-currents" />
+                    <ncml:const name="valence" value="2" />
+                    <ncml:const name="F" value="96485.3" />
+                    <ncml:const name="d" value="0.2" />
+                    <ncml:const name="ca2o" value="2.0" />
+                    <ncml:const name="ca2i0" value="5e-05" />
+                    <ncml:const name="beta" value="1.3" />
+                    <ncml:rate name="ca2">
+                        <ncml:expr>((neg (ica2) / (2 * F * d)) * 10000.0 - (beta * (ca2 - ca2i0)))
+                        </ncml:expr>
+                        <ncml:initial>ca2i0</ncml:initial>
+                    </ncml:rate>
+                    <ncml:output name="ca2" />
+                    <ncml:output name="valence" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="CaHVA">
+                    <ncml:component type="gate">
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:const name="Aalpha_s" value="0.04944" />
+                        <ncml:const name="Kalpha_s" value="15.87301587302" />
+                        <ncml:const name="V0alpha_s" value="-29.06" />
+                        <ncml:const name="Abeta_s" value="0.08298" />
+                        <ncml:const name="Kbeta_s" value="-25.641" />
+                        <ncml:const name="V0beta_s" value="-18.66" />
+                        <ncml:const name="Aalpha_u" value="0.0013" />
+                        <ncml:const name="Kalpha_u" value="-18.183" />
+                        <ncml:const name="V0alpha_u" value="-48" />
+                        <ncml:const name="Abeta_u" value="0.0013" />
+                        <ncml:const name="Kbeta_u" value="83.33" />
+                        <ncml:const name="V0beta_u" value="-48" />
+                        <ncml:defun name="alpha_s">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_s * exp ((v - V0alpha_s) / Kalpha_s))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_s">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_s * exp ((v - V0beta_s) / Kbeta_s))</ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="alpha_u">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_u * exp ((v - V0alpha_u) / Kalpha_u))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_u">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_u * exp ((v - V0beta_u) / Kbeta_u))</ncml:body>
+                        </ncml:defun>
+                        <ncml:hh_ionic_gate name="CaHVA">
+                            <ncml:initial_m>((alpha_s (v Q10)) / (alpha_s (v Q10) + beta_s (v Q10)))
+                            </ncml:initial_m>
+                            <ncml:initial_h>((alpha_u (v Q10)) / (alpha_u (v Q10) + beta_u (v Q10)))
+                            </ncml:initial_h>
+                            <ncml:m_power>2</ncml:m_power>
+                            <ncml:h_power>1</ncml:h_power>
+                            <ncml:m_inf>((alpha_s (v Q10) / (alpha_s (v Q10) + beta_s (v Q10))))
+                            </ncml:m_inf>
+                            <ncml:m_tau>((1 / (alpha_s (v Q10) + beta_s (v Q10))))</ncml:m_tau>
+                            <ncml:h_inf>((alpha_u (v Q10) / (alpha_u (v Q10) + beta_u (v Q10))))
+                            </ncml:h_inf>
+                            <ncml:h_tau>((1 / (alpha_u (v Q10) + beta_u (v Q10))))</ncml:h_tau>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.00046" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="ca">
+                        <ncml:const name="e" value="129.33" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="CaHVA">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="CaLVA">
+                    <ncml:input name="ca2i" from="ion-pools" />
+                    <ncml:input name="ca2o" from="ion-pools" />
+                    <ncml:component type="gate">
+                        <ncml:const name="shift" value="2" />
+                        <ncml:const name="v0_m_inf" value="-50" />
+                        <ncml:const name="v0_h_inf" value="-78" />
+                        <ncml:const name="k_m_inf" value="-7.4" />
+                        <ncml:const name="k_h_inf" value="5.0" />
+                        <ncml:const name="C_tau_m" value="3" />
+                        <ncml:const name="A_tau_m" value="1.0" />
+                        <ncml:const name="v0_tau_m1" value="-25" />
+                        <ncml:const name="v0_tau_m2" value="-100" />
+                        <ncml:const name="k_tau_m1" value="10" />
+                        <ncml:const name="k_tau_m2" value="-15" />
+                        <ncml:const name="C_tau_h" value="85" />
+                        <ncml:const name="A_tau_h" value="1.0" />
+                        <ncml:const name="v0_tau_h1" value="-46" />
+                        <ncml:const name="v0_tau_h2" value="-405" />
+                        <ncml:const name="k_tau_h1" value="4" />
+                        <ncml:const name="k_tau_h2" value="-50" />
+                        <ncml:asgn name="phi_m">
+                            <ncml:expr>(pow (5.0 ((celsius - 24) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="phi_h">
+                            <ncml:expr>(pow (3.0 ((celsius - 24) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="m_inf">
+                            <ncml:expr>(1.0 / (1 + exp ((v + shift - v0_m_inf) / k_m_inf)))
+                            </ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="h_inf">
+                            <ncml:expr>(1.0 / (1 + exp ((v + shift - v0_h_inf) / k_h_inf)))
+                            </ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_m">
+                            <ncml:expr>((C_tau_m + A_tau_m / (exp ((v + shift - v0_tau_m1) /
+                                k_tau_m1) + exp ((v + shift - v0_tau_m2) / k_tau_m2))) / phi_m)
+                            </ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_h">
+                            <ncml:expr>((C_tau_h + A_tau_h / (exp ((v + shift - v0_tau_h1) /
+                                k_tau_h1) + exp ((v + shift - v0_tau_h2) / k_tau_h2))) / phi_h)
+                            </ncml:expr>
+                        </ncml:asgn>
+                        <ncml:hh_ionic_gate name="CaLVA">
+                            <ncml:initial_m>m_inf</ncml:initial_m>
+                            <ncml:initial_h>h_inf</ncml:initial_h>
+                            <ncml:m_power>2</ncml:m_power>
+                            <ncml:h_power>1</ncml:h_power>
+                            <ncml:m_inf>m_inf</ncml:m_inf>
+                            <ncml:m_tau>tau_m</ncml:m_tau>
+                            <ncml:h_inf>h_inf</ncml:h_inf>
+                            <ncml:h_tau>tau_h</ncml:h_tau>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.00025" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="ca2">
+                        <ncml:const name="valence" value="2" />
+                        <ncml:const name="F" value="96485.3" />
+                        <ncml:const name="R" value="8.31342" />
+                        <ncml:asgn name="e">
+                            <ncml:expr>((1000.0) * (R * (celsius + 273.15)) / (2 * F) * ln (ca2o /
+                                ca2i))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:output name="e" />
+                        <ncml:output name="valence" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="CaLVA">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="200" />
+                    <ncml:const name="vcbdur" value="30" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="HCN1">
+                    <ncml:const name="Ehalf" value="-72.49" />
+                    <ncml:const name="c" value="0.11305" />
+                    <ncml:const name="rA" value="0.002096" />
+                    <ncml:const name="rB" value="0.97596" />
+                    <ncml:defun name="r">
+                        <ncml:arg>potential</ncml:arg>
+                        <ncml:body>((rA * potential) + rB)</ncml:body>
+                    </ncml:defun>
+                    <ncml:defun name="tau">
+                        <ncml:arg>potential</ncml:arg>
+                        <ncml:arg>t1</ncml:arg>
+                        <ncml:arg>t2</ncml:arg>
+                        <ncml:arg>t3</ncml:arg>
+                        <ncml:body>(exp (((t1 * potential) - t2) * t3))</ncml:body>
+                    </ncml:defun>
+                    <ncml:defun name="o_inf">
+                        <ncml:arg>potential</ncml:arg>
+                        <ncml:arg>Ehalf</ncml:arg>
+                        <ncml:arg>c</ncml:arg>
+                        <ncml:body>(1 / (1 + exp ((potential - Ehalf) * c)))</ncml:body>
+                    </ncml:defun>
+                    <ncml:component type="gate">
+                        <ncml:const name="tCs" value="0.01451" />
+                        <ncml:const name="tDs" value="-4.056" />
+                        <ncml:const name="tEs" value="2.302585092" />
+                        <ncml:asgn name="o_slow_inf">
+                            <ncml:expr>((1 - r (v)) * o_inf (v Ehalf c))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_s">
+                            <ncml:expr>(tau (v tCs tDs tEs))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:rate name="o_slow">
+                            <ncml:expr>((o_slow_inf - o_slow) / tau_s)</ncml:expr>
+                            <ncml:initial>o_slow_inf</ncml:initial>
+                        </ncml:rate>
+                        <ncml:output name="o_slow" />
+                    </ncml:component>
+                    <ncml:component type="gate">
+                        <ncml:const name="tCf" value="0.01371" />
+                        <ncml:const name="tDf" value="-3.368" />
+                        <ncml:const name="tEf" value="2.302585092" />
+                        <ncml:asgn name="o_fast_inf">
+                            <ncml:expr>(r (v) * o_inf (v Ehalf c))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_f">
+                            <ncml:expr>(tau (v tCf tDf tEf))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:rate name="o_fast">
+                            <ncml:expr>((o_fast_inf - o_fast) / tau_f)</ncml:expr>
+                            <ncml:initial>o_fast_inf</ncml:initial>
+                        </ncml:rate>
+                        <ncml:output name="o_fast" />
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="5e-05" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="non-specific">
+                        <ncml:const name="e" value="-20" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="HCN1">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="HCN2">
+                    <ncml:const name="Ehalf" value="-81.95" />
+                    <ncml:const name="c" value="0.1661" />
+                    <ncml:const name="rA" value="-0.0227" />
+                    <ncml:const name="rB" value="-1.4694" />
+                    <ncml:defun name="r">
+                        <ncml:arg>potential</ncml:arg>
+                        <ncml:arg>r1</ncml:arg>
+                        <ncml:arg>r2</ncml:arg>
+                        <ncml:body>(if (potential &gt;= -64.7) then 0.0 else (if (potential &lt;=
+                            -108.7) then 1.0 else (r1 * potential) + r2))</ncml:body>
+                    </ncml:defun>
+                    <ncml:defun name="o_inf">
+                        <ncml:arg>potential</ncml:arg>
+                        <ncml:arg>Ehalf</ncml:arg>
+                        <ncml:arg>c</ncml:arg>
+                        <ncml:body>(1 / (1 + exp ((potential - Ehalf) * c)))</ncml:body>
+                    </ncml:defun>
+                    <ncml:component type="gate">
+                        <ncml:const name="tCs" value="0.0152" />
+                        <ncml:const name="tDs" value="-5.2944" />
+                        <ncml:const name="tEs" value="2.3026" />
+                        <ncml:defun name="tau_slow">
+                            <ncml:arg>potential</ncml:arg>
+                            <ncml:arg>t1</ncml:arg>
+                            <ncml:arg>t2</ncml:arg>
+                            <ncml:arg>t3</ncml:arg>
+                            <ncml:body>(exp (t3 * ((t1 * potential) - t2)))</ncml:body>
+                        </ncml:defun>
+                        <ncml:asgn name="o_slow_inf">
+                            <ncml:expr>((1 - r (v rA rB)) * o_inf (v Ehalf c))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_s">
+                            <ncml:expr>(tau_slow (v tCs tDs tEs))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:rate name="o_slow">
+                            <ncml:expr>((o_slow_inf - o_slow) / tau_s)</ncml:expr>
+                            <ncml:initial>o_slow_inf</ncml:initial>
+                        </ncml:rate>
+                        <ncml:output name="o_slow" />
+                    </ncml:component>
+                    <ncml:component type="gate">
+                        <ncml:const name="tCf" value="0.0269" />
+                        <ncml:const name="tDf" value="-5.6111" />
+                        <ncml:const name="tEf" value="2.3026" />
+                        <ncml:defun name="tau_fast">
+                            <ncml:arg>potential</ncml:arg>
+                            <ncml:arg>t1</ncml:arg>
+                            <ncml:arg>t2</ncml:arg>
+                            <ncml:arg>t3</ncml:arg>
+                            <ncml:body>(exp (t3 * ((t1 * potential) - t2)))</ncml:body>
+                        </ncml:defun>
+                        <ncml:asgn name="o_fast_inf">
+                            <ncml:expr>(r (v rA rB) * o_inf (v Ehalf c))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_f">
+                            <ncml:expr>(tau_fast (v tCf tDf tEf))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:rate name="o_fast">
+                            <ncml:expr>((o_fast_inf - o_fast) / tau_f)</ncml:expr>
+                            <ncml:initial>o_fast_inf</ncml:initial>
+                        </ncml:rate>
+                        <ncml:output name="o_fast" />
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="8e-05" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="non-specific">
+                        <ncml:const name="e" value="-20" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="HCN2">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="KA">
+                    <ncml:defun name="sigm">
+                        <ncml:arg>x</ncml:arg>
+                        <ncml:arg>y</ncml:arg>
+                        <ncml:body>(1 / (exp (x / y) + 1))</ncml:body>
+                    </ncml:defun>
+                    <ncml:component type="gate">
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 25.5) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:const name="Aalpha_a" value="0.8147" />
+                        <ncml:const name="Kalpha_a" value="-23.32708" />
+                        <ncml:const name="V0alpha_a" value="-9.17203" />
+                        <ncml:const name="Abeta_a" value="0.1655" />
+                        <ncml:const name="Kbeta_a" value="19.47175" />
+                        <ncml:const name="V0beta_a" value="-18.27914" />
+                        <ncml:const name="Aalpha_b" value="0.0368" />
+                        <ncml:const name="Kalpha_b" value="12.8433" />
+                        <ncml:const name="V0alpha_b" value="-111.33209" />
+                        <ncml:const name="Abeta_b" value="0.0345" />
+                        <ncml:const name="Kbeta_b" value="-8.90123" />
+                        <ncml:const name="V0beta_b" value="-49.9537" />
+                        <ncml:const name="V0_ainf" value="-38" />
+                        <ncml:const name="K_ainf" value="-17" />
+                        <ncml:const name="V0_binf" value="-78.8" />
+                        <ncml:const name="K_binf" value="8.4" />
+                        <ncml:defun name="alpha_a">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_a * sigm ((v - V0alpha_a) Kalpha_a))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_a">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * (Abeta_a / exp ((v - V0beta_a) / Kbeta_a)))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="alpha_b">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_b * sigm ((v - V0alpha_b) Kalpha_b))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_b">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_b * sigm ((v - V0beta_b) Kbeta_b))</ncml:body>
+                        </ncml:defun>
+                        <ncml:asgn name="a_inf">
+                            <ncml:expr>(1 / (1 + exp ((v - V0_ainf) / K_ainf)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_a">
+                            <ncml:expr>(1 / (alpha_a (v Q10) + beta_a (v Q10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="b_inf">
+                            <ncml:expr>(1 / (1 + exp ((v - V0_binf) / K_binf)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="tau_b">
+                            <ncml:expr>(1 / (alpha_b (v Q10) + beta_b (v Q10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:hh_ionic_gate name="KA">
+                            <ncml:initial_m>(a_inf)</ncml:initial_m>
+                            <ncml:initial_h>(b_inf)</ncml:initial_h>
+                            <ncml:m_power>3</ncml:m_power>
+                            <ncml:h_power>1</ncml:h_power>
+                            <ncml:m_inf>a_inf</ncml:m_inf>
+                            <ncml:m_tau>tau_a</ncml:m_tau>
+                            <ncml:h_inf>b_inf</ncml:h_inf>
+                            <ncml:h_tau>tau_b</ncml:h_tau>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.008" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="k">
+                        <ncml:const name="e" value="-84.69" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="KA">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="KCa">
+                    <ncml:input name="cai" from="ion-pools" />
+                    <ncml:component type="gate">
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 30) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:const name="Aalpha_c" value="7" />
+                        <ncml:const name="Balpha_c" value="0.0015" />
+                        <ncml:const name="Kalpha_c" value="-11.765" />
+                        <ncml:const name="Abeta_c" value="1.0" />
+                        <ncml:const name="Bbeta_c" value="0.00015" />
+                        <ncml:const name="Kbeta_c" value="-11.765" />
+                        <ncml:defun name="alpha_c">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>cai</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_c / (1 + (Balpha_c * exp (v / Kalpha_c) /
+                                cai)))</ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_c">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>cai</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_c / (1 + (cai / (Bbeta_c * exp (v / Kbeta_c)))))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:hh_ionic_gate name="KCa">
+                            <ncml:initial_m>((alpha_c (v cai Q10)) / (alpha_c (v cai Q10) + beta_c
+                                (v cai Q10)))</ncml:initial_m>
+                            <ncml:m_power>1</ncml:m_power>
+                            <ncml:h_power>0</ncml:h_power>
+                            <ncml:m_alpha>(alpha_c (v cai Q10))</ncml:m_alpha>
+                            <ncml:m_beta>(beta_c (v cai Q10))</ncml:m_beta>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.003" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="k">
+                        <ncml:const name="e" value="-84.69" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                    <ncml:component type="modulating-ion" name="ca">
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="KCa">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="KM">
+                    <ncml:component type="gate">
+                        <ncml:const name="Aalpha_n" value="0.0033" />
+                        <ncml:const name="Kalpha_n" value="40" />
+                        <ncml:const name="V0alpha_n" value="-30" />
+                        <ncml:const name="Abeta_n" value="0.0033" />
+                        <ncml:const name="Kbeta_n" value="-20" />
+                        <ncml:const name="V0beta_n" value="-30" />
+                        <ncml:const name="V0_ninf" value="-35" />
+                        <ncml:const name="B_ninf" value="6" />
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 22) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:defun name="alpha_n">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_n * exp ((v - V0alpha_n) / Kalpha_n))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_n">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_n * exp ((v - V0beta_n) / Kbeta_n))</ncml:body>
+                        </ncml:defun>
+                        <ncml:hh_ionic_gate name="KM">
+                            <ncml:initial_m>((1 / (1 + exp ((neg (v - V0_ninf)) / B_ninf))))
+                            </ncml:initial_m>
+                            <ncml:m_power>1</ncml:m_power>
+                            <ncml:h_power>0</ncml:h_power>
+                            <ncml:m_inf>((1 / (1 + exp ((neg (v - V0_ninf)) / B_ninf))))
+                            </ncml:m_inf>
+                            <ncml:m_tau>((1 / (alpha_n (v Q10) + beta_n (v Q10))))</ncml:m_tau>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.001" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="k">
+                        <ncml:const name="e" value="-84.69" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="KM">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="KV">
+                    <ncml:defun name="linoid">
+                        <ncml:arg>x</ncml:arg>
+                        <ncml:arg>y</ncml:arg>
+                        <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2)))
+                            else (x / (exp (x / y) - 1)))</ncml:body>
+                    </ncml:defun>
+                    <ncml:component type="gate">
+                        <ncml:const name="Aalpha_n" value="-0.01" />
+                        <ncml:const name="Kalpha_n" value="-10" />
+                        <ncml:const name="V0alpha_n" value="-26" />
+                        <ncml:const name="Abeta_n" value="0.125" />
+                        <ncml:const name="Kbeta_n" value="-80" />
+                        <ncml:const name="V0beta_n" value="-36" />
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 6.3) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:defun name="alpha_n">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_n * linoid ((v - V0alpha_n) Kalpha_n))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_n">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_n * exp ((v - V0beta_n) / Kbeta_n))</ncml:body>
+                        </ncml:defun>
+                        <ncml:hh_ionic_gate name="KV">
+                            <ncml:initial_m>((alpha_n (v Q10)) / (alpha_n (v Q10) + beta_n (v Q10)))
+                            </ncml:initial_m>
+                            <ncml:m_power>4</ncml:m_power>
+                            <ncml:h_power>0</ncml:h_power>
+                            <ncml:m_alpha>(alpha_n (v Q10))</ncml:m_alpha>
+                            <ncml:m_beta>(beta_n (v Q10))</ncml:m_beta>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.032" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="k">
+                        <ncml:const name="e" value="-84.69" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="KV">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="SK2">
+                    <ncml:input name="cai" from="ion-pools" />
+                    <ncml:component type="gate">
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 23) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:const name="diff" value="3" />
+                        <ncml:const name="invc1" value="0.08" />
+                        <ncml:const name="invc2" value="0.08" />
+                        <ncml:const name="invc3" value="0.2" />
+                        <ncml:const name="invo1" value="1" />
+                        <ncml:const name="invo2" value="0.1" />
+                        <ncml:const name="diro1" value="0.16" />
+                        <ncml:const name="diro2" value="1.2" />
+                        <ncml:const name="dirc2" value="200" />
+                        <ncml:const name="dirc3" value="160" />
+                        <ncml:const name="dirc4" value="80" />
+                        <ncml:asgn name="invc1_t">
+                            <ncml:expr>(invc1 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="invc2_t">
+                            <ncml:expr>(invc2 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="invc3_t">
+                            <ncml:expr>(invc3 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="invo1_t">
+                            <ncml:expr>(invo1 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="invo2_t">
+                            <ncml:expr>(invo2 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="diro1_t">
+                            <ncml:expr>(diro1 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="diro2_t">
+                            <ncml:expr>(diro2 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="dirc2_t">
+                            <ncml:expr>(dirc2 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="dirc3_t">
+                            <ncml:expr>(dirc3 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="dirc4_t">
+                            <ncml:expr>(dirc4 * Q10)</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="dirc2_t_ca">
+                            <ncml:expr>(dirc2_t * (cai / diff))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="dirc3_t_ca">
+                            <ncml:expr>(dirc3_t * (cai / diff))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:asgn name="dirc4_t_ca">
+                            <ncml:expr>(dirc4_t * (cai / diff))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:reaction name="SK2_z">
+                            <ncml:open>o1,o2</ncml:open>
+                            <ncml:power>1</ncml:power>
+                            <ncml:transitions>
+                                <ncml:transition src="c1" dst="c2">
+                                    <ncml:rate>dirc2_t_ca</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="c2" dst="c1">
+                                    <ncml:rate>invc1_t</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="c2" dst="c3">
+                                    <ncml:rate>dirc3_t_ca</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="c3" dst="c2">
+                                    <ncml:rate>invc2_t</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="c3" dst="c4">
+                                    <ncml:rate>dirc4_t_ca</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="c4" dst="c3">
+                                    <ncml:rate>invc3_t</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="c3" dst="o1">
+                                    <ncml:rate>diro1_t</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="o1" dst="c3">
+                                    <ncml:rate>invo1_t</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="c4" dst="o2">
+                                    <ncml:rate>diro2_t</ncml:rate>
+                                </ncml:transition>
+                                <ncml:transition src="o2" dst="c4">
+                                    <ncml:rate>invo2_t</ncml:rate>
+                                </ncml:transition>
+                            </ncml:transitions>
+                        </ncml:reaction>
+                        <ncml:output name="SK2_z" />
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.038" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="k">
+                        <ncml:const name="e" value="-84.69" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                    <ncml:component type="modulating-ion" name="ca">
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="SK2">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-69" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="8" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="Na">
+                    <ncml:defun name="linoid">
+                        <ncml:arg>x</ncml:arg>
+                        <ncml:arg>y</ncml:arg>
+                        <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2)))
+                            else (x / (1 - exp (x / y))))</ncml:body>
+                    </ncml:defun>
+                    <ncml:component type="gate">
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:const name="Aalpha_u" value="0.3" />
+                        <ncml:const name="Kalpha_u" value="-10" />
+                        <ncml:const name="V0alpha_u" value="-25" />
+                        <ncml:const name="Abeta_u" value="12" />
+                        <ncml:const name="Kbeta_u" value="-18.182" />
+                        <ncml:const name="V0beta_u" value="-50" />
+                        <ncml:const name="Aalpha_v" value="0.21" />
+                        <ncml:const name="Kalpha_v" value="-3.333" />
+                        <ncml:const name="V0alpha_v" value="-50" />
+                        <ncml:const name="Abeta_v" value="3" />
+                        <ncml:const name="Kbeta_v" value="-5" />
+                        <ncml:const name="V0beta_v" value="-17" />
+                        <ncml:defun name="alpha_u">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_u * linoid ((v - V0alpha_u) Kalpha_u))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_u">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_u * exp ((v - V0beta_u) / Kbeta_u))</ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="alpha_v">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_v * exp ((v - V0alpha_v) / Kalpha_v))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_v">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_v / (1 + exp ((v - V0beta_v) / Kbeta_v)))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:hh_ionic_gate name="Na">
+                            <ncml:initial_m>((alpha_u (v Q10)) / (alpha_u (v Q10) + beta_u (v Q10)))
+                            </ncml:initial_m>
+                            <ncml:initial_h>((alpha_v (v Q10)) / (alpha_v (v Q10) + beta_v (v Q10)))
+                            </ncml:initial_h>
+                            <ncml:m_power>3</ncml:m_power>
+                            <ncml:h_power>1</ncml:h_power>
+                            <ncml:m_alpha>(alpha_u (v Q10))</ncml:m_alpha>
+                            <ncml:m_beta>(beta_u (v Q10))</ncml:m_beta>
+                            <ncml:h_alpha>(alpha_v (v Q10))</ncml:h_alpha>
+                            <ncml:h_beta>(beta_v (v Q10))</ncml:h_beta>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.048" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="na">
+                        <ncml:const name="e" value="87.39" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="Na">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-60" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="9" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="NaP">
+                    <ncml:defun name="linoid">
+                        <ncml:arg>x</ncml:arg>
+                        <ncml:arg>y</ncml:arg>
+                        <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2)))
+                            else (x / (exp (x / y) - 1)))</ncml:body>
+                    </ncml:defun>
+                    <ncml:component type="gate">
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 30) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:const name="Aalpha_m" value="-0.91" />
+                        <ncml:const name="Kalpha_m" value="-5" />
+                        <ncml:const name="V0alpha_m" value="-40" />
+                        <ncml:const name="Abeta_m" value="0.62" />
+                        <ncml:const name="Kbeta_m" value="5" />
+                        <ncml:const name="V0beta_m" value="-40" />
+                        <ncml:const name="V0_minf" value="-43" />
+                        <ncml:const name="B_minf" value="5" />
+                        <ncml:defun name="alpha_m">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_m * linoid ((v - V0alpha_m) Kalpha_m))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_m">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_m * linoid ((v - V0beta_m) Kbeta_m))</ncml:body>
+                        </ncml:defun>
+                        <ncml:hh_ionic_gate name="NaP">
+                            <ncml:initial_m>((1 / (1 + exp ((neg (v - V0_minf)) / B_minf))))
+                            </ncml:initial_m>
+                            <ncml:m_power>1</ncml:m_power>
+                            <ncml:h_power>0</ncml:h_power>
+                            <ncml:m_inf>((1 / (1 + exp ((neg (v - V0_minf)) / B_minf))))
+                            </ncml:m_inf>
+                            <ncml:m_tau>((5 / (alpha_m (v Q10) + beta_m (v Q10))))</ncml:m_tau>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.00019" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="na">
+                        <ncml:const name="e" value="87.39" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="NaP">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-60" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="9" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="NaR">
+                    <ncml:component type="gate">
+                        <ncml:asgn name="Q10">
+                            <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
+                        </ncml:asgn>
+                        <ncml:const name="Aalpha_s" value="-0.00493" />
+                        <ncml:const name="V0alpha_s" value="-4.48754" />
+                        <ncml:const name="Kalpha_s" value="-6.81881" />
+                        <ncml:const name="Shiftalpha_s" value="8e-05" />
+                        <ncml:const name="Abeta_s" value="0.01558" />
+                        <ncml:const name="V0beta_s" value="43.97494" />
+                        <ncml:const name="Kbeta_s" value="0.10818" />
+                        <ncml:const name="Shiftbeta_s" value="0.04752" />
+                        <ncml:const name="Aalpha_f" value="0.31836" />
+                        <ncml:const name="V0alpha_f" value="-80" />
+                        <ncml:const name="Kalpha_f" value="-62.52621" />
+                        <ncml:const name="Abeta_f" value="0.01014" />
+                        <ncml:const name="V0beta_f" value="-83.3332" />
+                        <ncml:const name="Kbeta_f" value="16.05379" />
+                        <ncml:defun name="alpha_s">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * (Shiftalpha_s + ((Aalpha_s * ((v + V0alpha_s))) / (exp
+                                ((v + V0alpha_s) / Kalpha_s) - 1))))</ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_s">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(let ((x1 ((v + V0beta_s) / Kbeta_s))) (Q10 * (Shiftbeta_s +
+                                Abeta_s * ((v + V0beta_s) / (exp ((if (x1 &gt; 200) then 200 else
+                                x1)) - 1)))))</ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="alpha_f">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Aalpha_f * exp ((v - V0alpha_f) / Kalpha_f))
+                            </ncml:body>
+                        </ncml:defun>
+                        <ncml:defun name="beta_f">
+                            <ncml:arg>v</ncml:arg>
+                            <ncml:arg>Q10</ncml:arg>
+                            <ncml:body>(Q10 * Abeta_f * exp ((v - V0beta_f) / Kbeta_f))</ncml:body>
+                        </ncml:defun>
+                        <ncml:hh_ionic_gate name="NaR">
+                            <ncml:initial_m>((alpha_s (v Q10)) / (alpha_s (v Q10) + beta_s (v Q10)))
+                            </ncml:initial_m>
+                            <ncml:initial_h>((alpha_f (v Q10)) / (alpha_f (v Q10) + beta_f (v Q10)))
+                            </ncml:initial_h>
+                            <ncml:m_power>1</ncml:m_power>
+                            <ncml:h_power>1</ncml:h_power>
+                            <ncml:m_alpha>(alpha_s (v Q10))</ncml:m_alpha>
+                            <ncml:m_beta>(beta_s (v Q10))</ncml:m_beta>
+                            <ncml:h_alpha>(alpha_f (v Q10))</ncml:h_alpha>
+                            <ncml:h_beta>(beta_f (v Q10))</ncml:h_beta>
+                        </ncml:hh_ionic_gate>
+                    </ncml:component>
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar" value="0.0017" />
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="na">
+                        <ncml:const name="e" value="87.39" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
+                <ncml:component type="voltage-clamp" name="NaR">
+                    <ncml:const name="vchold" value="-71" />
+                    <ncml:const name="vcbase" value="-60" />
+                    <ncml:const name="vcinc" value="10" />
+                    <ncml:const name="vcsteps" value="9" />
+                    <ncml:const name="vchdur" value="30" />
+                    <ncml:const name="vcbdur" value="100" />
+                    <ncml:output name="vchold" />
+                    <ncml:output name="vcbase" />
+                    <ncml:output name="vcinc" />
+                    <ncml:output name="vcsteps" />
+                    <ncml:output name="vchdur" />
+                    <ncml:output name="vcbdur" />
+                </ncml:component>
+                <ncml:component type="ionic-current" name="Lkg">
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar"> (2.1e-05)
+                        </ncml:const>
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="non-specific">
+                        <ncml:const name="e" value="-55" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:component>
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
-                <reversalPotential species="ca" value="129.33" units="mV" segmentGroup="soma_group"/>
-                <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma_group"/>
-                <reversalPotential species="k" value="-84.69" units="mV" segmentGroup="soma_group"/>
+                <reversalPotential species="ca" value="129.33" units="mV"
+                    segmentGroup="soma_group" />
+                <reversalPotential species="na" value="87.39" units="mV"
+                    segmentGroup="soma_group" />
+                <reversalPotential species="k" value="-84.69" units="mV"
+                    segmentGroup="soma_group" />
             </membraneProperties>
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
@@ -941,13 +1685,13 @@
                     <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
                         units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
                 </conductanceSynapse>
-                 <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />
-            </synapses>            
+                <gapJunction id="Gap" type="Gap" segmentGroup="soma_group" />
+            </synapses>
             <initalConditions>
-                <membranePotential value='-65 mV'/>
+                <membranePotential value='-65 mV' />
                 <ionConcentration species="ca" value="50e-6" />
-                <ionConcentration species="ca2" value="50e-6" />                    
-            </initalConditions>                          
+                <ionConcentration species="ca2" value="50e-6" />
+            </initalConditions>
         </biophysicalProperties>
     </cell>
-</neuroml>
+</ncml:model>
