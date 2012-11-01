@@ -17,7 +17,7 @@
         <population id="Granules" cell="Granule">
             <layout type="Extension" engine="Brep" id="debug_Granules" />
             <cellParameters>
-                <distribution component="CGC_Lkg1" param="e" type="uniform" low="-19.8"
+                <distribution component="CGC_Lkg1" param="ReversalPotential" type="uniform" low="-19.8"
                     high="-13.2" units="nA" />
                 <distribution param="diam" type="uniform" low="9.4" high="14.16"
                     units="um" segmentGroup="soma" />
