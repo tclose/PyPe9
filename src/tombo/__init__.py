@@ -162,10 +162,16 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
     else:
         env = copy(env)
     copy_cmd = ''
-    for directory in copy_to_output:
+    for to_copy in copy_to_output:
+        origin = work_dir + os.path.sep + to_copy
         if strip_build_from_copy:
-            copy_cmd+='find {work_dir}/{directory} -name build -exec rm -r {{}} \; 2>/dev/null\n'.format(work_dir=work_dir, directory=directory)
-        copy_cmd+='cp -r {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
+            copy_cmd+='find {origin} -name build -exec rm -r {{}} \; 2>/dev/null\n'.format(origin=origin)
+        destination = output_dir + os.path.sep + to_copy
+        base_dir = os.path.dirname(destination[:-1] if destination.endswith('/') else destination)
+        copy_cmd += """
+mkdir -p {base_dir}
+cp -r {origin} {destination}
+""".format(base_dir=base_dir, origin=origin, destination=destination)
     #Create jobscript
     jobscript_path = os.path.join(work_dir, script_name + '.job')
     f = open(jobscript_path, 'w')

@@ -16,9 +16,9 @@ if 'NINEMLP_MPI' in os.environ:
     print "importing MPI"
 import argparse
 import ninemlp
-from pyNN.neuron.
 import time
 from operator import itemgetter
+import numpy.random
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
@@ -53,32 +53,35 @@ else:
     stim_seed = int(args.stim_seed)
 # Print out basic parameters of the simulation
 net = Network(xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
-                             build_mode=args.build, silent_build=args.silent_build)
+                                                                            build_mode=args.build)
 #setup(timestep=args.timestep, min_delay=args.min_delay, max_delay=4.0, quit_on_end=True)
 inputs = net.get_population('Inputs')
+spikes_array = numpy.cumsum(numpy.random.poisson(1.0, (len(inputs),50)), axis=1)
 inputs.set_spikes(spikes_array)
-
-
-golgi_pairs = []
-source_var_gid = 0
-for pair_i in xrange(args.num_pairs):
-    pair = (Golgi(), Golgi())
-    for i in (0, 1):
-        source = pair[i]
-        target = pair[(i + 1) % 2]
-        gap_junction = pair[i].soma.Gap
-        gap_junction.g = args.ggap
-        simulator.state.parallel_context.target_var(target.soma.Gap._ref_vgap, source_var_gid)
-        simulator.state.parallel_context.source_var(source.soma(0.5)._ref_v, source_var_gid)
-        source_var_gid += 1
-    golgi_pairs.append(pair)
-first_golgi = golgi_pairs[0][0]
-output_path=os.path.join(args.output, "first_golgi.v")
-first_golgi.record('v', output_path) #@UndefinedVariable
-if args.print_first:
-    for seg_id, seg in sorted(first_golgi.segments.items(), key=itemgetter(0)):
-        print "ID: {0}".format(seg_id)
-        neuron.h.psection(sec=seg)
+# Record from golgis
+golgis = net.get_population('TestCells')
+output_path = args.output + "/TestCells.v"
+golgis.record('v', output_path)
+#golgi_pairs = []
+#source_var_gid = 0
+#for pair_i in xrange(args.num_pairs):
+#    pair = (ninemlp.neuron.Golgi(), ninemlp.neuron.Golgi()) #@UndefinedVariable
+#    for i in (0, 1):
+#        source = pair[i]
+#        target = pair[(i + 1) % 2]
+#        gap_junction = pair[i].soma.Gap
+#        gap_junction.g = args.ggap
+#        simulator.state.parallel_context.target_var(target.soma.Gap._ref_vgap, source_var_gid)
+#        simulator.state.parallel_context.source_var(source.soma(0.5)._ref_v, source_var_gid)
+#        source_var_gid += 1
+#    golgi_pairs.append(pair)
+#first_golgi = golgi_pairs[0][0]
+#output_path=os.path.join(args.output, "first_golgi.v")
+#first_golgi.record('v', output_path) #@UndefinedVariable
+#if args.print_first:
+#    for seg_id, seg in sorted(first_golgi.segments.items(), key=itemgetter(0)):
+#        print "ID: {0}".format(seg_id)
+#        neuron.h.psection(sec=seg)
 # Set simulation temperature
 neuron.h.celsius = args.temperature
 print "Starting run"
