@@ -687,7 +687,7 @@
                     </ncml:rate>
                     <ncml:output name="ca" />
                 </ncml:component>
-                <ncml:component type="decaying-pool" name="ca2">
+                <ncml:decayingPool name="ca2">
                     <ncml:input name="ica2" from="ion-currents" />
                     <ncml:const name="valence" value="2" />
                     <ncml:const name="F" value="96485.3" />
@@ -702,8 +702,8 @@
                     </ncml:rate>
                     <ncml:output name="ca2" />
                     <ncml:output name="valence" />
-                </ncml:component>
-                <ncml:component type="ionic-current" name="CaHVA">
+                </ncml:decayingPool>
+                <ncml:ionicCurrent name="CaHVA">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
@@ -765,7 +765,7 @@
                         <ncml:const name="e" value="129.33" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="CaHVA">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -866,7 +866,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="HCN1">
+                <ncml:ionicCurrent name="HCN1">
                     <ncml:const name="Ehalf" value="-72.49" />
                     <ncml:const name="c" value="0.11305" />
                     <ncml:const name="rA" value="0.002096" />
@@ -928,7 +928,7 @@
                         <ncml:const name="e" value="-20" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="HCN1">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -943,7 +943,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="HCN2">
+                <ncml:ionicCurrent name="HCN2">
                     <ncml:const name="Ehalf" value="-81.95" />
                     <ncml:const name="c" value="0.1661" />
                     <ncml:const name="rA" value="-0.0227" />
@@ -1015,7 +1015,7 @@
                         <ncml:const name="e" value="-20" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="HCN2">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1030,7 +1030,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="KA">
+                <ncml:ionicCurrent name="KA">
                     <ncml:defun name="sigm">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1110,7 +1110,7 @@
                         <ncml:const name="e" value="-84.69" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="KA">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1125,7 +1125,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="KCa">
+                <ncml:ionicCurrent name="KCa">
                     <ncml:input name="cai" from="ion-pools" />
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
@@ -1170,7 +1170,7 @@
                     </ncml:component>
                     <ncml:component type="modulating-ion" name="ca">
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="KCa">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1185,7 +1185,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="KM">
+                <ncml:ionicCurrent type="ionic-current" name="KM">
                     <ncml:component type="gate">
                         <ncml:const name="Aalpha_n" value="0.0033" />
                         <ncml:const name="Kalpha_n" value="40" />
@@ -1227,7 +1227,7 @@
                         <ncml:const name="e" value="-84.69" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="KM">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1242,7 +1242,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="KV">
+                <ncml:ionicCurrent type="ionic-current" name="KV">
                     <ncml:defun name="linoid">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1287,7 +1287,7 @@
                         <ncml:const name="e" value="-84.69" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="KV">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1302,7 +1302,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="SK2">
+                <ncml:ionicCurrent name="SK2">
                     <ncml:input name="cai" from="ion-pools" />
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
@@ -1406,7 +1406,7 @@
                     </ncml:component>
                     <ncml:component type="modulating-ion" name="ca">
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="SK2">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1421,7 +1421,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="Na">
+                <ncml:ionicCurrent name="Na">
                     <ncml:defun name="linoid">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1488,7 +1488,7 @@
                         <ncml:const name="e" value="87.39" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="Na">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-60" />
@@ -1503,7 +1503,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="NaP">
+                <ncml:ionicCurrent name="NaP">
                     <ncml:defun name="linoid">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1551,7 +1551,7 @@
                         <ncml:const name="e" value="87.39" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="NaP">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-60" />
@@ -1566,7 +1566,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="NaR">
+                <ncml:ionicCurrent name="NaR">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
@@ -1630,7 +1630,7 @@
                         <ncml:const name="e" value="87.39" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="NaR">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-60" />
@@ -1645,7 +1645,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="Lkg">
+                <ncml:ionicCurrent name="Lkg">
                     <ncml:component type="pore">
                         <ncml:const name="gbar"> (2.1e-05)
                         </ncml:const>
@@ -1655,7 +1655,7 @@
                         <ncml:const name="e" value="-55" />
                         <ncml:output name="e" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="ca" value="129.33" units="mV"
                     segmentGroup="soma_group" />
