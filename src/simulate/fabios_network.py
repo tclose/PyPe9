@@ -11,6 +11,10 @@
 #    Copyright 2011 Okinawa Institute of Science and Technology (OIST), Okinawa, Japan
 #
 #######################################################################################
+import sys
+from pyNN import __version__
+print __version__
+from ninemlp.nest import *
 import os.path
 if 'NINEMLP_MPI' in os.environ:
     import mpi4py #@UnresolvedImport @UnusedImport
@@ -27,23 +31,23 @@ parser.add_argument('--simulator', type=str, default='neuron',
 parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
-parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres')
-parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)')
+parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
+parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms) (default: %(default)s)')
 parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.') , help='The output location of the recording files')
-parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation')
-parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
-parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
+parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation (default: %(default)s)')
+parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network (default: %(default)s)')
+parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation (default: %(default)s)')
 parser.add_argument('--save_connections', type=str, default=None, help='A path in which to save the generated connections')
 parser.add_argument('--stim_seed', type=int, default=None, help='The seed passed to the stimulated spikes')
 parser.add_argument('--para_unsafe', action='store_true', help='If set the network simulation will try to be parallel neuron safe')
 parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs=2, default=[], action='append', help='Save voltage traces for the given list of ("population name", "cell ID") tuples')
-parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
+parser.add_argument('--debug_network', action='store_true', help='Loads a stripped down version of the network for easier debugging')
 parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
 parser.add_argument('--include_gap', action='store_true', help='Includes Golgi-to-Golgi gap junctions into the network')
 parser.add_argument('--no_granule_to_golgi', action='store_true', help='Deactivates the granule to golgi connection in the network.')
 args = parser.parse_args()
 # Set the network xml location
-if args.debug:
+if args.debug_network:
     xml_filename = 'debug_fabios.xml'
 else:
     xml_filename = 'fabios_network.xml'
@@ -66,7 +70,7 @@ if args.no_granule_to_golgi:
 # Build the network
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
-                             build_mode=args.build, silent_build=args.silent_build, flags=flags)
+                                build_mode=args.build, silent_build=args.silent_build, flags=flags)
 print "Network description"
 net.describe()
 if args.save_connections:
@@ -77,6 +81,9 @@ mossy_fibers = net.get_population('MossyFibers')
 mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
 print "Setting up recorders"
 net.record_all_spikes(args.output)
+golgis = net.get_population('Golgis')
+for ID in golgis:
+    neuron.h.psection(sec=ID._cell.soma) #UndefinedVariable
 # Set up voltage traces    
 for pop_id, cell_id in args.volt_trace:
     cell = net.get_population(pop_id)[int(cell_id)]

@@ -51,6 +51,7 @@ before the next step in the variable trace is plotted')
 single combined axis')
     parser.add_argument('--no_show', action='store_true', help='Don''t show the plots initially \
 (waiting for other plots to be plotted')
+    parser.add_argument('--ignore_header', action='store_true', help='Ignore the pyNN header (useful if it is not a pyNN file or it is corrupted')
     args = parser.parse_args(arguments)
 
     # Set up the common axis to plot the results on
@@ -60,7 +61,7 @@ single combined axis')
     unique_currents = set()
     for filename in args.filenames:
         ext = filename.split('.')[-1]
-        if ext == 'spikes':
+        if ext.startswith('spikes'):
             num_spike_trains += 1
         elif ext == 'v' or ext == 'dat':
             num_v += 1
@@ -116,9 +117,14 @@ single combined axis')
                         pass
                 header[key] = value
             f.close()
-            # Check loaded header
+            # Check loaded header:
             if not header:
-                raise Exception("Did not load a header from the passed file '%s', is it a pyNN \
+                if args.ignore_header:
+                    header = {}
+                    header['dt'] = 1 
+                    header['variable'] = filename.split('.')[0]
+                elif variable_name != 'spikes_dat':
+                    raise Exception("Did not load a header from the passed file '%s', is it a pyNN \
 output file?" % filename)
             label = header.get('label', '')
         # Get the type of variable recorded via the file's extension
@@ -149,6 +155,20 @@ output file?" % filename)
             max_id = numpy.max(ids)
             ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
             ax.set_ylim(-2, max_id + 2)
+            spike_train_count += 1
+        elif variable_name == 'spikes_dat':
+            # Get axes to plot spikes on
+            ax = spike_axes[spike_train_count]
+            # Set axis labels and limits
+            ax.set_xlabel("Time (ms)")
+            ax.set_ylabel("Neuron #")
+            plt.title(label + ' ' + args.extra_label + ' - Spike Times')
+            # Loop through the spikes file and 
+            with open(filename) as f:
+                for cell_id, line in enumerate(f):
+                    spikes = numpy.array([float(t) for t in line.split()])
+                    # Plot spikes
+                    ax.scatter(spikes, numpy.tile(cell_id, spikes.shape))
             spike_train_count += 1
         else:
             if variable_name == 'dat':
