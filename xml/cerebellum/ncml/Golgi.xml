@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ncml:model xmlns:ncml="ncml" name="Golgi">
     <!--<include href="SimpleIonChannel.xml"/> Contains ionChannel NaConductance -->
+    <ncml:sxslt>
+<!-- XML syntactic sugar stylesheet -->
+     (
+           (sxml:match 'ncml:ionicCurrent
+	    (lambda (node bindings root env)
+	      (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name)))
+                    (kids (sxml:kids node)))
+                  `(ncml:component (@ (type "ionic-current") (name ,id)) . ,kids)
+		  )))
+
+           (sxml:match 'ncml:decayingPool
+	    (lambda (node bindings root env)
+	      (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name)))
+                    (kids (sxml:kids node)))
+                  `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids)
+                 )))
+        )
+    </ncml:sxslt>
     <cell id="Golgi">
         <notes>A model of a Golgi cell</notes>
         <morphology id="GolgiMorph">
