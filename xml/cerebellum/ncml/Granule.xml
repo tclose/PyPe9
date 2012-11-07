@@ -21,8 +21,11 @@
         )
     </ncml:sxslt>
 
-
-    <cell id="Granule">
+    <cell id="Granule" > 
+      <nemoBuildOptions>
+	<neuron command="-p --pyparams={paramsdir} --nmodl={nmodldir} --nmodl-method=derivimplicit --nmodl-kinetic=Na_z"/>
+	<nest command="-p --pyparams={paramsdir} --nest={nmodldir} --nest-method=cvode"/>
+      </nemoBuildOptions>
         <notes>A model of a granule cell</notes>
         <morphology id="GranuleMorph">
             <!-- Segments -->
