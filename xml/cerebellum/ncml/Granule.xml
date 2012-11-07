@@ -1,31 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ncml:model xmlns:ncml="ncml" name="Granule">
     <!--<include href="SimpleIonChannel.xml"/> -->
-
     <ncml:sxslt>
-<!-- XML syntactic sugar stylesheet -->
-     (
-           (sxml:match 'ncml:ionicCurrent
-	    (lambda (node bindings root env)
-	      (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name)))
-                    (kids (sxml:kids node)))
-                  `(ncml:component (@ (type "ionic-current") (name ,id)) . ,kids)
-		  )))
-
-           (sxml:match 'ncml:decayingPool
-	    (lambda (node bindings root env)
-	      (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name)))
-                    (kids (sxml:kids node)))
-                  `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids)
-                 )))
-        )
+        <!-- XML syntactic sugar stylesheet -->
+        ( (sxml:match 'ncml:ionicCurrent (lambda (node bindings root env) (let ((id (or (sxml:attr
+        node 'id) (sxml:attr node 'name))) (kids (sxml:kids node))) `(ncml:component (@ (type
+        "ionic-current") (name ,id)) . ,kids) ))) (sxml:match 'ncml:decayingPool (lambda (node
+        bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
+        (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
     </ncml:sxslt>
-
-    <cell id="Granule" > 
-      <nemoBuildOptions>
-	<neuron command="-p --pyparams={paramsdir} --nmodl={nmodldir} --nmodl-method=derivimplicit --nmodl-kinetic=Na_z"/>
-	<nest command="-p --pyparams={paramsdir} --nest={nmodldir} --nest-method=cvode"/>
-      </nemoBuildOptions>
+    <cell id="Granule">
         <notes>A model of a granule cell</notes>
         <morphology id="GranuleMorph">
             <!-- Segments -->
@@ -38,6 +22,14 @@
             </segmentGroup>
         </morphology>
         <biophysicalProperties id="Cerebellar Granule Cell">
+            <defaultBuildOptions>
+                <build tool="nemo" simulator="neuron" method="derivimplicit">
+                    <kinetic comp_id="Na_z" />
+                </build>
+                <build tool="nemo" simulator="nest" method="cvode" />
+                <!-- -p pyparams={paramsdir} nmodl={nmodldir} nmodl-method=derivimplicit nmodl-kinetic=Na_z" -->
+                <!-- -p pyparams={paramsdir} nest={nmodldir} nest-method=cvode" -->
+            </defaultBuildOptions>
             <actionPotentialThreshold v="-21" />
             <membraneProperties>
                 <ncml:input name="v" />
@@ -51,7 +43,8 @@
                     <ncml:arg>x</ncml:arg>
                     <ncml:arg>y</ncml:arg>
                     <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2))) else (x
-                        / (exp (x / y) - 1)))</ncml:body>
+                        / (exp (x / y) - 1))) 
+                    </ncml:body>
                 </ncml:defun>
                 <ncml:decayingPool name="ca">
                     <ncml:input name="cai" from="ion-pools" />
@@ -63,7 +56,8 @@
                     <ncml:const name="beta" value="1.5" />
                     <ncml:rate name="ca">
                         <ncml:expr>((neg (ica) / (2 * F * d)) * 10000.0 - (beta * ((if (ca &lt;
-                            cai0) then cai0 else ca) - cai0)))</ncml:expr>
+                            cai0) then cai0 else ca) - cai0))) 
+                        </ncml:expr>
                         <ncml:initial>cai0</ncml:initial>
                     </ncml:rate>
                     <ncml:output name="ca" />
@@ -247,17 +241,16 @@
                         <ncml:const name="Abeta_c" value="1.5" />
                         <ncml:const name="Bbeta_c" value="0.00015" />
                         <ncml:const name="Kbeta_c" value="-11.765" />
-
-			<ncml:asgn name="cai1"> 
-			  <ncml:expr>(if (cai &lt;  1e-4) then 1e-4 else cai)</ncml:expr>
-			</ncml:asgn>
-
+                        <ncml:asgn name="cai1">
+                            <ncml:expr>(if (cai &lt; 1e-4) then 1e-4 else cai)</ncml:expr>
+                        </ncml:asgn>
                         <ncml:defun name="alpha_c">
                             <ncml:arg>v</ncml:arg>
                             <ncml:arg>cai</ncml:arg>
                             <ncml:arg>Q10</ncml:arg>
                             <ncml:body>(Q10 * Aalpha_c / (1 + (Balpha_c * exp (v / Kalpha_c) /
-                                cai)))</ncml:body>
+                                cai)))
+                            </ncml:body>
                         </ncml:defun>
                         <ncml:defun name="beta_c">
                             <ncml:arg>v</ncml:arg>
@@ -268,7 +261,8 @@
                         </ncml:defun>
                         <ncml:hh_ionic_gate name="KCa">
                             <ncml:initial_m>((alpha_c (v cai1 Q10)) / (alpha_c (v cai1 Q10) + beta_c
-                                (v cai1 Q10)))</ncml:initial_m>
+                                (v cai1 Q10)))
+                            </ncml:initial_m>
                             <ncml:m_power>1</ncml:m_power>
                             <ncml:h_power>0</ncml:h_power>
                             <ncml:m_alpha>(alpha_c (v cai1 Q10))</ncml:m_alpha>
