@@ -13,8 +13,6 @@
 #######################################################################################
 import sys
 from pyNN import __version__
-print __version__
-from ninemlp.nest import *
 import os.path
 if 'NINEMLP_MPI' in os.environ:
     import mpi4py #@UnresolvedImport @UnusedImport
