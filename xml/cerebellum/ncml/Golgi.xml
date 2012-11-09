@@ -623,7 +623,7 @@
                 <member segment="axon_47" />
                 <member segment="axon_48" />
                 <member segment="axon_49" />
-                <member segment= method="kinetic" "axon_50" />
+                <member segment="axon_50" />
                 <member segment="axon_51" />
                 <member segment="axon_52" />
                 <member segment="axon_53" />
@@ -681,8 +681,6 @@
                     <kinetic comp_id="Na_z" />
                 </build>
                 <build tool="nemo" simulator="nest" method="cvode" />
-                <!-- command="-p --pyparams={paramsdir} --nmodl={nmodldir} --nmodl-method=derivimplicit --nmodl-kinetic=Na_z" -->
-                <!-- command="-p --pyparams={paramsdir} --nest={nmodldir} --nest-method=cvode" -->
             </defaultBuildOptions>
             <!-- FIXME: celsius = 23 Not sure where to put this -->
             <membraneProperties>
