@@ -20,7 +20,7 @@
                 <distribution component="Lkg1" attr="ReversalPotential" type="uniform"
                     low="-19.8" high="-13.2" units="nA" />
                 <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um"
-                    segmentGroup="soma" />
+                    segmentGroup="soma_group" />
             </cellParameters>
             <initalConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
@@ -30,8 +30,8 @@
             <layout type="Extension" engine="Brep" id="debug_Golgis" />
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
-                    segmentGroup="soma" />
-                <distribution component="Lkg" attr="e" type="uniform" low="-66"
+                    segmentGroup="soma_group" />
+                <distribution component="Lkg" attr="ReversalPotential" type="uniform" low="-66"
                     high="-44" units="nA" />
             </cellParameters>
             <initalConditions>
