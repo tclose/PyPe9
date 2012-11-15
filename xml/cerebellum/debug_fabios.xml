@@ -22,9 +22,9 @@
                 <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um"
                     segmentGroup="soma" />
             </cellParameters>
-            <initalConditions>
+            <initialConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
-            </initalConditions>
+            </initialConditions>
         </population>
         <population id="Golgis" cell="Golgi">
             <layout type="Extension" engine="Brep" id="debug_Golgis" />
@@ -34,9 +34,9 @@
                 <distribution component="Lkg" attr="ReversalPotential" type="uniform" low="-66"
                     high="-44" units="nA" />
             </cellParameters>
-            <initalConditions>
+            <initialConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
-            </initalConditions>
+            </initialConditions>
         </population>
         <population id="MossyFibers" cell="SpikeSourceArray">
             <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
