@@ -125,6 +125,7 @@
                 <parent segment="dend_2_5" />
                 <distal x="0" y="79.1" z="13.5" diameter="3" />
             </segment>
+            self.morphology.groups.append(self.SegmentGroup(attrs['id'], []))
             <segment id="dend_2_7">
                 <parent segment="dend_2_6" />
                 <distal x="0" y="90.4" z="13.5" diameter="3" />
@@ -537,11 +538,11 @@
                 <parent segment="axon_98" />
                 <distal x="0.0" y="-1200.0" z="13.5" diameter="2.4" />
             </segment>
-            <segmentGroup id="soma">
-                <member segment="soma" />
+            <segmentGroup id="soma" default="True">
+                <member segment="soma" default="True" />
             </segmentGroup>
-            <segmentGroup id="dendrite_group">
-                <member segment="dend_0_0" />
+            <segmentGroup id="dendrite">
+                <member segment="dend_0_0" default="True" />
                 <member segment="dend_0_1" />
                 <member segment="dend_0_2" />
                 <member segment="dend_0_3" />
@@ -573,7 +574,7 @@
                 <member segment="dend_2_9" />
             </segmentGroup>
             <segmentGroup id="axon">
-                <member segment="axon_0" />
+                <member segment="axon_0" default="True" />
                 <member segment="axon_1" />
                 <member segment="axon_2" />
                 <member segment="axon_3" />
@@ -1186,8 +1187,7 @@
                         <ncml:const name="e" value="-84.69" />
                         <ncml:output name="e" />
                     </ncml:component>
-                    <ncml:component type="modulating-ion" name="ca">
-                    </ncml:component>
+                    <ncml:component type="modulating-ion" name="ca" />
                 </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="KCa">
                     <ncml:const name="vchold" value="-71" />
@@ -1423,8 +1423,7 @@
                         <ncml:const name="e" value="-84.69" />
                         <ncml:output name="e" />
                     </ncml:component>
-                    <ncml:component type="modulating-ion" name="ca">
-                    </ncml:component>
+                    <ncml:component type="modulating-ion" name="ca" />
                 </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="SK2">
                     <ncml:const name="vchold" value="-71" />

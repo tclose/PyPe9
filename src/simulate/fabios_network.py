@@ -81,7 +81,7 @@ print "Setting up recorders"
 net.record_all_spikes(args.output)
 golgis = net.get_population('Golgis')
 for ID in golgis:
-    neuron.h.psection(sec=ID._cell.soma) #UndefinedVariable
+    neuron.h.psection(sec=ID._cell.soma_seg) #UndefinedVariable
 # Set up voltage traces    
 for pop_id, cell_id in args.volt_trace:
     cell = net.get_population(pop_id)[int(cell_id)]
