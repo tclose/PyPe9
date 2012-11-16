@@ -58,6 +58,8 @@ def main(arguments):
     pop = net.all_populations()[0]
     cell = pop[0]._cell
     soma = cell.soma_seg
+    from neuron import h
+    h.psection(sec=soma)
     if args.print_all:
         from neuron import h
         for seg_id, seg in sorted(cell.segments.items(), key=itemgetter(0)):
