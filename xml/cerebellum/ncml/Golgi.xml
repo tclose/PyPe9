@@ -679,7 +679,7 @@
         <biophysicalProperties id="GolgiBiophys">
             <defaultBuildOptions>
                 <build tool="nemo" simulator="neuron" method="derivimplicit">
-                    <kinetic comp_id="Na_z" />
+                    <kinetic comp_id="SK2_z" />
                 </build>
                 <build tool="nemo" simulator="nest" method="cvode" />
             </defaultBuildOptions>
@@ -1411,14 +1411,14 @@
                                 <ncml:transition src="o2" dst="c4">
                                     <ncml:rate>invo2_t</ncml:rate>
                                 </ncml:transition>
-				<ncml:conserve>
+                            </ncml:transitions>
+			    <ncml:conserve>
 				  <ncml:conseq val="1">
 				    <ncml:expr>
 				      c1 + c2 + c3 + c4 + o2 + o1
 				    </ncml:expr>
 				  </ncml:conseq>
 				</ncml:conserve>
-                            </ncml:transitions>
                         </ncml:reaction>
                         <ncml:output name="SK2_z" />
                     </ncml:component>
