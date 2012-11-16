@@ -15,8 +15,6 @@
 import os.path
 import argparse
 import ninemlp
-import numpy
-import math
 from operator import itemgetter
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
@@ -89,7 +87,7 @@ def main(arguments):
             print var + ": " + str(getattr(soma, var))
         except:
             pass
-    print "celsius: " + str(h.celsius)
+#    print "celsius: " + str(h.celsius)
     print "Starting run"
     
     run(args.time) #@UndefinedVariable
