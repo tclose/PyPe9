@@ -1,6 +1,6 @@
 
 
-TITLE CGC_CaHVA
+TITLE Granule_CaHVA
 
 
 NEURON {

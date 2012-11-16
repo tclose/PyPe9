@@ -1,6 +1,6 @@
 
 
-TITLE CGC_KM
+TITLE Granule_KM
 
 
 NEURON {

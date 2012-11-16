@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX CGC_KCa
+	SUFFIX Granule_KCa
 	USEION k READ ek WRITE ik 
 	USEION ca READ cai
 	RANGE gkbar, ik, ica, g, alpha_c, beta_c

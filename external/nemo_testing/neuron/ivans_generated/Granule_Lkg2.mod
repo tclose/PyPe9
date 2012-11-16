@@ -1,6 +1,6 @@
 
 
-TITLE CGC_Lkg2
+TITLE Granule_Lkg2
 
 
 NEURON {

@@ -1,6 +1,6 @@
 
 
-TITLE CGC_Na
+TITLE Granule_Na
 
 
 NEURON {

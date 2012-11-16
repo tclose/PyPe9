@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX CGC_Lkg2 
+	SUFFIX Granule_Lkg2 
 	NONSPECIFIC_CURRENT il
 	RANGE egaba, ggaba , i
 } 

@@ -1,6 +1,6 @@
 
 
-TITLE CGC_KA
+TITLE Granule_KA
 
 
 NEURON {

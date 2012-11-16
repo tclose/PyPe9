@@ -144,7 +144,7 @@ for i=0, NETDIM_Xb-1 {
  //v_leak randomization
  v_leak=-16.5 
  dprob=prob.uniform(-v_leak*(variabilityb/100),v_leak*(variabilityb/100))
- GrC[l].soma.comp47_e_CGC_Lkg1=v_leak+dprob
+ GrC[l].soma.comp47_e_Granule_Lkg1=v_leak+dprob
  l=l+1
   }
  }

@@ -1,6 +1,6 @@
 
 
-TITLE CGC_Ca
+TITLE Granule_Ca
 
 
 NEURON {

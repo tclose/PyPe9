@@ -1,6 +1,6 @@
 
 
-TITLE CGC_Kir
+TITLE Granule_Kir
 
 
 NEURON {

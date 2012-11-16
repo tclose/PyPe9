@@ -9,7 +9,7 @@ COMMENT
 ENDCOMMENT
 
 NEURON { 
-	SUFFIX CGC_KV 
+	SUFFIX Granule_KV 
 	USEION k READ ek WRITE ik 
 	RANGE gkbar, ik, g, alpha_n, beta_n 
 	RANGE Aalpha_n, Kalpha_n, V0alpha_n

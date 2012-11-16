@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
 
 NEURON {
-        SUFFIX CGC_Ca
+        SUFFIX Granule_Ca
         USEION ca READ ica, cao WRITE cai
         RANGE d, beta, cai0
 }

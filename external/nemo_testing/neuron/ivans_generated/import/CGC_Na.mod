@@ -5,7 +5,7 @@ Based on Raman 13 state model. Adapted from Magistretti et al, 2006.
 ENDCOMMENT
 
 NEURON {
-	SUFFIX CGC_Na
+	SUFFIX Granule_Na
 	USEION na READ ena WRITE ina
 	RANGE gnabar, ina, g
 	RANGE alfa, beta, gamma, delta, epsilon, teta, Con, Coff, Oon, Ooff
