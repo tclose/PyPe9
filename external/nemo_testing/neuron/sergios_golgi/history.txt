@@ -1,0 +1,3 @@
+This comes directly from modeldb "Solinas S, Forti L, Cesana E, Mapelli J, De Schutter E, D`Angelo E
+(2007) Computational reconstruction of pacemaking and intrinsic electroresponsiveness in cerebellar 
+golgi cells. Front. Cell. Neurosci."

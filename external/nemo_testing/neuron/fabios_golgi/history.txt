@@ -1,0 +1,4 @@
+- The mod files in this directory are the same as the ones in 'sergios_golgi', with the exception
+of the Ca_LVA mod file where the table has been commented out.
+
+- sergios golgi.hoc will create the same neuron as in 'sergios_golgi'

@@ -1,0 +1,3 @@
+This is copied from the NCML build directory, I don't think that it is important as I think it was 
+just an intermediate stage between the nmodl files in 'ivan_generated_nmodl' and the current 
+generated mod files.
