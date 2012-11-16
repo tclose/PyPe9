@@ -62,7 +62,7 @@
                     </ncml:rate>
                     <ncml:output name="ca" />
                 </ncml:decayingPool>
-                <ncml:ionicCurrent name="CaHVA">
+                <ncml:ionicCurrent name="CaHVA" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
@@ -137,7 +137,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="KA">
+                <ncml:ionicCurrent name="KA" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 25.5) / 10)))</ncml:expr>
@@ -229,7 +229,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="KCa">
+                <ncml:ionicCurrent name="KCa" segmentGroup="soma">
                     <ncml:input name="cai" from="ion-pools" />
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
@@ -293,7 +293,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="Kir">
+                <ncml:ionicCurrent name="Kir" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
@@ -347,7 +347,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="KM">
+                <ncml:ionicCurrent name="KM" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:const name="Aalpha_n" value="0.0033" />
                         <ncml:const name="Kalpha_n" value="40" />
@@ -403,7 +403,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="KV">
+                <ncml:ionicCurrent name="KV" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 6.3) / 10)))</ncml:expr>
@@ -457,7 +457,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="Lkg1">
+                <ncml:ionicCurrent name="Lkg1" segmentGroup="soma">
                     <ncml:component type="pore">
                         <ncml:const name="gbar"> (5.68e-05)
                         </ncml:const>
@@ -468,7 +468,7 @@
                         <ncml:output name="e" />
                     </ncml:component>
                 </ncml:ionicCurrent>
-                <ncml:ionicCurrent name="Lkg2">
+                <ncml:ionicCurrent name="Lkg2" segmentGroup="soma">
                     <ncml:component type="pore">
                         <ncml:const name="ggaba"> (3e-05)
                         </ncml:const>
@@ -479,7 +479,7 @@
                         <ncml:output name="egaba" />
                     </ncml:component>
                 </ncml:ionicCurrent>
-                <ncml:ionicCurrent name="Na">
+                <ncml:ionicCurrent name="Na" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>

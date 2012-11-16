@@ -718,7 +718,7 @@
                     <ncml:output name="ca2" />
                     <ncml:output name="valence" />
                 </ncml:decayingPool>
-                <ncml:ionicCurrent name="CaHVA">
+                <ncml:ionicCurrent name="CaHVA" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
@@ -882,7 +882,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="HCN1">
+                <ncml:ionicCurrent name="HCN1" segmentGroup="soma">
                     <ncml:const name="Ehalf" value="-72.49" />
                     <ncml:const name="c" value="0.11305" />
                     <ncml:const name="rA" value="0.002096" />
@@ -959,7 +959,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="HCN2">
+                <ncml:ionicCurrent name="HCN2" segmentGroup="soma">
                     <ncml:const name="Ehalf" value="-81.95" />
                     <ncml:const name="c" value="0.1661" />
                     <ncml:const name="rA" value="-0.0227" />
@@ -1047,7 +1047,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="KA">
+                <ncml:ionicCurrent name="KA" segmentGroup="soma">
                     <ncml:defun name="sigm">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1142,7 +1142,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="KCa">
+                <ncml:ionicCurrent name="KCa" segmentGroup="soma">
                     <ncml:input name="cai" from="ion-pools" />
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
@@ -1203,7 +1203,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent type="ionic-current" name="KM">
+                <ncml:ionicCurrent type="ionic-current" name="KM" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:const name="Aalpha_n" value="0.0033" />
                         <ncml:const name="Kalpha_n" value="40" />
@@ -1260,7 +1260,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent type="ionic-current" name="KV">
+                <ncml:ionicCurrent type="ionic-current" name="KV" segmentGroup="soma">
                     <ncml:defun name="linoid">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1321,7 +1321,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="SK2">
+                <ncml:ionicCurrent name="SK2" segmentGroup="soma">
                     <ncml:input name="cai" from="ion-pools" />
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
@@ -1439,7 +1439,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="Na">
+                <ncml:ionicCurrent name="Na" segmentGroup="soma">
                     <ncml:defun name="linoid">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1522,7 +1522,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="NaP">
+                <ncml:ionicCurrent name="NaP" segmentGroup="soma">
                     <ncml:defun name="linoid">
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
@@ -1586,7 +1586,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="NaR">
+                <ncml:ionicCurrent name="NaR" segmentGroup="soma">
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
                             <ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
