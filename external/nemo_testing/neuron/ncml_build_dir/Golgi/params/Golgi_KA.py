@@ -25,7 +25,7 @@ comp2188_Abeta_a  =  0.1655
 comp2103_vchdur  =  30.0
 
 
-properties  =  {'ReversalPotential': ('comp2188_e',  comp2188_e),  
-  'MaximalConductance': ('comp2188_gbar',  comp2188_gbar)}
+properties  =  {'e_rev': ('comp2188_e',  comp2188_e),  
+  'gbar': ('comp2188_gbar',  comp2188_gbar)}
 
 

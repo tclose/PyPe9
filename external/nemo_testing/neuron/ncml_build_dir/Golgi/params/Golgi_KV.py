@@ -15,7 +15,7 @@ comp3363_V0alpha_n  =  -26.0
 comp3363_Abeta_n  =  0.125
 
 
-properties  =  {'ReversalPotential': ('comp3363_e',  comp3363_e),  
-  'MaximalConductance': ('comp3363_gbar',  comp3363_gbar)}
+properties  =  {'e_rev': ('comp3363_e',  comp3363_e),  
+  'gbar': ('comp3363_gbar',  comp3363_gbar)}
 
 

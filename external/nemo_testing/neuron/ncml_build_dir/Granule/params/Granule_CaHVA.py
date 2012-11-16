@@ -20,7 +20,7 @@ comp435_Abeta_s  =  0.08298
 comp435_gbar  =  0.00046
 
 
-properties  =  {'ReversalPotential': ('comp435_e',  comp435_e),  
-  'MaximalConductance': ('comp435_gbar',  comp435_gbar)}
+properties  =  {'e_rev': ('comp435_e',  comp435_e),  
+  'gbar': ('comp435_gbar',  comp435_gbar)}
 
 

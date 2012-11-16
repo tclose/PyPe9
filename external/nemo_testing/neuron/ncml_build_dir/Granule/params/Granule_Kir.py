@@ -14,7 +14,7 @@ comp1756_V0alpha_d  =  -83.94
 comp1756_Abeta_d  =  0.16994
 
 
-properties  =  {'ReversalPotential': ('comp1756_e',  comp1756_e),  
-  'MaximalConductance': ('comp1756_gbar',  comp1756_gbar)}
+properties  =  {'e_rev': ('comp1756_e',  comp1756_e),  
+  'gbar': ('comp1756_gbar',  comp1756_gbar)}
 
 

@@ -21,7 +21,7 @@ comp526_Abeta_u  =  0.0013
 comp526_Abeta_s  =  0.08298
 
 
-properties  =  {'ReversalPotential': ('comp526_e',  comp526_e),  
-  'MaximalConductance': ('comp526_gbar',  comp526_gbar)}
+properties  =  {'e_rev': ('comp526_e',  comp526_e),  
+  'gbar': ('comp526_gbar',  comp526_gbar)}
 
 

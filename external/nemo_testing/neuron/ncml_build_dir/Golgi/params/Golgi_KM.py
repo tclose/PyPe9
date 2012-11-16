@@ -17,7 +17,7 @@ comp3026_V0alpha_n  =  -30.0
 comp3026_Abeta_n  =  0.0033
 
 
-properties  =  {'ReversalPotential': ('comp3026_e',  comp3026_e),  
-  'MaximalConductance': ('comp3026_gbar',  comp3026_gbar)}
+properties  =  {'e_rev': ('comp3026_e',  comp3026_e),  
+  'gbar': ('comp3026_gbar',  comp3026_gbar)}
 
 

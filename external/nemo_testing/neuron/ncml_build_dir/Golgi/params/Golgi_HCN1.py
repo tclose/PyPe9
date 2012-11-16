@@ -19,7 +19,7 @@ comp1353_vchdur  =  30.0
 comp1353_vcinc  =  10.0
 
 
-properties  =  {'ReversalPotential': ('comp1438_e',  comp1438_e),  
-  'MaximalConductance': ('comp1438_gbar',  comp1438_gbar)}
+properties  =  {'e_rev': ('comp1438_e',  comp1438_e),  
+  'gbar': ('comp1438_gbar',  comp1438_gbar)}
 
 

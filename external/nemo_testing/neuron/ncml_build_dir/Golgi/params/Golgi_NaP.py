@@ -17,7 +17,7 @@ comp4469_Abeta_m  =  0.62
 comp4469_e  =  87.39
 
 
-properties  =  {'ReversalPotential': ('comp4469_e',  comp4469_e),  
-  'MaximalConductance': ('comp4469_gbar',  comp4469_gbar)}
+properties  =  {'e_rev': ('comp4469_e',  comp4469_e),  
+  'gbar': ('comp4469_gbar',  comp4469_gbar)}
 
 

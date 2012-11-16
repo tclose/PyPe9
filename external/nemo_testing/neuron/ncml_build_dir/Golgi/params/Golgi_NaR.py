@@ -23,7 +23,7 @@ comp4828_Abeta_f  =  0.01014
 comp4743_vchdur  =  30.0
 
 
-properties  =  {'ReversalPotential': ('comp4828_e',  comp4828_e),  
-  'MaximalConductance': ('comp4828_gbar',  comp4828_gbar)}
+properties  =  {'e_rev': ('comp4828_e',  comp4828_e),  
+  'gbar': ('comp4828_gbar',  comp4828_gbar)}
 
 

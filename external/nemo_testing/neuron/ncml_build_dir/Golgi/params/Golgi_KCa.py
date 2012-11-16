@@ -15,7 +15,7 @@ comp2714_Bbeta_c  =  0.00015
 comp2714_Abeta_c  =  1.0
 
 
-properties  =  {'ReversalPotential': ('comp2714_e',  comp2714_e),  
-  'MaximalConductance': ('comp2714_gbar',  comp2714_gbar)}
+properties  =  {'e_rev': ('comp2714_e',  comp2714_e),  
+  'gbar': ('comp2714_gbar',  comp2714_gbar)}
 
 

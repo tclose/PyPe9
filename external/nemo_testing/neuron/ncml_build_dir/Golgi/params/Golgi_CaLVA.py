@@ -28,6 +28,6 @@ comp971_v0_h_inf  =  -78.0
 comp886_vchold  =  -71.0
 
 
-properties  =  {'MaximalConductance': ('comp971_gbar',  comp971_gbar)}
+properties  =  {'gbar': ('comp971_gbar',  comp971_gbar)}
 
 

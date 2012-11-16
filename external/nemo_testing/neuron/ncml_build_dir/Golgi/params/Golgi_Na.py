@@ -21,7 +21,7 @@ comp4005_Abeta_v  =  3.0
 comp4005_Abeta_u  =  12.0
 
 
-properties  =  {'ReversalPotential': ('comp4005_e',  comp4005_e),  
-  'MaximalConductance': ('comp4005_gbar',  comp4005_gbar)}
+properties  =  {'e_rev': ('comp4005_e',  comp4005_e),  
+  'gbar': ('comp4005_gbar',  comp4005_gbar)}
 
 

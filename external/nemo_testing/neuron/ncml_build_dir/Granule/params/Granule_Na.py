@@ -25,7 +25,7 @@ comp2922_gbar  =  0.013
 comp2922_e  =  87.39
 
 
-properties  =  {'ReversalPotential': ('comp2922_e',  comp2922_e),  
-  'MaximalConductance': ('comp2922_gbar',  comp2922_gbar)}
+properties  =  {'e_rev': ('comp2922_e',  comp2922_e),  
+  'gbar': ('comp2922_gbar',  comp2922_gbar)}
 
 

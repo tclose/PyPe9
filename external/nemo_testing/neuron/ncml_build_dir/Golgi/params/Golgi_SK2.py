@@ -20,7 +20,7 @@ comp3691_e  =  -84.69
 comp3606_vchold  =  -71.0
 
 
-properties  =  {'ReversalPotential': ('comp3691_e',  comp3691_e),  
-  'MaximalConductance': ('comp3691_gbar',  comp3691_gbar)}
+properties  =  {'e_rev': ('comp3691_e',  comp3691_e),  
+  'gbar': ('comp3691_gbar',  comp3691_gbar)}
 
 

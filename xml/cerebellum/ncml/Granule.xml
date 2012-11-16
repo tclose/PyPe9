@@ -20,7 +20,7 @@
             <segmentGroup id="soma">
                 <member segment="soma" />
             </segmentGroup>
-        </morphology>
+        </morphology> 
         <biophysicalProperties id="Cerebellar Granule Cell">
             <defaultBuildOptions>
                 <build tool="nemo" simulator="neuron" method="derivimplicit">

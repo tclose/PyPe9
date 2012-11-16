@@ -24,7 +24,7 @@ comp813_vchdur  =  30.0
 comp813_vcinc  =  10.0
 
 
-properties  =  {'ReversalPotential': ('comp898_e',  comp898_e),  
-  'MaximalConductance': ('comp898_gbar',  comp898_gbar)}
+properties  =  {'e_rev': ('comp898_e',  comp898_e),  
+  'gbar': ('comp898_gbar',  comp898_gbar)}
 
 

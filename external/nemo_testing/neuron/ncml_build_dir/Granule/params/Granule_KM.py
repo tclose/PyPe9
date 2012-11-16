@@ -16,7 +16,7 @@ comp2083_V0alpha_n  =  -30.0
 comp2083_Abeta_n  =  0.0033
 
 
-properties  =  {'ReversalPotential': ('comp2083_e',  comp2083_e),  
-  'MaximalConductance': ('comp2083_gbar',  comp2083_gbar)}
+properties  =  {'e_rev': ('comp2083_e',  comp2083_e),  
+  'gbar': ('comp2083_gbar',  comp2083_gbar)}
 
 

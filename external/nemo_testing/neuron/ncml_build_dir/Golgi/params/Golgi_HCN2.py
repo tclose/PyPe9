@@ -19,7 +19,7 @@ comp1804_rA  =  -0.0227
 comp1804_gbar  =  8e-05
 
 
-properties  =  {'ReversalPotential': ('comp1804_e',  comp1804_e),  
-  'MaximalConductance': ('comp1804_gbar',  comp1804_gbar)}
+properties  =  {'e_rev': ('comp1804_e',  comp1804_e),  
+  'gbar': ('comp1804_gbar',  comp1804_gbar)}
 
 

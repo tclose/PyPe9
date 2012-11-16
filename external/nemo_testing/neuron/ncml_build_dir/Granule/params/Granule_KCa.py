@@ -14,7 +14,7 @@ comp1426_Bbeta_c  =  0.00015
 comp1426_Abeta_c  =  1.5
 
 
-properties  =  {'ReversalPotential': ('comp1426_e',  comp1426_e),  
-  'MaximalConductance': ('comp1426_gbar',  comp1426_gbar)}
+properties  =  {'e_rev': ('comp1426_e',  comp1426_e),  
+  'gbar': ('comp1426_gbar',  comp1426_gbar)}
 
 

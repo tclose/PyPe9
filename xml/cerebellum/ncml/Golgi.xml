@@ -20,7 +20,7 @@
             <segment id="dend_0_0">
                 <parent segment="soma" fractionAlong="0.5" />
                 <distal x="11.3" y="0" z="13.5" diameter="3" />
-            </segment>
+            </segment> 
             <segment id="dend_0_1">
                 <parent segment="dend_0_0" />
                 <distal x="22.6" y="0" z="13.5" diameter="3" />
