@@ -1,7 +1,7 @@
 stim_amp=0.01875
 
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
-nrn_load_dll("/home/tclose/kbrain/external/nemo_testing/neuron/ivans_generated/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain/external/nemo_testing/neuron/ncml_build_dir/Granule/install/x86_64/.libs/libnrnmech.so")
 
 //object variable will refer to a list that will hold an arbitrary number of NetCon objects.
 
@@ -43,7 +43,7 @@ soma {
     
     Area = PI*soma.diam*soma.L*1e-8
 
-    insert Granule_Ca
+    insert Granule_ca
     insert Granule_CaHVA    
     insert Granule_KA
     insert Granule_KCa 
@@ -54,7 +54,7 @@ soma {
     insert Granule_Lkg2
     insert Granule_Na 
 
-    gcabar_Granule_Ca= 0.00046    //2009 model
+    gcabar_Granule_ca= 0.00046    //2009 model
     gkbar_Granule_KCa = 0.04   //ajusted Version 3
     gkbar_Granule_KA = 0.0032   //2009 model
     gkbar_Granule_KV= 0.003    //2009 model
@@ -64,9 +64,9 @@ soma {
     ggaba_Granule_Lkg2 = 3e-05    //2009 model
     gnabar_Granule_Na= 0.013     //2009 model  
 
-    beta_GRC_Ca = 1.5
+    beta_GRC_ca = 1.5
     
-    usetable_Granule_Ca   = 0              
+    usetable_Granule_ca   = 0              
     usetable_Granule_KA   = 0
     usetable_Granule_KCa  = 0
     usetable_Granule_KM   = 0
@@ -154,7 +154,7 @@ run()
 
 objref output_file
 output_file = new File()
-output_file.wopen("/home/tclose/kbrain/output/ivans_generated_granule_hoc.dat")
+output_file.wopen("/home/tclose/kbrain/output/ncml_generated_granule_hoc.dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }

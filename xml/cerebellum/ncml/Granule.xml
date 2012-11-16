@@ -35,7 +35,7 @@
                 <ncml:input name="v" />
                 <ncml:input name="celsius" />
                 <ncml:defun name="sigm">
-                    <ncml:arg>x</ncml:arg>
+                    <ncml:arg>x</ncml:arg> 
                     <ncml:arg>y</ncml:arg>
                     <ncml:body>(1 / (exp (x / y) + 1))</ncml:body>
                 </ncml:defun>

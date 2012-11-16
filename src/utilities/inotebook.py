@@ -41,7 +41,7 @@ def diff(ref_file, new_file):
     Performs a 'context diff' on the two files provided. Useful for comparing to scripts before
     comparing their output
     
-    @param file1: The reference file
+    @param ref_file: The reference file
     @param new_file: The file to compare agains the reference
     """
     ref_file_contents = open(ref_file).readlines()
