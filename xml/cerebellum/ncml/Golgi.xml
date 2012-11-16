@@ -1411,6 +1411,13 @@
                                 <ncml:transition src="o2" dst="c4">
                                     <ncml:rate>invo2_t</ncml:rate>
                                 </ncml:transition>
+				<ncml:conserve>
+				  <ncml:conseq val="1">
+				    <ncml:expr>
+				      c1 + c2 + c3 + c4 + o2 + o1
+				    </ncml:expr>
+				  </ncml:conseq>
+				</ncml:conserve>
                             </ncml:transitions>
                         </ncml:reaction>
                         <ncml:output name="SK2_z" />
