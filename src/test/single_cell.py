@@ -59,7 +59,7 @@ def main(arguments):
     # Get population and print the soma section of the single cell.
     pop = net.all_populations()[0]
     cell = pop[0]._cell
-    soma = cell.soma
+    soma = cell.soma_seg
     if args.print_all:
         from neuron import h
         for seg_id, seg in sorted(cell.segments.items(), key=itemgetter(0)):
