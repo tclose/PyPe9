@@ -125,7 +125,6 @@
                 <parent segment="dend_2_5" />
                 <distal x="0" y="79.1" z="13.5" diameter="3" />
             </segment>
-            self.morphology.groups.append(self.SegmentGroup(attrs['id'], []))
             <segment id="dend_2_7">
                 <parent segment="dend_2_6" />
                 <distal x="0" y="90.4" z="13.5" diameter="3" />

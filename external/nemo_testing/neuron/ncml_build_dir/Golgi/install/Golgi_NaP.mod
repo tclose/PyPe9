@@ -20,12 +20,12 @@ FUNCTION comp4469_alpha_m (v, Q10) {
 
 
 FUNCTION comp4469_linoid (x, y) {
-  LOCAL v5334
+  LOCAL v5339
   if 
     (fabs(x / y) < 1e-06) 
-     {v5334  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v5334  =  x / (exp(x / y) + -1.0)} 
-comp4469_linoid  =  v5334
+     {v5339  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v5339  =  x / (exp(x / y) + -1.0)} 
+comp4469_linoid  =  v5339
 }
 
 

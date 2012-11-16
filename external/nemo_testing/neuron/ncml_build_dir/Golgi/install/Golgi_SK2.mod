@@ -99,63 +99,33 @@ PROCEDURE reactions () {
 
 
 BREAKPOINT {
-  SOLVE states METHOD derivimplicit
+  SOLVE kstates METHOD sparse
   reactions ()
   i_SK2  =  (comp3691_gbar * comp3691_SK2_z) * (v - ek)
   ik  =  i_SK2
 }
 
 
-DERIVATIVE states {
+KINETIC kstates {
   comp3691_cai  =  cai
   asgns ()
-  comp3691_SK2_zc1'  =  
-  -(comp3691_SK2_zc1 * comp3691_dirc2_t_ca) + 
-    comp3691_SK2_zc2 * comp3691_invc1_t
-  comp3691_SK2_zc2'  =  
-  -(comp3691_SK2_zc2 * comp3691_dirc3_t_ca + 
-            comp3691_SK2_zc2 * comp3691_invc1_t) 
-    + 
-    comp3691_SK2_zc3 * comp3691_invc2_t + 
-      comp3691_SK2_zc1 * comp3691_dirc2_t_ca
-  comp3691_SK2_zc3'  =  
-  -(comp3691_SK2_zc3 * comp3691_diro1_t + 
-              comp3691_SK2_zc3 * comp3691_dirc4_t_ca 
-            + 
-            comp3691_SK2_zc3 * comp3691_invc2_t) 
-    + 
-    comp3691_SK2_zo1 * comp3691_invo1_t + 
-        comp3691_SK2_zc4 * comp3691_invc3_t 
-      + 
-      comp3691_SK2_zc2 * comp3691_dirc3_t_ca
-  comp3691_SK2_zo1'  =  
-  -(comp3691_SK2_zo1 * comp3691_invo1_t) + 
-    comp3691_SK2_zc3 * comp3691_diro1_t
-  comp3691_SK2_zc4'  =  
-  -(comp3691_SK2_zc4 * comp3691_diro2_t + 
-            comp3691_SK2_zc4 * comp3691_invc3_t) 
-    + 
-    comp3691_SK2_zo2 * comp3691_invo2_t + 
-      comp3691_SK2_zc3 * comp3691_dirc4_t_ca
-  comp3691_SK2_zo2'  =  
-  -(comp3691_SK2_zo2 * comp3691_invo2_t) + 
-    comp3691_SK2_zc4 * comp3691_diro2_t
+  ~ comp3691_SK2_zc1 <-> comp3691_SK2_zc2 (comp3691_dirc2_t_ca , comp3691_invc1_t)
+  ~ comp3691_SK2_zc2 <-> comp3691_SK2_zc3 (comp3691_dirc3_t_ca , comp3691_invc2_t)
+  ~ comp3691_SK2_zc3 <-> comp3691_SK2_zc4 (comp3691_dirc4_t_ca , comp3691_invc3_t)
+  ~ comp3691_SK2_zc3 <-> comp3691_SK2_zo1 (comp3691_diro1_t , comp3691_invo1_t)
+  ~ comp3691_SK2_zc4 <-> comp3691_SK2_zo2 (comp3691_diro2_t , comp3691_invo2_t)
+  CONSERVE comp3691_SK2_zc1 + comp3691_SK2_zc2 + comp3691_SK2_zc3 + comp3691_SK2_zc4 + comp3691_SK2_zo2 + comp3691_SK2_zo1 = 1
 }
 
 
 INITIAL {
   comp3691_cai  =  cai
   asgns ()
+  SOLVE kstates STEADYSTATE sparse
   ek  =  comp3691_e
 }
 
 
 PROCEDURE print_state () {
-  printf ("NMODL state: t = %g v = %g comp3691_SK2_zc1 = %g\n" , t, v,  comp3691_SK2_zc1)
-  printf ("NMODL state: t = %g v = %g comp3691_SK2_zc2 = %g\n" , t, v,  comp3691_SK2_zc2)
-  printf ("NMODL state: t = %g v = %g comp3691_SK2_zc3 = %g\n" , t, v,  comp3691_SK2_zc3)
-  printf ("NMODL state: t = %g v = %g comp3691_SK2_zc4 = %g\n" , t, v,  comp3691_SK2_zc4)
-  printf ("NMODL state: t = %g v = %g comp3691_SK2_zo1 = %g\n" , t, v,  comp3691_SK2_zo1)
-  printf ("NMODL state: t = %g v = %g comp3691_SK2_zo2 = %g\n" , t, v,  comp3691_SK2_zo2)
   printf ("NMODL state: t = %g v = %g comp3691_SK2_z = %g\n" , t, v,  comp3691_SK2_z)
 }

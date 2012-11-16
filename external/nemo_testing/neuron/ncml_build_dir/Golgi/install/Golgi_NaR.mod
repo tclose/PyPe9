@@ -29,14 +29,14 @@ FUNCTION comp4828_alpha_f (v, Q10) {
 
 
 FUNCTION comp4828_beta_s (v, Q10) {
-  LOCAL v5343, v5342
-  v5342  =  (v + comp4828_V0beta_s) / comp4828_Kbeta_s 
-if (v5342 > 200.0)  {v5343  =  200.0} else {v5343  =  v5342} 
+  LOCAL v5348, v5347
+  v5347  =  (v + comp4828_V0beta_s) / comp4828_Kbeta_s 
+if (v5347 > 200.0)  {v5348  =  200.0} else {v5348  =  v5347} 
   comp4828_beta_s  =  
       Q10 * 
           (comp4828_Shiftbeta_s + 
               comp4828_Abeta_s * 
-                (v + comp4828_V0beta_s) / (exp(v5343) + -1.0))
+                (v + comp4828_V0beta_s) / (exp(v5348) + -1.0))
 }
 
 
@@ -115,16 +115,16 @@ BREAKPOINT {
 
 
 DERIVATIVE states {
-  LOCAL v5337, v5340
+  LOCAL v5342, v5345
   asgns ()
-  v5337  =  NaR_mO 
+  v5342  =  NaR_mO 
 NaR_mO'  =  
     -(NaR_mO * comp4828_beta_s(v, comp4828_Q10)) + 
-        (1 - v5337) * (comp4828_alpha_s(v, comp4828_Q10))
-  v5340  =  NaR_hO 
+        (1 - v5342) * (comp4828_alpha_s(v, comp4828_Q10))
+  v5345  =  NaR_hO 
 NaR_hO'  =  
     -(NaR_hO * comp4828_beta_f(v, comp4828_Q10)) + 
-        (1 - v5340) * (comp4828_alpha_f(v, comp4828_Q10))
+        (1 - v5345) * (comp4828_alpha_f(v, comp4828_Q10))
 }
 
 

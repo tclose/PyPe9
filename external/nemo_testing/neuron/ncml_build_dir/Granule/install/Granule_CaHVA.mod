@@ -65,7 +65,7 @@ PARAMETER {
   comp350_vcinc  =  10.0
   comp350_vchold  =  -71.0
   comp350_vchdur  =  30.0
-  comp435_e  =  129.33
+  comp435_e  =  132.457934
   comp350_vcsteps  =  8.0
   comp350_vcbdur  =  100.0
   comp350_vcbase  =  -69.0

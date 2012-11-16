@@ -27,12 +27,12 @@ FUNCTION comp4005_alpha_u (v, Q10) {
 
 
 FUNCTION comp4005_linoid (x, y) {
-  LOCAL v5318
+  LOCAL v5323
   if 
     (fabs(x / y) < 1e-06) 
-     {v5318  =  y * (1.0 + -(x / y / 2.0))} 
-    else {v5318  =  x / (1.0 + -(exp(x / y)))} 
-comp4005_linoid  =  v5318
+     {v5323  =  y * (1.0 + -(x / y / 2.0))} 
+    else {v5323  =  x / (1.0 + -(exp(x / y)))} 
+comp4005_linoid  =  v5323
 }
 
 
@@ -108,26 +108,26 @@ PROCEDURE reactions () {
 
 
 BREAKPOINT {
-  LOCAL v5320
+  LOCAL v5325
   SOLVE states METHOD derivimplicit
   reactions ()
-  v5320  =  Na_m 
-i_Na  =  (comp4005_gbar * v5320 * v5320 * v5320 * Na_h) * (v - ena)
+  v5325  =  Na_m 
+i_Na  =  (comp4005_gbar * v5325 * v5325 * v5325 * Na_h) * (v - ena)
   ina  =  i_Na
 }
 
 
 DERIVATIVE states {
-  LOCAL v5313, v5316
+  LOCAL v5318, v5321
   asgns ()
-  v5313  =  Na_mO 
+  v5318  =  Na_mO 
 Na_mO'  =  
     -(Na_mO * comp4005_beta_u(v, comp4005_Q10)) + 
-        (1 - v5313) * (comp4005_alpha_u(v, comp4005_Q10))
-  v5316  =  Na_hO 
+        (1 - v5318) * (comp4005_alpha_u(v, comp4005_Q10))
+  v5321  =  Na_hO 
 Na_hO'  =  
     -(Na_hO * comp4005_beta_v(v, comp4005_Q10)) + 
-        (1 - v5316) * (comp4005_alpha_v(v, comp4005_Q10))
+        (1 - v5321) * (comp4005_alpha_v(v, comp4005_Q10))
 }
 
 

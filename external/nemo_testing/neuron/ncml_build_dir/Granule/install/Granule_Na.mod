@@ -155,6 +155,7 @@ KINETIC kstates {
   ~ comp2922_Na_zC4 <-> comp2922_Na_zI4 (comp2922_Con * comp2922_a ^ 3.0 , comp2922_Coff * comp2922_b ^ 3.0)
   ~ comp2922_Na_zC5 <-> comp2922_Na_zI5 (comp2922_Con * comp2922_a ^ 4.0 , comp2922_Coff * comp2922_b ^ 4.0)
   ~ comp2922_Na_zO <-> comp2922_Na_zI6 (comp2922_Oon , comp2922_Ooff)
+  CONSERVE comp2922_Na_zC1 + comp2922_Na_zC2 + comp2922_Na_zC3 + comp2922_Na_zC4 + comp2922_Na_zC5 + comp2922_Na_zO + comp2922_Na_zB + comp2922_Na_zI1 + comp2922_Na_zI2 + comp2922_Na_zI3 + comp2922_Na_zI4 + comp2922_Na_zI5 + comp2922_Na_zI6 = 1
 }
 
 
