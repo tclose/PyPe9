@@ -10,7 +10,7 @@ DT=0.025
 //////////////////////////
 //MF stimulus parameters//   
 /////////////////////////
-MFfreq=100
+MFfreq=5
 NETIN_SP_START=100
 SEED=1
 
