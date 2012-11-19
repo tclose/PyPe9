@@ -12,7 +12,7 @@ class MockCell(object):
         self.celltype = cellclass()
         self.local = local
 
-def build_cellclass(cb):
+def build_celltype(cb):
     class MockCellClass(object):
         conductance_based = cb
     return MockCellClass
@@ -28,11 +28,11 @@ def setup():
 
 def test_is_conductance():
     for cb in (True, False):
-        cell = MockCell(build_cellclass(cb))
+        cell = MockCell(build_celltype(cb))
         assert common.is_conductance(cell) == cb
     
 def test_is_conductance_with_nonlocal_cell():
-    cell = MockCell(build_cellclass(True), local=False)
+    cell = MockCell(build_celltype(True), local=False)
     assert common.is_conductance(cell) is None
     
 def test_check_weight_with_scalar():
