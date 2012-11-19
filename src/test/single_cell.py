@@ -89,7 +89,8 @@ def main(arguments):
             print var + ": " + str(getattr(soma, var))
         except:
             pass
-#    print "celsius: " + str(h.celsius)
+    from neuron import h
+    print "celsius: " + str(h.celsius)
     print "Starting run"
     
     run(args.time) #@UndefinedVariable

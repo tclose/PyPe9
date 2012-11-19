@@ -119,7 +119,7 @@
                         <ncml:output name="gbar" />
                     </ncml:component>
                     <ncml:component type="permeating-ion" name="ca">
-                        <ncml:const name="e" value="132.457934" />
+                        <ncml:const name="e" value="129.33" /> <!-- 132.457934 -->
                         <ncml:output name="e" />
                     </ncml:component>
                 </ncml:ionicCurrent>

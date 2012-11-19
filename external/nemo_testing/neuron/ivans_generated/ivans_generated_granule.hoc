@@ -76,7 +76,7 @@ soma {
     
     ena = 87.39
     ek = -84.69
-    //eca = 129.33
+    eca = 129.33
     ecl = -65
     
     nclist=new List()
