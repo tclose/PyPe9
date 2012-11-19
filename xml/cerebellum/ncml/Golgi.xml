@@ -137,7 +137,7 @@
                 <parent segment="dend_2_8" />
                 <distal x="0" y="113.0" z="13.5" diameter="3" />
             </segment>
-            <segment id="axon_0">
+           <!--  <segment id="axon_0">
                 <parent segment="soma" fractionAlong="0.5" />
                 <distal x="0.0" y="-12.0" z="13.5" diameter="2.4" />
             </segment>
@@ -536,7 +536,7 @@
             <segment id="axon_99">
                 <parent segment="axon_98" />
                 <distal x="0.0" y="-1200.0" z="13.5" diameter="2.4" />
-            </segment>
+            </segment> -->
             <segmentGroup id="soma" default="True">
                 <member segment="soma" default="True" />
             </segmentGroup>
@@ -572,7 +572,7 @@
                 <member segment="dend_2_8" />
                 <member segment="dend_2_9" />
             </segmentGroup>
-            <segmentGroup id="axon">
+           <!-- <segmentGroup id="axon">
                 <member segment="axon_0" default="True" />
                 <member segment="axon_1" />
                 <member segment="axon_2" />
@@ -673,7 +673,7 @@
                 <member segment="axon_97" />
                 <member segment="axon_98" />
                 <member segment="axon_99" />
-            </segmentGroup>
+            </segmentGroup> --> 
         </morphology>
         <biophysicalProperties id="GolgiBiophys">
             <defaultBuildOptions>
