@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <network id="SingleLooopGranularLayer">
+        <simulationDefaults>
+            <temperature value="23" />
+        </simulationDefaults>
+        <population id="Granules" cell="Granule" size="1" />
+        <population id="Golgis" cell="Golgi" size="1" />
+        <population id="MossyFibers" cell="SpikeSourceArray" size="1" />
+        <projection id="MossyFibers_Granules_AMPA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="AMPA" segment="soma" />
+            <connection pattern="OneToONE" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="2.6 uS"
+                rate="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
+        </projection>
+        <projection id="MossyFibers_Granules_NMDA" flags="NMDA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="NMDA" segment="soma" />
+            <connection pattern="OneToOne" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="0.2244 uS"
+                rate="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
+        </projection>
+        <projection id="Granules_Golgis" flags="GranuleToGolgi">
+            <source id="Granules" />
+            <destination id="Golgis" synapse="GABA" segment="soma" />
+            <connection pattern="OneToOne" />
+        </projection>
+    </network>
+</nineml>
