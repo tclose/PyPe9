@@ -31,8 +31,8 @@ k1_MFGoC=0.01
 //(PF synapses)    //
 /////////////////////
 CONNECTION_WEIGHT_AMPA_GrCGoC=2.6e-3  
-CONNECTION_PROB_GrCGoC=0.5
-//CONNECTION_PROB_GrCGoC=0.0 // Used to switch off the granule to golgi connections
+//CONNECTION_PROB_GrCGoC=0.5
+CONNECTION_PROB_GrCGoC=0.0 // Used to switch off the granule to golgi connections
 CONNECTION_THRESHOLD_GrCGoC_=-20 
 CONNECTION_DELAY_GrCGoC=2e-3   
 CONNECTION_DELAY_AF=300e-3  
