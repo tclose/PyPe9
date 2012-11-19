@@ -57,7 +57,7 @@ soma {
     netcon.record(SpikeTrain)
     
     RT_Vm.record(&v(0.5))
-    
+    psection()
 }
     
 create dend[3]
@@ -78,6 +78,7 @@ for i=0,2 {
             inh[(i*9)+k] = new Synapse(0.5)
             inh[(i*9)+k].Erev = -60
         }
+        psection()
     }
     connect dend[i](0), soma(1) 
 }
@@ -91,6 +92,7 @@ axon {
   Ra = 100
   celsius = 23
   insert Golgi_Lkg
+  psection()
 }
 connect axon(0), soma(0)
     
@@ -119,8 +121,8 @@ connect seal(1), soma(1)
 connect elec(1), seal(0)
     
     
-access soma    
-psection()
+//access soma    
+//psection()
 
 printf("ena: %f", ena)
 printf("ek: %f", ek)

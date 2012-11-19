@@ -687,7 +687,7 @@
                 <ncml:input name="v" />
                 <ncml:input name="celsius" />
                 <ncml:const name="ca2o" value="2.0" />
-                <ncml:component type="decaying-pool" name="ca">
+                <ncml:decayingPool name="ca" segmentGroup="soma">
                     <ncml:input name="ica" from="ion-currents" />
                     <ncml:const name="F" value="96485.3" />
                     <ncml:const name="d" value="0.2" />
@@ -700,8 +700,8 @@
                         <ncml:initial>cai0</ncml:initial>
                     </ncml:rate>
                     <ncml:output name="ca" />
-                </ncml:component>
-                <ncml:decayingPool name="ca2">
+                </ncml:decayingPool>
+                <ncml:decayingPool name="ca2" segmentGroup="soma">
                     <ncml:input name="ica2" from="ion-currents" />
                     <ncml:const name="valence" value="2" />
                     <ncml:const name="F" value="96485.3" />
@@ -794,7 +794,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="CaLVA">
+                <ncml:ionicCurrent name="CaLVA" segmentGroup="soma">
                     <ncml:input name="ca2i" from="ion-pools" />
                     <ncml:input name="ca2o" from="ion-pools" />
                     <ncml:component type="gate">
@@ -866,7 +866,7 @@
                         <ncml:output name="e" />
                         <ncml:output name="valence" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="CaLVA">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1685,8 +1685,8 @@
                     </ncml:component>
                 </ncml:ionicCurrent>
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
-                <reversalPotential species="ca" value="129.33" units="mV"
-                    segmentGroup="soma" />
+                <reversalPotential species="ca" value="132.457934" units="mV"
+                    segmentGroup="soma" /> <!-- 129.33 -->
                 <reversalPotential species="na" value="87.39" units="mV"
                     segmentGroup="soma" />
                 <reversalPotential species="k" value="-84.69" units="mV"
