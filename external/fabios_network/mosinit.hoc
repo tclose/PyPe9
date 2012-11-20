@@ -92,5 +92,5 @@ sav_GoCMatrixS.close()
 
 //move the files to data folder
 strdef command
-sprint(command,"mv *.dat data/")
+sprint(command,"mv *.dat ../output/")
 system(command)
