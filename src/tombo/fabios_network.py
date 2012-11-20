@@ -71,7 +71,7 @@ if args.legacy_hoc:
     os.chdir(os.path.join(work_dir, 'external', 'fabios_network'))
     subprocess.check_call('nrnivmodl', shell=True)
     cmd_line = "cd external/fabios_network\n" \
-               "nrniv mosinit.hoc"
+               "time nrniv mosinit.hoc"
     copy_to_output = ['data', os.path.join('external','fabios_network')]
 else:
     #Compile network
