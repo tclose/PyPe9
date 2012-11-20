@@ -4,7 +4,6 @@ load_file("nrngui.hoc")
 ////////////////////////
 //tmax=150         
 tmax=2000         
-tmax=1         
 cvode.active(0)  //Fixed time step 
 DT=0.025	
 
