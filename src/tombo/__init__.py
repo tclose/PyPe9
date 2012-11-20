@@ -130,7 +130,7 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
     if os.path.exists(pynn_nmodl_path):
         shutil.rmtree(pynn_nmodl_path)
     print "Compiling required NINEML+ objects"
-    subprocess.check_call('python {} {} --build compile_only'.\
+    subprocess.check_call('python {} {} --build build_only'.\
                            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
                                   script_args),
                           shell=True, env=env)
@@ -150,7 +150,7 @@ def compile_custom(script_name, work_dir, env=None, script_dir='test', script_ar
         env = copy(env)
     # Remove NMODL build directory for pyNN neuron so it can be recompiled in script
     print "Compiling required objects"
-    subprocess.check_call('python {} {} --build compile_only'.\
+    subprocess.check_call('python {} {} --build build_only'.\
                           format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
                                   script_args),
                           shell=True, env=env)
