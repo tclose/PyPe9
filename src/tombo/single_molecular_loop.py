@@ -51,7 +51,7 @@ if args.hoc:
     cmd_line = \
 """
 cd external/fabios_network
-nrniv single_molecular_layer_mosinit.hoc
+nrniv single_molecular_mosinit.hoc
 """
     copy_to_output = ['data', os.path.join('external','fabios_network')]
 else:
