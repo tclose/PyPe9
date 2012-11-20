@@ -64,7 +64,7 @@ def main(arguments):
     parser.add_argument('--init_mech_var', nargs=3, metavar=('MECH_NAME', 'VAR_NAME', 'INITIAL_VALUE'), action='append', default=[], help='Used to initialise mechanism variables, calcium concentrations and the like, eg. --init_var ek "-84.69" (NB: don''t forget to quote negative numbers)')
     args = parser.parse_args(arguments)
     no_plot = args.no_plot or not loaded_matplotlib
-    if no_plot and not args.save_prefix and args.build != 'compile_only':
+    if no_plot and not args.save_prefix and args.build != 'build_only':
         raise Exception('If the ''--no_plot'' option is given (or matplotlib could not be loaded) \
 you probably want to specify a save location (''--save_prefix'') because otherwise what is the point unless you are just compiling?')
     # Put all the simulation params in a dict for convenience
@@ -136,8 +136,8 @@ you probably want to specify a save location (''--save_prefix'') because otherwi
                                                                      [args.silent_build] * num_procs))
         build_pool.close()
         build_pool.join()
-    if args.build == 'compile_only':
-        print "Finished compiling, now exiting because '--build' was set to 'compile_only'"
+    if args.build == 'build_only':
+        print "Finished compiling, now exiting because '--build' was set to 'build_only'"
         sys.exit(0)
     if args.reference:
         test_names = ('new', 'ref', 'diff')
