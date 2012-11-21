@@ -5,7 +5,7 @@
             <temperature value="23" />
         </simulationDefaults>
         <population id="Granules" cell="Granule" size="1" />
-        <population id="Golgis" cell="Golgi" size="1" />
+        <population id="Golgis" cell="Golgi" size="1" morphology="WithoutAxon" />
         <population id="MossyFibers" cell="SpikeSourceArray" size="1" />
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
