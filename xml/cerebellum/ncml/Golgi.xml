@@ -11,6 +11,15 @@
     </ncml:sxslt>
     <cell id="Golgi" defaultMorphology="WithAxon">
         <notes>A model of a Golgi cell</notes>
+        <morphology id="SingleCompartment">
+            <segment id="soma">
+                <proximal x="0" y="0" z="0" diameter="27" />
+                <distal x="0" y="0" z="27" diameter="27" />
+            </segment>
+            <segmentGroup id="soma">
+                <member segment="soma" />
+            </segmentGroup>
+        </morphology>
         <morphology id="WithAxon">
             <!-- Segments -->
             <segment id="soma">
