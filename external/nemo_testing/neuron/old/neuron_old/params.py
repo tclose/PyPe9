@@ -1,0 +1,158 @@
+comp2143_ACoff  =  0.5
+comp304_Kalpha_u  =  -18.183
+comp304_Kalpha_s  =  15.87301587302
+comp1572_Kalpha_n  =  40.0
+comp1839_Kalpha_n  =  -10.0
+comp1333_Kalpha_d  =  -24.3902
+comp1091_Kalpha_c  =  -11.765
+comp665_Kalpha_b  =  12.8433
+comp665_Kalpha_a  =  -23.32708
+comp2143_Ateta  =  0.0201
+comp665_gbar  =  0.0032
+comp2143_AOon  =  0.75
+comp1006_vchdur  =  30.0
+comp1996_vchdur  =  30.0
+comp1091_e  =  -84.69
+comp2481_vchold  =  -71.0
+comp304_V0beta_u  =  -48.0
+comp304_V0beta_s  =  -18.66
+comp1572_V0beta_n  =  -30.0
+comp1839_V0beta_n  =  -35.0
+comp1333_V0beta_d  =  -83.94
+comp665_V0beta_b  =  -49.9537
+comp665_V0beta_a  =  -18.27914
+comp219_beta  =  1.5
+comp1572_V0_ninf  =  -35.0
+comp304_gbar  =  0.00046
+comp1487_vcbdur  =  100.0
+comp304_Kbeta_u  =  83.33
+comp304_Kbeta_s  =  -25.641
+comp1572_Kbeta_n  =  -20.0
+comp1839_Kbeta_n  =  -80.0
+comp1333_Kbeta_d  =  35.714
+comp1091_Kbeta_c  =  -11.765
+comp665_Kbeta_b  =  -8.90123
+comp665_Kbeta_a  =  19.47175
+comp1248_vcinc  =  10.0
+comp1091_Balpha_c  =  0.0015
+comp1487_vcbase  =  -69.0
+comp2143_ACon  =  0.005
+comp2481_vchdur  =  30.0
+comp580_vchold  =  -71.0
+comp1248_vchold  =  -71.0
+comp1754_vchold  =  -71.0
+comp1487_vcinc  =  10.0
+comp665_e  =  -84.69
+comp1006_vcbdur  =  100.0
+comp1996_vcbdur  =  100.0
+comp1006_vcinc  =  10.0
+comp2143_n4  =  0.738
+comp2143_n3  =  1.83
+comp2143_n2  =  3.279
+comp2143_n1  =  5.422
+comp1006_vcbase  =  -69.0
+comp1996_vcbase  =  -69.0
+comp2143_Agamma  =  150.0
+comp580_vchdur  =  30.0
+comp1248_vchdur  =  30.0
+comp1754_vchdur  =  30.0
+comp1333_e  =  -84.69
+comp304_e  =  132.457934
+comp2143_Vbeta  =  13.99
+comp2143_Adelta  =  40.0
+comp219_d  =  0.2
+comp219_F  =  96485.3
+comp2481_vcbdur  =  100.0
+comp1572_B_ninf  =  6.0
+comp2081_e  =  -16.5
+comp2112_egaba  =  -65.0
+comp2481_vcbase  =  -60.0
+comp2143_AOoff  =  0.005
+comp2143_Valfa  =  13.99
+comp580_vcsteps  =  8.0
+comp1006_vcsteps  =  8.0
+comp1248_vcsteps  =  8.0
+comp1487_vcsteps  =  8.0
+comp1754_vcsteps  =  8.0
+comp1996_vcsteps  =  8.0
+comp2481_vcsteps  =  9.0
+comp1572_gbar  =  0.00025
+comp580_vcbdur  =  100.0
+comp1248_vcbdur  =  100.0
+comp1754_vcbdur  =  100.0
+comp665_V0_binf  =  -78.8
+comp580_vcbase  =  -69.0
+comp1248_vcbase  =  -69.0
+comp1754_vcbase  =  -69.0
+comp2481_vcinc  =  10.0
+comp1839_gbar  =  0.003
+comp2143_Vteta  =  25.0
+comp304_Aalpha_u  =  0.0013
+comp304_Aalpha_s  =  0.04944
+comp1572_Aalpha_n  =  0.0033
+comp1839_Aalpha_n  =  -0.01
+comp1333_Aalpha_d  =  0.13289
+comp1091_Aalpha_c  =  2.5
+comp665_Aalpha_b  =  0.0368
+comp665_Aalpha_a  =  0.8147
+comp665_K_binf  =  8.4
+comp2143_Abeta  =  1.272
+comp1333_gbar  =  0.0009
+comp580_vcinc  =  10.0
+comp1487_vchold  =  -71.0
+comp1996_vcinc  =  10.0
+comp1839_e  =  -84.69
+comp1091_gbar  =  0.04
+comp1091_Bbeta_c  =  0.00015
+comp665_V0_ainf  =  -38.0
+comp2081_gbar  =  5.68e-05
+comp2112_ggaba  =  3e-05
+comp219_cao  =  2.0
+comp304_V0alpha_u  =  -48.0
+comp304_V0alpha_s  =  -29.06
+comp1572_V0alpha_n  =  -30.0
+comp1839_V0alpha_n  =  -25.0
+comp2143_Aalfa  =  353.91
+comp1333_V0alpha_d  =  -83.94
+comp665_V0alpha_b  =  -111.33209
+comp665_V0alpha_a  =  -9.17203
+comp304_Abeta_u  =  0.0013
+comp304_Abeta_s  =  0.08298
+comp1572_Abeta_n  =  0.0033
+comp1839_Abeta_n  =  0.125
+comp1333_Abeta_d  =  0.16994
+comp1091_Abeta_c  =  1.5
+comp665_Abeta_b  =  0.0345
+comp665_Abeta_a  =  0.1655
+comp2143_Aepsilon  =  1.75
+comp1487_vchdur  =  30.0
+comp1754_vcinc  =  10.0
+comp1006_vchold  =  -71.0
+comp1996_vchold  =  -71.0
+comp665_K_ainf  =  -17.0
+comp2143_e  =  87.39
+comp1572_e  =  -84.69
+comp219_cai0  =  0.0001
+comp2143_gbar  =  0.013
+
+
+properties  =  {'ReversalPotential': ('comp1091_e',  comp1091_e),  
+  'MaximalConductance': ('comp1091_gbar',  comp1091_gbar),  
+  'ReversalPotential': ('comp1333_e',  comp1333_e),  
+  'MaximalConductance': ('comp1333_gbar',  comp1333_gbar),  
+  'ReversalPotential': ('comp304_e',  comp304_e),  
+  'MaximalConductance': ('comp304_gbar',  comp304_gbar),  
+  'ReversalPotential': ('comp1572_e',  comp1572_e),  
+  'MaximalConductance': ('comp1572_gbar',  comp1572_gbar),  
+  'ReversalPotential': ('comp665_e',  comp665_e),  
+  'MaximalConductance': ('comp665_gbar',  comp665_gbar),  
+  'ReversalPotential': ('comp1839_e',  comp1839_e),  
+  'MaximalConductance': ('comp1839_gbar',  comp1839_gbar),  
+  'ReversalPotential': ('comp2081_e',  comp2081_e),  
+  'MaximalConductance': ('comp2081_gbar',  comp2081_gbar),  
+  'ReversalPotential': ('comp2112_egaba',  comp2112_egaba),  
+  'MaximalConductance': ('comp2112_ggaba',  comp2112_ggaba),  
+  'ReversalPotential': ('comp2143_e',  comp2143_e),  
+  'MaximalConductance': ('comp2143_gbar',  comp2143_gbar)}
+
+

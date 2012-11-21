@@ -20,7 +20,7 @@
             <segmentGroup id="soma">
                 <member segment="soma" />
             </segmentGroup>
-        </morphology>
+        </morphology> 
         <biophysicalProperties id="Cerebellar Granule Cell">
             <defaultBuildOptions>
                 <build tool="nemo" simulator="neuron" method="derivimplicit">
@@ -35,7 +35,7 @@
                 <ncml:input name="v" />
                 <ncml:input name="celsius" />
                 <ncml:defun name="sigm">
-                    <ncml:arg>x</ncml:arg>
+                    <ncml:arg>x</ncml:arg> 
                     <ncml:arg>y</ncml:arg>
                     <ncml:body>(1 / (exp (x / y) + 1))</ncml:body>
                 </ncml:defun>
@@ -119,7 +119,7 @@
                         <ncml:output name="gbar" />
                     </ncml:component>
                     <ncml:component type="permeating-ion" name="ca">
-                        <ncml:const name="e" value="132.457934" />
+                        <ncml:const name="e" value="129.33" /> <!-- 132.457934 -->
                         <ncml:output name="e" />
                     </ncml:component>
                 </ncml:ionicCurrent>
@@ -650,6 +650,13 @@
                                     <ncml:rate>Ooff</ncml:rate>
                                 </ncml:transition>
                             </ncml:transitions>
+			    <ncml:conserve>
+			      <ncml:conseq val="1">
+				<ncml:expr>
+				  C1 + C2 + C3 + C4 + C5 + O + B + I1 + I2 + I3 + I4 + I5 + I6
+				</ncml:expr>
+			      </ncml:conseq>
+			    </ncml:conserve>
                         </ncml:reaction>
                         <ncml:output name="Na_z" />
                     </ncml:component>

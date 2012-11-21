@@ -1,0 +1,80 @@
+load_file("nrngui.hoc")
+/////////////////////////
+//Simulation parameters//
+////////////////////////
+//tmax=150         
+tmax=2000         
+cvode.active(0)  //Fixed time step 
+DT=0.025	
+
+//////////////////////////
+//MF stimulus parameters//   
+/////////////////////////
+MFfreq=10
+NETIN_SP_START=1000
+SEED=1
+
+///////////////////////////////
+//uncomment gap junction flag//
+//////////////////////////////
+GJ=1      // with GJ between GoCs
+//GJ=0      // without GJ between GoCs
+
+///////////////////////////
+//Building Network Layers//
+///////////////////////////
+load_file("single_molecular_loop_network.hoc") 
+
+//////////////////////
+//Running Simulation//
+/////////////////////
+cleanMF()      //clear MF buffers
+stimulus(NETIN_SP_START, MFfreq, tmax, SEED)  //start MF stimulus
+
+init()
+tstop=DT 
+run()  //run a single time step
+
+golgi.setv(-65)
+granule.setv(-65)
+
+continuerun(tmax) //run the rest of simulation
+
+//simulation finished
+
+/////////////////////////
+//Generate Raster Plots//
+/////////////////////////
+objref g1
+g1 = new Graph()
+idvec1.mark(g1, timevec1, "|")
+
+objref g2
+g2 = new Graph()
+idvec2.mark(g2, timevec2, "|")
+
+///////////////////////
+//Save Data to Files//
+//////////////////////
+
+golgi_spike_matrix.resize(tmax,1) 
+granule_spike_matrix.resize(tmax,1) 
+mossy_fiber_spike_matrix.resize(tmax,1) 
+mossy_fiber_spike_matrix.setcol(0,mossy_fiber.spiketimes)  
+granule_spike_matrix.setcol(0,granule.spiketimes) 
+golgi_spike_matrix.setcol(0,golgi.spiketimes)  
+
+//record Vectors to File	
+mossy_fiber_spike_matrix.fprint(sav_mossy_fiber_spike_matrix," %g")
+granule_spike_matrix.fprint(sav_granule_spike_matrix," %g")
+golgi_spike_matrix.fprint(sav_golgi_spike_matrix," %g")
+
+//Close Files	
+sav_mossy_fiber_spike_matrix.close()
+sav_granule_spike_matrix.close()
+sav_golgi_spike_matrix.close()
+
+//move the files to data folder
+//strdef command
+//sprint(command,"mv *.spike_dat data/")
+//system(command)

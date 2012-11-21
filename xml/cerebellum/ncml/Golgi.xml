@@ -9,9 +9,18 @@
         bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
         (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
     </ncml:sxslt>
-    <cell id="Golgi">
+    <cell id="Golgi" defaultMorphology="WithAxon">
         <notes>A model of a Golgi cell</notes>
-        <morphology id="GolgiMorph">
+        <morphology id="SingleCompartment">
+            <segment id="soma">
+                <proximal x="0" y="0" z="0" diameter="27" />
+                <distal x="0" y="0" z="27" diameter="27" />
+            </segment>
+            <segmentGroup id="soma">
+                <member segment="soma" />
+            </segmentGroup>
+        </morphology>
+        <morphology id="WithAxon">
             <!-- Segments -->
             <segment id="soma">
                 <proximal x="0" y="0" z="0" diameter="27" />
@@ -125,7 +134,6 @@
                 <parent segment="dend_2_5" />
                 <distal x="0" y="79.1" z="13.5" diameter="3" />
             </segment>
-            self.morphology.groups.append(self.SegmentGroup(attrs['id'], []))
             <segment id="dend_2_7">
                 <parent segment="dend_2_6" />
                 <distal x="0" y="90.4" z="13.5" diameter="3" />
@@ -676,10 +684,172 @@
                 <member segment="axon_99" />
             </segmentGroup>
         </morphology>
+        <morphology id="WithoutAxon">
+            <!-- Segments -->
+            <segment id="soma">
+                <proximal x="0" y="0" z="0" diameter="27" />
+                <distal x="0" y="0" z="27" diameter="27" />
+            </segment>
+            <segment id="dend_0_0">
+                <parent segment="soma" fractionAlong="0.5" />
+                <distal x="11.3" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_1">
+                <parent segment="dend_0_0" />
+                <distal x="22.6" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_2">
+                <parent segment="dend_0_1" />
+                <distal x="33.9" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_3">
+                <parent segment="dend_0_2" />
+                <distal x="45.2" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_4">
+                <parent segment="dend_0_3" />
+                <distal x="56.5" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_5">
+                <parent segment="dend_0_4" />
+                <distal x="67.8" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_6">
+                <parent segment="dend_0_5" />
+                <distal x="79.1" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_7">
+                <parent segment="dend_0_6" />
+                <distal x="90.4" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_8">
+                <parent segment="dend_0_7" />
+                <distal x="101.7" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_0_9">
+                <parent segment="dend_0_8" />
+                <distal x="113.0" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_0">
+                <parent segment="soma" fractionAlong="0.5" />
+                <distal x="-11.3" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_1">
+                <parent segment="dend_1_0" />
+                <distal x="-22.6" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_2">
+                <parent segment="dend_1_1" />
+                <distal x="-33.9" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_3">
+                <parent segment="dend_1_2" />
+                <distal x="-45.2" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_4">
+                <parent segment="dend_1_3" />
+                <distal x="-56.5" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_5">
+                <parent segment="dend_1_4" />
+                <distal x="-67.8" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_6">
+                <parent segment="dend_1_5" />
+                <distal x="-79.1" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_7">
+                <parent segment="dend_1_6" />
+                <distal x="-90.4" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_8">
+                <parent segment="dend_1_7" />
+                <distal x="-101.7" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_1_9">
+                <parent segment="dend_1_8" />
+                <distal x="-113.0" y="0" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_0">
+                <parent segment="soma" fractionAlong="0.5" />
+                <distal x="0" y="11.3" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_1">
+                <parent segment="dend_2_0" />
+                <distal x="0" y="22.6" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_2">
+                <parent segment="dend_2_1" />
+                <distal x="0" y="33.9" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_3">
+                <parent segment="dend_2_2" />
+                <distal x="0" y="45.2" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_4">
+                <parent segment="dend_2_3" />
+                <distal x="0" y="56.5" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_5">
+                <parent segment="dend_2_4" />
+                <distal x="0" y="67.8" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_6">
+                <parent segment="dend_2_5" />
+                <distal x="0" y="79.1" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_7">
+                <parent segment="dend_2_6" />
+                <distal x="0" y="90.4" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_8">
+                <parent segment="dend_2_7" />
+                <distal x="0" y="101.7" z="13.5" diameter="3" />
+            </segment>
+            <segment id="dend_2_9">
+                <parent segment="dend_2_8" />
+                <distal x="0" y="113.0" z="13.5" diameter="3" />
+            </segment>
+            <segmentGroup id="soma" default="True">
+                <member segment="soma" default="True" />
+            </segmentGroup>
+            <segmentGroup id="dendrite">
+                <member segment="dend_0_0" default="True" />
+                <member segment="dend_0_1" />
+                <member segment="dend_0_2" />
+                <member segment="dend_0_3" />
+                <member segment="dend_0_4" />
+                <member segment="dend_0_5" />
+                <member segment="dend_0_6" />
+                <member segment="dend_0_7" />
+                <member segment="dend_0_8" />
+                <member segment="dend_0_9" />
+                <member segment="dend_1_0" />
+                <member segment="dend_1_1" />
+                <member segment="dend_1_2" />
+                <member segment="dend_1_3" />
+                <member segment="dend_1_4" />
+                <member segment="dend_1_5" />
+                <member segment="dend_1_6" />
+                <member segment="dend_1_7" />
+                <member segment="dend_1_8" />
+                <member segment="dend_1_9" />
+                <member segment="dend_2_0" />
+                <member segment="dend_2_1" />
+                <member segment="dend_2_2" />
+                <member segment="dend_2_3" />
+                <member segment="dend_2_4" />
+                <member segment="dend_2_5" />
+                <member segment="dend_2_6" />
+                <member segment="dend_2_7" />
+                <member segment="dend_2_8" />
+                <member segment="dend_2_9" />
+            </segmentGroup>
+        </morphology>
         <biophysicalProperties id="GolgiBiophys">
             <defaultBuildOptions>
                 <build tool="nemo" simulator="neuron" method="derivimplicit">
-                    <kinetic comp_id="Na_z" />
+                    <kinetic comp_id="SK2_z" />
                 </build>
                 <build tool="nemo" simulator="nest" method="cvode" />
             </defaultBuildOptions>
@@ -688,7 +858,7 @@
                 <ncml:input name="v" />
                 <ncml:input name="celsius" />
                 <ncml:const name="ca2o" value="2.0" />
-                <ncml:component type="decaying-pool" name="ca">
+                <ncml:decayingPool name="ca" segmentGroup="soma">
                     <ncml:input name="ica" from="ion-currents" />
                     <ncml:const name="F" value="96485.3" />
                     <ncml:const name="d" value="0.2" />
@@ -701,8 +871,8 @@
                         <ncml:initial>cai0</ncml:initial>
                     </ncml:rate>
                     <ncml:output name="ca" />
-                </ncml:component>
-                <ncml:decayingPool name="ca2">
+                </ncml:decayingPool>
+                <ncml:decayingPool name="ca2" segmentGroup="soma">
                     <ncml:input name="ica2" from="ion-currents" />
                     <ncml:const name="valence" value="2" />
                     <ncml:const name="F" value="96485.3" />
@@ -795,7 +965,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:component type="ionic-current" name="CaLVA">
+                <ncml:ionicCurrent name="CaLVA" segmentGroup="soma">
                     <ncml:input name="ca2i" from="ion-pools" />
                     <ncml:input name="ca2o" from="ion-pools" />
                     <ncml:component type="gate">
@@ -867,7 +1037,7 @@
                         <ncml:output name="e" />
                         <ncml:output name="valence" />
                     </ncml:component>
-                </ncml:component>
+                </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="CaLVA">
                     <ncml:const name="vchold" value="-71" />
                     <ncml:const name="vcbase" value="-69" />
@@ -1412,6 +1582,12 @@
                                     <ncml:rate>invo2_t</ncml:rate>
                                 </ncml:transition>
                             </ncml:transitions>
+                            <ncml:conserve>
+                                <ncml:conseq val="1">
+                                    <ncml:expr> c1 + c2 + c3 + c4 + o2 + o1
+                                    </ncml:expr>
+                                </ncml:conseq>
+                            </ncml:conserve>
                         </ncml:reaction>
                         <ncml:output name="SK2_z" />
                     </ncml:component>
@@ -1679,8 +1855,8 @@
                     </ncml:component>
                 </ncml:ionicCurrent>
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
-                <reversalPotential species="ca" value="129.33" units="mV"
-                    segmentGroup="soma" />
+                <reversalPotential species="ca" value="132.457934" units="mV"
+                    segmentGroup="soma" /> <!-- 129.33 -->
                 <reversalPotential species="na" value="87.39" units="mV"
                     segmentGroup="soma" />
                 <reversalPotential species="k" value="-84.69" units="mV"
