@@ -59,11 +59,6 @@ if args.no_granule_to_golgi:
 print "Building network"
 net = Network(NETWORK_XML_LOCATION, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
               build_mode=args.build, silent_build=args.silent_build, flags=flags)
-print "Network description"
-net.describe()
-if args.save_connections:
-    print "Saving connections"
-    net.save_connections(args.save_connections)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
 mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
@@ -73,6 +68,11 @@ print "Setting up recorders"
 for pop_name in ['Granules', 'Golgis']:
     cell = net.get_population(pop_name)[0]
     record_v(cell, args.output + pop_name + ".v") #@UndefinedVariable
+print "Network description"
+net.describe()
+if args.save_connections:
+    print "Saving connections"
+    net.save_connections(args.save_connections)    
 print "Starting run"
 # Print out basic parameters of the simulation
 print "Simulation time: %f" % args.time
