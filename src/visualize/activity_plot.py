@@ -141,7 +141,7 @@ def main(arguments):
                 spikes = spikes_n_ids[:, 0]
                 ids = spikes_n_ids[:, 1]
             elif variable_name == 'spikes_dat':
-                spike_matrix = numpy.loadtxt(filename)
+                spike_matrix = numpy.loadtxt(filename, skiprows=1)
                 num_spikes = [zeros[0] if len(zeros) else len(zeros)
                                                         for zeros in numpy.where(spike_matrix == 0)]
                 ids = []

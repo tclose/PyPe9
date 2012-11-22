@@ -435,9 +435,9 @@ sav_GrCMatrixS=new File()
 sav_GoCMatrixS=new File()
 
 //Open recording Files
-sav_MFMatrixS.wopen("MFMatrixS.dat")
-sav_GrCMatrixS.wopen("GrCMatrixS.dat")
-sav_GoCMatrixS.wopen("GoCMatrixS.dat")
+sav_MFMatrixS.wopen("MossyFibers.spikes_dat")
+sav_GrCMatrixS.wopen("Granules.spikes_dat")
+sav_GoCMatrixS.wopen("Golgis.spikes_dat")
 
 
 //Data for Raster Plots
