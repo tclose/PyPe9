@@ -75,6 +75,6 @@ sav_granule_spike_matrix.close()
 sav_golgi_spike_matrix.close()
 
 //move the files to data folder
-//strdef command
-//sprint(command,"mv *.spike_dat data/")
-//system(command)
+strdef command
+sprint(command,"mv *.spikes_dat ../../output/")
+system(command)
