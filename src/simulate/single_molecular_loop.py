@@ -16,6 +16,7 @@ if 'NINEMLP_MPI' in os.environ:
     print "importing MPI"
 import argparse
 import ninemlp
+import numpy
 import time
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
@@ -28,7 +29,7 @@ parser.add_argument('--simulator', type=str, default='neuron',
 parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
-parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
+parser.add_argument('--mf_rate', type=float, default=100, help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
 parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms) (default: %(default)s)')
 parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_molecular_loop.') , help='The output location of the recording files')
 parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation (default: %(default)s)')
@@ -61,7 +62,9 @@ net = Network(NETWORK_XML_LOCATION, timestep=args.timestep, min_delay=args.min_d
               build_mode=args.build, silent_build=args.silent_build, flags=flags)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
-mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
+spike_times = numpy.arange(args.start_input, 1.0 / args.mf_rate, args.time)
+spike_times = numpy.reshape(spike_times, (1, len(spike_times)))
+mossy_fibers.tset('spike_times', spike_times)
 print "Setting up recorders"
 #net.record_all_spikes(args.output)
 # Set up voltage trace recorders
