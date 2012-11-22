@@ -142,6 +142,8 @@ def main(arguments):
                 ids = spikes_n_ids[:, 1]
             elif variable_name == 'spikes_dat':
                 spike_matrix = numpy.loadtxt(filename, skiprows=1)
+                if len(spike_matrix.shape) == 1:
+                    spike_matrix = numpy.reshape(spike_matrix, (spike_matrix.shape[0], 1))
                 num_spikes = [zeros[0] if len(zeros) else len(zeros)
                                                         for zeros in numpy.where(spike_matrix == 0)]
                 ids = []
@@ -161,6 +163,9 @@ def main(arguments):
                     ids += [cell_id] * num_spikes
                 ids = numpy.array(ids)
                 spikes = numpy.array(spikes)
+                if not len(spikes):
+                    print "No spikes were generated for selected population"
+                    sys.exit(0)                
             else:
                 assert(False)
 
