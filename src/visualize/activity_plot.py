@@ -68,7 +68,7 @@ def main(arguments):
         ext = filename.split('.')[-1]
         if ext == 'spikes' or ext == 'spikes_dat':
             num_spike_trains += 1
-        elif ext == 'v' or ext == 'dat':
+        elif ext == 'v' or ext == 'v_dat':
             num_v += 1
         else:
             num_currents += 1
@@ -99,10 +99,14 @@ def main(arguments):
             rescale = False
     spike_train_count = 0
     var_count = 0
-    dat_count = 0 # Counts the number of 'dat' files that are plotted to give them an index
+    dat_count = 0 # Counts the number of 'v_dat' files that are plotted to give them an index
     for filename in args.filenames:
         variable_name = filename.split('.')[-1]
-        if not (variable_name == 'dat' or variable_name == 'spikes_dat'):
+        # If variable uses the 'dat' extention only, assume that it is a voltage file and change to
+        # the 'v_dat' variable name
+        if variable_name == 'dat':
+            variable_name = 'v_dat'
+        if not (variable_name == 'v_dat' or variable_name == 'spikes_dat'):
             #Read Header
             header = {}
             f = open(filename)
@@ -190,7 +194,7 @@ def main(arguments):
             ax.set_ylim(-2, max_id + 2)
             spike_train_count += 1
         # Legacy hoc
-        elif variable_name == 'dat':
+        elif variable_name == 'v_dat':
                 t_data = numpy.loadtxt(filename)
                 t = t_data[:, 0]
                 data = t_data[:, 1]
