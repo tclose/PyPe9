@@ -129,9 +129,9 @@ sav_granule_spike_matrix=new File()
 sav_golgi_spike_matrix=new File()
 
 //Open recording Files
-sav_mossy_fiber_spike_matrix.wopen("SingleMolLoopMossyFiber.spikes_dat")
-sav_granule_spike_matrix.wopen("SingleMolLoopGranule.spikes_dat")
-sav_golgi_spike_matrix.wopen("SingleMolLoopGolgi.spikes_dat")
+sav_mossy_fiber_spike_matrix.wopen("SingleMolecularLoop.MossyFibers.spikes_dat")
+sav_granule_spike_matrix.wopen("SingleMolecularLoop.Granules.spikes_dat")
+sav_golgi_spike_matrix.wopen("SingleMolecularLoop.Golgis.spikes_dat")
 
 //Data for Raster Plots
 //GoC
