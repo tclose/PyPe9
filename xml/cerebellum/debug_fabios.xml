@@ -61,7 +61,7 @@
         </projection>
         <projection id="Granules_Golgis" flags="GranuleToGolgi">
             <source id="Granules" />
-            <destination id="Golgis" synapse="GABA" segment="soma" />
+            <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="debug_Granule-Golgi" />
         </projection>
     </network>

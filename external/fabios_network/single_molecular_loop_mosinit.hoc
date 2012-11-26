@@ -74,7 +74,18 @@ sav_mossy_fiber_spike_matrix.close()
 sav_granule_spike_matrix.close()
 sav_golgi_spike_matrix.close()
 
+// Save the voltage traces
+objref granule_v_file, golgi_v_file
+granule_v_file = new File()
+granule_v_file.wopen("SingleMolLoopGranule.v_dat")
+golgi_v_file = new File()
+golgi_v_file.wopen("SingleMolLoopGolgi.v_dat")
+for (i=0; i < time.size(); i=i+1) {
+    granule_v_file.printf("%g %g\n", time.x[i], granule_v.x[i])
+    golgi_v_file.printf("%g %g\n", time.x[i], golgi_v.x[i])      
+}
+
 //move the files to data folder
-//strdef command
-//sprint(command,"mv *.spike_dat data/")
-//system(command)
+strdef command
+sprint(command,"mv *dat ../../output/")
+system(command)

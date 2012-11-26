@@ -5,35 +5,42 @@
             <temperature value="23" />
         </simulationDefaults>
         <population id="Granules" cell="Granule" size="1" />
-        <population id="Golgis" cell="Golgi" size="1" />
+        <population id="Golgis" cell="Golgi" size="1" morphology="WithoutAxon" />
         <population id="MossyFibers" cell="SpikeSourceArray" size="1" />
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />
             <connection pattern="OneToOne" />
             <weight pattern="Constant" value="1.3e-3" />
-            <delay pattern="Constant" value="1e-3" />
+            <delay pattern="Constant" value="0.025" />
         </projection>
         <projection id="MossyFibers_Granules_NMDA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="NMDA" segment="soma" />
             <connection pattern="OneToOne" />
             <weight pattern="Constant" value="0.1122e-3" />
-            <delay pattern="Constant" value="1e-3" />
+            <delay pattern="Constant" value="0.025" />
         </projection>
         <projection id="MossyFibers_Golgis">
             <source id="MossyFibers" />
-            <destination id="Golgis" synapse="AMPA" segment="soma" />
+            <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="OneToOne" />
             <weight pattern="Constant" value="1.3e-3" />
-            <delay pattern="Constant" value="1e-3" />
+            <delay pattern="Constant" value="0.025" />
         </projection>        
         <projection id="Granules_Golgis">
             <source id="Granules" />
-            <destination id="Golgis" synapse="GABA" segment="soma" />
+            <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="OneToOne" />
             <weight pattern="Constant" value="1.3e-3" />
-            <delay pattern="Constant" value="1e-3" />
+            <delay pattern="Constant" value="0.3" />
         </projection>
+        <projection id="Golgis_Granules">
+            <source id="Golgis" />
+            <destination id="Granules" synapse="GABA" segment="soma" />
+            <connection pattern="OneToOne" />
+            <weight pattern="Constant" value="1.4e-3" />
+            <delay pattern="Constant" value="0.025" />
+        </projection>     
     </network>
 </nineml>

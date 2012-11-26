@@ -57,7 +57,7 @@
         </projection>
         <projection id="MossyFibers_Golgis_AMPA">
             <source id="MossyFibers" />
-            <destination id="Golgis" synapse="AMPA" segment="soma" />
+            <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
                 number="21" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="2.6 nS"
@@ -66,7 +66,7 @@
         </projection>
         <projection id="Granules_Golgis" flags="GranuleToGolgi">
             <source id="Granules" />
-            <destination id="Golgis" synapse="GABA" segment="soma" />
+            <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />
             <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
