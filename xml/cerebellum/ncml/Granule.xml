@@ -20,7 +20,7 @@
             <segmentGroup id="soma">
                 <member segment="soma" />
             </segmentGroup>
-        </morphology> 
+        </morphology>
         <biophysicalProperties id="Cerebellar Granule Cell">
             <defaultBuildOptions>
                 <build tool="nemo" simulator="neuron" method="derivimplicit">
@@ -35,7 +35,7 @@
                 <ncml:input name="v" />
                 <ncml:input name="celsius" />
                 <ncml:defun name="sigm">
-                    <ncml:arg>x</ncml:arg> 
+                    <ncml:arg>x</ncml:arg>
                     <ncml:arg>y</ncml:arg>
                     <ncml:body>(1 / (exp (x / y) + 1))</ncml:body>
                 </ncml:defun>
@@ -650,13 +650,13 @@
                                     <ncml:rate>Ooff</ncml:rate>
                                 </ncml:transition>
                             </ncml:transitions>
-			    <ncml:conserve>
-			      <ncml:conseq val="1">
-				<ncml:expr>
-				  C1 + C2 + C3 + C4 + C5 + O + B + I1 + I2 + I3 + I4 + I5 + I6
-				</ncml:expr>
-			      </ncml:conseq>
-			    </ncml:conserve>
+                            <ncml:conserve>
+                                <ncml:conseq val="1">
+                                    <ncml:expr> C1 + C2 + C3 + C4 + C5 + O + B + I1 + I2 + I3 + I4 +
+                                        I5 + I6
+                                    </ncml:expr>
+                                </ncml:conseq>
+                            </ncml:conserve>
                         </ncml:reaction>
                         <ncml:output name="Na_z" />
                     </ncml:component>
@@ -695,21 +695,19 @@
             <synapses>
                 <!-- Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
                 <conductanceSynapse id="AMPA" type="Exp2Syn">
-                    <ncml:arg name="tau1" value="0.3" units="ms" />
-                    <ncml:arg name="tau2" value="0.5" units="ms" />
-                    <ncml:arg name="e" value="0.0" units="mV" />
+                    <parameter name="tau1" value="0.3" units="ms" />
+                    <parameter name="tau2" value="0.5" units="ms" />
+                    <parameter name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
                 <conductanceSynapse id="NMDA" type="Exp2Syn">
-                    <ncml:arg name="tau1" value="1" units="ms" />
-                    <ncml:arg name="tau2" value="13.3" units="ms" />
-                    <ncml:arg name="e" value="0.0" units="mV" />
+                    <parameter name="tau1" value="1" units="ms" />
+                    <parameter name="tau2" value="13.3" units="ms" />
+                    <parameter name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
                 <conductanceSynapse id="GABA" type="Exp2Syn">
-                    <ncml:arg name="tau1_0" value="0.31" units="ms" />
-                    <ncml:arg name="tau2_0" value="8.8" units="ms" />
-                    <ncml:arg name="e_0" value="-75.0" units="mV" />
-                    <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
-                        units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
+                    <parameter name="tau1" value="0.31" units="ms" />
+                    <parameter name="tau2" value="8.8" units="ms" />
+                    <parameter name="e" value="-75.0" units="mV" />
                 </conductanceSynapse>
                 <gapJunction id="Gap" type="Gap" />
             </synapses>

@@ -35,6 +35,9 @@ def main(arguments):
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
     parser.add_argument('--input_spikes', nargs='+', type=float, default=[1000.0],
                         help='The timing of input spikes into the granule cell')
+    parser.add_argument('--synaptic_weight', type=float, default=1.4e-3, 
+                        help="The weight of the synaptic connection between the input and the " \
+                             "granule cell.")
     args = parser.parse_args(arguments)
     ninemlp.BUILD_MODE = args.build
     import ninemlp.neuron as nine
@@ -46,8 +49,10 @@ def main(arguments):
                              build_mode=args.build)
     granule = Granule()
     stim = VectorSpikeSource(args.input_spikes)
-    netcon = nine.h.NetCon(stim, granule.soma_seg.GABA, sec=granule.soma_seg) #@UnusedVariable: Object just needs to be referenced to stop it being garbaged collected before the simulation
+    netcon = nine.h.NetCon(stim, granule.soma_seg.GABA, -20, 0, args.synaptic_weight, #@UnusedVariable
+                           sec=granule.soma_seg)
     nine.neuron.h.psection(sec=granule.soma_seg)
+    granule.record('v', os.path.join(PROJECT_PATH, 'output', 'SoloGranule.v'))
     print "celsius: " + str(nine.h.celsius)
     print "Starting run"
     nine.run(args.time)

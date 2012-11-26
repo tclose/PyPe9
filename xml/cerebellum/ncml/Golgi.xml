@@ -1867,19 +1867,15 @@
             </intracellularProperties>
             <synapses>
                 <conductanceSynapse id="AMPA_MossyFiber" type="Exp2Syn" segmentGroup="soma">
-                    <arg name="tau1" value="0.3" units="ms" />
-                    <arg name="tau2" value="0.5" units="ms" />
-                    <arg name="e" value="0.0" units="mV" />
+                    <parameter name="tau1" value="0.3" units="ms" />
+                    <parameter name="tau2" value="0.5" units="ms" />
+                    <parameter name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
                 <conductanceSynapse id="AMPA_Granule" type="Exp2Syn" segmentGroup="soma">
-                    <arg name="tau1" value="1" units="ms" />
-                    <arg name="tau2" value="13.3" units="ms" />
-                    <arg name="e" value="0.0" units="mV" />
+                    <parameter name="tau1" value="1" units="ms" />
+                    <parameter name="tau2" value="13.3" units="ms" />
+                    <parameter name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
-                <!-- <conductanceSynapse id="GABA" type="Exp2Syn" segmentGroup="soma"> <arg name="tau1_0" 
-                    value="0.31" units="ms" /> <arg name="tau2_0" value="8.8" units="ms" /> <arg name="e_0" value="-75.0" 
-                    units="mV" /> <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
-                    units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> </conductanceSynapse> -->
                 <gapJunction id="Gap" type="Gap" segmentGroup="soma" />
             </synapses>
             <initalConditions>
