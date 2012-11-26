@@ -62,27 +62,36 @@ golgi.soma.nai(0.5)=5
 //MF->GrC synapses//
 ////////////////////
 
-mossy_fiber.Presynapse granule.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), granule.synAMPA, -20, MF_TO_GRANULE_DELAY, MF_TO_GRANULE_AMPA_WEIGHT))
-mossy_fiber.Presynapse granule.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), granule.synNMDA, -20, MF_TO_GRANULE_DELAY, MF_TO_GRANULE_NDMA_WEIGHT))  
+if (!NoMossyFiber2GranuleAMPA) {
+  mossy_fiber.Presynapse granule.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), granule.synAMPA, -20, MF_TO_GRANULE_DELAY, MF_TO_GRANULE_AMPA_WEIGHT))
+}
 
+if (!NoMossyFiber2GranuleNMDA) {
+  mossy_fiber.Presynapse granule.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), granule.synNMDA, -20, MF_TO_GRANULE_DELAY, MF_TO_GRANULE_NDMA_WEIGHT))  
+}
 ////////////////////
 //MF->GoC synapses//
 ////////////////////
 
-mossy_fiber.Presynapse golgi.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), golgi.synAMPA1, -20, MF_TO_GOLGI_DELAY, MF_TO_GOLGI_WEIGHT))
-
+if (!NoMossyFiber2Golgi) {
+  mossy_fiber.Presynapse golgi.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), golgi.synAMPA1, -20, MF_TO_GOLGI_DELAY, MF_TO_GOLGI_WEIGHT))
+}
 /////////////////////
 //GrC->GoC synapses//
 //(PF synapses)    //
 /////////////////////
 
-granule.soma golgi.nclist.append(new NetCon(&granule.soma.v(0.5), golgi.synAMPA2, -20, GRANULE_TO_GOLGI_DELAY, GRANULE_TO_GOLGI_WEIGHT))
+if (!NoGranulesGolgi) {
+  granule.soma golgi.nclist.append(new NetCon(&granule.soma.v(0.5), golgi.synAMPA2, -20, GRANULE_TO_GOLGI_DELAY, GRANULE_TO_GOLGI_WEIGHT))
+}
 
 ////////////////////
 //GoC>GrC synapses//
 ////////////////////
 
-golgi.soma granule.nclist.append(new NetCon(&golgi.soma.v(0.5),granule.synGABAa1, -20, GOLGI_TO_GRANULE_DELAY, GOLGI_TO_GRANULE_WEIGHT))
+if (!NoGolgi2Granule) {
+  golgi.soma granule.nclist.append(new NetCon(&golgi.soma.v(0.5),granule.synGABAa1, -20, GOLGI_TO_GRANULE_DELAY, GOLGI_TO_GRANULE_WEIGHT))
+}
 
 /////////////////////////////
 //MF stimulation procedures//

@@ -17,8 +17,12 @@ SEED=1
 ///////////////////////////////
 //uncomment gap junction flag//
 //////////////////////////////
-GJ=1      // with GJ between GoCs
-//GJ=0      // without GJ between GoCs
+
+NoMossyFiber2GranuleAMPA=1
+NoMossyFiber2GranuleNMDA=1
+NoMossyFiber2Golgi=1
+NoGranulesGolgi=1
+NoGolgi2Granule=1
 
 ///////////////////////////
 //Building Network Layers//
