@@ -58,6 +58,8 @@ golgi.soma.ki(0.5)=140
 golgi.soma.nao(0.5)=145
 golgi.soma.nai(0.5)=5
 
+golgi.soma psection()
+
 ////////////////////
 //MF->GrC synapses//
 ////////////////////
@@ -121,6 +123,8 @@ proc stimulus() {
   mossy_fiber.StimTrigger.seed(SEED)
 
 }
+
+celsius = 6.3
 
 ////////////////////////////////////////
 //Setting up for Saving Spiking Events//

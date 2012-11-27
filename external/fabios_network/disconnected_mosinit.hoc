@@ -19,14 +19,13 @@ SEED=1
 //////////////////////////////
 GJ=1      // with GJ between GoCs
 //GJ=0      // without GJ between GoCs
-GrC2GoC=1
-//GrC2GoC=0
 
 ///////////////////////////
 //Building Network Layers//
 ///////////////////////////
 
-load_file("network.hoc") 
+load_file("disconnected_network.hoc")
+
 
 //////////////////////
 //Running Simulation//
@@ -93,6 +92,18 @@ sav_MFMatrixS.close()
 sav_GrCMatrixS.close()
 sav_GoCMatrixS.close()
 
+// Save the voltage traces
+objref granule_v_file, golgi_v_file
+granule_v_file = new File()
+granule_v_file.wopen("DisconnectedNetwork.Granules.v_dat")
+golgi_v_file = new File()
+golgi_v_file.wopen("DisconnectedNetwork.Golgis.v_dat")
+for (i=0; i < time.size(); i=i+1) {
+    granule_v_file.printf("%g %g\n", time.x[i], granule_v.x[i])
+    golgi_v_file.printf("%g %g\n", time.x[i], golgi_v.x[i])      
+}
+
+
 strdef command
-sprint(command,"mv *.spikes_dat ../../output/")
+sprint(command,"mv *dat ../../output/")
 system(command)

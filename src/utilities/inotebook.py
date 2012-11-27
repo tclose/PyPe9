@@ -104,7 +104,7 @@ will be searched for in the first string
     else:
         ref_psection = open(ref_psection_log).read()
     # The regular expression for picking out the name value pairs
-    pattern = re.compile('([a-zA-Z_]+=[0-9]+(?:\.[0-9]+)*(?:e-?[0-9]+)*)')
+    pattern = re.compile('([a-zA-Z0-9_]+=\-?[0-9]+(?:\.[0-9]+)*(?:e\-?[0-9]+)*)')
     # A dictionary that uses the values as a key to match the corresponding names
     vals_dict = defaultdict(lambda: (list(), list()))
     # Extract the name value pairs and add them to the values dictionary

@@ -91,12 +91,16 @@ for pop_name in ['Granules', 'Golgis']:
     record_v(cell, args.output + pop_name + ".v") #@UndefinedVariable
 print "Network description"
 net.describe()
+from neuron import h
+golgi_soma = net.get_population('Golgis')[0]._cell.soma_seg
+h.psection(sec=golgi_soma)
 if args.save_connections:
     print "Saving connections"
     net.save_connections(args.save_connections)    
 print "Starting run"
 # Print out basic parameters of the simulation
 print "Simulation time: %f" % args.time
+print "Temperature: {}".format(h.celsius)
 print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.mf_rate
 # Actually run simulation
