@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 """
-Contains a method for plotting morphologies of NINEML+ network
+Contains a method for plotting morphologies of NINEML+ network. The selected cell model 
+will be loaded along with NeuronVisio's controls, from which the morphology can be plotted using the
+Plot3D function (as a bonus the cell can also be run interactively using the other NeuronVisio 
+commands). 
+
+Requires NeuronVisio,to install NeuronVisio see http://mattions.github.com/neuronvisio/install.html.
 
 @author Tom Close
 
