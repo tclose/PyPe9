@@ -12,12 +12,17 @@
 #######################################################################################
 import os.path
 import ninemlp
-from ninemlp.common.ncml import read_MorphML, read_NCML
+from ninemlp.connectivity.morphology import read_NeurolucidaXML
+#from ninemlp.common.ncml import read_MorphML, read_NCML
 # Get the xml location
-CELL_ID = 'Golgi'
-XML_FILENAME = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..', 'xml', 'cerebellum', 'ncml',
-                                             CELL_ID + '.xml'))
-morphml = read_MorphML(CELL_ID, XML_FILENAME)
-ncml = read_NCML(CELL_ID, XML_FILENAME)
-print morphml
-print ncml
+#CELL_ID = 'Golgi'
+#XML_FILENAME = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..', 'xml', 'cerebellum', 'ncml',
+#                                             CELL_ID + '.xml'))
+#morphml = read_MorphML(CELL_ID, XML_FILENAME)
+#ncml = read_NCML(CELL_ID, XML_FILENAME)
+#print morphml
+#print ncml
+XML_FILENAME = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..', 'morph', 'Purkinje', 'xml',
+                                             'GFP_P60.1_slide7_2ndslice-HN-FINAL.xml'))
+neurolucida_xml = read_NeurolucidaXML(XML_FILENAME)
+print neurolucida_xml
