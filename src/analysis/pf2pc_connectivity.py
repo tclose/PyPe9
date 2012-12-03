@@ -72,7 +72,6 @@ def main(arguments):
             finish_point = (x, y, forest_max[2], args.pf_diam)
             pf_branch = NeurolucidaXMLHandler.Branch((start_point, finish_point), [])
             pf = Tree(pf_branch, 2)
-#            f.write('{x} {y}'.format(x=x, y=y))
             for purkinje in forest:
                 num_overlap = purkinje.num_overlapping(pf, args.vox_size)
                 f.write(' {}'.format(num_overlap))

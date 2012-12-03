@@ -1,10 +1,4 @@
 #!/usr/bin/env python
-"""
-Contains a method for plotting cell positions loaded from BRep export files
-
-@author Tom Close
-
-"""
 
 #######################################################################################
 #
@@ -16,16 +10,9 @@ import numpy as np
 import pylab
 import argparse
 
-def quit_figure(event):
-    """
-    Creates a shortcut to close the current window with the key 'q'
-    """
-    if event.key == 'q':
-        pylab.close(event.canvas.figure)
-
 def main(arguments):
     """
-    Runs the visualization script
+    Loads the connectivity matrix from pf2pc_connectivity.py script and plots it in different ways.
     
     @param arguments [list(str)]: The arguments to be parsed using argparser
     """
@@ -37,32 +24,32 @@ def main(arguments):
                         help='Plots a histogram of the parallel fibre connections')
     args = parser.parse_args(arguments)
     # Read number of x from header
-    num_x = None
+    header = {}
     with open(args.matrix_file) as f:
         for line in f:
             if line[0] != '#':
                 break
             if ':' in line:
                 key, val = line.split(':')
-                if key[1:].strip() == 'Num X': 
-                    num_x = int(val)
-    if not num_x:
-        raise Exception("Key 'Num X' was not found in matrix header")
+                header[key[1:].strip()] = val.strip()
+    if not header.has_key('num_x'):
+        raise Exception("Key 'num_x' was not found in matrix header")
     # Load matrix file
     matrix = np.loadtxt(args.matrix_file)
-    matrix = np.reshape(matrix, (num_x, -1, matrix.shape[1]))
+    matrix = np.reshape(matrix, (int(header['num_x']), -1, matrix.shape[1]))
     if args.plot_slice:
         if args.plot_slice[0] == 0: matrix_slice = matrix[args.plot_slice[1], :, :]
         elif args.plot_slice[0] == 1: matrix_slice = matrix[:, args.plot_slice[1], :]
         elif args.plot_slice[0] == 2: matrix_slice = matrix[:, :, args.plot_slice[1]]        
         else: raise Exception('{} out of range, should be 0-2'.format(args.slice_dim))
         fig = pylab.figure()
-        cid = fig.canvas.mpl_connect('key_press_event', quit_figure) #@UnusedVariable
         pylab.imshow(matrix_slice)
     elif args.histogram:
         bool_matrix = np.array(matrix, dtype=bool)
         pc_counts = np.sum(bool_matrix, axis=2)
-        
+        pylab.hist(pc_counts.ravel(), bins=range(1,matrix.shape[2]))
+    else:
+        raise Exception("At least one plot option needs to be specified ('plot_slice' or 'histogram'")
     pylab.show()
     
 if __name__ == '__main__':
