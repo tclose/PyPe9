@@ -93,8 +93,7 @@ print "Setting up recorders"
 net.record_all_spikes(args.output)
 # Set up voltage trace recorders
 for pop_name in ['Granules', 'Golgis']:
-    cell = net.get_population(pop_name)[0]
-    record_v(cell, args.output + pop_name + ".v") #@UndefinedVariable
+    net.get_population(pop_name)[0:1].record_v()
 print "Network description"
 net.describe()
 from neuron import h
@@ -111,5 +110,7 @@ print "Stimulation start: %f" % args.start_input
 print "MossyFiber firing rate: %f" % args.mf_rate
 # Actually run simulation
 run(args.time) #@UndefinedVariable
+for pop_name in ['Granules', 'Golgis']:
+    net.get_population(pop_name).print_v(args.output + pop_name + ".v")
 end() #@UndefinedVariable
 print "Simulated Single Molecular Loop for %f milliseconds" % args.time
