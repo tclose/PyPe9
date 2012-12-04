@@ -31,11 +31,16 @@ def main(arguments):
                                                                       'fibres')
     parser.add_argument('--vox_size', type=float, nargs=3, default=(1.0, 1.0, 1.0),
                         help='The voxel size of the masks')
+    parser.add_argument('--shifted', action='store_true',
+                        help="Uses the same PF tree that is 'shifted' into position rather than "
+                             "creating a new tree for each parallel fibre")
     args = parser.parse_args(arguments)
-    if args.pf_spacing[0] % args.vox_size[0] or args.pf_spacing[1] % args.vox_size[1]:
+    if args.shifted and \
+            (args.pf_spacing[0] % args.vox_size[0] or args.pf_spacing[1] % args.vox_size[1]):
         raise Exception("Parallel fibre spacing ({}) should be even multiples of corresponding "
-                        "voxel sizes ({}). NB This could be relaxed but it would be significantly "
-                        "less efficient".format(args.pf_spacing, args.vox_size[0:2]))
+                        "voxel sizes ({}) if the 'shifted' option is provided. NB not providing "
+                        "the 'shifted' option will have a significant impact on performance"
+                        .format(args.pf_spacing, args.vox_size[0:2]))
     forest = read_NeurolucidaXML(args.forest_xml)
     forest_min = np.array([float('inf'), float('inf'), float('inf')])
     forest_max = np.array([float('-inf'), float('-inf'), float('-inf')])
@@ -61,23 +66,36 @@ def main(arguments):
                 "# num_x: {num[0]}\n"
                 "# num_y: {num[1]}\n"
                 "# min_x: {min[0]}\n"
-                "# min_y: {min[1]}\n"                
+                "# min_y: {min[1]}\n"
                 "# max_x: {max[0]}\n"
                 "# max_y: {max[1]}\n"
                 "# step_x: {step[0]}\n"
-                "# step_y: {step[1]}\n".format(num=(num_x, num_y), min=pf_min, max=pf_max, 
+                "# step_y: {step[1]}\n".format(num=(num_x, num_y), min=pf_min, max=pf_max,
                                                step=args.pf_spacing))
-        for i, (x, y) in enumerate(zip(pf_X.ravel(), pf_Y.ravel())):
-            start_point = (x, y, forest_min[2], args.pf_diam)
-            finish_point = (x, y, forest_max[2], args.pf_diam)
+        f.write("# purkinje_zs: [")
+        for purkinje in forest[:-1]:
+            f.write("{}, ".format(purkinje.centroid[2]))
+        f.write("{}]\n".format(forest[-1].centroid[2]))
+        if args.shifted:
+            start_point = (0.0, 0.0, forest_min[2], args.pf_diam)
+            finish_point = (0.0, 0.0, forest_max[2], args.pf_diam)
             pf_branch = NeurolucidaXMLHandler.Branch((start_point, finish_point), [])
-            pf = Tree(pf_branch, 2)
+            pf_init = Tree(pf_branch, 2)
+        for i, (x, y) in enumerate(zip(pf_X.ravel(), pf_Y.ravel())):
+            if args.shifted:
+                pf = pf_init.shifted_tree((x, y, 0.0))
+            else:
+                start_point = (x, y, forest_min[2], args.pf_diam)
+                finish_point = (x, y, forest_max[2], args.pf_diam)
+                pf_branch = NeurolucidaXMLHandler.Branch((start_point, finish_point), [])
+                pf = Tree(pf_branch, 2)
             for purkinje in forest:
                 num_overlap = purkinje.num_overlapping(pf, args.vox_size)
                 f.write(' {}'.format(num_overlap))
             f.write('\n')
             if i % num_x == num_x - 1:
                 print "Finished y: {}".format(y)
+        print "done"
 
 def pf2pc_connectivity(arguments):
     import shlex
