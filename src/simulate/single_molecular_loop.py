@@ -22,42 +22,44 @@ import time
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Set the network xml location
 NETWORK_XML_LOCATION = os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'single_molecular_loop.xml')
-FLAGS = ["NoMossyFiber2GranuleAMPA", "NoMossyFiber2GranuleNMDA", "NoMossyFiber2Golgi", 
+FLAGS = ["NoMossyFiber2GranuleAMPA", "NoMossyFiber2GranuleNMDA", "NoMossyFiber2Golgi",
          "NoGranulesGolgi", "NoGolgi2Granule"]
 # Parse the input options
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
 parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
-                    help="Option to build the NMODL files before running (can be one of '{}'.".\
+                    help="Option to build the NMODL files before running (can be one of '{}'.".
                     format(ninemlp.BUILD_MODE_OPTIONS))
-parser.add_argument('--mf_rate', type=float, default=10, 
+parser.add_argument('--mf_rate', type=float, default=10,
                     help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
-parser.add_argument('--time', type=float, default=2000.0, 
+parser.add_argument('--time', type=float, default=2000.0,
                     help='The run time of the simulation (ms) (default: %(default)s)')
-parser.add_argument('--output', type=str, 
-                    default=os.path.join(PROJECT_PATH, 'output', 'SingleMolecularLoop.'), 
+parser.add_argument('--output', type=str,
+                    default=os.path.join(PROJECT_PATH, 'output', 'SingleMolecularLoop.'),
                     help='The output location of the recording files')
-parser.add_argument('--start_input', type=float, default=1000, 
+parser.add_argument('--start_input', type=float, default=1000,
                     help='The start time of the mossy fiber stimulation (default: %(default)s)')
-parser.add_argument('--min_delay', type=float, default=0.025, 
+parser.add_argument('--min_delay', type=float, default=0.025,
                     help='The minimum synaptic delay in the network (default: %(default)s)')
-parser.add_argument('--timestep', type=float, default=0.025, 
+parser.add_argument('--timestep', type=float, default=0.025,
                     help='The timestep used for the simulation (default: %(default)s)')
-parser.add_argument('--save_connections', type=str, default=None, 
+parser.add_argument('--save_connections', type=str, default=None,
                     help='A path in which to save the generated connections')
-parser.add_argument('--stim_seed', type=int, default=None, 
-                    help='The seed passed to the stimulated spikes')
-parser.add_argument('--para_unsafe', action='store_true', 
-                    help='If set the network simulation will try to be parallel neuron safe')
-parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs=2, default=[], 
-                    action='append', help="Save voltage traces for the given list of " \
-                    "('population name', 'cell ID') tuples")
-parser.add_argument('--debug_network', action='store_true', 
-                    help='Loads a stripped down version of the network for easier debugging')
+parser.add_argument('--stim_seed', type=int, default=None, help="The seed passed to the stimulated "
+                                                                "spikes")
+parser.add_argument('--para_unsafe', action='store_true', help="If set the network simulation will "
+                                                                "try to be parallel neuron safe")
+parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs=2, default=[],
+                    action='append', help="Save voltage traces for the given list of "
+                                          "('population name', 'cell ID') tuples")
+parser.add_argument('--debug_network', action='store_true', help="Loads a stripped down version of "
+                                                                 "the network for easier debugging")
 parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
+parser.add_argument('--poisson', action='store_true', help="Use Poisson stimulation instead of "
+                                                           "regular firing")
 for flag in FLAGS:
-    eval("parser.add_argument('--{flag}', action='store_true', help='Sets the ''{flag}'' " \
+    eval("parser.add_argument('--{flag}', action='store_true', help='Sets the ''{flag}'' "
          "flag in the network construction')".format(flag=flag))
 args = parser.parse_args()
 # Set the stimulation random seed
@@ -80,9 +82,13 @@ net = Network(NETWORK_XML_LOCATION, timestep=args.timestep, min_delay=args.min_d
               build_mode=args.build, silent_build=args.silent_build, flags=flags)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
-spike_times = numpy.arange(args.start_input, args.time, 1000 / args.mf_rate)
-spike_times = numpy.reshape(spike_times, (1, len(spike_times)))
-mossy_fibers.tset('spike_times', spike_times)
+if args.poisson:
+    mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
+else:
+    spike_times = numpy.arange(args.start_input, args.time, 1000 / args.mf_rate)
+    spike_times = numpy.tile(numpy.reshape(spike_times, (1, len(spike_times))), 
+                             (mossy_fibers.size,1))
+    mossy_fibers.tset('spike_times', spike_times)
 print "Setting up recorders"
 net.record_all_spikes(args.output)
 # Set up voltage trace recorders
@@ -92,11 +98,11 @@ for pop_name in ['Granules', 'Golgis']:
 print "Network description"
 net.describe()
 from neuron import h
-golgi_soma = net.get_population('Golgis')[0]._cell.soma_seg
-h.psection(sec=golgi_soma)
+#golgi_soma = net.get_population('Golgis')[0]._cell.soma_seg
+#h.psection(sec=golgi_soma)
 if args.save_connections:
     print "Saving connections"
-    net.save_connections(args.save_connections)    
+    net.save_connections(args.save_connections)
 print "Starting run"
 # Print out basic parameters of the simulation
 print "Simulation time: %f" % args.time
