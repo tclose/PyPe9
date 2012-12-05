@@ -43,15 +43,14 @@ parser.add_argument('--output_dir', default=None, type=str,
                          '(defaults to $HOME/Output)')
 parser.add_argument('--legacy_hoc', action="store_true", 
                     help="Run fabios original hoc model instead of the pyNN version")
-parser.add_argument('--dont_copy', action="store_true", 
-                    help="Don't copy or move any files from the work directory so they can be " \
-                         "run again")
 parser.add_argument('--include_gap', action='store_true', 
                     help='Includes gap junctions into the network')
 parser.add_argument('--no_granule_to_golgi', action='store_true', 
                     help='Deactivates the granule to golgi connection in the network.')
 parser.add_argument('--dry_run', action='store_true', help="Runs the script but doesn't actually "
                                                            "submit the job")
+parser.add_argument('-keep_build', action='store_true', help="Don't delete the build directory to "
+                                                             "allow the script to be rerun")
 args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
@@ -103,4 +102,4 @@ else:
 if not args.dry_run:
     tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
                      copy_to_output=copy_to_output, que_name=args.que_name, 
-                     strip_build_from_copy=(not args.dont_copy))
+                     strip_build_from_copy=(not args.keep_build))
