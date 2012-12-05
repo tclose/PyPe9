@@ -66,19 +66,19 @@ def main(arguments):
             matrix_slice = matrix[args.plot_slice[1], :, :]
             x_label = 'Ordered Purkinjes(low to high z)'
             y_label = 'y coordinate of parallel fiber'
-            title ='Parallel fiber to Purkinje connectivity (x fixed at {})'\
-                   .format(float(header['min_x']) + float(header['step_x']) * args.plot_slice[1])            
+            title = 'Parallel fiber to Purkinje connectivity (x fixed at {})'\
+                   .format(float(header['min_x']) + float(header['step_x']) * args.plot_slice[1])
         elif args.plot_slice[0] == 1:
             matrix_slice = matrix[:, args.plot_slice[1], :]
             x_label = 'Ordered Purkinjes(low to high z)'
             y_label = 'x coordinate of parallel fiber'
-            title ='Parallel fiber to Purkinje connectivity (y fixed at {})'\
+            title = 'Parallel fiber to Purkinje connectivity (y fixed at {})'\
                    .format(float(header['min_y']) + float(header['step_y']) * args.plot_slice[1])
         elif args.plot_slice[0] == 2:
             matrix_slice = matrix[:, :, args.plot_slice[1]]
             x_label = 'y coordinate of parallel fiber'
             y_label = 'x coordinate of parallel fiber'
-            title = 'Parallel fiber to Purkinje connectivity (Purkinje {})'.format(args.plot_slice[1])            
+            title = 'Parallel fiber to Purkinje connectivity (Purkinje {})'.format(args.plot_slice[1])
         else: raise Exception('{} out of range, should be 0-2'.format(args.slice_dim))
         pylab.imshow(matrix_slice)
         if args.title:

@@ -21,14 +21,14 @@ PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 def main(arguments):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('forest_xml', type=str, help='The path of the Purkinje forest xml file')
-    parser.add_argument('output_file', type=str, 
+    parser.add_argument('output_file', type=str,
                         help='The output location to save the connectivity matrix')
     parser.add_argument('--pf_spacing', type=float, nargs=2, metavar=('X', 'Y'), default=(2.0, 2.0),
                         help='The distance between parallel fibres (default %(default)s')
     parser.add_argument('--pf_diam', type=float, default=2.0, help='The radius of the parallel '
                                                                    'fibres (default %(default)s')
-    parser.add_argument('--vox_size', type=float, nargs=3, default=(1.0, 1.0, 1.0), 
-                        metavar=('X', 'Y', 'Z'), 
+    parser.add_argument('--vox_size', type=float, nargs=3, default=(1.0, 1.0, 1.0),
+                        metavar=('X', 'Y', 'Z'),
                         help='The voxel size of the PF and PC masks (default %(default)s')
     parser.add_argument('--shifted', action='store_true',
                         help="Uses the same PF tree mask that is 'shifted' into position rather "
