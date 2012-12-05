@@ -99,7 +99,7 @@ else:
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
     if args.log:
-        cmd_line += ' --log {work_dir}/log'
+        cmd_line += ' --log {}/log'.format(work_dir)
     copy_to_output = ['xml']
 # Submit job to que
 if not args.dry_run:
