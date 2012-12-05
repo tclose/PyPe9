@@ -90,7 +90,7 @@ else:
                              (mossy_fibers.size,1))
     mossy_fibers.tset('spike_times', spike_times)
 print "Setting up recorders"
-net.record_all_spikes(args.output)
+net.record_spikes()
 # Set up voltage trace recorders
 for pop_name in ['Granules', 'Golgis']:
     net.get_population(pop_name)[0:1].record_v()
@@ -112,5 +112,5 @@ print "MossyFiber firing rate: %f" % args.mf_rate
 run(args.time) #@UndefinedVariable
 for pop_name in ['Granules', 'Golgis']:
     net.get_population(pop_name).print_v(args.output + pop_name + ".v")
-end() #@UndefinedVariable
+net.print_spikes(args.output)
 print "Simulated Single Molecular Loop for %f milliseconds" % args.time
