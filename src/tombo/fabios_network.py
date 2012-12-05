@@ -31,7 +31,7 @@ parser.add_argument('--stim_seed', default=None,
 parser.add_argument('--np', type=int, default=96, 
                     help="The the number of processes to use for the simulation " \
                          "(default: %(default)s)")
-parser.add_argument('--que_name', type=str, default='longP', 
+parser.add_argument('--que_name', type=str, default='shortP', 
                     help='The the que to submit the job to(default: %(default)s)')
 parser.add_argument('--volt_trace', nargs='+', action='append', default=None, 
                     metavar=('POP_ID', 'SLICE_INDICES'), 
@@ -99,7 +99,7 @@ else:
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
     if args.log:
-        cmd_line += ' --log {}/pyNN.log'.format(work_dir)
+        cmd_line += ' --log {}/output/pyNN.log'.format(work_dir)
     copy_to_output = ['xml']
 # Submit job to que
 if not args.dry_run:
