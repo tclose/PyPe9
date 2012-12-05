@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """
-  This script creates and runs a minimal network in the NINEML+ framework with only one cell 
-  in it
+  This script runs a parallel fibre to Purkinje connectivity analysis on a forest of purkinje fibres 
 
   @author Tom Close
   @date 17/9/2012
@@ -21,19 +20,21 @@ PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
 def main(arguments):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('forest_xml', type=str, help='The name of the xml file to load the purkinje'
-                                                     ' forest from.')
-    parser.add_argument('output_file', type=str,
-                        help='The output location to save the number of overlaps')
-    parser.add_argument('--pf_spacing', type=float, nargs=2, default=(2.0, 2.0),
-                        help='The distance between parallel fibres')
+    parser.add_argument('forest_xml', type=str, help='The path of the Purkinje forest xml file')
+    parser.add_argument('output_file', type=str, 
+                        help='The output location to save the connectivity matrix')
+    parser.add_argument('--pf_spacing', type=float, nargs=2, metavar=('X', 'Y'), default=(2.0, 2.0),
+                        help='The distance between parallel fibres (default %(default)s')
     parser.add_argument('--pf_diam', type=float, default=2.0, help='The radius of the parallel '
-                                                                      'fibres')
-    parser.add_argument('--vox_size', type=float, nargs=3, default=(1.0, 1.0, 1.0),
-                        help='The voxel size of the masks')
+                                                                   'fibres (default %(default)s')
+    parser.add_argument('--vox_size', type=float, nargs=3, default=(1.0, 1.0, 1.0), 
+                        metavar=('X', 'Y', 'Z'), 
+                        help='The voxel size of the PF and PC masks (default %(default)s')
     parser.add_argument('--shifted', action='store_true',
-                        help="Uses the same PF tree that is 'shifted' into position rather than "
-                             "creating a new tree for each parallel fibre")
+                        help="Uses the same PF tree mask that is 'shifted' into position rather "
+                             "than creating a new tree for each parallel fibre so will be ~5-6 "
+                             "times faster but requires that the 'pf_spacing' option is an even "
+                             "multiple of each of the voxel dimensions")
     args = parser.parse_args(arguments)
     if args.shifted and \
             (args.pf_spacing[0] % args.vox_size[0] or args.pf_spacing[1] % args.vox_size[1]):
