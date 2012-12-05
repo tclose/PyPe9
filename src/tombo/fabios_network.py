@@ -49,7 +49,7 @@ parser.add_argument('--no_granule_to_golgi', action='store_true',
                     help='Deactivates the granule to golgi connection in the network.')
 parser.add_argument('--dry_run', action='store_true', help="Runs the script but doesn't actually "
                                                            "submit the job")
-parser.add_argument('-keep_build', action='store_true', help="Don't delete the build directory to "
+parser.add_argument('--keep_build', action='store_true', help="Don't delete the build directory to "
                                                              "allow the script to be rerun")
 args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
