@@ -127,4 +127,4 @@ net.print_spikes(args.output)
 for volt_trace in args.volt_trace:
     pop = net.get_population(volt_trace[0])
     pop.print_v(args.output + volt_trace[0] + ".v")
-print "Saved recorded data to file"
+print "Saved recorded data to files '{}*.*'".format(args.output)
