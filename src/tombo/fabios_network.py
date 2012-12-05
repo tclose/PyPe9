@@ -51,6 +51,7 @@ parser.add_argument('--dry_run', action='store_true', help="Runs the script but 
                                                            "submit the job")
 parser.add_argument('--keep_build', action='store_true', help="Don't delete the build directory to "
                                                              "allow the script to be rerun")
+parser.add_argument('--log', action='store_true', help='Save logging information to file')
 args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
@@ -97,6 +98,8 @@ else:
         cmd_line += ' --include_gap'
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
+    if args.log:
+        cmd_line += ' --log {work_dir}/log'
     copy_to_output = ['xml']
 # Submit job to que
 if not args.dry_run:
