@@ -33,7 +33,8 @@ parser.add_argument('--np', type=int, default=96,
                          "(default: %(default)s)")
 parser.add_argument('--que_name', type=str, default='longP', 
                     help='The the que to submit the job to(default: %(default)s)')
-parser.add_argument('--volt_trace', nargs=2, default=None, metavar=('POPULATION', 'INDEX'), 
+parser.add_argument('--volt_trace', nargs='+', action='append', default=None, 
+                    metavar=('POP_ID', 'SLICE_INDICES'), 
                     help="The population label and cell ID of a cell to record its voltage trace")
 parser.add_argument('--debug', action='store_true', 
                     help='Loads a stripped down version of the network for easier debugging')
@@ -49,6 +50,8 @@ parser.add_argument('--include_gap', action='store_true',
                     help='Includes gap junctions into the network')
 parser.add_argument('--no_granule_to_golgi', action='store_true', 
                     help='Deactivates the granule to golgi connection in the network.')
+parser.add_argument('--dry_run', action='store_true', help="Runs the script but doesn't actually "
+                                                           "submit the job")
 args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
@@ -80,27 +83,24 @@ else:
     cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
                "--time {time} --start_input {start_input} --mf_rate {mf_rate} " \
                "--min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \
-               "--stim_seed {stim_seed} --build require".format(script_name=SCRIPT_NAME, 
-                                                                work_dir=work_dir, 
-                                                                mf_rate=args.mf_rate,
-                                                                start_input=args.start_input, 
-                                                                time=args.time, 
-                                                                min_delay=args.min_delay,
-                                                                simulator=args.simulator, 
-                                                                timestep=args.timestep, 
-                                                                stim_seed=tombo.create_seed(
-                                                                                    args.stim_seed))
+               "--stim_seed {stim_seed} --build require"\
+               .format(script_name=SCRIPT_NAME, work_dir=work_dir, mf_rate=args.mf_rate,
+               start_input=args.start_input, time=args.time, min_delay=args.min_delay,
+               simulator=args.simulator, timestep=args.timestep, 
+               stim_seed=tombo.create_seed(args.stim_seed))
     if args.debug:
         cmd_line += " --debug"
-    if args.volt_trace:
-        cmd_line += " --volt_trace {volt_pop} {volt_cellid}".format(volt_pop=args.volt_trace[0],
-                                                                    volt_cellid=args.volt_trace[1])
+    for volt_trace in args.volt_trace:
+        cmd_line += " --volt_trace"
+        for arg in volt_trace:
+            cmd_line += " "  + str(arg)
     if args.include_gap:
         cmd_line += ' --include_gap'
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
     copy_to_output = ['xml']
 # Submit job to que
-tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
-                 copy_to_output=copy_to_output, que_name=args.que_name, 
-                 strip_build_from_copy=(not args.dont_copy))
+if not args.dry_run:
+    tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
+                     copy_to_output=copy_to_output, que_name=args.que_name, 
+                     strip_build_from_copy=(not args.dont_copy))

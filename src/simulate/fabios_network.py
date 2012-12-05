@@ -39,10 +39,10 @@ parser.add_argument('--output', type=str,
 parser.add_argument('--start_input', type=float, default=1000, help="The start time of the mossy "
                                                                     "fiber stimulation "
                                                                     "(default: %(default)s)")
-parser.add_argument('--min_delay', type=float, default=0.002, help="The minimum synaptic delay in "
+parser.add_argument('--min_delay', type=float, default=0.02, help="The minimum synaptic delay in "
                                                                    "the network "
                                                                    "(default: %(default)s)")
-parser.add_argument('--timestep', type=float, default=0.001, help="The timestep used for the "
+parser.add_argument('--timestep', type=float, default=0.02, help="The timestep used for the "
                                                                   "simulation "
                                                                   "(default: %(default)s)")
 parser.add_argument('--save_connections', type=str, default=None, help="A path in which to save "
@@ -51,9 +51,10 @@ parser.add_argument('--stim_seed', type=int, default=None, help="The seed passed
                                                                 "spikes")
 parser.add_argument('--para_unsafe', action='store_true', help="If set the network simulation will "
                                                                "try to be parallel neuron safe")
-parser.add_argument('--volt_trace', metavar=('POPULATION', 'INDEX'), nargs='+', default=[], 
-                    action='append', help="Save voltage traces for the given list of "
-                                          "('population name', 'cell ID') tuples")
+parser.add_argument('--volt_trace', nargs='+', default=[], action='append', 
+                    metavar=('POP_ID', 'SLICE_INDICES'), 
+                    help="Save voltage traces for the given list of ('population name', 'cell ID') "
+                         "tuples")
 parser.add_argument('--debug_network', action='store_true', help="Loads a stripped down version of "
                                                                  "the network for easier debugging")
 parser.add_argument('--silent_build', action='store_true', help="Suppresses all build output")
@@ -92,7 +93,7 @@ print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
 mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
 print "Setting up recorders"
-net.record_spikes
+net.record_spikes()
 # Set up voltage traces    
 for volt_trace in args.volt_trace:
     pop = net.get_population(volt_trace[0])
@@ -123,7 +124,7 @@ run(args.time) #@UndefinedVariable
 print "Simulated Fabio's Network for %f milliseconds" % args.time
 # Save recorded data to file
 net.print_spikes(args.output)
-for pop_name in args.volt_trace:
-    pop = net.get_population(pop_name)
-    pop.print_v(args.output + pop_name + ".v")
+for volt_trace in args.volt_trace:
+    pop = net.get_population(volt_trace[0])
+    pop.print_v(args.output + volt_trace[0] + ".v")
 print "Saved recorded data to file"
