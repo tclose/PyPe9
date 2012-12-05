@@ -63,7 +63,12 @@ parser.add_argument('--include_gap', action='store_true', help="Includes Golgi-t
 parser.add_argument('--no_granule_to_golgi', action='store_true', help="Deactivates the granule to "
                                                                        "golgi connection in the "
                                                                        "network.")
+parser.add_argument('--log', type=str, help="Save logging information to file",
+                    default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.log'))
 args = parser.parse_args()
+if args.log:
+    from pyNN.utility import init_logging
+    init_logging(args.log, debug=True)
 # Set the network xml location
 if args.debug_network:
     xml_filename = 'debug_fabios.xml'
