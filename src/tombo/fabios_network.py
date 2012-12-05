@@ -22,9 +22,9 @@ parser.add_argument('--time', type=float, default=2000.0,
                     help='The run time of the simulation (ms)  (default: %(default)s)')
 parser.add_argument('--start_input', type=float, default=1000, 
                     help='The start time of the mossy fiber stimulation (default: %(default)s)')
-parser.add_argument('--min_delay', type=float, default=0.002, 
+parser.add_argument('--min_delay', type=float, default=0.02, 
                     help='The minimum synaptic delay in the network (default: %(default)s)')
-parser.add_argument('--timestep', type=float, default=0.001, 
+parser.add_argument('--timestep', type=float, default=0.02, 
                     help='The time step used for the simulation (default: %(default)s)')
 parser.add_argument('--stim_seed', default=None, 
                     help='The seed passed to the stimulated spikes (defaults to time stamp)')
