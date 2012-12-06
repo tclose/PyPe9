@@ -49,27 +49,27 @@
             <destination id="Granules" synapse="AMPA" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
                 number="39" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="2.6 uS"
-                rate="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
         <projection id="MossyFibers_Granules_NMDA" flags="NMDA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="NMDA" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
                 number="25" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="0.2244 uS"
-                rate="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
         <projection id="MossyFibers_Golgis_AMPA">
             <source id="MossyFibers" />
             <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
                 number="21" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="2.6 nS"
-                rate="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
         <projection id="Granules_Golgis" flags="GranuleToGolgi">
             <source id="Granules" />
@@ -81,8 +81,8 @@
             <destination id="Granules" synapse="GABA" segment="soma" />
             <connection pattern="DistanceBased" geometry="EllipseMask" x_scale="200 um"
                 y_scale="58.35 um" number="350" /> <!-- x_scale="600 um" -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" origin="1.4 nS"
-                rate="-0.01" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
+                exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" rate="2 us/um" />
             <comment> There are about 400 Golgi cells per granule cell in the mouse. The axon does
                 not seem to be confined as the dendrite, but it is rather flat and oriented in the
