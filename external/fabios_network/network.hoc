@@ -225,6 +225,7 @@ prob=new Random()
 //MF->GrC synapses//
 ////////////////////
 
+count = 0
 for i=0, NumberCellsa-1{
  for j=0, NumberCellsb-1 {
   aprob=prob.uniform(0,1)
@@ -241,9 +242,20 @@ for i=0, NumberCellsa-1{
  
     adist =((xi-xj)^2+(yi-yj)^2+(zi-zj)^2)^(1/2)             			
     if (adist< diameter_MFGrC) {
-   fiber[i].Presynapse GrC[j].nclist.append(new NetCon(&fiber[i].Presynapse.v(0.5),GrC[j].synAMPA, CONNECTION_THRESHOLD_MFGrC, CONNECTION_DELAY_MFGrC*adist,CONNECTION_WEIGHT_AMPA_MFGrC*(E^(-k1_MFGrC*adist))))
-   fiber[i].Presynapse GrC[j].nclist.append(new NetCon(&fiber[i].Presynapse.v(0.5),GrC[j].synNMDA, CONNECTION_THRESHOLD_MFGrC, CONNECTION_DELAY_MFGrC*adist,CONNECTION_WEIGHT_NMDA_MFGrC*(E^(-k1_MFGrC*adist))))  
-     }
+/*      if (count % 100 == 0) {       
+        printf("mf coord: (%f, %f, %f)\n", xi, yi, zi)
+        printf("pc coord: (%f, %f, %f)\n", xj, yj, zj)            
+        printf("dist: %f\n", adist)
+        printf("MF->GC AMPA connection weight: %f\n", CONNECTION_WEIGHT_AMPA_MFGrC*(E^(-k1_MFGrC*adist)))
+        printf("MF->GC NMDA connection weight: %f\n", CONNECTION_WEIGHT_NMDA_MFGrC*(E^(-k1_MFGrC*adist)))   
+        printf("MF->GC AMPA connection delay: %f\n", CONNECTION_DELAY_MFGrC*adist)
+        printf("MF->GC NMDA connection delay: %f\n", CONNECTION_DELAY_MFGrC*adist)        
+      }
+*/
+      fiber[i].Presynapse GrC[j].nclist.append(new NetCon(&fiber[i].Presynapse.v(0.5),GrC[j].synAMPA, CONNECTION_THRESHOLD_MFGrC, CONNECTION_DELAY_MFGrC*adist,CONNECTION_WEIGHT_AMPA_MFGrC*(E^(-k1_MFGrC*adist))))
+      fiber[i].Presynapse GrC[j].nclist.append(new NetCon(&fiber[i].Presynapse.v(0.5),GrC[j].synNMDA, CONNECTION_THRESHOLD_MFGrC, CONNECTION_DELAY_MFGrC*adist,CONNECTION_WEIGHT_NMDA_MFGrC*(E^(-k1_MFGrC*adist))))  
+      count = count + 1
+    }
   }
  }
 }
