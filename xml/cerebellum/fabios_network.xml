@@ -85,7 +85,7 @@
             <source id="Granules" />
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />
-            <weight pattern="Constant" scalar="2.6 nS"/>
+            <weight pattern="Constant" value="2.6 nS"/>
             <!-- NB: Delay is set by brep -->  
             <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).

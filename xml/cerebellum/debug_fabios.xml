@@ -75,7 +75,7 @@
             <source id="Granules" />
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="debug_Granule-Golgi" />
-            <weight pattern="Constant" scalar="2.6 nS"/>    
+            <weight pattern="Constant" value="2.6 nS"/>    
         </projection>
         <projection id="Golgis_Granules">
             <source id="Golgis" />
