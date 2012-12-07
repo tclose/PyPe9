@@ -225,7 +225,7 @@ prob=new Random()
 //MF->GrC synapses//
 ////////////////////
 
-count = 0
+//debug_count = 0
 for i=0, NumberCellsa-1{
  for j=0, NumberCellsb-1 {
   aprob=prob.uniform(0,1)
@@ -242,19 +242,20 @@ for i=0, NumberCellsa-1{
  
     adist =((xi-xj)^2+(yi-yj)^2+(zi-zj)^2)^(1/2)             			
     if (adist< diameter_MFGrC) {
-/*      if (count % 100 == 0) {       
-        printf("mf coord: (%f, %f, %f)\n", xi, yi, zi)
-        printf("pc coord: (%f, %f, %f)\n", xj, yj, zj)            
-        printf("dist: %f\n", adist)
-        printf("MF->GC AMPA connection weight: %f\n", CONNECTION_WEIGHT_AMPA_MFGrC*(E^(-k1_MFGrC*adist)))
-        printf("MF->GC NMDA connection weight: %f\n", CONNECTION_WEIGHT_NMDA_MFGrC*(E^(-k1_MFGrC*adist)))   
-        printf("MF->GC AMPA connection delay: %f\n", CONNECTION_DELAY_MFGrC*adist)
-        printf("MF->GC NMDA connection delay: %f\n", CONNECTION_DELAY_MFGrC*adist)        
-      }
+/* 
+ *     if (debug_count % 100 == 0) {       
+ *       printf("mf coord: (%f, %f, %f)\n", xi, yi, zi)
+ *       printf("pc coord: (%f, %f, %f)\n", xj, yj, zj)            
+ *       printf("dist: %f\n", adist)
+ *       printf("MF->GC AMPA connection weight: %f\n", CONNECTION_WEIGHT_AMPA_MFGrC*(E^(-k1_MFGrC*adist)))
+ *       printf("MF->GC NMDA connection weight: %f\n", CONNECTION_WEIGHT_NMDA_MFGrC*(E^(-k1_MFGrC*adist)))   
+ *       printf("MF->GC AMPA connection delay: %f\n", CONNECTION_DELAY_MFGrC*adist)
+ *       printf("MF->GC NMDA connection delay: %f\n", CONNECTION_DELAY_MFGrC*adist)        
+ *     }
 */
       fiber[i].Presynapse GrC[j].nclist.append(new NetCon(&fiber[i].Presynapse.v(0.5),GrC[j].synAMPA, CONNECTION_THRESHOLD_MFGrC, CONNECTION_DELAY_MFGrC*adist,CONNECTION_WEIGHT_AMPA_MFGrC*(E^(-k1_MFGrC*adist))))
       fiber[i].Presynapse GrC[j].nclist.append(new NetCon(&fiber[i].Presynapse.v(0.5),GrC[j].synNMDA, CONNECTION_THRESHOLD_MFGrC, CONNECTION_DELAY_MFGrC*adist,CONNECTION_WEIGHT_NMDA_MFGrC*(E^(-k1_MFGrC*adist))))  
-      count = count + 1
+//      debug_count = debug_count + 1
     }
   }
  }
@@ -290,7 +291,7 @@ for i=0, NumberCellsa-1{
 //GrC->GoC synapses//
 //(PF synapses)    //
 /////////////////////
-
+debug_count = 0
 for i=0, NumberCellsb-1{
  for j=0, NumberCellsd-1 {
   aprob=prob.uniform(0,1)
@@ -307,7 +308,15 @@ for i=0, NumberCellsb-1{
   
    adist =((xi-xj)^2+(yi-yj)^2+(zi-zj)^2)^(1/2)               			
    if (abs(xi-xj)<=2500 && abs(yi-yj)<=(2.6+100)) {
-   GrC[i].soma GoC[j].nclist.append(new NetCon(&GrC[i].soma.v(0.5),GoC[j].synAMPA2, CONNECTION_THRESHOLD_GrCGoC_, CONNECTION_DELAY_GrCGoC*adist+CONNECTION_DELAY_AF,CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist))))
+       if (debug_count % 100 == 0) {       
+         printf("gr coord: (%f, %f, %f)\n", xi, yi, zi)
+         printf("go coord: (%f, %f, %f)\n", xj, yj, zj)            
+         printf("dist: %f\n", adist)
+         printf("GrC->GoC AMPA connection weight: %f\n", CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist)))
+         printf("GrC->GoC AMPA connection delay: %f\n", CONNECTION_DELAY_GrCGoC*adist+CONNECTION_DELAY_AF)  
+       }
+       GrC[i].soma GoC[j].nclist.append(new NetCon(&GrC[i].soma.v(0.5),GoC[j].synAMPA2, CONNECTION_THRESHOLD_GrCGoC_, CONNECTION_DELAY_GrCGoC*adist+CONNECTION_DELAY_AF,CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist))))
+       debug_count = debug_count + 1
      }
   }
  }

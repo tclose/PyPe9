@@ -85,6 +85,8 @@
             <source id="Granules" />
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />
+            <weight pattern="Constant" scalar="1.3 nS"/>
+            <!-- NB: Delay is set by brep -->  
             <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
                 The dendritic tree size is 200 x 600 x 180μm in cats. A simple way to get this
