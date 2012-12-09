@@ -1,0 +1,28 @@
+// =================================================================================================
+//
+// getGID(Out, N)
+//
+// Returns list Out, with gids of the cells
+// 
+//		N - is a vector with numbers of neurons in pools
+//
+// =================================================================================================
+proc getGID() { localobj N, Out, tmp
+	
+	Out = $o1
+	N   = $o2
+	
+	Out.remove_all
+	
+	tmp = new Vector(N.x[0]) 
+	tmp.indgen
+	Out.append(tmp)
+	
+	tmp = new Vector(N.x[1]) 
+	tmp.indgen.add(N.x[0])
+	Out.append(tmp)
+	
+	tmp = new Vector(N.x[2]) 
+	tmp.indgen.add(N.x[0]).add(N.x[1])
+	Out.append(tmp)	
+}

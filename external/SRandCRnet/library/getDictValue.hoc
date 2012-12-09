@@ -1,0 +1,31 @@
+// getDictValue( dictList, key, field)
+//
+// Search the list dictList to find a match of the field `name` with the `key`
+// return the value of the field `field` (must be numerical)
+
+strdef cmd
+
+func getDictValue() {local pN, pNN, i
+	
+	pN = -1
+	pNN = 0
+	
+	for i=0,  $o1.count()-1 {
+	
+		if(strcmp($o1.object(i).name, $s2)==0) {
+			
+			sprintf(cmd, "pN = %s", field)
+			execute1(cmd, $o1.object(i))
+			print pN
+			pNN = pNN + 1
+		}			
+	}
+	
+	if(pNN!=1) {
+	
+		print "ERROR pNN"
+		return(-1)
+	}
+	
+	return pN
+}

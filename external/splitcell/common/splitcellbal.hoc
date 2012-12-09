@@ -1,0 +1,26 @@
+iterator pcitr() {local i1, i2, si
+	// only over the source gids unless $3
+	// exists and nonzero. Note that with load balance, the gid
+	// exists only after the cell is created.
+	si = 0
+	if (numarg() == 3) {
+		si = $3
+	}
+	for i1=0, gidvec.size-1 {
+		i2 = gidvec.x[i1]
+		$&1 = i1
+		$&2 = i2
+		if (si == 1) {
+			iterator_statement
+		}else if (i2 < splitbit) {
+			iterator_statement
+		}
+	}
+}
+
+proc read_splitcell_info() { localobj s
+	s = new String()
+	sprint(s.s, "%s.%d", $s1, pc.nhost)
+	load_balance_.read_load_balance_info(s.s, pc.id)
+	gidvec = new Vector()
+}

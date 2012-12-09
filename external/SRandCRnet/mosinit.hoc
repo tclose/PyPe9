@@ -1,0 +1,6 @@
+////moddir mod
+load_file("nrngui.hoc")
+// load_file("netrun.hoc")
+print "These files are currently not configured for autolaunch"
+print "Please download and extract the archive and follow the"
+print "Instructions in the readme"

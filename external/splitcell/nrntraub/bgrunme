@@ -1,0 +1,92 @@
+#!/bin/sh
+
+if test "$#" = 0 ; then
+echo "sh bgrunme partition np phase nhost(for phase 4, 6)"
+exit 0
+fi
+
+NRNIV=/home/hines/neuron/nrnobj/powerpc64/bin/nrniv
+
+R=$1
+np=$2
+nhost=$np
+PHASE=$3
+shift
+shift
+shift
+
+echo partition $R   np $np   phase $PHASE
+
+run() {
+  bgrun VN $R $np $*
+}
+
+phase() {
+ p=$1
+ shift
+ run -c "load_balance_phase=$p" $*
+ mv temp.$np stdout.$nhost.$p
+}
+
+# create mcomplex.dat
+if test "$PHASE" = "1" ; then
+phase 1 $PHASE init.hoc
+fi
+
+# whole cell load balance with specified prefix and nhost
+if test "$PHASE" = "4" ; then
+prefix=cxwhole
+nhost=$1
+sed "
+/default_var.*wholecell_prefix/s/cxwhole/$prefix/
+" init.hoc > _init.hoc
+phase $PHASE _init.hoc
+$NRNIV -c "{load_file(\"hoc/binfo.hoc\")}" -c "mymetis2(\"$prefix\",$nhost)" \
+  >> stdout.$nhost.$PHASE
+fi
+
+#whole cell load balance run with specified prefix
+if test "$PHASE" = "5" ; then
+prefix=cxwhole
+sed "
+/default_var.*wholecell_prefix/s/cxwhole/$prefix/
+" init.hoc > _init.hoc
+phase $PHASE _init.hoc
+sortspike out$nhost.dat out$nhost.$PHASE
+rm out$nhost.dat
+fi
+
+# base round robin run
+if test "$PHASE" = "0" ; then
+phase $PHASE init.hoc
+sortspike out$nhost.dat out$nhost.$PHASE
+rm out$nhost.dat
+fi
+
+# multisplit load balance with specified prefix and nhost
+if test "$PHASE" = "6" ; then
+nhost="$1"
+prefix=cx_$nhost
+sed "
+/default_var.*multisplit_prefix/s/cx/$prefix/
+/default_var.*multisplit_nhost/s/256/$nhost/
+" init.hoc > _init.hoc
+phase $PHASE _init.hoc
+$NRNIV -c "{load_file(\"hoc/binfo.hoc\")}" -c "mymetis3(\"$prefix\",$nhost)" \
+  >> stdout.$nhost.$PHASE
+fi
+
+
+# multisplit load balance run
+if test "$PHASE" = "7" ; then
+prefix=cx_$nhost
+sed "
+/default_var.*multisplit_prefix/s/cx/$prefix/
+" init.hoc > _init.hoc
+phase $PHASE _init.hoc
+sortspike out$nhost.dat out$nhost.$PHASE
+rm out$nhost.dat
+fi
+
+
+

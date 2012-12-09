@@ -1,0 +1,60 @@
+reproducible original after using mcellran4
+setuptime=282.2
+runtime=397.53
+
+setuptime=283.25
+runtime=393.73
+real    11m22.686s
+user    10m46.208s
+sys     0m0.763s
+
+after upgrading
+setuptime=296.64
+runtime=398.06
+
+setuptime=292.35
+runtime=399.24
+real    11m38.260s
+user    10m58.870s
+sys     0m0.904s
+
+
+after transforming. (also upgraded gcc)
+
+1 host (NeuronDev)
+setuptime=7.6000001
+runtime=411.04
+
+ time mpirun -nolocal -machinefile $HOME/mpi64 -np 12 $HOME/neuron/mpi-gcc3.2.3/x86_64/bin
+nrniv init.hoc >& out12
+setuptime=0.12999988
+runtime=28.56
+real    0m31.648s
+user    0m0.389s
+sys     0m0.324s
+
+time mpirun -nolocal -machinefile $HOME/mpi64 -np 1 $HOME/neuron/mpi-gcc3.2.3/x86_64/bin
+nrniv init.hoc >& out1
+setuptime=0.25
+runtime=330.85
+real    5m33.093s
+user    0m0.256s
+sys     0m0.086s
+
+
+time mpirun -nolocal -machinefile $HOME/mpi32 -np 24 $HOME/neuron/mpi-gcc2.96/i686/bin
+nrniv init.hoc >& out24
+setuptime=0.27999997
+runtime=30.42
+real    5m14.682s
+user    0m0.471s
+sys     0m0.650s
+
+ time mpirun -nolocal -machinefile $HOME/mpi32 -np 1 $HOME/neuron/mpi-gcc2.96/i686/bin
+nrniv init.hoc >& out1.i686
+setuptime=0.46000004
+runtime=607.08
+real    10m9.389s
+user    0m0.287s
+sys     0m0.137s
+

@@ -27,7 +27,7 @@ def main(arguments):
     test2 = net.get_population('Test2')
     current_source = StepCurrentSource({'amplitudes': [1.0],  #@UndefinedVariable
                                         'times': [1000]}) 
-    test1.inject(current_source)
+    test2.inject(current_source)
     test1.record_v()
     test2.record_v()
     net.describe()
