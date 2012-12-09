@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <network id="CerebellarGranularLayer">
+        <freeParameters>
+            <flags>
+                <flag id="NMDA" default="True" />
+                <flag id="GranuleToGolgi" default="True" />
+                <flag id="includeGap" default="False" />
+            </flags>
+            <scalars />
+        </freeParameters>
+        <simulationDefaults>
+            <temperature value="23" />
+        </simulationDefaults>
+        <extensions>
+            <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
+        </extensions>
+        <!-- Populations -->
+        <population id="Granules" cell="Granule">
+            <layout type="Extension" engine="Brep" id="debug_Granules" />
+            <cellParameters>
+                <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
+                    high="-13.2" units="nA" />
+                <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um"
+                    segmentGroup="soma" />
+            </cellParameters>
+            <initialConditions>
+                <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
+            </initialConditions>
+        </population>
+        <population id="Golgis" cell="Golgi">
+            <layout type="Extension" engine="Brep" id="debug_Golgis" />
+            <cellParameters>
+                <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
+                    segmentGroup="soma" />
+                <distribution component="Lkg" attr="e_rev" type="uniform" low="-66"
+                    high="-44" units="nA" />
+            </cellParameters>
+            <initialConditions>
+                <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
+            </initialConditions>
+        </population>
+        <population id="MossyFibers" cell="SpikeSourceArray">
+            <layout type="Extension" engine="Brep" id="debug_MossyFibers" />
+        </population>
+        <!-- Projections -->
+        <projection id="MossyFibers_Granules_AMPA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="AMPA" segment="soma" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
+                number="39" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+        </projection>
+        <projection id="MossyFibers_Granules_NMDA" flags="NMDA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="NMDA" segment="soma" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
+                number="25" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+        </projection>
+        <projection id="MossyFibers_Golgis_AMPA">
+            <source id="MossyFibers" />
+            <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
+                number="21" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+        </projection>
+        <projection id="Granules_Golgis" flags="GranuleToGolgi">
+            <source id="Granules" />
+            <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
+            <connection pattern="Extension" engine="Brep" id="debug_Granule-Golgi" />
+            <weight pattern="Constant" value="2.6 nS"/>    
+        </projection>
+        <projection id="Golgis_Granules">
+            <source id="Golgis" />
+            <destination id="Granules" synapse="GABA" segment="soma" />
+            <connection pattern="DistanceBased" geometry="EllipseMask" x_scale="200 um"
+                y_scale="58.35 um" number="350" /> <!-- x_scale="600 um" -->
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <comment> There are about 400 Golgi cells per granule cell in the mouse. The axon does
+                not seem to be confined as the dendrite, but it is rather flat and oriented in the
+                same direction. Every granule cell receives from about 10 Golgi cells. I am not sure
+                about this number. Better way to estimate it is to measure the axonal length and
+                multiply by the density of synapses per um of axon. Currently we position the Golgi
+                cells with a uniform distribution. We calculate the number of Golgi cells by 1.
+                estimating the number of granule cells via density 2. multiplying that number by 400
+            </comment>
+        </projection>
+        <projection id="Golgis_Golgis_Gap" flags="includeGap">
+            <source id="Golgis" />
+            <destination id="Golgis" synapse="Gap" segment="soma" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
+            <!-- radius is set very large because in the model each golgi is connected to each other 
+                golgi, but I can't use AllToAll and distance-based weight geometry at this point -->
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
+                exponent="-0.03" />
+            <comment> These are the golgi gap junction projection connections.
+            </comment>
+        </projection>
+    </network>
+</nineml>
