@@ -94,12 +94,13 @@
                 estimating the number of granule cells via density 2. multiplying that number by 400
             </comment>
         </projection>
-        <projection id="Golgis_Golgis_Gap" flags="includeGap">
-            <source id="Golgis" />
-            <destination id="Golgis" synapse="Gap" segment="soma" />
+        <projection id="Golgis_Golgis_Gap" synapseFamily="Electrical" flags="includeGap">
+            <source id="Golgis" segment="soma" />
+            <destination id="Golgis" segment="soma" />
+            <!-- The connection radius is set very large because in the model each golgi is 
+                 connected to each other golgi, but I can't use AllToAll and distance-based weight 
+                 geometry at this point -->
             <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
-            <!-- radius is set very large because in the model each golgi is connected to each other 
-                golgi, but I can't use AllToAll and distance-based weight geometry at this point -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
                 exponent="-0.03" />
             <comment> These are the golgi gap junction projection connections.
