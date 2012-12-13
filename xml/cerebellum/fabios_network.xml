@@ -7,8 +7,7 @@
                 <flag id="includeGap" default="False" />
                 <flag id="GranuleToGolgi" default="True" />
             </flags>
-            <scalars>
-            </scalars>
+            <scalars />
         </freeParameters>
         <simulationDefaults>
             <temperature value="23" />
@@ -65,7 +64,7 @@
             <comment> The mossy fiber branches before the cerebellum and in the granular layer and
                 gives off the rosettes/glomeruli (estimates say that one mossy fiber gives off about
                 150 rosettes, which may cross folia. The rosettes are at a distance of about 100um
-                of each other. Each rosette talks to about 20+ granule cells, and about one Go Axon.
+                of each other. Each rosette talks to about 20+ granule cells, and about one GoC Axon.
                 Distribution of Glomeruli: Preferably homogeneous. Euclidean distance between
                 rosettes about 85um (can be used as the radius of a sphere). Each Glomerulus
                 contacts about 21 gr cells. One Glomerulus is contacted by a Golgi cell axon. We do
@@ -85,8 +84,8 @@
             <source id="Granules" />
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />
-            <weight pattern="Constant" value="2.6 nS"/>
-            <!-- NB: Delay is set by brep -->  
+            <weight pattern="Constant" value="2.6 nS" />
+            <!-- NB: Delay is set by brep -->
             <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
                 The dendritic tree size is 200 x 600 x 180μm in cats. A simple way to get this
@@ -114,14 +113,13 @@
         <projection id="Golgis_Golgis_Gap" synapseFamily="Electrical" flags="includeGap">
             <source id="Golgis" segment="soma" />
             <destination id="Golgis" segment="soma" />
-            <!-- The connection radius is set very large because in the model each golgi is 
-                 connected to each other golgi, but I currently AllToAll cannot be used with
-                 distance-based weight -->
+            <!-- The connection radius is set very large because in the model each golgi is connected 
+                to each other golgi, but currently AllToAll cannot be used with distance-based weight -->
             <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
                 exponent="-0.03" />
             <comment> These are the golgi gap junction projection connections.
             </comment>
-        </projection>        
+        </projection>
     </network>
 </nineml>
