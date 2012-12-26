@@ -119,4 +119,4 @@ network.add(columns, outer_exc2all)
 model = nineml.Model("Nested 9ML example model")
 model.add_group(network)
 
-model.write("nested_example.xml")
+model.write("../../../../output/nineml_nested_example.xml")

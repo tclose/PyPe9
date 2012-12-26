@@ -91,4 +91,4 @@ model.add_group(network)
 
 if __name__ == "__main__":
 
-    model.write("simple_example.xml")
+    model.write("../../../../output/nineml_simple_example.xml")
