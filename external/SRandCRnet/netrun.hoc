@@ -1,0 +1,167 @@
+
+
+strdef cmd
+objref pr
+
+
+gapstyle=1  //change this number as I change the parameters such as gmax, gap junctions, or recurrents, number of 
+//signal cells, etc
+
+
+pyrthr=100  //this is the threshold at which pyramidal cells will have a noise event at each 0.5 ms
+	//  the TGnet.tem will compare if a uniformly distributed number from 0-100 is > this threshold
+basketthr=100   //noise threshold for basket cells
+basktopyrgmax=5.5   //not used
+pyrgapgmax =0.005   //not used
+sigfreq=16    //frequency in Hz of the input signal
+realrunFlag=1
+singlerunFlag=0
+noiserunFlag=0
+Tstop   = 1000   //how many ms long this simulation will run
+
+{load_file("nrngui.hoc") }
+{load_file("stdrun.hoc")}
+{load_file("stdlib.hoc")} 
+{load_file("netparmpi.hoc")}    //this gets loaded, but it was never run in parallel--several functions are not
+// parallel-safe
+{load_file("./templates/TGnet.tem")}    //this is the main network creation
+
+proc init() {  
+
+	{pr.setScatteredVoltages(-85, -60)}   //randomly starts each cell at different start voltages
+  	finitialize() 
+  	finitialize() 
+}
+
+
+
+
+celsius = 34
+iteration=0
+{cvode.active(0)}
+
+proc DoRun() { localobj fo, fo1
+{pr  = new TGnet()}
+
+{pr.recordVoltages()}
+if (noiserunFlag) {pr.recordnoise()}   //this is to record just the response of the noise, not the whole net
+
+{pr.pnm.set_maxstep(0.01)}
+
+{pr.pnm.want_all_spikes()}
+
+runningTime = startsw()
+
+stdinit()
+
+//for SR, will use all five of the following. For CR, just the top
+{pr.activeSynapsesRandom(Tstop, pyrthr, basketthr)}  // this is the main program function when just noise is added.
+//{pr.signalSynapse(Tstop, 0, sigfreq, 1)}   // these four commands would also place a periodic signal at four pyramidal cells
+///{pr.signalSynapse(Tstop, 0, sigfreq, 11)}  // $1 is duration, $2 is start time, $3 is frequency of stim, $4 is the cell number receiving the stim
+//{pr.signalSynapse(Tstop, 0, sigfreq, 21)}
+//{pr.signalSynapse(Tstop, 0, sigfreq, 31)}
+
+
+{pr.pnm.psolve(Tstop)}   //solve the simulation
+
+
+//below is a function to save files when I am recording from just one cell
+//or check if this is a full "realrun" with the whole network
+//or else just save a generic data file
+	if (singlerunFlag) {pr.writesingleVoltage(basketthr,pyrthr,sigfreq)
+		} else if (realrunFlag) {pr.writeVoltages(basketthr,pyrthr,gapstyle,sigfreq)
+		} else {pr.writeVoltages()}
+
+//now check if it is also recording the noise sources
+	if (noiserunFlag) {pr.writenoise(pyrthr)}
+
+
+	{pr.pnm.pc.runworker()}   //this was not doing anything at present
+	runningTime = startsw() - runningTime
+	iteration=iteration+1
+	print "Running Time: ", runningTime, "iteration: ",iteration
+
+//now will save a spike raster
+	{pr.pnm.gatherspikes()}
+	fo = new File()
+	fo1= new File()
+	sprint(cmd, "data/spikes.dat")
+	{fo1.wopen(cmd)}
+	sprint(cmd, "data/spikes_b%d_p%d_g%d_f%d.dat",basketthr,pyrthr,gapstyle,sigfreq)
+	if (realrunFlag) {fo.wopen(cmd)}
+   	for i=0, pr.pnm.spikevec.size-1 {
+	if (realrunFlag) fo.printf("%-10.6lf, %d\n", pr.pnm.spikevec.x[i], pr.pnm.idvec.x[i])
+	fo1.printf("%-10.6lf, %d\n", pr.pnm.spikevec.x[i], pr.pnm.idvec.x[i])
+	}
+
+if (realrunFlag) {fo.close()}
+{fo1.close()}
+
+{pr.pnm.pc.done()}
+
+// now will save a history file for later use, to keep track of all files done
+if (realrunFlag){
+	{fo=new File()}
+	{sprint(cmd, "spikes_b%d_p%d_g%d_f%d.dat",basketthr,pyrthr,gapstyle,sigfreq)}
+	{fo.aopen("data/spikelog.dat")}
+	{fo.printf("%s\n",cmd)}
+	{fo.close()}
+	{fo=new File()}
+	{sprint(cmd, "sum_b%d_p%d_g%d_f%d.dat",basketthr,pyrthr,gapstyle,sigfreq)}
+	{fo.aopen("data/sumlog.dat")}
+	{fo.printf("%s\n",cmd)}
+	{fo.close()}
+	}
+
+if (singlerunFlag){
+	{fo=new File()}
+	{sprint(cmd, "1_b%d_p%d_single_f%d.dat",basketthr,pyrthr,sigfreq)}
+	{fo.aopen("data/singlelog.dat")}
+	{fo.printf("%s\n",cmd)}
+	{fo.close()}
+	{fo=new File()}
+	}
+
+if (noiserunFlag){
+	{fo=new File()}
+	{sprint(cmd, "noise_b%d.dat",pyrthr)}
+	{fo.aopen("data/noiselog.dat")}
+	{fo.printf("%s\n",cmd)}
+	{fo.close()}
+	{fo=new File()}
+	}
+
+
+{pr.pnm.pc.gid_clear()}   //need to clear GIDs to reset the system
+}
+
+
+
+//this is how I do multiple runs.  
+//from other testing I have determined that pyrthr 95 yields input noise of 0.008 nA2, 85 is 0.06 nA2, and 75 is 0.11 nA2
+sigfreq=0
+pyrthr=95
+DoRun()
+pyrthr=85
+DoRun()
+pyrthr=75
+DoRun()
+
+return()  //just forces a quit with an error
+
+
+pyrthr=80
+DoRun()
+pyrthr=75
+DoRun()
+pyrthr=70
+DoRun()
+pyrthr=65
+DoRun()
+pyrthr=60
+DoRun()
+
+
+return()  //this return just forces a quit error to stop the function
+
+

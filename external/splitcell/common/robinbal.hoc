@@ -1,0 +1,23 @@
+objref wt
+proc rd() {local i, n
+	wt = new Vector()
+	ropen("balance.dat.wt")
+	n = fscan() fscan() fscan()
+	for i=0, n-1 {
+		wt.append(fscan())
+	}
+	printf("n=%d total=%g\n", n, wt.sum)
+}
+rd()
+func bal() {local i localobj cx
+	cx = new Vector($1)
+	cx.fill(0)
+	for i = 0, wt.size-1 {
+		cx.x[i%$1] += wt.x[i]
+	}
+	return cx.max/cx.mean
+}
+
+for (i=32; i <= 512; i *= 2) {
+	print i, " ", bal(i)
+}

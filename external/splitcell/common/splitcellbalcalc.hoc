@@ -1,0 +1,32 @@
+proc print_splitcell_balance_info() {local i, j, k, gid, c \
+  localobj b, f, s, o, oi, oj, bvec, list
+	s = new String()
+	sprint(s.s, "splitbal.dat")
+	f = new File(s.s)
+	b = load_balance_
+	bvec = new Vector()
+	list = new List()
+	for pcitr(&i, &gid, 1) {
+		c = b.cell_complexity(pnm.pc.gid2obj(gid))
+		o = b.resolutions(oi, oj)
+		bvec.append(i, gid, c, o.size)
+		list.append(o)
+		list.append(oi)
+		list.append(oj)
+	}
+	for serialize_output(f) {
+		if (pc.id == 0) {
+			f.printf("1\n%d\n", pnm.ncell)
+		}
+		for i = 0, list.count/3 - 1 {
+			k = i*4
+			o = list.object(3*i)
+			oi = list.object(3*i + 1)
+			oj = list.object(3*i + 2)
+			f.printf("%d %d %d %d\n", bvec.x[k], bvec.x[k+1], bvec.x[k+2], bvec.x[k+3])
+			for j=0, o.size-1 {
+				f.printf("%d %d %d\n", o.x[j], oi.x[j], oj.x[j])
+			}
+		}
+	}
+}

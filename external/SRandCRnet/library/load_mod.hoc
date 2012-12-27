@@ -1,0 +1,39 @@
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+// NOTICE OF COPYRIGHT AND OWNERSHIP OF SOFTWARE
+//
+// Copyright 2007, The University Of Pennsylvania
+// 	School of Engineering & Applied Science.
+//   All rights reserved.
+//   For research use only; commercial use prohibited.
+//   Distribution without permission of Maciej T. Lazarewicz not permitted.
+//   mlazarew@seas.upenn.edu
+//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+strdef cmd
+objref strFunctions
+
+// =================================================================================================
+//
+// load mod library - NEURON reports some error, but simulation looks working properly
+//
+// =================================================================================================
+
+{ 
+
+	strFunctions = new StringFunctions() 
+
+	if (strFunctions.is_name("capr")==0) {
+
+		system("uname -p", cmd)
+
+		strFunctions.head(cmd,"\n",cmd)
+
+		if (strcmp(cmd,"i386")==0)    { nrn_load_dll("../mod/i686/.libs/libnrnmech.so") }
+
+		if (strcmp(cmd,"powerpc")==0) nrn_load_dll("../mod/powerpc/.libs/libnrnmech.so")
+	}
+
+}

@@ -1,0 +1,100 @@
+// division information format is a leaf to root ordered list of
+// sid sectionname hostid
+// where each triple refers to the subtree for which the triple defines
+// the root of the subtree.
+// Note that root of the whole cell defines a subtree which is what is
+// left over when all other subtrees have been disconnected. Some point
+// on this subtree (typically for convenience, soma(0)) should be the
+// last item in the list and may have a sid of -1. In fact the only information
+// used in the last item is the host field which defines where it will
+// continue to exists.
+// Note that consistency requires that if two pairs have the same parent
+// then they must also have the same sid.
+// Also required is that there cannot be more than two distinct connection
+// points into the root subtree from other subtrees. Furthermore, there
+// can only be at  most one connection point into a non-root subtree from
+// other (child) subtrees.
+
+// args are sid Vector, SectionRefList, host vector
+// Note that any subtree with a host != pc.id is deleted.
+
+// This algorithm allows multiple subtrees from the same cell on
+// one cpu. In fact all the subtrees can be on one cpu.
+
+// Note: occasionally the root  parent piece (containing the soma)
+// is an orphan at its sid == 0 (root)
+// in the sense that
+// no other piece connects to that location. This is naturally handled
+// in that we do not call multisplit at that point and so there is
+// no wasteful backbone.
+
+
+proc multisplit_divide() {local i, x \
+ localobj sids, subroots, subroot, hosts, sr, sl1, sl2, pc, parents, px
+	pc = ParallelContext[0]
+	sids = $o1
+	subroots = $o2
+	hosts = $o3
+	// sl1 is the whole tree
+	sl1 = new SectionList()
+	$o2.object(0).sec { sl1.wholetree }
+	// create a parallel list of true_parent SectionRef and parent
+	// connection points. We use that to help construct the parents
+	// parent to child multisplit connection near the end.
+	parents = new List()
+	px = new Vector()
+	for i=0, subroots.count - 2 { // do not use the root subtree
+		subroot = subroots.object(i)
+		if (subroot.has_parent) { // if not then root(0)
+			subroot.parent parents.append(new SectionRef())
+			subroot.sec px.append(parent_connection())
+		}else{
+			subroot.root parents.append(new SectionRef())
+			px.append(0)
+		}
+	}	
+	// now disconnect leaving only subtrees
+	for i=0, subroots.count - 2 {
+		subroots.object(i).sec disconnect()
+	}
+	// delete any subtree not on this cpu.
+	for i=0, subroots.count - 1 {
+		if (hosts.x[i] != pc.id) {
+			sl1 = new SectionList()
+			subroots.object(i).sec sl1.wholetree()
+			forsec sl1 delete_section()
+		}
+	}
+	// now we can do the multisplit for each subroot
+	for i=0, subroots.count - 2 {
+		if (subroots.object(i).exists()) subroots.object(i).sec {
+//printf("%d %s pc.multisplit(%g, %d, 2)\n", pc.id, secname(), 0, sids.x[i])
+			pc.multisplit(0, sids.x[i], 2)
+			// and it will be helpful to initialize v marks
+			sl1 = new SectionList()
+			sl1.wholetree()
+			forsec sl1 v = -1
+		}
+	}
+	// mark all the subtree parents
+	for i=0, subroots.count - 2 {
+		if (parents.object(i).exists()) parents.object(i).sec {
+			v(px.x[i]) = -1
+		}
+	}
+	// and we can do the multisplit for the parents
+	// but we should only do any given parent location once
+	// (that is why we find the v mark useful)
+	for i=0, subroots.count - 2 {
+		if (parents.object(i).exists()) parents.object(i).sec {
+			if (v(px.x[i]) == -1) { // multisplit needs to be done
+//printf("%d %s pc.multisplit(%g, %d, 2)\n", pc.id, secname(), px.x[i], sids.x[i])
+				pc.multisplit(px.x[i], sids.x[i], 2)
+				v(px.x[i]) = sids.x[i]
+			}else if (v(px.x[i]) != sids.x[i]) { // sanity check
+printf("i=%d px.x[i]=%d v=%g sids.x[i]=%g\n", i, px.x[i], v(px.x[i]), sids.x[i])
+				execerror("Subtrees at same parent with different sid", "")
+			}
+		}
+	}
+}

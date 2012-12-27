@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <network id="GapTest">
+        <!-- Populations -->
+        <population id="Test1" cell="Test" size="1" />
+        <population id="Test2" cell="Test" size="1" />
+        <!-- Projections -->
+        <projection id="Gap_test" synapseFamily="Electrical">
+            <source id="Test1" segment="soma" />
+            <destination id="Test2" segment="soma" />
+            <connection pattern="AllToAll"/>
+            <weight pattern="Constant" value="1.5 uS" />
+        </projection>
+    </network>
+</nineml>

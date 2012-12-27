@@ -1,0 +1,26 @@
+This is the readme for the model from the paper
+
+Hines, Eichner, and Schuermann (2008)
+Neuron splitting in compute-bound parallel network simulations enables
+runtime scaling with twice as many processors.
+J Comput Neurosci (accepted).
+
+The pardentategyrus and nrntraub folders contain splitcell
+parallelized versions of the ModelDB models used in fig 3 of the above
+paper.
+
+Original serial versions of the models are at
+http://senselab.med.yale.edu/modeldb/ShowModel.asp?model=51781
+http://senselab.med.yale.edu/modeldb/ShowModel.asp?model=45539
+Splitcell modifications to the Santhakumar model began with the
+pardentategyrus code at
+http://senselab.med.yale.edu/modeldb/ShowModel.asp?model=64229
+
+Note: for autolaunch from ModelDB, after the choice of which of the two
+figure 3 models to run, an attempt is made to do the appropriate
+nrnivmodl or mknrndll and dynamically load the shared library or dll.
+The simulation will stop after setup when launched using the mosinit.hoc
+file.
+
+In the pardentgyrus directory, see bg.sh for an example of how
+these simulations were run in parallel on the BlueGene.

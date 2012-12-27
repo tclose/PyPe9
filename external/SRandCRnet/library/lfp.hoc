@@ -1,0 +1,66 @@
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+// NOTICE OF COPYRIGHT AND OWNERSHIP OF SOFTWARE
+//
+// Copyright 2007, The University Of Pennsylvania
+// 	School of Engineering & Applied Science.
+//   All rights reserved.
+//   For research use only; commercial use prohibited.
+//   Distribution without permission of Maciej T. Lazarewicz not permitted.
+//   mlazarew@seas.upenn.edu
+//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+// =================================================================================================
+//
+// lfp(obj, lfpVec)
+//
+// =================================================================================================
+objref lfpVec, lfpPlot, lfpFftVec, lfpFftPlot, lfpBox
+
+lfpBox     = VBox()
+lfpBox.intercept(1)	
+lfpPlot    = new Graph()
+
+//lfpFftPlot = new Graph()
+lfpPlot.size(0, tstop, -70, 30)
+lfpBox.intercept(0)	//ends intercept mode
+lfpBox.map("LFP")	
+
+objref x,y
+proc lfp() {local i localobj obj
+	
+	obj    = $o1
+	
+	lfpVec = new Vector( obj.cells.object(0).recordTS.size() )
+
+	for i=0, obj.N-1 lfpVec.add(obj.cells.object(i).voltageRecS)
+	
+	lfpVec.div(obj.N)
+	
+	lfpVec.plot(lfpPlot, obj.cells.object(0).recordTS)
+
+	sprint(cmd, "LFP for %s", obj)
+	
+	lfpPlot.exec_menu("View = plot")
+	
+	// Spectrum
+	
+	//lfpFftVec = new Vector()
+
+	//x = new Vector(t*1000)
+	//x.indgen.div(1e6)
+
+	//y = lfpVec.c.interpolate(x, obj.cells.object(0).recordTS, lfpVec)
+
+	//lfpFftVec.spctrm(y)	
+	
+	//y.plot(lfpPlot, x)
+	
+	//lfpFftVec.plot(lfpFftPlot,2,1)
+
+	//sprint(cmd, "LFP for %s", obj)
+	
+	//lfpFftPlot.size(0,100,0,100)
+}

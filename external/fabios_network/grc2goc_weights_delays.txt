@@ -1,0 +1,1499 @@
+loading membrane mechanisms from x86_64/.libs/libnrnmech.so
+	1 
+	0 
+	1 
+	1 
+	1 
+	1 
+gr coord: (-1.054535, 0.430699, 0.000000)
+go coord: (9.406109, 36.573994, 0.000000)
+dist: 37.626624
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.375253
+gr coord: (-0.140037, 4.452787, 0.000000)
+go coord: (532.584229, 104.159569, 0.000000)
+dist: 541.974709
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.383949
+gr coord: (-0.080915, 11.137181, 0.000000)
+go coord: (732.235779, 67.007660, 0.000000)
+dist: 734.444859
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.768890
+gr coord: (-0.354988, 17.450266, 0.000000)
+go coord: (869.776672, 43.391968, 0.000000)
+dist: 870.518281
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.041037
+gr coord: (0.364603, 21.484503, 0.000000)
+go coord: (902.377136, 105.393906, 0.000000)
+dist: 905.906948
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.111814
+gr coord: (0.494797, 27.348654, 0.000000)
+go coord: (997.857483, 70.185905, 0.000000)
+dist: 998.282203
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.296564
+gr coord: (1.016218, 32.410439, 0.000000)
+go coord: (1034.831299, 44.300831, 0.000000)
+dist: 1033.883457
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.367767
+gr coord: (-0.492282, 37.979214, 0.000000)
+go coord: (1067.607300, 9.181091, 0.000000)
+dist: 1068.487739
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.436975
+gr coord: (-0.363089, 44.969471, 0.000000)
+go coord: (869.776672, 43.391968, 0.000000)
+dist: 870.141191
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.040282
+gr coord: (-0.315745, 50.520844, 0.000000)
+go coord: (563.619934, 101.003845, 0.000000)
+dist: 566.190766
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.432382
+gr coord: (-0.754499, 54.490669, 0.000000)
+go coord: (432.441132, 10.461059, 0.000000)
+dist: 435.427447
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.170855
+gr coord: (0.430252, 60.224609, 0.000000)
+go coord: (167.794281, 40.715595, 0.000000)
+dist: 168.497240
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.636994
+gr coord: (0.430252, 60.224609, 0.000000)
+go coord: (1454.563599, 42.888134, 0.000000)
+dist: 1454.236688
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.208473
+gr coord: (-0.341710, 66.039215, 0.000000)
+go coord: (1291.363159, 133.135910, 0.000000)
+dist: 1293.446340
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.886893
+gr coord: (0.795441, 72.622398, 0.000000)
+go coord: (1124.459351, 145.079056, 0.000000)
+dist: 1125.997579
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.551995
+gr coord: (-1.058712, 78.050858, 0.000000)
+go coord: (1059.244019, 141.828720, 0.000000)
+dist: 1062.219138
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.424438
+gr coord: (0.248603, 83.323357, 0.000000)
+go coord: (729.076233, 101.252678, 0.000000)
+dist: 729.048129
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.758096
+gr coord: (-0.206517, 88.004517, 0.000000)
+go coord: (540.732422, 68.652344, 0.000000)
+dist: 541.284992
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.382570
+gr coord: (-0.065298, 94.451675, 0.000000)
+go coord: (301.052460, 107.296112, 0.000000)
+dist: 301.391579
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.902783
+gr coord: (0.255499, 100.648712, 0.000000)
+go coord: (204.033142, 11.221028, 0.000000)
+dist: 222.536825
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.745074
+gr coord: (0.906022, 104.485748, 0.000000)
+go coord: (104.457237, 77.070351, 0.000000)
+dist: 107.118898
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.514238
+gr coord: (0.906022, 104.485748, 0.000000)
+go coord: (1432.695190, 144.837830, 0.000000)
+dist: 1432.357677
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.164715
+gr coord: (-0.315543, 110.064552, 0.000000)
+go coord: (1291.363159, 133.135910, 0.000000)
+dist: 1291.884731
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.883769
+gr coord: (0.537988, 122.367409, 0.000000)
+go coord: (37.054562, 74.796532, 0.000000)
+dist: 59.970397
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.419941
+gr coord: (-1.067264, 127.966667, 0.000000)
+go coord: (78.023468, 76.839806, 0.000000)
+dist: 94.176960
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.488354
+gr coord: (0.052215, 133.746307, 0.000000)
+go coord: (78.023468, 76.839806, 0.000000)
+dist: 96.529095
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.493058
+gr coord: (-0.131751, 139.090942, 0.000000)
+go coord: (301.052460, 107.296112, 0.000000)
+dist: 302.857788
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.905716
+gr coord: (-0.287025, 145.272552, 0.000000)
+go coord: (863.143494, 68.847679, 0.000000)
+dist: 866.806219
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.033612
+gr coord: (-0.886634, 155.986496, 0.000000)
+go coord: (301.052460, 107.296112, 0.000000)
+dist: 305.839778
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.911680
+gr coord: (-0.984618, 161.385086, 0.000000)
+go coord: (862.900879, 102.892853, 0.000000)
+dist: 865.863438
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.031727
+gr coord: (5.889844, 6.570133, 0.000000)
+go coord: (37.054562, 74.796532, 0.000000)
+dist: 75.007207
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.450014
+gr coord: (6.241021, 10.535254, 0.000000)
+go coord: (238.212357, 34.757969, 0.000000)
+dist: 233.232589
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.766465
+gr coord: (5.132627, 16.267130, 0.000000)
+go coord: (402.926483, 1.465973, 0.000000)
+dist: 398.069122
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.096138
+gr coord: (4.518919, 22.582014, 0.000000)
+go coord: (862.900879, 102.892853, 0.000000)
+dist: 862.130745
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.024261
+gr coord: (6.522539, 28.819839, 0.000000)
+go coord: (1156.643555, 10.362796, 0.000000)
+dist: 1150.269105
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.600538
+gr coord: (5.279661, 33.089348, 0.000000)
+go coord: (1334.504395, 36.205620, 0.000000)
+dist: 1329.228386
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.958457
+gr coord: (6.316041, 39.450848, 0.000000)
+go coord: (1329.287354, 105.212425, 0.000000)
+dist: 1324.604725
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.949209
+gr coord: (4.872919, 44.570126, 0.000000)
+go coord: (1092.967773, 140.621262, 0.000000)
+dist: 1092.326066
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.484652
+gr coord: (4.713397, 50.092812, 0.000000)
+go coord: (837.651367, 39.216633, 0.000000)
+dist: 833.008976
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.966018
+gr coord: (4.590245, 56.091942, 0.000000)
+go coord: (604.593872, 44.174412, 0.000000)
+dist: 600.121971
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.500244
+gr coord: (5.370335, 61.390762, 0.000000)
+go coord: (397.090668, 40.921940, 0.000000)
+dist: 392.254754
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.084510
+gr coord: (4.583805, 66.740700, 0.000000)
+go coord: (207.598267, 133.833191, 0.000000)
+dist: 213.813643
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.727627
+gr coord: (4.755205, 71.370506, 0.000000)
+go coord: (167.794281, 40.715595, 0.000000)
+dist: 165.895943
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.631792
+gr coord: (5.087483, 76.671082, 0.000000)
+go coord: (33.939587, 41.672821, 0.000000)
+dist: 45.357713
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.390715
+gr coord: (5.087483, 76.671082, 0.000000)
+go coord: (1321.496826, 138.746231, 0.000000)
+dist: 1317.872104
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.935744
+gr coord: (4.908788, 83.087013, 0.000000)
+go coord: (1291.782837, 34.221313, 0.000000)
+dist: 1287.801489
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.875603
+gr coord: (4.733808, 89.559349, 0.000000)
+go coord: (1059.244019, 141.828720, 0.000000)
+dist: 1055.804846
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.411610
+gr coord: (6.388579, 93.636269, 0.000000)
+go coord: (901.095337, 5.037966, 0.000000)
+dist: 899.082778
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.098166
+gr coord: (6.270779, 99.215858, 0.000000)
+go coord: (638.009216, 7.753741, 0.000000)
+dist: 638.324974
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.576650
+gr coord: (6.451203, 104.818008, 0.000000)
+go coord: (532.584229, 104.159569, 0.000000)
+dist: 526.133437
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.352267
+gr coord: (4.533161, 111.849487, 0.000000)
+go coord: (466.298492, 34.196445, 0.000000)
+dist: 468.249097
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.236498
+gr coord: (6.332447, 116.413345, 0.000000)
+go coord: (570.924927, 37.167240, 0.000000)
+dist: 570.126840
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.440254
+gr coord: (5.442738, 123.294411, 0.000000)
+go coord: (632.938721, 72.048073, 0.000000)
+dist: 629.585098
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.559170
+gr coord: (4.546628, 127.352715, 0.000000)
+go coord: (1000.636536, 42.748669, 0.000000)
+dist: 999.676422
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.299353
+gr coord: (5.433675, 134.061676, 0.000000)
+go coord: (1193.977051, 37.144966, 0.000000)
+dist: 1192.488241
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.684976
+gr coord: (6.005509, 137.994232, 0.000000)
+go coord: (1391.646484, 137.163177, 0.000000)
+dist: 1385.641225
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.071282
+gr coord: (4.831234, 149.606461, 0.000000)
+go coord: (563.619934, 101.003845, 0.000000)
+dist: 560.898410
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.421797
+gr coord: (6.444854, 155.172653, 0.000000)
+go coord: (1264.579468, 76.508018, 0.000000)
+dist: 1260.591461
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.821183
+gr coord: (10.666821, -0.628926, 0.000000)
+go coord: (209.342209, 35.450974, 0.000000)
+dist: 201.924909
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.703850
+gr coord: (11.335029, 4.624766, 0.000000)
+go coord: (772.548462, 72.076836, 0.000000)
+dist: 764.196096
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.828392
+gr coord: (11.506753, 10.303138, 0.000000)
+go coord: (1093.681763, 11.297649, 0.000000)
+dist: 1082.175467
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.464351
+gr coord: (10.023498, 16.877636, 0.000000)
+go coord: (1067.607300, 9.181091, 0.000000)
+dist: 1057.611808
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.415224
+gr coord: (10.749984, 21.747698, 0.000000)
+go coord: (1132.926514, 75.060493, 0.000000)
+dist: 1123.442219
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.546884
+gr coord: (11.771543, 28.277285, 0.000000)
+go coord: (1288.863892, 12.269052, 0.000000)
+dist: 1277.192676
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.854385
+gr coord: (11.608610, 32.548355, 0.000000)
+go coord: (1327.782837, 78.411697, 0.000000)
+dist: 1316.973060
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.933946
+gr coord: (10.131202, 38.031998, 0.000000)
+go coord: (1129.524658, 10.627794, 0.000000)
+dist: 1119.728851
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.539458
+gr coord: (11.775356, 45.496326, 0.000000)
+go coord: (1102.099609, 68.806122, 0.000000)
+dist: 1090.573392
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.481147
+gr coord: (11.918146, 50.160816, 0.000000)
+go coord: (902.377136, 105.393906, 0.000000)
+dist: 892.170335
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.084341
+gr coord: (11.633911, 56.169804, 0.000000)
+go coord: (861.081299, 9.170012, 0.000000)
+dist: 850.746640
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.001493
+gr coord: (11.218355, 62.206516, 0.000000)
+go coord: (569.006409, 8.354508, 0.000000)
+dist: 560.381612
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.420763
+gr coord: (11.463701, 66.845093, 0.000000)
+go coord: (405.968628, 76.800751, 0.000000)
+dist: 394.630526
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.089261
+gr coord: (11.843256, 72.643776, 0.000000)
+go coord: (307.163208, 11.691135, 0.000000)
+dist: 301.544521
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.903089
+gr coord: (10.438670, 77.981598, 0.000000)
+go coord: (73.924660, 135.672379, 0.000000)
+dist: 85.782848
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.471566
+gr coord: (10.438670, 77.981598, 0.000000)
+go coord: (1323.044800, 10.409552, 0.000000)
+dist: 1314.344260
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.928689
+gr coord: (10.024939, 83.885040, 0.000000)
+go coord: (1025.914429, 102.997543, 0.000000)
+dist: 1016.069261
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.332139
+gr coord: (11.287880, 88.483704, 0.000000)
+go coord: (936.031799, 2.108855, 0.000000)
+dist: 928.769041
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.157538
+gr coord: (11.555334, 93.515396, 0.000000)
+go coord: (830.501831, 4.068127, 0.000000)
+dist: 823.816836
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.947634
+gr coord: (11.761889, 99.079079, 0.000000)
+go coord: (838.467529, 106.458176, 0.000000)
+dist: 826.738572
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.953477
+gr coord: (10.575545, 106.481659, 0.000000)
+go coord: (830.501831, 4.068127, 0.000000)
+dist: 826.297553
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.952595
+gr coord: (10.036283, 110.168831, 0.000000)
+go coord: (632.938721, 72.048073, 0.000000)
+dist: 624.067816
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.548136
+gr coord: (11.638509, 115.623169, 0.000000)
+go coord: (669.034180, 66.735016, 0.000000)
+dist: 659.210983
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.618422
+gr coord: (12.161345, 122.075508, 0.000000)
+go coord: (866.895447, 144.755920, 0.000000)
+dist: 855.034961
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.010070
+gr coord: (10.659873, 126.899384, 0.000000)
+go coord: (1127.281616, 44.388638, 0.000000)
+dist: 1119.666084
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.539332
+gr coord: (10.345238, 132.278183, 0.000000)
+go coord: (1291.363159, 133.135910, 0.000000)
+dist: 1281.018209
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.862036
+gr coord: (11.084772, 144.048828, 0.000000)
+go coord: (9.467916, 69.607780, 0.000000)
+dist: 74.458605
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.448917
+gr coord: (11.304652, 150.592102, 0.000000)
+go coord: (466.813202, 110.881721, 0.000000)
+dist: 457.236212
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.214472
+gr coord: (11.312149, 154.841782, 0.000000)
+go coord: (1228.991577, 137.537247, 0.000000)
+dist: 1217.802380
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.735605
+gr coord: (15.667652, 0.567332, 0.000000)
+go coord: (370.156708, 12.184903, 0.000000)
+dist: 354.679374
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.009359
+gr coord: (17.016378, 6.475240, 0.000000)
+go coord: (569.006409, 8.354508, 0.000000)
+dist: 551.993229
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.403986
+gr coord: (17.703852, 11.408946, 0.000000)
+go coord: (604.593872, 44.174412, 0.000000)
+dist: 587.803940
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.475608
+gr coord: (17.024580, 17.373301, 0.000000)
+go coord: (764.308289, 10.476753, 0.000000)
+dist: 747.315531
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.794631
+gr coord: (17.356958, 22.831301, 0.000000)
+go coord: (830.501831, 4.068127, 0.000000)
+dist: 813.361322
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.926723
+gr coord: (17.323086, 26.677664, 0.000000)
+go coord: (901.095337, 5.037966, 0.000000)
+dist: 884.037142
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.068074
+gr coord: (15.668895, 32.730701, 0.000000)
+go coord: (1034.831299, 44.300831, 0.000000)
+dist: 1019.228077
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.338456
+gr coord: (16.156185, 38.227802, 0.000000)
+go coord: (830.501831, 4.068127, 0.000000)
+dist: 815.061786
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.930124
+gr coord: (16.073189, 44.678425, 0.000000)
+go coord: (729.076233, 101.252678, 0.000000)
+dist: 715.244005
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.730488
+gr coord: (16.546345, 49.057610, 0.000000)
+go coord: (532.584229, 104.159569, 0.000000)
+dist: 518.971409
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.337943
+gr coord: (15.715333, 55.235207, 0.000000)
+go coord: (402.926483, 1.465973, 0.000000)
+dist: 390.926598
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.081853
+gr coord: (16.420322, 60.135025, 0.000000)
+go coord: (402.926483, 1.465973, 0.000000)
+dist: 390.933588
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.081867
+gr coord: (17.060205, 66.417702, 0.000000)
+go coord: (141.694092, 109.289734, 0.000000)
+dist: 131.801429
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.563603
+gr coord: (16.871737, 72.667656, 0.000000)
+go coord: (9.406109, 36.573994, 0.000000)
+dist: 36.857673
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.373715
+gr coord: (16.871737, 72.667656, 0.000000)
+go coord: (1194.999756, 4.351392, 0.000000)
+dist: 1180.107089
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.660214
+gr coord: (17.525221, 76.702049, 0.000000)
+go coord: (997.857483, 70.185905, 0.000000)
+dist: 980.353918
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.260708
+gr coord: (17.545649, 82.424461, 0.000000)
+go coord: (796.924377, 138.656616, 0.000000)
+dist: 781.404670
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.862809
+gr coord: (16.448008, 88.408035, 0.000000)
+go coord: (703.707764, 132.845856, 0.000000)
+dist: 688.694920
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.677390
+gr coord: (16.527163, 94.399414, 0.000000)
+go coord: (598.019775, 75.836273, 0.000000)
+dist: 581.788835
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.463578
+gr coord: (17.229523, 100.710846, 0.000000)
+go coord: (466.813202, 110.881721, 0.000000)
+dist: 449.698712
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.199397
+gr coord: (17.774658, 105.768242, 0.000000)
+go coord: (301.052460, 107.296112, 0.000000)
+dist: 283.281922
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.866564
+gr coord: (17.186810, 111.627525, 0.000000)
+go coord: (209.837662, 74.449844, 0.000000)
+dist: 196.205328
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.692411
+gr coord: (16.735252, 117.261421, 0.000000)
+go coord: (535.710327, 136.149017, 0.000000)
+dist: 519.318659
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.338637
+gr coord: (17.048004, 121.183846, 0.000000)
+go coord: (796.924377, 138.656616, 0.000000)
+dist: 780.072083
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.860144
+gr coord: (17.109911, 128.111954, 0.000000)
+go coord: (862.900879, 102.892853, 0.000000)
+dist: 846.166866
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.992334
+gr coord: (16.152721, 132.254837, 0.000000)
+go coord: (964.285889, 71.716797, 0.000000)
+dist: 950.063870
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.200128
+gr coord: (17.727573, 139.337723, 0.000000)
+go coord: (1361.173096, 68.973618, 0.000000)
+dist: 1345.286950
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.990574
+gr coord: (16.800247, 149.892365, 0.000000)
+go coord: (532.584229, 104.159569, 0.000000)
+dist: 517.807497
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.335615
+gr coord: (16.126877, 156.357895, 0.000000)
+go coord: (1163.745361, 69.428368, 0.000000)
+dist: 1150.906134
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.601812
+gr coord: (21.595440, 0.872676, 0.000000)
+go coord: (270.017242, 101.050026, 0.000000)
+dist: 267.859839
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.835720
+gr coord: (23.299696, 6.077679, 0.000000)
+go coord: (830.501831, 4.068127, 0.000000)
+dist: 807.204637
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.914409
+gr coord: (22.419003, 11.007378, 0.000000)
+go coord: (1102.099609, 68.806122, 0.000000)
+dist: 1081.226576
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.462453
+gr coord: (22.460543, 15.565724, 0.000000)
+go coord: (1264.579468, 76.508018, 0.000000)
+dist: 1243.613038
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.787226
+gr coord: (23.277931, 28.054262, 0.000000)
+go coord: (9.305905, 103.354858, 0.000000)
+dist: 76.585882
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.453172
+gr coord: (22.260984, 33.989941, 0.000000)
+go coord: (167.794281, 40.715595, 0.000000)
+dist: 145.688623
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.591377
+gr coord: (21.284565, 39.700142, 0.000000)
+go coord: (272.317780, 12.338482, 0.000000)
+dist: 252.519970
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.805040
+gr coord: (21.919935, 45.408318, 0.000000)
+go coord: (142.487808, 42.591423, 0.000000)
+dist: 120.600775
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.541202
+gr coord: (21.600208, 48.975277, 0.000000)
+go coord: (100.732422, 12.210050, 0.000000)
+dist: 87.255883
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.474512
+gr coord: (21.600208, 48.975277, 0.000000)
+go coord: (1288.863892, 12.269052, 0.000000)
+dist: 1267.795169
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.835590
+gr coord: (22.363935, 54.837601, 0.000000)
+go coord: (1060.814453, 44.787937, 0.000000)
+dist: 1038.499145
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.376998
+gr coord: (22.138884, 61.306999, 0.000000)
+go coord: (961.298706, 103.715645, 0.000000)
+dist: 940.116836
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.180234
+gr coord: (23.233696, 65.911568, 0.000000)
+go coord: (800.028015, 101.426811, 0.000000)
+dist: 777.605779
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.855212
+gr coord: (21.197903, 71.544540, 0.000000)
+go coord: (467.750305, 74.660530, 0.000000)
+dist: 446.563274
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.193127
+gr coord: (21.333904, 77.437508, 0.000000)
+go coord: (334.865875, 39.349743, 0.000000)
+dist: 315.836943
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.931674
+gr coord: (21.141130, 84.212524, 0.000000)
+go coord: (109.904648, 41.403419, 0.000000)
+dist: 98.547357
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.497095
+gr coord: (21.141130, 84.212524, 0.000000)
+go coord: (1458.851074, 73.146210, 0.000000)
+dist: 1437.752533
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.175505
+gr coord: (21.688391, 88.125977, 0.000000)
+go coord: (1261.268799, 10.803641, 0.000000)
+dist: 1241.989666
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.783979
+gr coord: (21.855587, 95.457664, 0.000000)
+go coord: (1034.831299, 44.300831, 0.000000)
+dist: 1014.266639
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.328533
+gr coord: (22.889580, 98.980942, 0.000000)
+go coord: (697.342224, 40.903622, 0.000000)
+dist: 676.948554
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.653897
+gr coord: (21.612965, 105.753708, 0.000000)
+go coord: (600.201904, 105.883003, 0.000000)
+dist: 578.588954
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.457178
+gr coord: (21.598518, 110.583549, 0.000000)
+go coord: (364.457794, 100.953217, 0.000000)
+dist: 342.994499
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.985989
+gr coord: (22.231920, 116.378540, 0.000000)
+go coord: (600.201904, 105.883003, 0.000000)
+dist: 578.065272
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.456131
+gr coord: (22.288435, 121.680786, 0.000000)
+go coord: (732.235779, 67.007660, 0.000000)
+dist: 712.049424
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.724099
+gr coord: (21.699772, 127.526413, 0.000000)
+go coord: (1000.636536, 42.748669, 0.000000)
+dist: 982.600862
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.265202
+gr coord: (23.125444, 133.332977, 0.000000)
+go coord: (1127.281616, 44.388638, 0.000000)
+dist: 1107.732796
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.515466
+gr coord: (21.798838, 138.873550, 0.000000)
+go coord: (1256.675537, 102.599495, 0.000000)
+dist: 1235.409353
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.770819
+gr coord: (21.344072, 150.870483, 0.000000)
+go coord: (405.968628, 76.800751, 0.000000)
+dist: 391.691682
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.083383
+gr coord: (23.052290, 155.612991, 0.000000)
+go coord: (866.895447, 144.755920, 0.000000)
+dist: 843.912999
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.987826
+gr coord: (28.830721, -0.458587, 0.000000)
+go coord: (238.212357, 34.757969, 0.000000)
+dist: 212.322573
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.724645
+gr coord: (27.332251, 4.607997, 0.000000)
+go coord: (800.962952, 33.266396, 0.000000)
+dist: 774.161330
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.848323
+gr coord: (27.377539, 11.983317, 0.000000)
+go coord: (936.031799, 2.108855, 0.000000)
+dist: 908.707913
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.117416
+gr coord: (28.634388, 16.356768, 0.000000)
+go coord: (1035.325562, 11.986825, 0.000000)
+dist: 1006.700658
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.313401
+gr coord: (27.511789, 22.912256, 0.000000)
+go coord: (1194.999756, 4.351392, 0.000000)
+dist: 1167.635499
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.635271
+gr coord: (27.959564, 27.185249, 0.000000)
+go coord: (1430.354858, 78.928757, 0.000000)
+dist: 1403.349547
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.106699
+gr coord: (28.853697, 33.168285, 0.000000)
+go coord: (1463.722534, 104.165283, 0.000000)
+dist: 1436.624222
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.173248
+gr coord: (28.665651, 38.211395, 0.000000)
+go coord: (1291.363159, 133.135910, 0.000000)
+dist: 1266.260502
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.832521
+gr coord: (27.024178, 45.179714, 0.000000)
+go coord: (1194.932861, 142.244720, 0.000000)
+dist: 1171.935284
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.643871
+gr coord: (27.611269, 48.933212, 0.000000)
+go coord: (896.757446, 136.028671, 0.000000)
+dist: 873.499111
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.046998
+gr coord: (27.664261, 55.065853, 0.000000)
+go coord: (763.197144, 144.242249, 0.000000)
+dist: 740.919058
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.781838
+gr coord: (28.465334, 60.175533, 0.000000)
+go coord: (532.584229, 104.159569, 0.000000)
+dist: 506.034046
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.312068
+gr coord: (27.975704, 66.145042, 0.000000)
+go coord: (408.861359, 110.536552, 0.000000)
+dist: 383.463803
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.066928
+gr coord: (27.824709, 71.526085, 0.000000)
+go coord: (334.031067, 110.553047, 0.000000)
+dist: 308.683394
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.917367
+gr coord: (27.824709, 71.526085, 0.000000)
+go coord: (1391.646484, 137.163177, 0.000000)
+dist: 1365.400331
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.030801
+gr coord: (28.275448, 78.859795, 0.000000)
+go coord: (1193.977051, 37.144966, 0.000000)
+dist: 1166.447750
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.632896
+gr coord: (27.240112, 83.066910, 0.000000)
+go coord: (1033.260376, 75.057915, 0.000000)
+dist: 1006.052143
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.312104
+gr coord: (28.090101, 88.449600, 0.000000)
+go coord: (830.501831, 4.068127, 0.000000)
+dist: 806.836301
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.913673
+gr coord: (26.828854, 94.627800, 0.000000)
+go coord: (640.589722, 38.512344, 0.000000)
+dist: 616.320815
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.532642
+gr coord: (28.234959, 99.205101, 0.000000)
+go coord: (467.750305, 74.660530, 0.000000)
+dist: 440.200154
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.180400
+gr coord: (27.499239, 104.986435, 0.000000)
+go coord: (240.395676, 74.512589, 0.000000)
+dist: 215.066381
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.730133
+gr coord: (27.319481, 112.017998, 0.000000)
+go coord: (100.732422, 12.210050, 0.000000)
+dist: 123.899501
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.547799
+gr coord: (28.217426, 115.825256, 0.000000)
+go coord: (231.778259, 136.101181, 0.000000)
+dist: 204.568145
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.709136
+gr coord: (27.480520, 121.417694, 0.000000)
+go coord: (307.742462, 141.950134, 0.000000)
+dist: 281.013055
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.862026
+gr coord: (27.388803, 127.681114, 0.000000)
+go coord: (438.850830, 133.584930, 0.000000)
+dist: 411.504380
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.123009
+gr coord: (27.008085, 133.253784, 0.000000)
+go coord: (600.201904, 105.883003, 0.000000)
+dist: 573.846943
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.447694
+gr coord: (27.654053, 137.924057, 0.000000)
+go coord: (640.589722, 38.512344, 0.000000)
+dist: 620.945105
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.541890
+gr coord: (27.263823, 143.559067, 0.000000)
+go coord: (934.752930, 132.485458, 0.000000)
+dist: 907.556667
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.115113
+gr coord: (28.159666, 155.696579, 0.000000)
+go coord: (331.577911, 134.371719, 0.000000)
+dist: 304.166700
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.908333
+gr coord: (26.845835, 160.165268, 0.000000)
+go coord: (1036.990234, 135.275055, 0.000000)
+dist: 1010.451004
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.320902
+gr coord: (33.525471, 6.659748, 0.000000)
+go coord: (78.023468, 76.839806, 0.000000)
+dist: 83.098209
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.466196
+gr coord: (33.487324, 11.494261, 0.000000)
+go coord: (340.496674, 77.399689, 0.000000)
+dist: 314.003609
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.928007
+gr coord: (32.898293, 16.538269, 0.000000)
+go coord: (638.009216, 7.753741, 0.000000)
+dist: 605.174684
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.510349
+gr coord: (33.498718, 22.823673, 0.000000)
+go coord: (863.143494, 68.847679, 0.000000)
+dist: 830.920371
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.961841
+gr coord: (34.441570, 28.873888, 0.000000)
+go coord: (998.665771, 99.377457, 0.000000)
+dist: 966.798357
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.233597
+gr coord: (33.867023, 32.695896, 0.000000)
+go coord: (1100.115723, 106.136002, 0.000000)
+dist: 1068.774877
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.437550
+gr coord: (33.108292, 39.903126, 0.000000)
+go coord: (997.857483, 70.185905, 0.000000)
+dist: 965.224352
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.230449
+gr coord: (33.935513, 44.131214, 0.000000)
+go coord: (765.841187, 45.322933, 0.000000)
+dist: 731.906644
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.763813
+gr coord: (33.037266, 49.556797, 0.000000)
+go coord: (438.850830, 133.584930, 0.000000)
+dist: 414.421737
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.128843
+gr coord: (32.975552, 54.831165, 0.000000)
+go coord: (307.742462, 141.950134, 0.000000)
+dist: 288.247411
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.876495
+gr coord: (33.367367, 60.884068, 0.000000)
+go coord: (370.156708, 12.184903, 0.000000)
+dist: 340.292035
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.980584
+gr coord: (34.372784, 66.526787, 0.000000)
+go coord: (207.598267, 133.833191, 0.000000)
+dist: 185.841922
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.671684
+gr coord: (34.372784, 66.526787, 0.000000)
+go coord: (1391.646484, 137.163177, 0.000000)
+dist: 1359.110517
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.018221
+gr coord: (33.187790, 72.727608, 0.000000)
+go coord: (1231.249634, 12.072623, 0.000000)
+dist: 1199.596269
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.699193
+gr coord: (32.489357, 77.646141, 0.000000)
+go coord: (997.857483, 70.185905, 0.000000)
+dist: 965.396951
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.230794
+gr coord: (32.230267, 84.295464, 0.000000)
+go coord: (801.179260, 79.047371, 0.000000)
+dist: 768.966903
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.837934
+gr coord: (32.229740, 89.105408, 0.000000)
+go coord: (600.201904, 105.883003, 0.000000)
+dist: 568.219911
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.436440
+gr coord: (32.865150, 95.003761, 0.000000)
+go coord: (475.283478, 135.014740, 0.000000)
+dist: 444.223879
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.188448
+gr coord: (32.354023, 99.738937, 0.000000)
+go coord: (467.750305, 74.660530, 0.000000)
+dist: 436.117930
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.172236
+gr coord: (32.891479, 104.554642, 0.000000)
+go coord: (242.485275, 110.890503, 0.000000)
+dist: 209.689538
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.719379
+gr coord: (34.219479, 110.655563, 0.000000)
+go coord: (9.305905, 103.354858, 0.000000)
+dist: 25.961249
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.351922
+gr coord: (34.219479, 110.655563, 0.000000)
+go coord: (1334.504395, 36.205620, 0.000000)
+dist: 1302.414549
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.904829
+gr coord: (33.062229, 115.655327, 0.000000)
+go coord: (1359.636719, 102.367577, 0.000000)
+dist: 1326.641037
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.953282
+gr coord: (33.368137, 121.672241, 0.000000)
+go coord: (1454.563599, 42.888134, 0.000000)
+dist: 1423.377488
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.146755
+gr coord: (33.445782, 128.854507, 0.000000)
+go coord: (1396.507202, 100.643967, 0.000000)
+dist: 1363.353318
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.026707
+gr coord: (32.958755, 139.630585, 0.000000)
+go coord: (33.641041, 109.810112, 0.000000)
+dist: 29.828277
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.359657
+gr coord: (32.400867, 143.662704, 0.000000)
+go coord: (170.314865, 140.505356, 0.000000)
+dist: 137.950134
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.575900
+gr coord: (33.151474, 149.315506, 0.000000)
+go coord: (603.915100, 139.112534, 0.000000)
+dist: 570.854813
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.441710
+gr coord: (33.762959, 155.906754, 0.000000)
+go coord: (1156.696655, 102.479340, 0.000000)
+dist: 1124.203974
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.548408
+gr coord: (37.928650, -0.789421, 0.000000)
+go coord: (234.233322, 8.443614, 0.000000)
+dist: 196.521687
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.693043
+gr coord: (37.824810, 5.396851, 0.000000)
+go coord: (436.379364, 42.617252, 0.000000)
+dist: 400.288759
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.100578
+gr coord: (37.865585, 11.174339, 0.000000)
+go coord: (704.915283, 0.892342, 0.000000)
+dist: 667.128937
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.634258
+gr coord: (38.567440, 15.968678, 0.000000)
+go coord: (863.143494, 68.847679, 0.000000)
+dist: 826.269845
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.952540
+gr coord: (39.574879, 21.894354, 0.000000)
+go coord: (800.962952, 33.266396, 0.000000)
+dist: 761.472994
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.822946
+gr coord: (38.862720, 28.851624, 0.000000)
+go coord: (964.362671, 39.348431, 0.000000)
+dist: 925.559475
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.151119
+gr coord: (39.090408, 34.375351, 0.000000)
+go coord: (1033.260376, 75.057915, 0.000000)
+dist: 995.002008
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.290004
+gr coord: (39.664356, 37.828857, 0.000000)
+go coord: (961.298706, 103.715645, 0.000000)
+dist: 923.986441
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.147973
+gr coord: (39.392212, 45.082386, 0.000000)
+go coord: (730.769165, 132.290314, 0.000000)
+dist: 696.855303
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.693711
+gr coord: (37.962254, 50.362171, 0.000000)
+go coord: (540.732422, 68.652344, 0.000000)
+dist: 503.102746
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.306205
+gr coord: (39.681210, 55.770756, 0.000000)
+go coord: (503.875244, 68.531990, 0.000000)
+dist: 464.369412
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.228739
+gr coord: (39.647869, 60.013557, 0.000000)
+go coord: (175.090973, 70.535744, 0.000000)
+dist: 135.851208
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.571702
+gr coord: (39.217247, 67.742302, 0.000000)
+go coord: (13.059534, 143.202133, 0.000000)
+dist: 79.864962
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.459730
+gr coord: (39.217247, 67.742302, 0.000000)
+go coord: (1194.932861, 142.244720, 0.000000)
+dist: 1158.114498
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.616229
+gr coord: (39.025101, 71.902893, 0.000000)
+go coord: (995.117004, 132.217697, 0.000000)
+dist: 957.992486
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.215985
+gr coord: (38.554710, 78.491249, 0.000000)
+go coord: (827.833862, 139.699646, 0.000000)
+dist: 791.648942
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.883298
+gr coord: (39.601925, 84.330597, 0.000000)
+go coord: (603.915100, 139.112534, 0.000000)
+dist: 566.965978
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.433932
+gr coord: (39.398079, 88.869560, 0.000000)
+go coord: (540.732422, 68.652344, 0.000000)
+dist: 501.741825
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.303484
+gr coord: (37.843075, 94.291519, 0.000000)
+go coord: (464.345367, 1.069698, 0.000000)
+dist: 436.571316
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.173143
+gr coord: (38.398159, 100.384766, 0.000000)
+go coord: (174.520523, 109.807190, 0.000000)
+dist: 136.448086
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.572896
+gr coord: (38.398159, 100.384766, 0.000000)
+go coord: (1462.640015, 139.878723, 0.000000)
+dist: 1424.789330
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.149579
+gr coord: (39.921097, 105.545845, 0.000000)
+go coord: (1256.675537, 102.599495, 0.000000)
+dist: 1216.758008
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.733516
+gr coord: (39.970268, 110.065521, 0.000000)
+go coord: (1256.675537, 102.599495, 0.000000)
+dist: 1216.728175
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.733456
+gr coord: (37.943634, 116.431053, 0.000000)
+go coord: (1430.354858, 78.928757, 0.000000)
+dist: 1392.916164
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.085832
+gr coord: (38.273430, 128.659103, 0.000000)
+go coord: (78.023468, 76.839806, 0.000000)
+dist: 65.309304
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.430619
+gr coord: (38.048889, 134.354156, 0.000000)
+go coord: (364.457794, 100.953217, 0.000000)
+dist: 328.113389
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.956227
+gr coord: (38.256073, 138.581741, 0.000000)
+go coord: (664.904480, 143.419556, 0.000000)
+dist: 626.667081
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.553334
+gr coord: (38.228752, 143.571854, 0.000000)
+go coord: (997.857483, 70.185905, 0.000000)
+dist: 962.430672
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.224861
+gr coord: (38.150547, 155.628616, 0.000000)
+go coord: (209.837662, 74.449844, 0.000000)
+dist: 189.911712
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.679823
+gr coord: (38.700180, 161.234253, 0.000000)
+go coord: (1059.244019, 141.828720, 0.000000)
+dist: 1020.728319
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.341457
+gr coord: (45.370831, 5.373747, 0.000000)
+go coord: (145.162170, 70.921127, 0.000000)
+dist: 119.393344
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.538787
+gr coord: (44.530296, 10.977041, 0.000000)
+go coord: (500.580231, 40.274296, 0.000000)
+dist: 456.990013
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.213980
+gr coord: (45.381977, 16.487429, 0.000000)
+go coord: (597.536804, 4.334456, 0.000000)
+dist: 552.288555
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.404577
+gr coord: (44.457581, 22.402288, 0.000000)
+go coord: (729.076233, 101.252678, 0.000000)
+dist: 689.144457
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.678289
+gr coord: (43.811783, 28.669065, 0.000000)
+go coord: (1060.814453, 44.787937, 0.000000)
+dist: 1017.130399
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.334261
+gr coord: (45.364960, 32.907650, 0.000000)
+go coord: (927.475708, 75.028595, 0.000000)
+dist: 883.115817
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.066232
+gr coord: (44.503033, 39.567436, 0.000000)
+go coord: (765.841187, 45.322933, 0.000000)
+dist: 721.361115
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.742722
+gr coord: (44.836426, 43.981461, 0.000000)
+go coord: (597.536804, 4.334456, 0.000000)
+dist: 554.120558
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.408241
+gr coord: (43.932961, 50.535408, 0.000000)
+go coord: (408.861359, 110.536552, 0.000000)
+dist: 369.828167
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.039656
+gr coord: (44.910107, 56.513470, 0.000000)
+go coord: (272.317780, 12.338482, 0.000000)
+dist: 231.658540
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.763317
+gr coord: (44.041439, 61.223267, 0.000000)
+go coord: (33.641041, 109.810112, 0.000000)
+dist: 49.687522
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.399375
+gr coord: (44.973728, 66.200623, 0.000000)
+go coord: (73.924660, 135.672379, 0.000000)
+dist: 75.262749
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.450525
+gr coord: (44.699017, 72.351418, 0.000000)
+go coord: (12.165250, 6.543688, 0.000000)
+dist: 73.410512
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.446821
+gr coord: (44.699017, 72.351418, 0.000000)
+go coord: (1265.811035, 39.841946, 0.000000)
+dist: 1221.544689
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.743089
+gr coord: (45.143215, 76.958687, 0.000000)
+go coord: (961.298706, 103.715645, 0.000000)
+dist: 916.546135
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.133092
+gr coord: (45.375973, 82.965477, 0.000000)
+go coord: (796.024658, 3.322200, 0.000000)
+dist: 754.861908
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.809724
+gr coord: (44.435192, 88.787018, 0.000000)
+go coord: (703.707764, 132.845856, 0.000000)
+dist: 660.743146
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.621486
+gr coord: (45.361080, 95.469292, 0.000000)
+go coord: (436.379364, 42.617252, 0.000000)
+dist: 394.573994
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.089148
+gr coord: (44.951908, 99.784157, 0.000000)
+go coord: (272.317780, 12.338482, 0.000000)
+dist: 243.602105
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.787204
+gr coord: (44.785778, 105.884705, 0.000000)
+go coord: (39.529602, 12.336132, 0.000000)
+dist: 93.696120
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.487392
+gr coord: (44.785778, 105.884705, 0.000000)
+go coord: (1261.157715, 135.816269, 0.000000)
+dist: 1216.740148
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.733480
+gr coord: (45.244926, 111.576248, 0.000000)
+go coord: (1194.932861, 142.244720, 0.000000)
+dist: 1150.096910
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.600194
+gr coord: (44.868404, 116.303497, 0.000000)
+go coord: (1458.851074, 73.146210, 0.000000)
+dist: 1414.641135
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.129282
+gr coord: (44.030846, 127.781235, 0.000000)
+go coord: (210.583191, 104.890839, 0.000000)
+dist: 168.117976
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.636236
+gr coord: (45.194523, 133.642075, 0.000000)
+go coord: (466.298492, 34.196445, 0.000000)
+dist: 432.686938
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.165374
+gr coord: (44.952358, 138.164413, 0.000000)
+go coord: (697.906433, 102.243286, 0.000000)
+dist: 653.941397
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.607883
+gr coord: (44.604538, 145.219040, 0.000000)
+go coord: (1132.926514, 75.060493, 0.000000)
+dist: 1090.581012
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.481162
+gr coord: (43.822086, 155.199509, 0.000000)
+go coord: (503.875244, 68.531990, 0.000000)
+dist: 468.145455
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.236291
+gr coord: (44.168911, 160.545105, 0.000000)
+go coord: (1063.906616, 75.860405, 0.000000)
+dist: 1023.248008
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.346496
+gr coord: (50.459660, 6.070559, 0.000000)
+go coord: (234.233322, 8.443614, 0.000000)
+dist: 183.788983
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.667578
+gr coord: (49.063828, 11.744352, 0.000000)
+go coord: (597.536804, 4.334456, 0.000000)
+dist: 548.523028
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.397046
+gr coord: (49.186436, 15.593476, 0.000000)
+go coord: (765.841187, 45.322933, 0.000000)
+dist: 717.271129
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.734542
+gr coord: (49.919384, 21.444901, 0.000000)
+go coord: (729.076233, 101.252678, 0.000000)
+dist: 683.829881
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.667660
+gr coord: (49.045883, 28.811516, 0.000000)
+go coord: (901.095337, 5.037966, 0.000000)
+dist: 852.381049
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.004762
+gr coord: (49.606819, 33.817135, 0.000000)
+go coord: (869.776672, 43.391968, 0.000000)
+dist: 820.225741
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.940451
+gr coord: (50.241638, 38.528343, 0.000000)
+go coord: (669.034180, 66.735016, 0.000000)
+dist: 619.435086
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.538870
+gr coord: (50.595150, 44.286442, 0.000000)
+go coord: (499.678772, 9.694922, 0.000000)
+dist: 450.413890
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.200828
+gr coord: (50.751701, 50.087105, 0.000000)
+go coord: (210.583191, 104.890839, 0.000000)
+dist: 168.966134
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.637932
+gr coord: (50.768078, 54.910187, 0.000000)
+go coord: (37.054562, 74.796532, 0.000000)
+dist: 24.156309
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.348313
+gr coord: (48.986980, 60.243534, 0.000000)
+go coord: (13.059534, 143.202133, 0.000000)
+dist: 90.404151
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.480808
+gr coord: (48.986980, 60.243534, 0.000000)
+go coord: (1389.905518, 76.627968, 0.000000)
+dist: 1341.018633
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.982037
+gr coord: (50.502743, 67.647133, 0.000000)
+go coord: (1159.553833, 137.830795, 0.000000)
+dist: 1111.269575
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.522539
+gr coord: (49.951874, 72.581215, 0.000000)
+go coord: (1156.696655, 102.479340, 0.000000)
+dist: 1107.148549
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.514297
+gr coord: (49.974346, 76.826088, 0.000000)
+go coord: (934.752930, 132.485458, 0.000000)
+dist: 886.527556
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.073055
+gr coord: (50.116791, 83.013145, 0.000000)
+go coord: (697.342224, 40.903622, 0.000000)
+dist: 648.593843
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.597188
+gr coord: (49.370438, 88.126839, 0.000000)
+go coord: (530.491821, 45.641903, 0.000000)
+dist: 482.993536
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.265987
+gr coord: (50.251282, 95.257568, 0.000000)
+go coord: (374.241364, 41.741215, 0.000000)
+dist: 328.380227
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.956760
+gr coord: (49.626049, 99.213829, 0.000000)
+go coord: (76.967575, 9.732479, 0.000000)
+dist: 93.565330
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.487131
+gr coord: (49.626049, 99.213829, 0.000000)
+go coord: (1458.851074, 73.146210, 0.000000)
+dist: 1409.466102
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 3.118932
+gr coord: (49.363586, 106.254822, 0.000000)
+go coord: (1194.999756, 4.351392, 0.000000)
+dist: 1150.159355
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.600319
+gr coord: (49.812534, 112.214561, 0.000000)
+go coord: (1093.681763, 11.297649, 0.000000)
+dist: 1048.735996
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.397472
+gr coord: (50.179928, 116.986374, 0.000000)
+go coord: (1127.281616, 44.388638, 0.000000)
+dist: 1079.545496
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.459091
+gr coord: (51.084671, 122.255302, 0.000000)
+go coord: (1300.072266, 74.139900, 0.000000)
+dist: 1249.914038
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.799828
+gr coord: (50.360786, 133.699585, 0.000000)
+go coord: (9.305905, 103.354858, 0.000000)
+dist: 51.051990
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.402104
+gr coord: (51.012520, 139.881882, 0.000000)
+go coord: (209.837662, 74.449844, 0.000000)
+dist: 171.775368
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.643551
+gr coord: (49.745388, 144.482895, 0.000000)
+go coord: (600.201904, 105.883003, 0.000000)
+dist: 551.808235
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.403616
+gr coord: (50.648075, 150.607010, 0.000000)
+go coord: (1036.990234, 135.275055, 0.000000)
+dist: 986.461314
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.272923
+gr coord: (49.272560, 160.124069, 0.000000)
+go coord: (300.340576, 75.698349, 0.000000)
+dist: 264.882712
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.829765
+gr coord: (55.624107, -1.031196, 0.000000)
+go coord: (863.143494, 68.847679, 0.000000)
+dist: 810.537239
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 1.921074
+gr coord: (55.351261, 5.957747, 0.000000)
+go coord: (1132.926514, 75.060493, 0.000000)
+dist: 1079.788690
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.459577
+gr coord: (54.676907, 10.393444, 0.000000)
+go coord: (1193.977051, 37.144966, 0.000000)
+dist: 1139.614173
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.579228
+gr coord: (55.939648, 17.749088, 0.000000)
+go coord: (1397.549316, 42.673897, 0.000000)
+dist: 1341.841179
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 2.983682
+gr coord: (56.463287, 28.666616, 0.000000)
+go coord: (167.649109, 5.227314, 0.000000)
+dist: 113.629608
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.527259
+gr coord: (55.709343, 33.635281, 0.000000)
+go coord: (272.317780, 12.338482, 0.000000)
+dist: 217.652862
+GrC->GoC AMPA connection weight: 0.002600
+GrC->GoC AMPA connection delay: 0.735306
+gr coord: (56.160450, 39.582767, 0.000000)
+go coord: (234.233322, 8.443614, 0.000000)

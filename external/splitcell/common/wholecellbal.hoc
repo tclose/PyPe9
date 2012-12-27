@@ -1,0 +1,44 @@
+iterator pcitr() {local i1, i2, si
+	// whole cell gids exist
+	// after read_wholecell_info(prefix) is called and are in
+	// gidvec
+	for i1=0, gidvec.size-1 {
+		i2 = gidvec.x[i1]
+		$&1 = i1
+		$&2 = i2
+		iterator_statement
+	}
+}
+
+proc read_wholecell_info() {local i, gid, icell, ncell, ihost, nhost \
+  localobj s, f
+	gidvec = new Vector()
+	s = new String()
+	sprint(s.s, "%s.%d.dat", $s1, pnm.nhost)
+	f = new File()
+	if (f.ropen(s.s) == 0) {
+		execerror("could not open", s.s)
+	}
+	if (pc.id == 0) { printf("gids from %s\n", s.s) }
+	f.scanvar() // skip msgid
+	nhost = f.scanvar()
+	for i=0, nhost - 1 {
+		ihost = f.scanvar()
+		if (ihost != pnm.myid) {
+			f.gets(s.s)
+			continue
+		}
+		ncell = f.scanvar()
+		for icell = 0, ncell - 1 {
+			f.scanvar() // skip the index
+			gid = f.scanvar()
+			f.scanvar() // skip the 0
+			pc.set_gid2node(gid, pc.id)
+			gidvec.append(gid)
+		}
+		break
+	}
+	f.close()
+}
+
+

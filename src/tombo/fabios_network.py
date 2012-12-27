@@ -15,30 +15,53 @@ import argparse
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
-                                           help="simulator for NINEML+ (either 'neuron' or 'nest')")
-parser.add_argument('--mf_rate', type=float, default=1, help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
-parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)  (default: %(default)s)')
-parser.add_argument('--start_input', type=float, default=1000, help='The start time of the mossy fiber stimulation (default: %(default)s)')
-parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network (default: %(default)s)')
-parser.add_argument('--timestep', type=float, default=0.001, help='The time step used for the simulation (default: %(default)s)')
-parser.add_argument('--stim_seed', default=None, help='The seed passed to the stimulated spikes (defaults to time stamp)')
-parser.add_argument('--np', type=int, default=96, help='The the number of processes to use for the simulation (default: %(default)s)')
-parser.add_argument('--que_name', type=str, default='longP', help='The the que to submit the job to(default: %(default)s)')
-parser.add_argument('--volt_trace', nargs=2, default=None, metavar=('POPULATION', 'INDEX'), help="The population label and cell ID of a cell to record its voltage trace")
-parser.add_argument('--debug', action='store_true', help='Loads a stripped down version of the network for easier debugging')
-parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
-parser.add_argument('--legacy_hoc', action="store_true", help="Run fabios original hoc model instead of the pyNN version")
-parser.add_argument('--dont_copy', action="store_true", help="Don't copy or move any files from the work directory so they can be run again")
-parser.add_argument('--include_gap', action='store_true', help='Includes gap junctions into the network')
-parser.add_argument('--no_granule_to_golgi', action='store_true', help='Deactivates the granule to golgi connection in the network.')
+                    help="simulator for NINEML+ (either 'neuron' or 'nest')")
+parser.add_argument('--mf_rate', type=float, default=5, 
+                    help='Mean firing rate of the Mossy Fibres (default: %(default)s)')
+parser.add_argument('--time', type=float, default=2000.0, 
+                    help='The run time of the simulation (ms)  (default: %(default)s)')
+parser.add_argument('--start_input', type=float, default=1000, 
+                    help='The start time of the mossy fiber stimulation (default: %(default)s)')
+parser.add_argument('--min_delay', type=float, default=0.02, 
+                    help='The minimum synaptic delay in the network (default: %(default)s)')
+parser.add_argument('--timestep', type=float, default=0.02, 
+                    help='The time step used for the simulation (default: %(default)s)')
+parser.add_argument('--stim_seed', default=None, 
+                    help='The seed passed to the stimulated spikes (defaults to time stamp)')
+parser.add_argument('--np', type=int, default=96, 
+                    help="The the number of processes to use for the simulation " \
+                         "(default: %(default)s)")
+parser.add_argument('--que_name', type=str, default='shortP', 
+                    help='The the que to submit the job to(default: %(default)s)')
+parser.add_argument('--volt_trace', nargs='+', action='append', default=None, 
+                    metavar=('POP_ID', 'SLICE_INDICES'), 
+                    help="The population label and cell ID of a cell to record its voltage trace")
+parser.add_argument('--debug', action='store_true', 
+                    help='Loads a stripped down version of the network for easier debugging')
+parser.add_argument('--output_dir', default=None, type=str, 
+                    help='The parent directory in which the output directory will be created ' \
+                         '(defaults to $HOME/Output)')
+parser.add_argument('--legacy_hoc', action="store_true", 
+                    help="Run fabios original hoc model instead of the pyNN version")
+parser.add_argument('--include_gap', action='store_true', 
+                    help='Includes gap junctions into the network')
+parser.add_argument('--no_granule_to_golgi', action='store_true', 
+                    help='Deactivates the granule to golgi connection in the network.')
+parser.add_argument('--dry_run', action='store_true', help="Runs the script but doesn't actually "
+                                                           "submit the job")
+parser.add_argument('--keep_build', action='store_true', help="Don't delete the build directory to "
+                                                             "allow the script to be rerun")
+parser.add_argument('--log', action='store_true', help='Save logging information to file')
 args = parser.parse_args()
-# Set the required directories to copy to the work directory depending on whether the legacy hoc code is used or not
+# Set the required directories to copy to the work directory depending on whether the legacy hoc 
+# code is used or not
 if args.legacy_hoc:
     required_dirs = ['external']
 else:
     required_dirs = ['src', 'xml']
 # Create work directory and get path for output directory
-work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
+work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, 
+                                             required_dirs=required_dirs)
 # Run existing hoc code instead of PyNN code if 'legacy_hoc' flag is used
 if args.legacy_hoc:
     args.np = 1
@@ -50,38 +73,36 @@ if args.legacy_hoc:
         raise Exception('Could not find nrnivmodl on system path')
     os.chdir(os.path.join(work_dir, 'external', 'fabios_network'))
     subprocess.check_call('nrnivmodl', shell=True)
-    cmd_line = \
-"""
-cd external/fabios_network
-nrniv mosinit.hoc
-"""
+    cmd_line = "cd external/fabios_network\n" \
+               "time nrniv mosinit.hoc"
     copy_to_output = ['data', os.path.join('external','fabios_network')]
 else:
     #Compile network
     tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
     # Set up command to run the script
-    cmd_line = \
-"time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ --time {time}  \
---start_input {start_input} --mf_rate {mf_rate} --min_delay {min_delay} --simulator {simulator} \
---timestep {timestep} --stim_seed {stim_seed} --build require".format(script_name=SCRIPT_NAME,
-                                                      work_dir=work_dir,
-                                                      mf_rate=args.mf_rate,
-                                                      start_input=args.start_input,
-                                                      time=args.time,
-                                                      min_delay=args.min_delay,
-                                                      simulator=args.simulator,
-                                                      timestep=args.timestep,
-                                                      stim_seed=tombo.create_seed(args.stim_seed))
+    cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
+               "--time {time} --start_input {start_input} --mf_rate {mf_rate} " \
+               "--min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \
+               "--stim_seed {stim_seed} --build require"\
+               .format(script_name=SCRIPT_NAME, work_dir=work_dir, mf_rate=args.mf_rate,
+               start_input=args.start_input, time=args.time, min_delay=args.min_delay,
+               simulator=args.simulator, timestep=args.timestep, 
+               stim_seed=tombo.create_seed(args.stim_seed))
     if args.debug:
         cmd_line += " --debug"
-    if args.volt_trace:
-        cmd_line += " --volt_trace {volt_pop} {volt_cellid}".format(volt_pop=args.volt_trace[0],
-                                                                    volt_cellid=args.volt_trace[1])
+    for volt_trace in args.volt_trace:
+        cmd_line += " --volt_trace"
+        for arg in volt_trace:
+            cmd_line += " "  + str(arg)
     if args.include_gap:
         cmd_line += ' --include_gap'
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
+    if args.log:
+        cmd_line += ' --log {}/output/pyNN.log'.format(work_dir)
     copy_to_output = ['xml']
 # Submit job to que
-tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output,
-                                 que_name=args.que_name, strip_build_from_copy=(not args.dont_copy))
+if not args.dry_run:
+    tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
+                     copy_to_output=copy_to_output, que_name=args.que_name, 
+                     strip_build_from_copy=(not args.keep_build))

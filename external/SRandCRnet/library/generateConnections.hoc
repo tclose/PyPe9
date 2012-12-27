@@ -1,0 +1,137 @@
+{load_file("min.hoc")}
+{load_file("getGID.hoc")}
+
+// =================================================================================================
+//
+// writeConn(preSyn, postSyn, synID, fo)
+//
+// =================================================================================================
+proc writeConn() {local i, postSyn, synID localobj preSyn, fo
+
+	preSyn  = $o1
+	postSyn = $2
+	synID   = $3
+	fo      = $o4
+	
+	for i=0, preSyn.size()-1 fo.printf("%d, %d, %d, %s, %s, %s\n", preSyn.x[i], postSyn, synID, $s5, $s6, $s7)
+}
+	
+	
+	
+	
+// =================================================================================================
+//
+// generatePreConn(gids, N, preOut, noSelf), gids is a Vector
+//
+//		gids    - vector, contains the range of avaiable GIDs, and it is an output
+//		N       - scalar, number of presynaptic GIDs to be selected
+//		isSelf  - scalar, if >0 then do not allow self wiring, and must be the GID of the postsynaptic cell
+//
+// 	Generates the subset of N gids (vector), and returns it in the vector preOut
+//  No repetitions
+// =================================================================================================
+proc generatePreConn() {local i, ii, N, isSelf, Npre localobj rand, gids, preOut, preInd
+
+	gids   = $o1
+	N      = $2
+	isSelf = $3
+	preOut = $o4
+	preOut.resize(0)
+	
+	Npre   = gids.size()
+
+	// Generate the vector of possible presynaptic neurons 
+	preInd = new Vector(Npre)
+	preInd.indgen()
+		
+	// Do not connect to itself
+	if (isSelf>0) preInd = gids.c.indvwhere("!=", isSelf)
+	
+	if (preInd.size()<N) {
+	
+		print "Number of GIDs too small comparing with N"
+		return
+	}
+	
+    rand = new Random(startsw())
+ 	
+	// Choose N presynaptic gids
+    for i=0, N-1 {
+				
+		// Choose the presynaptic cell indexed by "i"
+		ind = rand.discunif(0, preInd.size()-1)
+		ii = preInd.x[ind]
+		preInd.remove(ind)
+		preOut.append( gids.x[ii] )	
+    }
+}
+
+
+
+load_file("../parameters/synapses.hoc")
+	
+// =================================================================================================
+//
+// generateConn(NN)
+// 	
+//		synParam - list of synapses for particular population of neurons(pyr, bask, OLM). Elements 
+//                 are objects SynParam defined in synapses.hoc
+//		postGIDs - a vector of GIDs of the postsynaptic cells
+//		N        - N is a vector of neuronal pools sizes 
+//
+// =================================================================================================
+proc generateConn() { localobj fo, preGIDsList, NN
+
+	NN = $o1
+	
+	fo = new File()
+	fo.wopen("conn.dat")
+	
+	preGIDsList = new List()
+	
+	getGID( preGIDsList, NN)
+	
+	generateConn2(synParamPyr,  preGIDsList.object(0), NN, fo, preGIDsList, "Pyr")
+	generateConn2(synParamBask, preGIDsList.object(1), NN, fo, preGIDsList, "Bask")
+	generateConn2(synParamOLM,  preGIDsList.object(2), NN, fo, preGIDsList, "OLM")
+		
+	fo.close()
+}
+
+
+
+
+// =================================================================================================
+//
+// generateConn(synParam, postGIDs, N, fo, preGIDsList)
+// 	
+//		synParam - list of synapses for particular population of neurons(pyr, bask, OLM). Elements 
+//                 are objects SynParam defined in synapses.hoc
+//		postGIDs - a vector of GIDs of the postsynaptic cells
+//		N        - N is a vector of neuronal pools sizes 
+//
+// =================================================================================================
+proc generateConn2() { local i, j localobj synParam, postGIDs, N, preGIDsList, preGIDs, fo, preGIDsList
+
+	synParam    = $o1
+	postGIDs    = $o2
+	N           = $o3
+	fo          = $o4
+	preGIDsList = $o5
+	preGIDs     = new Vector()
+		
+	for i=0, synParam.count()-1 {
+		
+		for j=0, postGIDs.size()-1 {
+		
+			generatePreConn(preGIDsList.object(0), synParam.object(i).Npre[0], postGIDs.x[j], preGIDs)			
+			writeConn(preGIDs, postGIDs.x[j], synParam.object(i).synID, fo, "Pyr", $s6, synParam.object(i).name)
+			
+			generatePreConn(preGIDsList.object(1), synParam.object(i).Npre[1], postGIDs.x[j], preGIDs)
+			writeConn(preGIDs, postGIDs.x[j], synParam.object(i).synID, fo, "Bask", $s6, synParam.object(i).name)
+			
+			generatePreConn(preGIDsList.object(2), synParam.object(i).Npre[2], postGIDs.x[j], preGIDs)						
+			writeConn(preGIDs, postGIDs.x[j], synParam.object(i).synID, fo, "OLM", $s6, synParam.object(i).name)
+		}
+	}
+}

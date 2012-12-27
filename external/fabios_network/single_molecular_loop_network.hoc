@@ -1,0 +1,182 @@
+
+////////////////////
+//Model Parameters//
+////////////////////
+
+/////////////////////////
+//GoC>GoC Gap junctions//
+////////////////////////
+
+MF_TO_GRANULE_DELAY = 0.025
+MF_TO_GOLGI_DELAY = 0.025
+GRANULE_TO_GOLGI_DELAY = 0.3
+GOLGI_TO_GRANULE_DELAY = 0.025
+
+MF_TO_GRANULE_AMPA_WEIGHT = 1.3e-3
+MF_TO_GRANULE_NDMA_WEIGHT = 0.1122e-3
+MF_TO_GOLGI_WEIGHT = 1.3e-3
+GRANULE_TO_GOLGI_WEIGHT = 1.3e-3
+GOLGI_TO_GRANULE_WEIGHT = 1.4e-3
+    
+    
+//////////////////////
+//Network Layers    //
+//////////////////////
+
+//load cells:
+load_file("granule_template.hoc") //GrC
+load_file("MF_template.hoc") //MF
+load_file("Golgi_template.hoc") //GoC
+
+//////////////////////////
+//MF (Mossy Fibre) Layer//
+//////////////////////////
+
+objref mossy_fiber
+mossy_fiber = new fibre(0.0, 0.0, 0.0)
+mossy_fiber.Presynapse mossy_fiber.nclist.append(new NetCon(mossy_fiber.StimTrigger,mossy_fiber.syn,0.5,0,0.01)) 
+
+/////////////////////////////////////
+//GrC (granule Cell) Layer         //
+/////////////////////////////////////
+
+objref granule
+granule = new grc(0.0,0.0,0.0) //create objects for cells
+
+//////////////////////////
+//GoC (golgi Cell) Layer//
+//////////////////////////
+
+objref golgi //define objects for cells
+golgi = new Goc(0.0,0.0,0.0) //create objects for cells
+golgi.soma.el_Golgi_lkg=-55 
+golgi.dend[0].el_Golgi_lkg=-55 
+golgi.dend[1].el_Golgi_lkg=-55 
+golgi.dend[2].el_Golgi_lkg=-55 
+golgi.soma.ko(0.5)=5
+golgi.soma.ki(0.5)=140
+golgi.soma.nao(0.5)=145
+golgi.soma.nai(0.5)=5
+
+golgi.soma psection()
+
+////////////////////
+//MF->GrC synapses//
+////////////////////
+
+if (!NoMossyFiber2GranuleAMPA) {
+  mossy_fiber.Presynapse granule.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), granule.synAMPA, -20, MF_TO_GRANULE_DELAY, MF_TO_GRANULE_AMPA_WEIGHT))
+}
+
+if (!NoMossyFiber2GranuleNMDA) {
+  mossy_fiber.Presynapse granule.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), granule.synNMDA, -20, MF_TO_GRANULE_DELAY, MF_TO_GRANULE_NDMA_WEIGHT))  
+}
+////////////////////
+//MF->GoC synapses//
+////////////////////
+
+if (!NoMossyFiber2Golgi) {
+  mossy_fiber.Presynapse golgi.nclist.append(new NetCon(&mossy_fiber.Presynapse.v(0.5), golgi.synAMPA1, -20, MF_TO_GOLGI_DELAY, MF_TO_GOLGI_WEIGHT))
+}
+/////////////////////
+//GrC->GoC synapses//
+//(PF synapses)    //
+/////////////////////
+
+if (!NoGranulesGolgi) {
+  granule.soma golgi.nclist.append(new NetCon(&granule.soma.v(0.5), golgi.synAMPA2, -20, GRANULE_TO_GOLGI_DELAY, GRANULE_TO_GOLGI_WEIGHT))
+}
+
+////////////////////
+//GoC>GrC synapses//
+////////////////////
+
+if (!NoGolgi2Granule) {
+  golgi.soma granule.nclist.append(new NetCon(&golgi.soma.v(0.5),granule.synGABAa1, -20, GOLGI_TO_GRANULE_DELAY, GOLGI_TO_GRANULE_WEIGHT))
+}
+
+/////////////////////////////
+//MF stimulation procedures//
+////////////////////////////
+
+//clear stim buffers
+proc cleanMF() {     
+   mossy_fiber.StimTrigger.start=0
+   mossy_fiber.StimTrigger.interval=0
+   mossy_fiber.StimTrigger.number=0
+   mossy_fiber.StimTrigger.noise=0
+}
+
+proc stimulus() {
+
+  NETIN_SP_START=$1 
+  MFfreq=$2
+  NETIN_SP_NUMBER=50*$3 
+  SEED=$4
+  NETIN_SP_INTERVAL=1000/MFfreq 
+  NETIN_SP_NOISE=0
+  
+  mossy_fiber.StimTrigger.start=NETIN_SP_START
+  mossy_fiber.StimTrigger.interval=NETIN_SP_INTERVAL
+  mossy_fiber.StimTrigger.number=NETIN_SP_NUMBER
+  mossy_fiber.StimTrigger.noise=NETIN_SP_NOISE
+  mossy_fiber.StimTrigger.seed(SEED)
+
+}
+
+celsius = 6.3
+
+////////////////////////////////////////
+//Setting up for Saving Spiking Events//
+///////////////////////////////////////
+
+//generate matrix and send the data to them
+objref golgi_spike_matrix, granule_spike_matrix, mossy_fiber_spike_matrix 
+golgi_spike_matrix=new Matrix() 
+granule_spike_matrix=new Matrix() 
+mossy_fiber_spike_matrix=new Matrix() 
+
+objref sav_mossy_fiber_spike_matrix,sav_granule_spike_matrix,sav_golgi_spike_matrix
+sav_mossy_fiber_spike_matrix=new File()
+sav_granule_spike_matrix=new File()
+sav_golgi_spike_matrix=new File()
+
+//Open recording Files
+sav_mossy_fiber_spike_matrix.wopen("SingleMolecularLoop.MossyFibers.spikes_dat")
+sav_granule_spike_matrix.wopen("SingleMolecularLoop.Granules.spikes_dat")
+sav_golgi_spike_matrix.wopen("SingleMolecularLoop.Golgis.spikes_dat")
+
+//Data for Raster Plots
+//GoC
+objref timevec1, idvec1, recncs1, tobj1, nil1
+timevec1 = new Vector()
+idvec1 = new Vector()
+recncs1 = new List()
+golgi.soma tobj1 = new NetCon(&v(0.5), nil1)
+tobj1.record(timevec1, idvec1, i+1) 
+recncs1.append(tobj1)
+
+objref tobj1 
+
+//GrC
+objref timevec2, idvec2, recncs2, tobj2, nil2
+timevec2 = new Vector()
+idvec2 = new Vector()
+recncs2 = new List()
+granule.soma tobj2 = new NetCon(&v(0.5), nil2)
+tobj2.record(timevec2, idvec2, i+1) 
+recncs2.append(tobj2)
+objref tobj2 
+
+//Recording voltage traces
+
+objref granule_v, golgi_v, time
+time = new Vector()
+granule_v = new Vector()
+golgi_v = new Vector()
+
+time.record(&t)
+granule.soma granule_v.record(&granule.soma.v(0.5))
+golgi.soma golgi_v.record(&golgi.soma.v(0.5))
+
+

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<neuroml xmlns="http://www.neuroml.org/schema/neuroml2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 ../Schemas/NeuroML2/NeuroML_v2alpha.xsd"
-    id="NML2_FullCell">
+<ncml:model xmlns:ncml="ncml" name="Test">
+    <!-- XML syntactic sugar stylesheet -->
+    <ncml:sxslt> ( (sxml:match 'ncml:ionicCurrent (lambda (node bindings root env) (let ((id (or
+        (sxml:attr node 'id) (sxml:attr node 'name))) (kids (sxml:kids node))) `(ncml:component (@
+        (type "ionic-current") (name ,id)) . ,kids) ))) (sxml:match 'ncml:decayingPool (lambda (node
+        bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
+        (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
+    </ncml:sxslt>
     <cell id="Test">
-        <notes>A model of a Golgi cell</notes>
+        <notes>A test cell with gap junctions</notes>
         <morphology id="GolgiMorph">
             <segment id="soma">
                 <proximal x="0" y="0" z="0" diameter="27" />
@@ -14,31 +19,32 @@
             </segmentGroup>
         </morphology>
         <biophysicalProperties id="GolgiBiophys">
+            <defaultBuildOptions>
+                <build tool="nemo" simulator="neuron" method="derivimplicit">
+                    <kinetic comp_id="SK2_z" />
+                </build>
+                <build tool="nemo" simulator="nest" method="cvode" />
+            </defaultBuildOptions>
             <membraneProperties>
-                <ionicCurrent id="Golgi_Ca" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_Ca2" segmentGroup="soma" />    
-                <ionicCurrent id="Golgi_KCa" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_Lkg" segmentGroup="soma" />        
-                <ionicCurrent id="Golgi_NaR" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_NaP" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_Na" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_KV" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_KM" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_KA" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_CaHVA" segmentGroup="soma" /> 
-                <ionicCurrent id="Golgi_HCN1" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_HCN2" segmentGroup="soma" />                
-                <ionicCurrent id="Golgi_SK2" segmentGroup="soma" />
-                <ionicCurrent id="Golgi_CaLVA" segmentGroup="soma" /> 
+                <ncml:ionicCurrent name="Lkg">
+                    <ncml:component type="pore">
+                        <ncml:const name="gbar"> (2.1e-05)
+                        </ncml:const>
+                        <ncml:output name="gbar" />
+                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="non-specific">
+                        <ncml:const name="e" value="-55" />
+                        <ncml:output name="e" />
+                    </ncml:component>
+                </ncml:ionicCurrent>
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
-                <reversalPotential species="na" value="87.39" units="mV" segmentGroup="soma"/>
-                <reversalPotential species="k" value="-84.39" units="mV" segmentGroup="soma"/>
             </membraneProperties>
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
             </intracellularProperties>
             <synapses>
-            </synapses>            
+                <gapJunction id="Gap" type="Gap" segmentGroup="soma" />
+            </synapses>
         </biophysicalProperties>
     </cell>
-</neuroml>
+</ncml:model>

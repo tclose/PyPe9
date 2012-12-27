@@ -1,0 +1,1056 @@
+loading membrane mechanisms from x86_64/.libs/libnrnmech.so
+	1 
+	0 
+	1 
+	1 
+	1 
+	1 
+mf coord: (0.226788, -0.871724, 0.000000)
+go coord: (33.641041, 109.810112, 0.000000)
+dist: 115.615661
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.231231
+mf coord: (-2.681060, 135.115463, 0.000000)
+go coord: (210.583191, 104.890839, 0.000000)
+dist: 215.395377
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.430791
+mf coord: (18.795279, 101.280182, 0.000000)
+go coord: (134.905457, 133.808258, 0.000000)
+dist: 120.580468
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.241161
+mf coord: (35.888702, 51.250664, 0.000000)
+go coord: (175.090973, 70.535744, 0.000000)
+dist: 140.531799
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.281064
+mf coord: (30.036137, 148.842972, 0.000000)
+go coord: (300.340576, 75.698349, 0.000000)
+dist: 280.026116
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.560052
+mf coord: (50.586231, 118.059204, 0.000000)
+go coord: (33.939587, 41.672821, 0.000000)
+dist: 78.179219
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.156358
+mf coord: (69.828712, 31.081318, 0.000000)
+go coord: (102.506577, 142.049530, 0.000000)
+dist: 115.679674
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.231359
+mf coord: (66.976685, 134.368668, 0.000000)
+go coord: (242.485275, 110.890503, 0.000000)
+dist: 177.071990
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.354144
+mf coord: (80.448013, 85.968231, 0.000000)
+go coord: (13.059534, 143.202133, 0.000000)
+dist: 88.413385
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.176827
+mf coord: (99.169128, 14.628259, 0.000000)
+go coord: (268.707214, 79.174599, 0.000000)
+dist: 181.409461
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.362819
+mf coord: (97.325089, 116.060112, 0.000000)
+go coord: (167.794281, 40.715595, 0.000000)
+dist: 103.163479
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.206327
+mf coord: (117.268326, 51.669147, 0.000000)
+go coord: (37.731384, 141.156891, 0.000000)
+dist: 119.725441
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.239451
+mf coord: (116.189728, 130.517761, 0.000000)
+go coord: (270.017242, 101.050026, 0.000000)
+dist: 156.624556
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.313249
+mf coord: (131.766113, 51.859974, 0.000000)
+go coord: (240.395676, 74.512589, 0.000000)
+dist: 110.966314
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.221933
+mf coord: (130.740250, 131.562134, 0.000000)
+go coord: (300.340576, 75.698349, 0.000000)
+dist: 178.563807
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.357128
+mf coord: (146.867203, 47.092644, 0.000000)
+go coord: (300.636322, 38.214294, 0.000000)
+dist: 154.025216
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.308050
+mf coord: (146.680359, 136.541565, 0.000000)
+go coord: (141.694092, 109.289734, 0.000000)
+dist: 27.704244
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.055408
+mf coord: (169.273575, 49.039848, 0.000000)
+go coord: (141.694092, 109.289734, 0.000000)
+dist: 66.262181
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.132524
+mf coord: (166.552399, 133.390503, 0.000000)
+go coord: (102.506577, 142.049530, 0.000000)
+dist: 64.628524
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.129257
+mf coord: (186.181091, 46.950798, 0.000000)
+go coord: (167.794281, 40.715595, 0.000000)
+dist: 19.415266
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.038831
+mf coord: (180.453049, 115.984428, 0.000000)
+go coord: (367.457703, 132.392960, 0.000000)
+dist: 187.723149
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.375446
+mf coord: (199.693512, 30.672571, 0.000000)
+go coord: (242.485275, 110.890503, 0.000000)
+dist: 90.917829
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.181836
+mf coord: (199.281097, 96.896553, 0.000000)
+go coord: (405.968628, 76.800751, 0.000000)
+dist: 207.662169
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.415324
+mf coord: (214.654266, 14.074666, 0.000000)
+go coord: (467.750305, 74.660530, 0.000000)
+dist: 260.246521
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.520493
+mf coord: (215.397003, 102.858070, 0.000000)
+go coord: (134.216049, 12.517909, 0.000000)
+dist: 121.456544
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.242913
+mf coord: (235.409409, -0.720786, 0.000000)
+go coord: (272.317780, 12.338482, 0.000000)
+dist: 39.150636
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.078301
+mf coord: (231.043976, 86.516144, 0.000000)
+go coord: (33.939587, 41.672821, 0.000000)
+dist: 202.141198
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.404282
+mf coord: (233.504822, 147.769897, 0.000000)
+go coord: (370.156708, 12.184903, 0.000000)
+dist: 192.502022
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.385004
+mf coord: (248.983032, 47.390064, 0.000000)
+go coord: (466.813202, 110.881721, 0.000000)
+dist: 226.894631
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.453789
+mf coord: (249.821472, 116.977081, 0.000000)
+go coord: (405.968628, 76.800751, 0.000000)
+dist: 161.232974
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.322466
+mf coord: (263.517395, 14.978327, 0.000000)
+go coord: (272.317780, 12.338482, 0.000000)
+dist: 9.187793
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.018376
+mf coord: (267.471344, 84.642639, 0.000000)
+go coord: (33.939587, 41.672821, 0.000000)
+dist: 237.452073
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.474904
+mf coord: (267.094879, 150.754959, 0.000000)
+go coord: (142.487808, 42.591423, 0.000000)
+dist: 165.003856
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.330008
+mf coord: (284.413269, 48.235287, 0.000000)
+go coord: (71.846512, 35.706188, 0.000000)
+dist: 212.935682
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.425871
+mf coord: (283.271667, 119.784340, 0.000000)
+go coord: (102.506577, 142.049530, 0.000000)
+dist: 182.131153
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.364262
+mf coord: (300.435699, 18.861025, 0.000000)
+go coord: (167.794281, 40.715595, 0.000000)
+dist: 134.429789
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.268860
+mf coord: (297.192383, 85.999596, 0.000000)
+go coord: (107.500069, 108.352173, 0.000000)
+dist: 191.004743
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.382009
+mf coord: (299.872437, 150.794220, 0.000000)
+go coord: (170.314865, 140.505356, 0.000000)
+dist: 129.965476
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.259931
+mf coord: (318.058990, 49.758911, 0.000000)
+go coord: (134.216049, 12.517909, 0.000000)
+dist: 187.576969
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.375154
+mf coord: (314.935760, 118.829033, 0.000000)
+go coord: (464.345367, 1.069698, 0.000000)
+dist: 190.237987
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.380476
+mf coord: (335.556976, 16.168770, 0.000000)
+go coord: (604.593872, 44.174412, 0.000000)
+dist: 270.490605
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.540981
+mf coord: (333.185028, 103.244820, 0.000000)
+go coord: (174.520523, 109.807190, 0.000000)
+dist: 158.800157
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.317600
+mf coord: (348.317322, 3.099081, 0.000000)
+go coord: (271.224091, 44.171780, 0.000000)
+dist: 87.351777
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.174704
+mf coord: (353.279724, 66.694534, 0.000000)
+go coord: (499.678772, 9.694922, 0.000000)
+dist: 157.103905
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.314208
+mf coord: (347.784851, 132.145508, 0.000000)
+go coord: (502.981415, 132.303375, 0.000000)
+dist: 155.196644
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.310393
+mf coord: (369.612610, 36.002941, 0.000000)
+go coord: (660.635315, 41.033855, 0.000000)
+dist: 291.066187
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.582132
+mf coord: (363.560516, 118.318703, 0.000000)
+go coord: (209.837662, 74.449844, 0.000000)
+dist: 159.859916
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.319720
+mf coord: (385.178711, 0.414527, 0.000000)
+go coord: (640.589722, 38.512344, 0.000000)
+dist: 258.236768
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.516474
+mf coord: (382.969391, 69.686317, 0.000000)
+go coord: (597.536804, 4.334456, 0.000000)
+dist: 224.298998
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.448598
+mf coord: (386.165771, 132.083237, 0.000000)
+go coord: (408.861359, 110.536552, 0.000000)
+dist: 31.294557
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.062589
+mf coord: (400.958313, 13.337524, 0.000000)
+go coord: (569.013733, 145.134140, 0.000000)
+dist: 213.571936
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.427144
+mf coord: (400.307007, 85.033318, 0.000000)
+go coord: (503.875244, 68.531990, 0.000000)
+dist: 104.874561
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.209749
+mf coord: (413.523438, -1.328222, 0.000000)
+go coord: (145.162170, 70.921127, 0.000000)
+dist: 277.916783
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.555834
+mf coord: (419.994080, 48.080303, 0.000000)
+go coord: (669.034180, 66.735016, 0.000000)
+dist: 249.737802
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.499476
+mf coord: (419.831390, 118.111473, 0.000000)
+go coord: (271.640839, 141.114563, 0.000000)
+dist: 149.965269
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.299931
+mf coord: (434.149933, 15.207098, 0.000000)
+go coord: (530.491821, 45.641903, 0.000000)
+dist: 101.034830
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.202070
+mf coord: (430.488007, 102.322296, 0.000000)
+go coord: (405.968628, 76.800751, 0.000000)
+dist: 35.391372
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.070783
+mf coord: (449.311523, -2.378595, 0.000000)
+go coord: (271.640839, 141.114563, 0.000000)
+dist: 228.379418
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.456759
+mf coord: (447.353394, 69.670959, 0.000000)
+go coord: (370.156708, 12.184903, 0.000000)
+dist: 96.249545
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.192499
+mf coord: (452.304993, 114.126579, 0.000000)
+go coord: (697.342224, 40.903622, 0.000000)
+dist: 255.743712
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.511487
+mf coord: (469.869659, 13.729361, 0.000000)
+go coord: (600.201904, 105.883003, 0.000000)
+dist: 159.620763
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.319242
+mf coord: (467.437408, 82.052734, 0.000000)
+go coord: (669.034180, 66.735016, 0.000000)
+dist: 202.177869
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.404356
+mf coord: (463.859344, 147.306885, 0.000000)
+go coord: (660.635315, 41.033855, 0.000000)
+dist: 223.639753
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.447280
+mf coord: (480.950287, 35.146400, 0.000000)
+go coord: (703.707764, 132.845856, 0.000000)
+dist: 243.240780
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.486482
+mf coord: (485.056213, 102.099312, 0.000000)
+go coord: (697.342224, 40.903622, 0.000000)
+dist: 220.930448
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.441861
+mf coord: (497.336487, 2.926679, 0.000000)
+go coord: (502.981415, 132.303375, 0.000000)
+dist: 129.499786
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.259000
+mf coord: (500.793640, 67.855438, 0.000000)
+go coord: (597.536804, 4.334456, 0.000000)
+dist: 115.733119
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.231466
+mf coord: (499.671753, 133.649994, 0.000000)
+go coord: (534.965820, 6.725958, 0.000000)
+dist: 131.739827
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.263480
+mf coord: (519.247559, 30.778288, 0.000000)
+go coord: (569.013733, 145.134140, 0.000000)
+dist: 124.715408
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.249431
+mf coord: (514.709717, 101.774338, 0.000000)
+go coord: (408.861359, 110.536552, 0.000000)
+dist: 106.210411
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.212421
+mf coord: (535.193359, 16.291702, 0.000000)
+go coord: (334.865875, 39.349743, 0.000000)
+dist: 201.650128
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.403300
+mf coord: (534.541687, 64.683899, 0.000000)
+go coord: (800.028015, 101.426811, 0.000000)
+dist: 268.016850
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.536034
+mf coord: (535.936707, 131.332581, 0.000000)
+go coord: (730.769165, 132.290314, 0.000000)
+dist: 194.834812
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.389670
+mf coord: (550.134949, 51.006382, 0.000000)
+go coord: (397.090668, 40.921940, 0.000000)
+dist: 153.376165
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.306752
+mf coord: (552.922607, 97.864250, 0.000000)
+go coord: (836.588318, 74.244484, 0.000000)
+dist: 284.647376
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.569295
+mf coord: (569.884399, 16.340944, 0.000000)
+go coord: (397.090668, 40.921940, 0.000000)
+dist: 174.533375
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.349067
+mf coord: (563.621216, 66.092720, 0.000000)
+go coord: (729.076233, 101.252678, 0.000000)
+dist: 169.149594
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.338299
+mf coord: (566.857605, 134.775055, 0.000000)
+go coord: (507.069061, 100.242844, 0.000000)
+dist: 69.044504
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.138089
+mf coord: (584.385010, 16.280653, 0.000000)
+go coord: (827.833862, 139.699646, 0.000000)
+dist: 272.946133
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.545892
+mf coord: (582.930847, 84.874939, 0.000000)
+go coord: (827.833862, 139.699646, 0.000000)
+dist: 250.964610
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.501929
+mf coord: (585.494507, 150.536285, 0.000000)
+go coord: (703.707764, 132.845856, 0.000000)
+dist: 119.529600
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.239059
+mf coord: (598.298950, 52.141445, 0.000000)
+go coord: (636.524231, 136.940323, 0.000000)
+dist: 93.016245
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.186032
+mf coord: (597.212280, 116.607834, 0.000000)
+go coord: (638.009216, 7.753741, 0.000000)
+dist: 116.248026
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.232496
+mf coord: (617.933594, 17.338690, 0.000000)
+go coord: (530.491821, 45.641903, 0.000000)
+dist: 91.908299
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.183817
+mf coord: (619.855042, 63.398167, 0.000000)
+go coord: (763.197144, 144.242249, 0.000000)
+dist: 164.568295
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.329137
+mf coord: (619.175720, 130.357132, 0.000000)
+go coord: (764.308289, 10.476753, 0.000000)
+dist: 188.241248
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.376482
+mf coord: (636.224121, 30.265240, 0.000000)
+go coord: (665.216553, 110.226639, 0.000000)
+dist: 85.055196
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.170110
+mf coord: (630.355042, 97.552933, 0.000000)
+go coord: (730.769165, 132.290314, 0.000000)
+dist: 106.252915
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.212506
+mf coord: (652.766724, -0.969180, 0.000000)
+go coord: (863.143494, 68.847679, 0.000000)
+dist: 221.659151
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.443318
+mf coord: (651.452026, 68.519958, 0.000000)
+go coord: (837.651367, 39.216633, 0.000000)
+dist: 188.491059
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.376982
+mf coord: (649.630615, 132.785645, 0.000000)
+go coord: (827.833862, 139.699646, 0.000000)
+dist: 178.337323
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.356675
+mf coord: (668.042419, 35.283924, 0.000000)
+go coord: (830.501831, 4.068127, 0.000000)
+dist: 165.431214
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.330862
+mf coord: (666.462708, 81.609474, 0.000000)
+go coord: (927.475708, 75.028595, 0.000000)
+dist: 261.095949
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.522192
+mf coord: (684.587097, -1.082313, 0.000000)
+go coord: (540.732422, 68.652344, 0.000000)
+dist: 159.865850
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.319732
+mf coord: (685.458740, 50.831432, 0.000000)
+go coord: (862.900879, 102.892853, 0.000000)
+dist: 184.921886
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.369844
+mf coord: (680.124268, 117.229630, 0.000000)
+go coord: (400.440613, 139.379471, 0.000000)
+dist: 280.559374
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.561119
+mf coord: (697.080750, 16.532665, 0.000000)
+go coord: (632.938721, 72.048073, 0.000000)
+dist: 84.830185
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.169660
+mf coord: (700.693237, 68.735260, 0.000000)
+go coord: (934.752930, 132.485458, 0.000000)
+dist: 242.586124
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.485172
+mf coord: (697.016296, 146.988785, 0.000000)
+go coord: (500.580231, 40.274296, 0.000000)
+dist: 223.551135
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.447102
+mf coord: (717.341492, 51.468052, 0.000000)
+go coord: (466.298492, 34.196445, 0.000000)
+dist: 251.636436
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.503273
+mf coord: (717.432434, 101.798241, 0.000000)
+go coord: (635.610168, 109.351807, 0.000000)
+dist: 82.170186
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.164340
+mf coord: (733.204041, -0.355534, 0.000000)
+go coord: (660.635315, 41.033855, 0.000000)
+dist: 83.542214
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.167084
+mf coord: (735.141968, 64.760918, 0.000000)
+go coord: (669.034180, 66.735016, 0.000000)
+dist: 66.137257
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.132275
+mf coord: (730.816101, 130.697983, 0.000000)
+go coord: (534.965820, 6.725958, 0.000000)
+dist: 231.789550
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.463579
+mf coord: (746.935120, 35.006989, 0.000000)
+go coord: (569.013733, 145.134140, 0.000000)
+dist: 209.246289
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.418493
+mf coord: (746.755920, 98.753670, 0.000000)
+go coord: (669.034180, 66.735016, 0.000000)
+dist: 84.058689
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.168117
+mf coord: (765.070679, 15.475894, 0.000000)
+go coord: (503.875244, 68.531990, 0.000000)
+dist: 266.529556
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.533059
+mf coord: (768.559631, 80.697601, 0.000000)
+go coord: (500.580231, 40.274296, 0.000000)
+dist: 271.011075
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.542022
+mf coord: (767.633911, 134.714294, 0.000000)
+go coord: (697.342224, 40.903622, 0.000000)
+dist: 117.223562
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.234447
+mf coord: (783.292603, 30.748426, 0.000000)
+go coord: (800.962952, 33.266396, 0.000000)
+dist: 17.848849
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.035698
+mf coord: (786.060242, 102.175011, 0.000000)
+go coord: (570.924927, 37.167240, 0.000000)
+dist: 224.742550
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.449485
+mf coord: (801.351624, -2.411776, 0.000000)
+go coord: (640.589722, 38.512344, 0.000000)
+dist: 165.889037
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.331778
+mf coord: (801.737366, 68.480415, 0.000000)
+go coord: (603.915100, 139.112534, 0.000000)
+dist: 210.053671
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.420107
+mf coord: (797.332214, 115.469826, 0.000000)
+go coord: (936.031799, 2.108855, 0.000000)
+dist: 179.132031
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.358264
+mf coord: (813.453247, 14.395420, 0.000000)
+go coord: (1034.831299, 44.300831, 0.000000)
+dist: 223.388843
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.446778
+mf coord: (819.594421, 83.155579, 0.000000)
+go coord: (1034.831299, 44.300831, 0.000000)
+dist: 218.715808
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.437432
+mf coord: (817.683044, 153.213013, 0.000000)
+go coord: (997.857483, 70.185905, 0.000000)
+dist: 198.384296
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.396769
+mf coord: (831.645630, 46.832016, 0.000000)
+go coord: (800.028015, 101.426811, 0.000000)
+dist: 63.089343
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.126179
+mf coord: (833.410706, 119.392960, 0.000000)
+go coord: (730.769165, 132.290314, 0.000000)
+dist: 103.448671
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.206897
+mf coord: (851.983643, -0.585618, 0.000000)
+go coord: (935.940674, 42.253433, 0.000000)
+dist: 94.254801
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.188510
+mf coord: (851.931091, 65.861885, 0.000000)
+go coord: (998.665771, 99.377457, 0.000000)
+dist: 150.513654
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.301027
+mf coord: (851.766113, 136.566818, 0.000000)
+go coord: (895.449036, 42.697086, 0.000000)
+dist: 103.536101
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.207072
+mf coord: (864.420593, 32.996311, 0.000000)
+go coord: (801.179260, 79.047371, 0.000000)
+dist: 78.231492
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.156463
+mf coord: (867.504639, 98.345657, 0.000000)
+go coord: (640.589722, 38.512344, 0.000000)
+dist: 234.670844
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.469342
+mf coord: (885.315063, -2.820576, 0.000000)
+go coord: (869.776672, 43.391968, 0.000000)
+dist: 48.754905
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.097510
+mf coord: (881.675781, 66.014809, 0.000000)
+go coord: (604.593872, 44.174412, 0.000000)
+dist: 277.941338
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.555883
+mf coord: (880.262024, 135.929626, 0.000000)
+go coord: (702.340820, 73.803291, 0.000000)
+dist: 188.455926
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.376912
+mf coord: (900.276001, 35.955112, 0.000000)
+go coord: (660.635315, 41.033855, 0.000000)
+dist: 239.694497
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.479389
+mf coord: (902.365845, 99.063271, 0.000000)
+go coord: (669.034180, 66.735016, 0.000000)
+dist: 235.560570
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.471121
+mf coord: (900.606201, 150.302628, 0.000000)
+go coord: (1063.906616, 75.860405, 0.000000)
+dist: 179.467741
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.358935
+mf coord: (913.714111, 48.601471, 0.000000)
+go coord: (729.076233, 101.252678, 0.000000)
+dist: 191.998166
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.383996
+mf coord: (914.022034, 100.284790, 0.000000)
+go coord: (1194.932861, 142.244720, 0.000000)
+dist: 284.027338
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.568055
+mf coord: (933.169006, -2.352382, 0.000000)
+go coord: (901.021973, 71.200485, 0.000000)
+dist: 80.271141
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.160542
+mf coord: (931.204224, 66.965782, 0.000000)
+go coord: (934.801392, 102.179131, 0.000000)
+dist: 35.396603
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.070793
+mf coord: (935.698792, 131.570679, 0.000000)
+go coord: (997.857483, 70.185905, 0.000000)
+dist: 87.360136
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.174720
+mf coord: (948.005249, 34.971195, 0.000000)
+go coord: (796.024658, 3.322200, 0.000000)
+dist: 155.240970
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.310482
+mf coord: (947.239929, 84.798508, 0.000000)
+go coord: (1132.926514, 75.060493, 0.000000)
+dist: 185.941756
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.371884
+mf coord: (965.475220, -0.486250, 0.000000)
+go coord: (764.308289, 10.476753, 0.000000)
+dist: 201.465435
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.402931
+mf coord: (969.729248, 67.547348, 0.000000)
+go coord: (827.833862, 139.699646, 0.000000)
+dist: 159.186226
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.318372
+mf coord: (964.971252, 130.918243, 0.000000)
+go coord: (862.900879, 102.892853, 0.000000)
+dist: 105.847927
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.211696
+mf coord: (984.618286, 32.005787, 0.000000)
+go coord: (838.467529, 106.458176, 0.000000)
+dist: 164.021956
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.328044
+mf coord: (983.338623, 99.271919, 0.000000)
+go coord: (730.769165, 132.290314, 0.000000)
+dist: 254.718561
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.509437
+mf coord: (986.277405, 149.001572, 0.000000)
+go coord: (927.475708, 75.028595, 0.000000)
+dist: 94.496777
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.188994
+mf coord: (999.129639, 47.660412, 0.000000)
+go coord: (765.841187, 45.322933, 0.000000)
+dist: 233.300162
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.466600
+mf coord: (997.824219, 96.901604, 0.000000)
+go coord: (1129.524658, 10.627794, 0.000000)
+dist: 157.442612
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.314885
+mf coord: (1013.737061, 16.915062, 0.000000)
+go coord: (801.179260, 79.047371, 0.000000)
+dist: 221.452573
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.442905
+mf coord: (1014.655884, 66.311600, 0.000000)
+go coord: (1124.459351, 145.079056, 0.000000)
+dist: 135.133687
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.270267
+mf coord: (1019.425232, 134.237259, 0.000000)
+go coord: (962.821777, 6.867905, 0.000000)
+dist: 139.380427
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.278761
+mf coord: (1035.925293, 18.482866, 0.000000)
+go coord: (1300.072266, 74.139900, 0.000000)
+dist: 269.946900
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.539894
+mf coord: (1034.046997, 99.354324, 0.000000)
+go coord: (866.895447, 144.755920, 0.000000)
+dist: 173.207811
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.346416
+mf coord: (1034.946533, 149.398560, 0.000000)
+go coord: (1299.601562, 105.115189, 0.000000)
+dist: 268.334309
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.536669
+mf coord: (1048.053589, 47.313148, 0.000000)
+go coord: (1288.863892, 12.269052, 0.000000)
+dist: 243.346853
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.486694
+mf coord: (1051.845337, 119.049660, 0.000000)
+go coord: (1092.967773, 140.621262, 0.000000)
+dist: 46.436933
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.092874
+mf coord: (1067.043701, 19.394381, 0.000000)
+go coord: (800.962952, 33.266396, 0.000000)
+dist: 266.442110
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.532884
+mf coord: (1064.243408, 69.560944, 0.000000)
+go coord: (1124.459351, 145.079056, 0.000000)
+dist: 96.586464
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.193173
+mf coord: (1067.983032, 132.468552, 0.000000)
+go coord: (1062.413086, 106.853790, 0.000000)
+dist: 26.213361
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.052427
+mf coord: (1086.500488, 35.909210, 0.000000)
+go coord: (1222.951904, 102.289558, 0.000000)
+dist: 151.741028
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.303482
+mf coord: (1083.103149, 100.849144, 0.000000)
+go coord: (1134.734253, 106.735130, 0.000000)
+dist: 51.965524
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.103931
+mf coord: (1098.021240, -0.517036, 0.000000)
+go coord: (837.651367, 39.216633, 0.000000)
+dist: 263.384197
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.526768
+mf coord: (1097.086792, 64.767174, 0.000000)
+go coord: (836.588318, 74.244484, 0.000000)
+dist: 260.670816
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.521342
+mf coord: (1103.013550, 136.425461, 0.000000)
+go coord: (869.776672, 43.391968, 0.000000)
+dist: 251.106893
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.502214
+mf coord: (1117.175903, 13.958388, 0.000000)
+go coord: (1192.385376, 66.247566, 0.000000)
+dist: 91.600343
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.183201
+mf coord: (1115.681030, 85.251404, 0.000000)
+go coord: (1100.115723, 106.136002, 0.000000)
+dist: 26.046981
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.052094
+mf coord: (1113.984131, 147.217880, 0.000000)
+go coord: (866.895447, 144.755920, 0.000000)
+dist: 247.100949
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.494202
+mf coord: (1135.315918, 51.630138, 0.000000)
+go coord: (869.776672, 43.391968, 0.000000)
+dist: 265.667007
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.531334
+mf coord: (1131.632568, 98.241096, 0.000000)
+go coord: (1033.260376, 75.057915, 0.000000)
+dist: 101.067048
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.202134
+mf coord: (1131.397705, 151.207138, 0.000000)
+go coord: (1391.646484, 137.163177, 0.000000)
+dist: 260.627435
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.521255
+mf coord: (1152.934570, 65.725792, 0.000000)
+go coord: (936.031799, 2.108855, 0.000000)
+dist: 226.039657
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.452079
+mf coord: (1151.569702, 116.245918, 0.000000)
+go coord: (1193.977051, 37.144966, 0.000000)
+dist: 89.751567
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.179503
+mf coord: (1168.511841, 15.064401, 0.000000)
+go coord: (1092.967773, 140.621262, 0.000000)
+dist: 146.531333
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.293063
+mf coord: (1168.777466, 86.352295, 0.000000)
+go coord: (1090.856689, 34.672066, 0.000000)
+dist: 93.501302
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.187003
+mf coord: (1165.872803, 153.233475, 0.000000)
+go coord: (1034.831299, 44.300831, 0.000000)
+dist: 170.405976
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.340812
+mf coord: (1184.157959, 31.082850, 0.000000)
+go coord: (1392.774658, 4.772239, 0.000000)
+dist: 210.269293
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.420539
+mf coord: (1186.254517, 99.060654, 0.000000)
+go coord: (1425.731323, 46.131710, 0.000000)
+dist: 245.256221
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.490512
+mf coord: (1198.891479, -2.509079, 0.000000)
+go coord: (1102.099609, 68.806122, 0.000000)
+dist: 120.226969
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.240454
+mf coord: (1201.019287, 51.882133, 0.000000)
+go coord: (1256.675537, 102.599495, 0.000000)
+dist: 75.298532
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.150597
+mf coord: (1196.784058, 115.295197, 0.000000)
+go coord: (1194.999756, 4.351392, 0.000000)
+dist: 110.958152
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.221916
+mf coord: (1219.954346, 14.727138, 0.000000)
+go coord: (1059.244019, 141.828720, 0.000000)
+dist: 204.896612
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.409793
+mf coord: (1219.449707, 84.911980, 0.000000)
+go coord: (1163.220825, 36.406364, 0.000000)
+dist: 74.259557
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.148519
+mf coord: (1213.414673, 151.638077, 0.000000)
+go coord: (1389.905518, 76.627968, 0.000000)
+dist: 191.769483
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.383539
+mf coord: (1232.829468, 50.164188, 0.000000)
+go coord: (1362.396118, 33.648743, 0.000000)
+dist: 130.614995
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.261230
+mf coord: (1235.412231, 116.813858, 0.000000)
+go coord: (1425.731323, 46.131710, 0.000000)
+dist: 203.020498
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.406041
+mf coord: (1251.410645, 48.109474, 0.000000)
+go coord: (1033.260376, 75.057915, 0.000000)
+dist: 219.808458
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.439617
+mf coord: (1250.597046, 114.330307, 0.000000)
+go coord: (964.285889, 71.716797, 0.000000)
+dist: 289.465007
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.578930
+mf coord: (1266.199219, 16.865461, 0.000000)
+go coord: (1059.244019, 141.828720, 0.000000)
+dist: 241.756636
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.483513
+mf coord: (1268.677246, 86.503448, 0.000000)
+go coord: (1163.220825, 36.406364, 0.000000)
+dist: 116.750908
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.233502
+mf coord: (1264.052612, 151.785828, 0.000000)
+go coord: (1321.496826, 138.746231, 0.000000)
+dist: 58.905592
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.117811
+mf coord: (1281.467285, 65.492844, 0.000000)
+go coord: (1397.549316, 42.673897, 0.000000)
+dist: 118.303602
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.236607
+mf coord: (1285.995850, 148.357681, 0.000000)
+go coord: (1159.553833, 137.830795, 0.000000)
+dist: 126.879466
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.253759
+mf coord: (1301.931641, 51.724113, 0.000000)
+go coord: (1454.563599, 42.888134, 0.000000)
+dist: 152.887505
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.305775
+mf coord: (1301.960938, 136.227829, 0.000000)
+go coord: (1329.287354, 105.212425, 0.000000)
+dist: 41.336283
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.082673
+mf coord: (1315.352539, 65.296059, 0.000000)
+go coord: (1059.244019, 141.828720, 0.000000)
+dist: 267.299126
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.534598
+mf coord: (1314.362915, 134.950958, 0.000000)
+go coord: (1362.396118, 33.648743, 0.000000)
+dist: 112.113012
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.224226
+mf coord: (1334.761841, 50.432972, 0.000000)
+go coord: (1425.731323, 46.131710, 0.000000)
+dist: 91.071113
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.182142
+mf coord: (1330.560913, 147.262314, 0.000000)
+go coord: (1261.157715, 135.816269, 0.000000)
+dist: 70.340713
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.140681
+mf coord: (1352.832153, 84.475136, 0.000000)
+go coord: (1430.354858, 78.928757, 0.000000)
+dist: 77.720860
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.155442
+mf coord: (1364.147095, 17.007898, 0.000000)
+go coord: (1256.675537, 102.599495, 0.000000)
+dist: 137.390164
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.274780
+mf coord: (1366.609375, 102.579140, 0.000000)
+go coord: (1222.951904, 102.289558, 0.000000)
+dist: 143.657763
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.287316
+mf coord: (1380.683472, 32.377003, 0.000000)
+go coord: (1288.863892, 12.269052, 0.000000)
+dist: 93.995558
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.187991
+mf coord: (1381.740356, 136.402252, 0.000000)
+go coord: (1124.459351, 145.079056, 0.000000)
+dist: 257.427277
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.514855
+mf coord: (1398.692017, 51.412552, 0.000000)
+go coord: (1265.811035, 39.841946, 0.000000)
+dist: 133.383785
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.266768
+mf coord: (1400.963501, 150.779922, 0.000000)
+go coord: (1291.782837, 34.221313, 0.000000)
+dist: 159.707003
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.319414
+mf coord: (1419.317383, 83.403801, 0.000000)
+go coord: (1454.563599, 42.888134, 0.000000)
+dist: 53.701164
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.107402
+mf coord: (1435.945068, 33.833313, 0.000000)
+go coord: (1391.646484, 137.163177, 0.000000)
+dist: 112.425199
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.224850
+mf coord: (1435.502686, 131.615799, 0.000000)
+go coord: (1458.851074, 73.146210, 0.000000)
+dist: 62.959035
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.125918
+mf coord: (1450.876831, 81.003632, 0.000000)
+go coord: (1327.782837, 78.411697, 0.000000)
+dist: 123.121280
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.246243
+mf coord: (1467.603516, 48.997284, 0.000000)
+go coord: (1334.504395, 36.205620, 0.000000)
+dist: 133.712388
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.267425
+mf coord: (1481.225342, 35.317196, 0.000000)
+go coord: (1222.961548, 38.287895, 0.000000)
+dist: 258.280879
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.516562
+mf coord: (1484.702759, 134.397141, 0.000000)
+go coord: (1299.601562, 105.115189, 0.000000)
+dist: 187.403003
+MF->GoC connection weight: 0.002600
+MF->GoC connection delay: 0.374806
+	1 
+	1 
+	1 
+	1 

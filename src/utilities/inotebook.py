@@ -41,7 +41,7 @@ def diff(ref_file, new_file):
     Performs a 'context diff' on the two files provided. Useful for comparing to scripts before
     comparing their output
     
-    @param file1: The reference file
+    @param ref_file: The reference file
     @param new_file: The file to compare agains the reference
     """
     ref_file_contents = open(ref_file).readlines()
@@ -104,7 +104,7 @@ will be searched for in the first string
     else:
         ref_psection = open(ref_psection_log).read()
     # The regular expression for picking out the name value pairs
-    pattern = re.compile('([a-zA-Z_]+=[0-9]+(?:\.[0-9]+)*)')
+    pattern = re.compile('([a-zA-Z0-9_]+=\-?[0-9]+(?:\.[0-9]+)*(?:e\-?[0-9]+)*)')
     # A dictionary that uses the values as a key to match the corresponding names
     vals_dict = defaultdict(lambda: (list(), list()))
     # Extract the name value pairs and add them to the values dictionary
@@ -126,6 +126,17 @@ will be searched for in the first string
 
 
 
+
+if __name__ == '__main__':
+    #    compare_psections('/home/tclose/kbrain/output/single_granule_cell.log', 
+    #                      '/home/tclose/kbrain/output/ivans_generated_granule_hoc.log')
+    test_str='insert ca_ion { cai=5e05 cao=2}'
+    # The regular expression for picking out the name value pairs
+    pattern = re.compile('([a-zA-Z_]+=[0-9]+(?:\.[0-9]+)*(?:e-?[0-9]+)*)')
+    name_vals= pattern.findall(test_str)
+    print test_str
+    print name_vals
+    
 
 
 

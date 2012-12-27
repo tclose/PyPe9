@@ -1,0 +1,109 @@
+// Karmarkar-Karp algorithm for multi-way partitioning
+// From Korf, Richard (1997) A complete anytime algorithm for
+// number partitioning. Artificial Intelligence 106:181.
+// http://www.cs.pdx.edu/~bart/cs510cs/papers/korf-ckk.pdf
+// see page 20 Section 7.3 Karmarkar-Karp Heuristic.
+
+// 6/20/2007 very wasteful of memory. Just trying to get the algorithm
+// working. Also very wasteful of cpu time. Should replace all the sort
+// with maintained order.
+
+begintemplate Partition
+public vec, merge
+objref vec
+proc init() {
+	k = $2
+	vec = new Vector(1)
+	vec.x[0] = $1
+}
+proc add() {
+	vec.append($1)
+}
+proc merge() {localobj p1, p2
+	// vec and $o1 sorted largest to smallest
+	// assume vec.size >= $o1.vec.size
+	if ($o1.vec.size == 1) {
+		if (vec.size < k) {
+			if ($o1.vec.max > vec.min) {
+				execerror("$o1 > vec", "")
+			}
+			add($o1.vec.x[0])
+			if (vec.size == k) {
+				vec.sub(vec.x[k-1])
+			}
+		}else{
+			if(vec.x[k-1] != 0) {
+				execerror("last partition element != 0", "")
+			}
+			vec.x[k-1] = $o1.vec.x[0]
+			vec.sort.reverse
+			vec.sub(vec.x[k-1])
+		}
+	}else if ($o1.vec.size != vec.size) {
+printf("genmerge %d %d\n", vec.size, $o1.vec.size)
+		genmerge($o1)
+	}else{
+printf("regular merge\n")
+		vec.add($o1.vec.c.reverse).sort
+		vec.sub(vec.x[0]).reverse
+		// vec is sorted largest to smallest
+	}
+}
+proc genmerge() {localobj m
+	// vec should be of size k and $o1 be of size 1
+	// but in an extremely wasteful way the general merge is ...
+	// assert vec and $o1 are already ordered from greatest to least
+	vec.resize(k)
+	m = $o1.vec.c.resize(k).reverse
+	vec.add(m)
+	vec.sort
+	vec.sub(vec.x[0]).reverse
+}
+endtemplate Partition
+
+begintemplate KarmarkarKarp
+public list
+objref list, w, srt
+proc init() {local i, j, mean  localobj p
+	w = $o1.c // Vector of values
+	k = $2  // Number of partitions
+	list = new List(w.size)
+	w.sort
+	for i=0, w.size-1 {
+		list.append(new Partition(w.x[i], k))
+	}
+	srt = w.sortindex // least to greatest
+	while (w.size > 1) {
+		merge()
+	}
+	p = list.object(0)
+
+	mean = $o1.sum/k
+	printf("max - min = %g bal = %g\n", p.vec.x[0] - p.vec.x[k-1],\
+		(p.vec.x[0] - p.vec.mean)/mean + 1)
+	printf("max=%g mean=%g vecmean=%g\n", p.vec.x[0], mean, p.vec.mean)
+}
+proc merge() {localobj p1, p2
+	// srt is sorted least to greatest
+	p1 = get_greatest()
+	p2 = get_greatest()
+	p1.merge(p2)
+	put(p1)
+}
+
+obfunc get_greatest() {local n  localobj p
+	n = srt.size-1
+	p = list.object(srt.x[n])
+	list.remove(srt.x[n])
+	w.remove(srt.x[n])
+	srt = w.sortindex
+	return p
+}
+
+proc put() {local i
+	list.append($o1)
+	w.append($o1.vec.x[0])
+	srt = w.sortindex
+}
+
+endtemplate KarmarkarKarp

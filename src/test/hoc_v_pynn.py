@@ -84,8 +84,8 @@ elif args.method == 'hoc':
         compile_nmodl(os.path.join(project_dir, 'Molecular_Layer', 'mechanisms', mech),
                                                                           build_mode=args.build)
 
-    if args.build == 'compile_only':
-        print "The '--build' option was specified as 'compile_only' so the network was not \
+    if args.build == 'build_only':
+        print "The '--build' option was specified as 'build_only' so the network was not \
                                                      constructed, only NMODL files were compiled."
         sys.exit()
 
@@ -95,7 +95,7 @@ elif args.method == 'hoc':
         test_loc = os.path.join(project_dir, DEFAULT_HOC_TEST)
 
     start_hoc = time.clock()
-    if args.build == 'compile_only':
+    if args.build == 'build_only':
         ml_main.init(ml_main.get_nrn_home(), ml_main.get_nrn_arch(), paramdir=test_loc,
                        include_pops=['granule', 'purkinje'],
                        working_dir=os.path.join(project_dir, 'Molecular_Layer'), verbose=True)

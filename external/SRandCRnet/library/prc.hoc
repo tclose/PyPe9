@@ -1,0 +1,119 @@
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+// NOTICE OF COPYRIGHT AND OWNERSHIP OF SOFTWARE
+//
+// Copyright 2007, The University Of Pennsylvania
+// 	School of Engineering & Applied Science.
+//   All rights reserved.
+//   For research use only; commercial use prohibited.
+//   Distribution without permission of Maciej T. Lazarewicz not permitted.
+//   mlazarew@seas.upenn.edu
+//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+objref g
+
+
+// =================================================================================================
+//
+// prc( obj, amp, inj, loc, gridNr, spNr )
+//
+// =================================================================================================
+
+proc prc() { local i1, tt0, tt1, gridNr, spNr, inj, loc localobj injOb, tt, xx, obj
+
+	if(numarg()==0) {
+	
+		printf("prc( obj, amp, inj, loc = {0-soma, 1-den}, gridNr, spNr,  )\n\n")
+		return
+	}
+
+	obj    = $o1
+
+	if (obj.N!=1) {
+	
+		printf("Please, set the `Number of Neurons in Network` to 1, and run prc again\n")
+		return
+	}
+	
+	amp    = 0.1
+	inj    = 0.2
+	loc    = 0
+	gridNr = 10
+	spNr   = 6
+	
+	if (numarg()>1) {
+	
+		amp = $2
+	
+		if (numarg()>2) {
+	
+			inj = $3
+	
+			if (numarg()>3) {
+	
+				loc = $4
+	
+				if (numarg()>4) {
+	
+					gridNr = $5
+				
+					if (numarg()>5)	spNr = $6
+				}
+			}
+		}
+	}
+	
+	cvode.active(0)
+
+	obj.setIapp(inj, 0)
+	
+	run()
+
+	if(obj.timevec.size()<10) {
+	
+		printf("Injected current `inj` is too small. Please increase it, and run `prc` again.\n")
+	
+		cvode.active(0)
+	
+		return
+	}
+
+	print "sss", obj.timevec.size()
+
+	g = new Graph()
+	
+	tt0 = obj.timevec.x[spNr-1]
+	tt1 = obj.timevec.x[spNr]
+	
+	xx = new Vector(gridNr+1)
+	tt = new Vector(gridNr+1)
+
+	if(loc==0) {
+	
+		printf("PRC for soma\n")
+		obj.cells.object(0).soma injOb = new IClamp(0.5)
+	
+	}else{	
+	
+		printf("PRC for dendrite\n")
+		obj.cells.object(0).den injOb = new IClamp(0.5)
+	
+	}
+	
+	injOb.amp = amp
+	injOb.dur = 1
+
+	for i=0,gridNr {
+	
+		injOb.del = tt0+(tt1-tt0)*i/gridNr
+		run()
+		tt.x[i] = (tt1-obj.timevec.x[spNr])/(tt1-tt0)
+		xx.x[i] = i/gridNr
+		
+		tt.mark(g, xx, "o", 10)
+		g.exec_menu("View = plot")
+	}
+	
+	cvode.active(1)
+}

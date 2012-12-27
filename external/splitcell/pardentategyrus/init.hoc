@@ -1,0 +1,78 @@
+setuptime = startsw()
+if (name_declared("load_balance_phase") == 0) {
+	execute("load_balance_phase=0")
+}
+
+{load_file("nrngui.hoc")}
+{load_file("netparmpi.hoc")}
+{load_file("../common/parlib.hoc")}
+
+// use 0 for normal round robin,
+// 1 to construct mcomplex.dat (or use mcomplex.hoc to construct)
+// 2 to construct splitcell balance info file ("splitbal.dat")
+// 3 for load balance using splitcell splitbal.nhost.dat file
+// 4 whole cell binfo with cx.nhost.dat
+load_balance(load_balance_phase)
+
+ncell = 528
+pnm.ncell = ncell
+gid_distribute()
+
+objref con_mat
+con_mat = new Matrix(ncell, ncell, 2)
+
+cells_count = 0
+
+obfunc createcell() {
+	cells_count += 1
+	return par_create(cells_count-1, $s1)
+}
+
+proc nc_append() {
+	con_mat.x[$1][$2] += 1
+	par_ncappend($1, $2, $3, $4, $5)
+}
+
+func is_connected() {local c
+        c = con_mat.getval($3+$4, $1+$2)
+        return (c != 0)
+}
+
+{load_file("parRI10sp.hoc")}
+nclist = pnm.nclist
+
+{want_all_spikes()}
+mkhist(50)
+
+initNet()
+
+{
+cvode.cache_efficient(1)
+pc.spike_compress(3, 1)
+cvode.queue_mode(1,0)
+}
+
+setuptime = startsw() - setuptime
+
+//if (pnm.nhost == 1) { saveNet() }
+
+
+//tstop = 10
+if (pnm.myid == 0) {print "SetupTime: ", setuptime}
+if (name_declared("mosinit")) { stop }
+prun()
+if (pnm.myid == 0) {print "RunTime: ", runtime}
+spike2file()
+//if (pnm.nhost == 1) { SpkMx() }
+
+{pnm.pc.runworker()}
+
+print "Maximum integration interval: ", mindelay()
+getstat()
+prhist()
+print_spike_stat_info()
+
+{pnm.pc.done()}
+
+perf2file()
+quit()

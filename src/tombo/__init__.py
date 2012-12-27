@@ -6,7 +6,8 @@
 """
 import sys
 if float(sys.version[0:3]) < 2.7:
-    raise Exception("This script requires python version 2.7 or greater, you should add python 2.7 to your path (i.e. PATH=$PATH:/apps/python/272/bin)")
+    raise Exception("This script requires python version 2.7 or greater, you should add python " \
+                    "2.7 to your path (i.e. PATH=$PATH:/apps/python/272/bin)")
 import os
 import time
 import shutil
@@ -17,7 +18,8 @@ def get_project_dir():
     """
     Returns the root directory of the project
     """
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')) # Root directory of the project code
+    # Root directory of the project code
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')) 
 
 def create_seed(seed):
     if not seed:
@@ -32,22 +34,27 @@ def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', '
     process.
     
     @param script_name: The name of the script, used to name the directories appropriately
-    @param output_dir_parent: The name of the parent directory in which the output directory will be created (defaults to $HOME/Output).
-    @param required_dirs: The sub-directories that need to be copied into the work directory    
+    @param output_dir_parent: The name of the parent directory in which the output directory """ \
+    "will be created (defaults to $HOME/Output)." \
+    """@param required_dirs: The sub-directories that need to be copied into the work directory    
     """
     if not output_dir_parent:
         output_dir_parent = os.path.join(os.environ['HOME'], 'output')
     work_dir_parent = os.path.realpath(os.path.join(os.environ['HOME'], 'work'))
     if not os.path.exists(work_dir_parent):
-        raise Exception("Symbolic link to work directory is missing from your home directory \
-(i.e. $HOME/work). A symbolic link should be created that points to an appropriate \
-directory in your units sub-directory of '/work' (i.e. ln -s /work/<unit-name>/<user-name> $HOME/work)")
+        raise Exception("Symbolic link to work directory is missing from your home directory " \
+                        "(i.e. $HOME/work). A symbolic link should be created that points to " \
+                        "an appropriate directory in your units sub-directory of '/work' " \
+                        "(i.e. ln -s /work/<unit-name>/<user-name> $HOME/work)")
     if not work_dir_parent.startswith('/work'):
-        raise Exception("$HOME/work be a symbolic link to a sub-directory of the high-performance \
-filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
+        raise Exception("$HOME/work be a symbolic link to a sub-directory of the " \
+                        "high-performance filesystem mounted at '/work' (typically "\
+                        "/work/<unit-name>/<user-name>).")
     # Automatically generate paths
-    time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs    
-    work_dir = os.path.join(work_dir_parent, script_name + "." + time_str + ".1") # Working directory path
+    # Unique time for distinguishing runs    
+    time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) 
+    # Working directory path
+    work_dir = os.path.join(work_dir_parent, script_name + "." + time_str + ".1") 
     #Ensure that working directory is unique
     created_work_dir=False
     count = 1
@@ -57,9 +64,11 @@ filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
         except IOError as e:
             count += 1
             if count > 1000:
-                print "Something has gone wrong, can't create directory '%s' after 1000 attempts" % work_dir
+                print "Something has gone wrong, can't create directory '{}' after 1000 " \
+                      "attempts".format(work_dir)
                 raise e
-            work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) # Replace old count at the end of work directory with new count
+            # Replace old count at the end of work directory with new count
+            work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) 
     output_dir = os.path.join(output_dir_parent, os.path.split(work_dir)[1])
     init_work_dir(work_dir, required_dirs, time_str)   
     return work_dir, output_dir
@@ -73,17 +82,18 @@ def init_work_dir(work_dir, required_dirs, time_str):
     """
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
-        shutil.copytree(os.path.join(get_project_dir(),directory), os.path.join(work_dir,directory), symlinks=True)
+        shutil.copytree(os.path.join(get_project_dir(),directory), 
+                        os.path.join(work_dir,directory), symlinks=True)
     # Make output directory for the generated files
     os.mkdir(os.path.join(work_dir, 'output'))
     # Save the git revision in the output folder for reference
-    subprocess.call('cd %s; git rev-parse HEAD > %s' % (get_project_dir(), os.path.join(work_dir, 'output', 'git_revision')), shell=True)
+    subprocess.call('cd {}; git rev-parse HEAD > {}'.\
+                    format(get_project_dir(), os.path.join(work_dir, 'output', 'git_revision')), 
+                    shell=True)
     # Write time string to file for future reference
     f = open(os.path.join(work_dir, 'output', 'time_stamp'), 'w')
     f.write(time_str + '\n')
     f.close()
-    
-
 
 def create_env(work_dir):
     """
@@ -120,9 +130,11 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
     if os.path.exists(pynn_nmodl_path):
         shutil.rmtree(pynn_nmodl_path)
     print "Compiling required NINEML+ objects"
-    subprocess.check_call('python %s %s --build compile_only' %
-                                      (os.path.join(work_dir, 'src', script_dir, script_name + '.py'), script_args),
-                                                                       shell=True, env=env)
+    subprocess.check_call('python {} {} --build build_only'.\
+                           format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
+                                  script_args),
+                          shell=True, env=env)
+
 def compile_custom(script_name, work_dir, env=None, script_dir='test', script_args=''):
     """
     Compiles objects in the work directory that are required by the custom script
@@ -138,13 +150,13 @@ def compile_custom(script_name, work_dir, env=None, script_dir='test', script_ar
         env = copy(env)
     # Remove NMODL build directory for pyNN neuron so it can be recompiled in script
     print "Compiling required objects"
-    subprocess.check_call('python %s %s --build compile_only' %
-                                      (os.path.join(work_dir, 'src', script_dir, script_name + '.py'), script_args),
-                                                                       shell=True, env=env)
-       
+    subprocess.check_call('python {} {} --build build_only'.\
+                          format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
+                                  script_args),
+                          shell=True, env=env)
 
-
-def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=['xml'], strip_build_from_copy=True):
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, 
+               copy_to_output=['xml'], strip_build_from_copy=True):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
     
@@ -165,7 +177,8 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
     for to_copy in copy_to_output:
         origin = work_dir + os.path.sep + to_copy
         if strip_build_from_copy:
-            copy_cmd+='find {origin} -name build -exec rm -r {{}} \; 2>/dev/null\n'.format(origin=origin)
+            copy_cmd+='find {origin} -name build -exec rm -r {{}} \; 2>/dev/null\n'.\
+                      format(origin=origin)
         destination = output_dir + os.path.sep + to_copy
         base_dir = os.path.dirname(destination[:-1] if destination.endswith('/') else destination)
         copy_cmd += """
@@ -223,7 +236,7 @@ cd {work_dir}
 echo "============== Mpirun has ended =============="
 
 echo "Copying files to output directory '{output_dir}'"
-mv {work_dir}/output {output_dir}
+cp -r {work_dir}/output {output_dir}
 cp {jobscript_path} {output_dir}/job
 cp {work_dir}/output_stream {output_dir}/output
 {copy_cmd}

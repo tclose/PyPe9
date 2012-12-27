@@ -1,0 +1,20 @@
+Santhakumar V, Aradi I, Soltesz I (2005) Role of mossy fiber sprouting
+and mossy cell loss in hyperexcitability: a network model of the dentate
+gyrus incorporating cell types and axonal topography. /J Neurophysiol/ *93*:437-53
+
+http://senselab.med.yale.edu/senselab/modeldb/ShowModel.asp?model=51781
+
+Note: a diagram of the model is one of the figures of the paper.
+I cannot say at the moment how many states the model has because some
+mod files cannot be used with
+the variable time step method.
+
+527 cells
+ 500 Granule, 9 compartments, 7 Mechanisms
+ 6 Basket, 17 compartments, 7 Mechanisms
+ 15 Mossy, 17 compartments, 8 Mechanisms
+ 6 HIPP, 13 compartments, 8 Mechanisms
+11293 NetCon into 4875 Exp2Syn
+
+300 ms,  2861 spikes generated, 50136 spikes delivered.
+

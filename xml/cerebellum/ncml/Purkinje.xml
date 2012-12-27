@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ncml:model xmlns:ncml="ncml">
     <!--<include href="SimpleIonChannel.xml"/> -->
-    <cell id="Purkinje">
+    <cell id="Purkinje" defaultMorphology="FourBranches">
         <notes>A model of a Purkinje cell</notes>
-        <morphology id="Compartmental">
+        <morphology id="FourBranches">
             <!-- Segments -->
             <!-- Soma segment -->
             <segment id="soma">
