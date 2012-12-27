@@ -14,7 +14,7 @@ import os.path
 import argparse
 import numpy as np
 import ninemlp
-from ninemlp.connectivity.morphology import read_NeurolucidaXML, Tree, NeurolucidaXMLHandler
+from ninemlp.connectivity.morphology import Forest, Tree, NeurolucidaXMLHandler
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
@@ -31,7 +31,7 @@ def main(arguments):
                         metavar=('X', 'Y', 'Z'),
                         help='The voxel size of the PF and PC masks (default %(default)s')
     parser.add_argument('--rotate_xz', type=float, default=0.0, metavar=('DEGREES'), 
-                        help="Rotate the Purkinje forest in the x-z plane")
+                        help="Rotate the Purkinje forest in the x-z plane (clockwise in degrees)")
     parser.add_argument('--shift_pfs', action='store_true',
                         help="Uses the same PF tree mask that is 'shifted' into position rather "
                              "than creating a new tree for each parallel fibre so will be ~5-6 "
@@ -44,7 +44,7 @@ def main(arguments):
                         "voxel sizes ({}) if the 'shifted' option is provided. NB not providing "
                         "the 'shifted' option will have a significant impact on performance"
                         .format(args.pf_spacing, args.vox_size[0:2]))
-    forest = read_NeurolucidaXML(args.forest_xml)
+    forest = Forest(args.forest_xml)
     if args.rotate:
         forest.rotate(args.rotate_xz, axis=0)
     forest_min = np.array([float('inf'), float('inf'), float('inf')])
