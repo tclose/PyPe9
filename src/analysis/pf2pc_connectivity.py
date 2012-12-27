@@ -30,13 +30,16 @@ def main(arguments):
     parser.add_argument('--vox_size', type=float, nargs=3, default=(1.0, 1.0, 1.0),
                         metavar=('X', 'Y', 'Z'),
                         help='The voxel size of the PF and PC masks (default %(default)s')
-    parser.add_argument('--shifted', action='store_true',
+    parser.add_argument('--rotate', type=float, nargs='+', default=0.0, 
+                        metavar=('START', "END INCREMENT"), 
+                        help="Rotate the Purkinje forest in the x-y plane")
+    parser.add_argument('--shift_pfs', action='store_true',
                         help="Uses the same PF tree mask that is 'shifted' into position rather "
                              "than creating a new tree for each parallel fibre so will be ~5-6 "
                              "times faster but requires that the 'pf_spacing' option is an even "
                              "multiple of each of the voxel dimensions")
     args = parser.parse_args(arguments)
-    if args.shifted and \
+    if args.shift_pfs and \
             (args.pf_spacing[0] % args.vox_size[0] or args.pf_spacing[1] % args.vox_size[1]):
         raise Exception("Parallel fibre spacing ({}) should be even multiples of corresponding "
                         "voxel sizes ({}) if the 'shifted' option is provided. NB not providing "
@@ -77,13 +80,13 @@ def main(arguments):
         for purkinje in forest[:-1]:
             f.write("{}, ".format(purkinje.centroid[2]))
         f.write("{}]\n".format(forest[-1].centroid[2]))
-        if args.shifted:
+        if args.shift_pfs:
             start_point = (0.0, 0.0, forest_min[2], args.pf_diam)
             finish_point = (0.0, 0.0, forest_max[2], args.pf_diam)
             pf_branch = NeurolucidaXMLHandler.Branch((start_point, finish_point), [])
             pf_init = Tree(pf_branch, 2)
         for i, (x, y) in enumerate(zip(pf_X.ravel(), pf_Y.ravel())):
-            if args.shifted:
+            if args.shift_pfs:
                 pf = pf_init.shifted_tree((x, y, 0.0))
             else:
                 start_point = (x, y, forest_min[2], args.pf_diam)
