@@ -30,9 +30,8 @@ def main(arguments):
     parser.add_argument('--vox_size', type=float, nargs=3, default=(1.0, 1.0, 1.0),
                         metavar=('X', 'Y', 'Z'),
                         help='The voxel size of the PF and PC masks (default %(default)s')
-    parser.add_argument('--rotate', type=float, nargs='+', default=0.0, 
-                        metavar=('START', "END INCREMENT"), 
-                        help="Rotate the Purkinje forest in the x-y plane")
+    parser.add_argument('--rotate_xz', type=float, default=0.0, metavar=('DEGREES'), 
+                        help="Rotate the Purkinje forest in the x-z plane")
     parser.add_argument('--shift_pfs', action='store_true',
                         help="Uses the same PF tree mask that is 'shifted' into position rather "
                              "than creating a new tree for each parallel fibre so will be ~5-6 "
@@ -46,6 +45,8 @@ def main(arguments):
                         "the 'shifted' option will have a significant impact on performance"
                         .format(args.pf_spacing, args.vox_size[0:2]))
     forest = read_NeurolucidaXML(args.forest_xml)
+    if args.rotate:
+        forest.rotate(args.rotate_xz, axis=0)
     forest_min = np.array([float('inf'), float('inf'), float('inf')])
     forest_max = np.array([float('-inf'), float('-inf'), float('-inf')])
     print "Generating binary masks for Purkinje trees"
