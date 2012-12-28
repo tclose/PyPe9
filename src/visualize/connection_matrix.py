@@ -43,8 +43,10 @@ def main(arguments):
                              'last index (1st) and first index (2nd) of the range that will be '
                              'plotted, and the number of columns to split the connectivity matrix '
                              'into (3rd).')
-    parser.add_argument('--overlap_matrix', action='store_true', 
-                        help="Plot a matrix showing the shared overlap between Purkinje cells")
+    parser.add_argument('--overlap_matrix', nargs="*", metavar=('NORMALISE'), 
+                        help="Plot a matrix showing the shared overlap between Purkinje cells. "
+                             "The optional argument flags whether the matrix will be normalised "
+                             "along its rows by the value on the diagonal.")
     parser.add_argument('--title', type=str, help='The title of the plot')
     parser.add_argument('--x_label', type=str, help='The x label of the plot')
     parser.add_argument('--y_label', type=str, help='The y label of the plot')
@@ -164,16 +166,24 @@ def main(arguments):
         pylab.title('Mean z position of Purkinje cells')
         pylab.xlabel('Purkinje cell indices')
         pylab.ylabel('Mean z position')
-    elif args.overlap_matrix:
+    elif args.overlap_matrix is not None:
         num_purkinjes = matrix.shape[1]
-        overlap_matrix = np.zeros((num_purkinjes, num_purkinjes), dtype=int)
-        for purk_i in xrange(num_purkinjes):
-            for purk_j in xrange(num_purkinjes):            
+        overlap_matrix = np.zeros((num_purkinjes, num_purkinjes), dtype=float)
+        for row_i in xrange(num_purkinjes):
+            for col_i in xrange(num_purkinjes):            
                 for pf_connections in matrix:
-                    if pf_connections[purk_i] and pf_connections[purk_j]:
-                        overlap_matrix[purk_i, purk_j] += 1
+                    if pf_connections[row_i] and pf_connections[col_i]:
+                        overlap_matrix[row_i, col_i] += 1.0
+        # If there is an argument provided to the overlap_matrix option and it is not 0 normalise
+        # the rows of the overlap matrix by the value of the diagonal (the total number of 
+        # connections for that Purkinje cell)
+        title = 'Number of mutually overlapping PFs'
+        if len(args.overlap_matrix) and int(args.overlap_matrix[0]):
+            for row_i in xrange(num_purkinjes):
+                overlap_matrix[row_i, :] /= overlap_matrix[row_i, row_i]
+            title += ", rows normalised by diagonal"
         pylab.imshow(overlap_matrix, interpolation='nearest')
-        pylab.title('Number of mutually overlapping PFs')
+        pylab.title(title)
         pylab.xlabel('Purkinje cell indices')
         pylab.ylabel('Purkinje cell indices')                  
     else:
