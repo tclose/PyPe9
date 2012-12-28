@@ -1,5 +1,7 @@
-from neuron import h, run
+from neuron import h, run, load_mechanisms
 import numpy as np
+
+load_mechanisms('/home/tclose/kbrain/src/pyNN/neuron/nmodl')
 
 # Get the parallel context
 pc = h.ParallelContext()
@@ -19,17 +21,16 @@ if mpi_rank == 0:
     stim = h.IClamp(pre_cell(0.5))
     stim.delay = 0
     stim.amp = 1
-    stim.dur = 1
+    stim.dur = 100
     # Record Voltage of pre-synaptic cell
     pre_v = h.Vector()
     pre_v.record(pre_cell(0.5)._ref_v)
 if mpi_rank == (num_processes - 1):
     # Create the post-synaptic cell
     post_cell = h.Section()
-    post_cell.insert('Gap')
-    gap_synapse = getattr(post_cell, 'Gap')
-    gap_synapse.g = 1.0
-    pc.target_var(gap_synapse._ref_vgap, GID)
+    post_cell.insert('gap')
+    post_cell(0.5).gap.g = 1.0
+    pc.target_var(post_cell(0.5).gap._ref_vgap, GID)
     # Record Voltage of post-synaptic cell
     post_v = h.Vector()
     post_v.record(post_cell(0.5)._ref_v)
