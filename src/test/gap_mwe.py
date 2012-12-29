@@ -28,9 +28,9 @@ if mpi_rank == 0:
 if mpi_rank == (num_processes - 1):
     # Create the post-synaptic cell
     post_cell = h.Section()
-    post_cell.insert('gap')
-    post_cell(0.5).gap.g = 1.0
-    pc.target_var(post_cell(0.5).gap._ref_vgap, GID)
+    gap_junction = h.Gap(0.5, sec=post_cell)
+    gap_junction.g = 1.0
+    pc.target_var(gap_junction._ref_vgap, GID)
     # Record Voltage of post-synaptic cell
     post_v = h.Vector()
     post_v.record(post_cell(0.5)._ref_v)
