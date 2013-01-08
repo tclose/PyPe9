@@ -1,12 +1,13 @@
-from neuron import h, run, load_mechanisms
+import neuron
+from neuron import h
 import numpy as np
 
-load_mechanisms('/home/tclose/kbrain/src/pyNN/neuron/nmodl')
+neuron.load_mechanisms('/home/tclose/kbrain/src/pyNN/neuron/nmodl')
 
 # Get the parallel context
 pc = h.ParallelContext()
-num_processes = pc.nhost()
-mpi_rank = pc.id()
+num_processes = int(pc.nhost())
+mpi_rank = int(pc.id())
 
 # The gid used for the gap junction connection
 GID = 0
@@ -40,19 +41,21 @@ rec_t.record(h._ref_t)
 
 # Run simulation    
 print "Running..."
-run(100)
+neuron.h.finitialize(-60)
+neuron.init()
+neuron.run(100)
 
 # Convert recorded times into numpy array
 t_array = np.array(rec_t)
 
 # Save data
 print "Saving data..."
-np.savetxt("times.dat",t_array)
+np.savetxt("../../output/times.dat",t_array)
 if mpi_rank == 0:
     pre_v_array = np.array(pre_v)
-    np.savetxt("pre_v.dat",np.array(pre_v_array))    
-elif mpi_rank == (num_processes - 1):
+    np.savetxt("../../output/pre_v.dat",np.array(pre_v_array))    
+if mpi_rank == (num_processes - 1):
     post_v_array = np.array(post_v)
-    np.savetxt("post_v.dat",np.array(post_v_array))
+    np.savetxt("../../output/post_v.dat",np.array(post_v_array))
 
 print "Done."
