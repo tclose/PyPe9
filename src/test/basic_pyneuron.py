@@ -90,14 +90,14 @@ plt.show() # If the interpreter stops now: close the figure.
 
 # Do for each section (here: soma, dend_contra, dend_ipsi):
 for sec in neuron.h.allsec():
-  # Do with the present `sec`
-  sec.insert('pas')
-  sec.Ra = 200
-  # Do for each segment within `sec`:
-  for seg in sec:
-    # Do with the segment `seg`:
-    seg.pas.g = 0.003
-    seg.pas.e = -60
+    # Do with the present `sec`
+    sec.insert('pas')
+    sec.Ra = 200
+    # Do for each segment within `sec`:
+    for seg in sec:
+        # Do with the segment `seg`:
+        seg.pas.g = 0.003
+        seg.pas.e = -60
 
 neuron.h.finitialize(-60)
 neuron.init()
@@ -107,7 +107,7 @@ times.append(list(rec_t))
 voltages.append(list(rec_v))
 fig2 = plt.figure()
 for time, voltage in zip(times, voltages):
-  plt.plot(time, voltage)
+    plt.plot(time, voltage)
 plt.title("Hello World")
 plt.xlabel("Time [ms]")
 plt.ylabel("Voltage [mV]")
