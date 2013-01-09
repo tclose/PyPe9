@@ -10,7 +10,6 @@ Email: tclose@oist.jp
 import os
 import argparse
 import numpy as np
-import matplotlib.pyplot as plt
 import neuron
 from neuron import h
 
@@ -88,6 +87,7 @@ if mpi_rank == (num_processes - 1):
 
 # Either plot the recorded values
 if args.plot and num_processes == 1:
+    import matplotlib.pyplot as plt
     if mpi_rank == 0:
         pre_fig = plt.figure()
         plt.plot(t_array, pre_v_array)
