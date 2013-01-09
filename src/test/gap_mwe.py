@@ -94,14 +94,16 @@ pc.setup_transfer()
 
 # Run simulation    
 print "Running..."
-#print "Finitialise on process {}".format(mpi_rank)
-#neuron.h.finitialize(-60)
 print "Setting maxstep on process {}".format(mpi_rank)
 pc.set_maxstep(10)
-print "Initialising on process {}".format(mpi_rank)
-neuron.init()
+print "Finitialise on process {}".format(mpi_rank)
+neuron.h.finitialize(-60)
 print "Solving on process {}".format(mpi_rank)
 pc.psolve(100)
+print "Running worker on process {}".format(mpi_rank)
+pc.runworker()
+print "Done pc on process {}".format(mpi_rank)
+pc.done()
 #neuron.run(100)
 
 print "Finished run on process {}".format(mpi_rank)
