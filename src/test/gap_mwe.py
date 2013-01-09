@@ -51,6 +51,7 @@ print "Creating test network..."
 # The pre-synaptic cell is created on the first node and the post-synaptic cell on the last node 
 # (NB: which will obviously be the same if there is only one node)
 if mpi_rank == 0:
+    print "Creating pre cell on process {}".format(mpi_rank)
     # Create the pre-synaptic cell
     pre_cell = h.Section()
     pre_cell.insert('pas')
@@ -65,6 +66,7 @@ if mpi_rank == 0:
     pre_v = h.Vector()
     pre_v.record(pre_cell(0.5)._ref_v)
 if mpi_rank == (num_processes - 1):
+    print "Creating post cell on process {}".format(mpi_rank)
     # Create the post-synaptic cell
     post_cell = h.Section()
     post_cell.insert('pas')    
