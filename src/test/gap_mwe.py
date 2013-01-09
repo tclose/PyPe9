@@ -24,10 +24,19 @@ parser.add_argument('--output_dir', type=str, default=os.getcwd(),
                     help="The directory to save the output files into")
 parser.add_argument('--gap_mechanism_dir', type=str, default=None,
                     help="The directory to load the gap mechanism from")
+parser.add_argument('--build', type=str, default='lazy', 
+                    metavar='BUILD_MODE',
+                    help='Option to build the NMODL files before running (can be one of \
+                          {}.'.format(['lazy', 'build_only', 'compile_only', 'force']))
 args = parser.parse_args()
 
+# Compile PyNN mechanisms (including 'Gap' mechanism)
+if args.build in ['build_only', 'compile_only', 'force']:
+    import ninemlp
+    ninemlp.pyNN_build_mode = args.build
+    import ninemlp.neuron #@UnusedImport
 # Load gap mechanism from another directory if required
-if args.gap_mechanism_dir and args.gap_mechanism_dir is not os.getcwd():
+elif args.gap_mechanism_dir and args.gap_mechanism_dir is not os.getcwd():
     neuron.load_mechanisms(args.gap_mechanism_dir)
 
 # Get the parallel context and related parameters
@@ -57,7 +66,7 @@ if mpi_rank == (num_processes - 1):
     post_cell = h.Section()
     post_cell.insert('pas')    
     # Insert gap junction
-    gap_junction = h.Gap(0.5, sec=post_cell)
+    gap_junction = h.gap(0.5, sec=post_cell)
     gap_junction.g = 1.0
     # Connect gap junction to pre-synaptic cell
     pc.target_var(gap_junction._ref_vgap, VARIABLE_GID)
