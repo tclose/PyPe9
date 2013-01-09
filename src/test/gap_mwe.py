@@ -7,14 +7,20 @@ Date: 8/1/2013
 Email: tclose@oist.jp
 """
 
+import sys
 import os
 import argparse
 import numpy as np
-from mpi4py import MPI
+# This is a hack I use on our cluster, to get MPI initialised=True. There is probably something
+# wrong with our setup but I can't be bothered trying to work out what it is at this point. All
+# suggestions welcome :)
+try:
+    from mpi4py import MPI #@UnresolvedImport @UnusedImport
+except:
+    print "mpi4py was not found, MPI will remain disabled if MPI initialized==False on startup"
 import neuron
 from neuron import h
-import sys
-import ninemlp
+from ninemlp.neuron.build import compile_nmodl
 
 # The GID used for the gap junction connection. NB: this number is completely independent from the 
 # GID's used for NEURON sections.
@@ -25,25 +31,21 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--plot', action='store_true', help="Plot the data instead of saving it")
 parser.add_argument('--output_dir', type=str, default=os.getcwd(), 
                     help="The directory to save the output files into")
-parser.add_argument('--gap_mechanism_dir', type=str, default=None,
+parser.add_argument('--gap_mechanism_dir', type=str, default=os.getcwd(),
                     help="The directory to load the gap mechanism from")
 parser.add_argument('--build', type=str, default='lazy', 
-                    metavar='BUILD_MODE',
-                    help='Option to build the NMODL files before running (can be one of \
-                          {}.'.format(['lazy', 'build_only', 'compile_only', 'force']))
+                    help="Can be either 'lazy', 'build_only', or 'require' (used for separating "
+                         "compilation and running)") 
 args = parser.parse_args()
 
-# Compile PyNN mechanisms (including 'Gap' mechanism)
-if args.build in ['build_only', 'compile_only', 'force']:
-    print args.build
-    ninemlp.pyNN_build_mode = args.build
-    import ninemlp.neuron #@UnusedImport
-    sys.exit(0)
 # Load gap mechanism from another directory if required
-if args.gap_mechanism_dir and args.gap_mechanism_dir is not os.getcwd():
+
+
+compile_nmodl(args.gap_mechanism_dir, build_mode=args.build)
+if args.build == 'build_only':
+    sys.exit(0)
+if args.gap_mechanism_dir is not os.getcwd():
     neuron.load_mechanisms(args.gap_mechanism_dir)
-else:
-    neuron.load_mechanisms(os.path.join(ninemlp.SRC_PATH, 'pyNN', 'neuron', 'nmodl'))
 # Get the parallel context and related parameters
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())

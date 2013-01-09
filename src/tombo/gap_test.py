@@ -23,11 +23,17 @@ else:
 # Create work directory and get path for output directory
 required_dirs = ['src', 'xml']    
 work_dir, output_dir = tombo.create_work_dir(script_name, args.output_dir, required_dirs=required_dirs)
+# Set gap mechanism dir as a script arg if required
+if args.mwe:
+    script_args = ' --gap_mechanism_dir {work_dir}/src/pyNN/neuron/nmodl'
+else:
+    script_args = ''      
 #Compile network
-tombo.compile_ninemlp(script_name, work_dir, script_dir='test')
+tombo.compile_ninemlp(script_name, work_dir, script_dir='test', script_args=script_args)
 # Set up command to run the script
 cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
-           "--build require".format(script_name=script_name, work_dir=work_dir)
+           "--build require {script_args}".format(script_name=script_name, work_dir=work_dir,
+                                       script_args=script_args)
 copy_to_output= ['xml']
 # Submit job to que
 tombo.submit_job(script_name, cmd_line, args.np, work_dir, output_dir, 
