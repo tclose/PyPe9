@@ -26,7 +26,7 @@ def main(arguments):
                         help='The output location of the recording files')    
     args = parser.parse_args(arguments)
     ninemlp.pyNN_build_mode = args.build
-    from ninemlp.neuron import * #@UnusedWildImport
+    from ninemlp.neuron import Network, run, StepCurrentSource
     print "Building network"
     net = Network(os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'gap_test.xml'),
                   timestep=0.002, min_delay=0.0025, max_delay=2.0, temperature=25.0,
