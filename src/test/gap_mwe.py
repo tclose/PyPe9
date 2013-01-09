@@ -44,8 +44,8 @@ args = parser.parse_args()
 compile_nmodl(args.gap_mechanism_dir, build_mode=args.build)
 if args.build == 'build_only':
     sys.exit(0)
-if args.gap_mechanism_dir is not os.getcwd():
-    neuron.load_mechanisms(args.gap_mechanism_dir)
+#if args.gap_mechanism_dir is not os.getcwd():
+    #neuron.load_mechanisms(args.gap_mechanism_dir)
 # Get the parallel context and related parameters
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
@@ -99,7 +99,7 @@ print "Running..."
 print "Setting maxstep on process {}".format(mpi_rank)
 pc.set_maxstep(10)
 print "Initialising on process {}".format(mpi_rank)
-neuron.init()
+neuron.h.stdinit()
 print "Solving on process {}".format(mpi_rank)
 pc.psolve(100)
 #neuron.run(100)
