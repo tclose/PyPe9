@@ -11,14 +11,13 @@ import os
 import argparse
 import numpy as np
 import neuron
-from mpi4py import MPI
 from neuron import h
 import sys
 import ninemlp
 
 # The GID used for the gap junction connection. NB: this number is completely independent from the 
 # GID's used for NEURON sections.
-VARIABLE_GID = 0
+GID_FOR_VARS = 0
 
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
@@ -47,7 +46,7 @@ else:
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
 mpi_rank = int(pc.id())
-print "On process {} of {} (id = {})".format(mpi_rank, num_processes, pc.id())
+print "On process {} of {}".format(mpi_rank+1, num_processes)
 
 print "Creating test network..."
 # The pre-synaptic cell is created on the first node and the post-synaptic cell on the last node 
@@ -58,7 +57,7 @@ if mpi_rank == 0:
     pre_cell = h.Section()
     pre_cell.insert('pas')
     # Connect the voltage of the pre-synaptic cell to the gap junction on the post-synaptic cell
-    pc.source_var(pre_cell(0.5)._ref_v, VARIABLE_GID)    
+    pc.source_var(pre_cell(0.5)._ref_v, GID_FOR_VARS)    
     # Stimulate the first cell to make it obvious whether gap junction is working
     stim = h.IClamp(pre_cell(0.5))
     stim.delay = 50
@@ -76,7 +75,7 @@ if mpi_rank == (num_processes - 1):
     gap_junction = h.gap(0.5, sec=post_cell)
     gap_junction.g = 1.0
     # Connect gap junction to pre-synaptic cell
-    pc.target_var(gap_junction._ref_vgap, VARIABLE_GID)
+    pc.target_var(gap_junction._ref_vgap, GID_FOR_VARS)
     # Record Voltage of post-synaptic cell
     post_v = h.Vector()
     post_v.record(post_cell(0.5)._ref_v)
@@ -91,8 +90,10 @@ pc.setup_transfer()
 # Run simulation    
 print "Running..."
 neuron.h.finitialize(-60)
+pc.set_maxstep(10)
 neuron.init()
-neuron.run(100)
+pc.psolve(100)
+#neuron.run(100)
 
 # Convert recorded data into Numpy arrays
 t_array = np.array(rec_t)
