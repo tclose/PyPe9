@@ -25,7 +25,7 @@ required_dirs = ['src', 'xml']
 work_dir, output_dir = tombo.create_work_dir(script_name, args.output_dir, required_dirs=required_dirs)
 # Set gap mechanism dir as a script arg if required
 if args.mwe:
-    script_args = ' --gap_mechanism_dir {work_dir}/src/pyNN/neuron/nmodl'
+    script_args = ' --gap_mechanism_dir {work_dir}/src/pyNN/neuron/nmodl'.format(work_dir=work_dir)
 else:
     script_args = ''      
 #Compile network
