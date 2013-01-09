@@ -97,7 +97,7 @@ print "Running..."
 print "Setting maxstep on process {}".format(mpi_rank)
 pc.set_maxstep(10)
 print "Finitialise on process {}".format(mpi_rank)
-neuron.h.finitialize(-60)
+h.finitialize(-60)
 print "Solving on process {}".format(mpi_rank)
 pc.psolve(100)
 print "Running worker on process {}".format(mpi_rank)
