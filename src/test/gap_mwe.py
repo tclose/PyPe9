@@ -10,8 +10,8 @@ Email: tclose@oist.jp
 import os
 import argparse
 import numpy as np
-import neuron
 from mpi4py import MPI
+import neuron
 from neuron import h
 import sys
 import ninemlp
@@ -80,6 +80,7 @@ if mpi_rank == (num_processes - 1):
     # Record Voltage of post-synaptic cell
     post_v = h.Vector()
     post_v.record(post_cell(0.5)._ref_v)
+print "Finished network construction on process {}".format(mpi_rank)
     
 # Record time
 rec_t = h.Vector()
@@ -94,6 +95,7 @@ neuron.h.finitialize(-60)
 neuron.init()
 neuron.run(100)
 
+print "Finished run on process {}".format(mpi_rank)
 # Convert recorded data into Numpy arrays
 t_array = np.array(rec_t)
 if mpi_rank == 0:
