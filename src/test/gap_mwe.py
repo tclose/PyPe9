@@ -18,8 +18,8 @@ try:
     from mpi4py import MPI #@UnresolvedImport @UnusedImport
 except:
     print "mpi4py was not found, MPI will remain disabled if MPI initialized==False on startup"
-import neuron
-from neuron import h
+from neuron import h, load_mechanisms
+h.load_file('stdrun.hoc')
 from ninemlp.neuron.build import compile_nmodl
 
 # The GID used for the gap junction connection. NB: this number is completely independent from the 
@@ -41,11 +41,11 @@ args = parser.parse_args()
 # Load gap mechanism from another directory if required
 
 
-compile_nmodl(args.gap_mechanism_dir, build_mode=args.build)
+#compile_nmodl(args.gap_mechanism_dir, build_mode=args.build)
 if args.build == 'build_only':
     sys.exit(0)
 #if args.gap_mechanism_dir is not os.getcwd():
-    #neuron.load_mechanisms(args.gap_mechanism_dir)
+#    load_mechanisms(args.gap_mechanism_dir)
 # Get the parallel context and related parameters
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
@@ -83,30 +83,27 @@ if mpi_rank == (num_processes - 1):
     # Record Voltage of post-synaptic cell
     post_v = h.Vector()
     post_v.record(post_cell(0.5)._ref_v)
-print "Finished network construction on process {}".format(mpi_rank)
-    
+# Finalise construction of parallel context
+pc.setup_transfer()    
 # Record time
 rec_t = h.Vector()
 rec_t.record(h._ref_t)    
-
-# Finalise construction of parallel context
-pc.setup_transfer()
-
+print "Finished network construction on process {}".format(mpi_rank)
+    
 # Run simulation    
-print "Running..."
 print "Setting maxstep on process {}".format(mpi_rank)
 pc.set_maxstep(10)
 print "Finitialise on process {}".format(mpi_rank)
 #h.finitialize(-60)
+h.stdinit()
 print "Solving on process {}".format(mpi_rank)
 pc.psolve(100)
 print "Running worker on process {}".format(mpi_rank)
 pc.runworker()
-print "Done pc on process {}".format(mpi_rank)
+print "Completing parallel context on process {}".format(mpi_rank)
 pc.done()
-#neuron.run(100)
-
 print "Finished run on process {}".format(mpi_rank)
+
 # Convert recorded data into Numpy arrays
 t_array = np.array(rec_t)
 if mpi_rank == 0:
@@ -116,6 +113,7 @@ if mpi_rank == (num_processes - 1):
 
 # Either plot the recorded values
 if args.plot and num_processes == 1:
+    print "Plotting..."
     import matplotlib.pyplot as plt
     if mpi_rank == 0:
         pre_fig = plt.figure()
