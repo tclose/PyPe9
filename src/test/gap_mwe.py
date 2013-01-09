@@ -46,6 +46,7 @@ else:
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
 mpi_rank = int(pc.id())
+print "On process {} of {}".format(mpi_rank, num_processes)
 
 print "Creating test network..."
 # The pre-synaptic cell is created on the first node and the post-synaptic cell on the last node 
