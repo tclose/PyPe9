@@ -35,8 +35,9 @@ if args.build in ['build_only', 'compile_only', 'force']:
     import ninemlp
     ninemlp.pyNN_build_mode = args.build
     import ninemlp.neuron #@UnusedImport
+    neuron.load_mechanisms(os.path.join(ninemlp.SRC_PATH, 'pyNN', 'neuron', 'nmodl'))
 # Load gap mechanism from another directory if required
-elif args.gap_mechanism_dir and args.gap_mechanism_dir is not os.getcwd():
+if args.gap_mechanism_dir and args.gap_mechanism_dir is not os.getcwd():
     neuron.load_mechanisms(args.gap_mechanism_dir)
 
 # Get the parallel context and related parameters
