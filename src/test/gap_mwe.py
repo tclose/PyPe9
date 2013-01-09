@@ -11,6 +11,7 @@ import os
 import argparse
 import numpy as np
 import neuron
+from mpi4py import MPI
 from neuron import h
 import sys
 import ninemlp
