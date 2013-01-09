@@ -12,6 +12,8 @@ import argparse
 import numpy as np
 import neuron
 from neuron import h
+import sys
+import ninemlp
 
 # The GID used for the gap junction connection. NB: this number is completely independent from the 
 # GID's used for NEURON sections.
@@ -32,14 +34,14 @@ args = parser.parse_args()
 
 # Compile PyNN mechanisms (including 'Gap' mechanism)
 if args.build in ['build_only', 'compile_only', 'force']:
-    import ninemlp
     ninemlp.pyNN_build_mode = args.build
     import ninemlp.neuron #@UnusedImport
-    neuron.load_mechanisms(os.path.join(ninemlp.SRC_PATH, 'pyNN', 'neuron', 'nmodl'))
+    sys.exit(0)
 # Load gap mechanism from another directory if required
 if args.gap_mechanism_dir and args.gap_mechanism_dir is not os.getcwd():
     neuron.load_mechanisms(args.gap_mechanism_dir)
-
+else:
+    neuron.load_mechanisms(os.path.join(ninemlp.SRC_PATH, 'pyNN', 'neuron', 'nmodl'))
 # Get the parallel context and related parameters
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
