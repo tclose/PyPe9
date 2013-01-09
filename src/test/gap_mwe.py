@@ -10,6 +10,7 @@ Email: tclose@oist.jp
 import os
 import argparse
 import numpy as np
+from mpi4py import MPI
 import neuron
 from neuron import h
 import sys
@@ -34,6 +35,7 @@ args = parser.parse_args()
 
 # Compile PyNN mechanisms (including 'Gap' mechanism)
 if args.build in ['build_only', 'compile_only', 'force']:
+    print args.build
     ninemlp.pyNN_build_mode = args.build
     import ninemlp.neuron #@UnusedImport
     sys.exit(0)
@@ -90,9 +92,13 @@ pc.setup_transfer()
 
 # Run simulation    
 print "Running..."
-neuron.h.finitialize(-60)
+#print "Finitialise on process {}".format(mpi_rank)
+#neuron.h.finitialize(-60)
+print "Setting maxstep on process {}".format(mpi_rank)
 pc.set_maxstep(10)
+print "Initialising on process {}".format(mpi_rank)
 neuron.init()
+print "Solving on process {}".format(mpi_rank)
 pc.psolve(100)
 #neuron.run(100)
 
