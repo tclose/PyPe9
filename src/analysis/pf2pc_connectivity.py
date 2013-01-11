@@ -45,7 +45,7 @@ def main(arguments):
                         "the 'shifted' option will have a significant impact on performance"
                         .format(args.pf_spacing, args.vox_size[0:2]))
     forest = Forest(args.forest_xml)
-    if args.rotate:
+    if args.rotate_xz:
         forest.rotate(args.rotate_xz, axis=0)
     forest_min = np.array([float('inf'), float('inf'), float('inf')])
     forest_max = np.array([float('-inf'), float('-inf'), float('-inf')])
@@ -93,7 +93,7 @@ def main(arguments):
                 start_point = (x, y, forest_min[2], args.pf_diam)
                 finish_point = (x, y, forest_max[2], args.pf_diam)
                 pf_branch = NeurolucidaXMLHandler.Branch((start_point, finish_point), [])
-                pf = Tree(pf_branch, 2)
+                pf = Tree(pf_branch)
             for purkinje in forest:
                 num_overlap = purkinje.num_overlapping(pf, args.vox_size)
                 f.write(' {}'.format(num_overlap))
