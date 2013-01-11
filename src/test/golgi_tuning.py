@@ -49,7 +49,7 @@ for diam in args.diam:
     golgi.__setattr__('soma_group.diam', diam)
     net.describe()
     run(1000)
-    golgis.print_v(args.output + str(diam) + '.v')
+    golgis.print_v(args.output + args.axon + '.diam_' + str(diam) + '.v')
     reset()
     print "Simulated Golgi cell with diam {}".format(diam)
 print "Done"

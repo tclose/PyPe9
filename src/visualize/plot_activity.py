@@ -101,7 +101,9 @@ def main(arguments):
     var_count = 0
     dat_count = 0 # Counts the number of 'v_dat' files that are plotted to give them an index
     for filename in args.filenames:
-        variable_name = filename.split('.')[-1]
+        spit_filename = filename.split('.')
+        filename_prefix = '.'.join(spit_filename[:-1])
+        variable_name = spit_filename[-1]
         # If variable uses the 'dat' extention only, assume that it is a voltage file and change to
         # the 'v_dat' variable name
         if variable_name == 'dat':
@@ -306,8 +308,9 @@ def main(arguments):
                 sorted_IDs.append(ID)
             if args.combine:
                 for ID in sorted_IDs:
-                    leg = '{variable_name} - ID{ID}'.\
-                          format(variable_name=variable_name.capitalize(), ID=ID)
+                    leg = '{prefix} - {variable_name} - ID{ID}'.\
+                          format(prefix=filename_prefix, 
+                                 variable_name=variable_name.capitalize(), ID=ID)
                     if rescale:
                         leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
                     combine_legend.append(leg)
@@ -334,7 +337,7 @@ def main(arguments):
     if not args.no_show:
         plt.show()
 
-def activity_plot(arguments):
+def plot_activity(arguments):
     import shlex
     main(shlex.split(arguments))
 

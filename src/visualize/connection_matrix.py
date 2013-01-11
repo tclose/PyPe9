@@ -191,6 +191,10 @@ def main(arguments):
                         " or 'histogram'")
     pylab.show()
 
+def plot_overlap_matrix(arguments):
+    import shlex
+    main(shlex.split(arguments))
+
 if __name__ == '__main__':
     import sys
     main(sys.argv[1:])

@@ -38,12 +38,10 @@ parser.add_argument('--build', type=str, default='lazy',
                          "compilation and running)") 
 args = parser.parse_args()
 
-# Load gap mechanism from another directory if required
-
-
 compile_nmodl(args.gap_mechanism_dir, build_mode=args.build)
 if args.build == 'build_only':
     sys.exit(0)
+# Load gap mechanism from another directory if required    
 #if args.gap_mechanism_dir is not os.getcwd():
 #    load_mechanisms(args.gap_mechanism_dir)
 # Get the parallel context and related parameters
@@ -132,8 +130,9 @@ else:
     # Save data
     print "Saving data..."
     if mpi_rank == 0:
-        np.savetxt(os.path.join(args.output_dir, "pre_v.dat"), np.transpose(np.vstack((t_array, pre_v_array)))) 
+        np.savetxt(os.path.join(args.output_dir, "pre_v.dat"), 
+                   np.transpose(np.vstack((t_array, pre_v_array)))) 
     if mpi_rank == (num_processes - 1):
-        np.savetxt(os.path.join(args.output_dir, "post_v.dat"), np.transpose(np.vstack((t_array, post_v_array))))
-        
+        np.savetxt(os.path.join(args.output_dir, "post_v.dat"), 
+                   np.transpose(np.vstack((t_array, post_v_array))))
 print "Done."
