@@ -9,7 +9,7 @@
     bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
     (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
   </ncml:sxslt>
-  <cell id="Golgi" defaultMorphology="WithoutAxon">
+  <cell id="Golgi_Solinas08" defaultMorphology="WithoutAxon">
     <notes>A model of a Golgi cell</notes>
     <morphology id="SingleCompartment">
       <segment id="soma">

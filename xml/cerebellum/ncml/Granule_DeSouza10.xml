@@ -9,7 +9,7 @@
     bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
     (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
   </ncml:sxslt>
-  <cell id="Granule">
+  <cell id="Granule_DeSouza10">
     <notes>A model of a granule cell</notes>
     <morphology id="GranuleMorph">
       <!-- Segments -->
