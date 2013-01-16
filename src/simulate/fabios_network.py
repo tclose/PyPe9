@@ -18,6 +18,7 @@ if 'NINEMLP_MPI' in os.environ:
 import argparse
 import ninemlp
 import time
+import sys
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
@@ -37,7 +38,7 @@ parser.add_argument('--output', type=str,
 parser.add_argument('--start_input', type=float, default=1000, help="The start time of the mossy "
                                                                     "fiber stimulation "
                                                                     "(default: %(default)s)")
-parser.add_argument('--min_delay', type=float, default=0.02, help="The minimum synaptic delay in "
+parser.add_argument('--min_delay', type=float, default=0.04, help="The minimum synaptic delay in "
                                                                    "the network "
                                                                    "(default: %(default)s)")
 parser.add_argument('--timestep', type=float, default=0.02, help="The timestep used for the "
@@ -64,6 +65,9 @@ parser.add_argument('--no_granule_to_golgi', action='store_true', help="Deactiva
 parser.add_argument('--log', type=str, help="Save logging information to file",
                     default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.log'))
 args = parser.parse_args()
+# Delete all system arguments once they are parsed to avoid conflicts in NEST module
+del sys.argv[1:]
+# Set up logger
 if args.log:
     from pyNN.utility import init_logging
     init_logging(args.log, debug=True)
@@ -81,6 +85,7 @@ else:
     stim_seed = int(args.stim_seed)
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
+from ninemlp.nest import *
 exec("from ninemlp.%s import *" % args.simulator)
 # Set flags for the construction of the network
 flags = []

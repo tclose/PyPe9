@@ -1758,7 +1758,7 @@
             <parameter name="tau2" value="13.3" units="ms" />
             <parameter name="e" value="0.0" units="mV" />
           </conductanceSynapse>
-          <gapJunction id="Gap" type="Gap" segmentGroup="soma" />
+          <gapJunction id="Gap" segmentGroup="soma" />
         </synapses>
         <initalConditions>
           <membranePotential value='-65 mV' />
