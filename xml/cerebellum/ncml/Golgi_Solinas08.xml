@@ -1,0 +1,1770 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ncml:model xmlns:ncml="ncml" name="Golgi">
+  <!--<include href="SimpleIonChannel.xml"/> Contains ionChannel NaConductance -->
+  <ncml:sxslt>
+    <!-- XML syntactic sugar stylesheet -->
+    ( (sxml:match 'ncml:ionicCurrent (lambda (node bindings root env) (let ((id (or (sxml:attr
+    node 'id) (sxml:attr node 'name))) (kids (sxml:kids node))) `(ncml:component (@ (type
+    "ionic-current") (name ,id)) . ,kids) ))) (sxml:match 'ncml:decayingPool (lambda (node
+    bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
+    (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
+  </ncml:sxslt>
+  <cell id="Golgi" defaultMorphology="WithoutAxon">
+    <notes>A model of a Golgi cell</notes>
+    <morphology id="SingleCompartment">
+      <segment id="soma">
+        <proximal x="0" y="0" z="0" diameter="27" />
+        <distal x="0" y="0" z="27" diameter="27" />
+      </segment>
+      <segmentGroup id="soma">
+        <member segment="soma" />
+      </segmentGroup>
+    </morphology>
+    <morphology id="WithoutAxon">
+      <!-- Segments -->
+      <segment id="soma">
+        <proximal x="0" y="0" z="0" diameter="27" />
+        <distal x="0" y="0" z="27" diameter="27" />
+      </segment>
+      <segment id="dend_0_0">
+        <parent segment="soma" fractionAlong="0.5" />
+        <distal x="11.3" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_1">
+        <parent segment="dend_0_0" />
+        <distal x="22.6" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_2">
+        <parent segment="dend_0_1" />
+        <distal x="33.9" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_3">
+        <parent segment="dend_0_2" />
+        <distal x="45.2" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_4">
+        <parent segment="dend_0_3" />
+        <distal x="56.5" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_5">
+        <parent segment="dend_0_4" />
+        <distal x="67.8" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_6">
+        <parent segment="dend_0_5" />
+        <distal x="79.1" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_7">
+        <parent segment="dend_0_6" />
+        <distal x="90.4" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_8">
+        <parent segment="dend_0_7" />
+        <distal x="101.7" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_9">
+        <parent segment="dend_0_8" />
+        <distal x="113.0" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_0">
+        <parent segment="soma" fractionAlong="0.5" />
+        <distal x="-11.3" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_1">
+        <parent segment="dend_1_0" />
+        <distal x="-22.6" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_2">
+        <parent segment="dend_1_1" />
+        <distal x="-33.9" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_3">
+        <parent segment="dend_1_2" />
+        <distal x="-45.2" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_4">
+        <parent segment="dend_1_3" />
+        <distal x="-56.5" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_5">
+        <parent segment="dend_1_4" />
+        <distal x="-67.8" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_6">
+        <parent segment="dend_1_5" />
+        <distal x="-79.1" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_7">
+        <parent segment="dend_1_6" />
+        <distal x="-90.4" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_8">
+        <parent segment="dend_1_7" />
+        <distal x="-101.7" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_9">
+        <parent segment="dend_1_8" />
+        <distal x="-113.0" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_0">
+        <parent segment="soma" fractionAlong="0.5" />
+        <distal x="0" y="11.3" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_1">
+        <parent segment="dend_2_0" />
+        <distal x="0" y="22.6" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_2">
+        <parent segment="dend_2_1" />
+        <distal x="0" y="33.9" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_3">
+        <parent segment="dend_2_2" />
+        <distal x="0" y="45.2" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_4">
+        <parent segment="dend_2_3" />
+        <distal x="0" y="56.5" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_5">
+        <parent segment="dend_2_4" />
+        <distal x="0" y="67.8" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_6">
+        <parent segment="dend_2_5" />
+        <distal x="0" y="79.1" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_7">
+        <parent segment="dend_2_6" />
+        <distal x="0" y="90.4" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_8">
+        <parent segment="dend_2_7" />
+        <distal x="0" y="101.7" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_9">
+        <parent segment="dend_2_8" />
+        <distal x="0" y="113.0" z="13.5" diameter="3" />
+      </segment>
+      <segmentGroup id="soma" default="True">
+        <member segment="soma" default="True" />
+      </segmentGroup>
+      <segmentGroup id="dendrite">
+        <member segment="dend_0_0" default="True" />
+        <member segment="dend_0_1" />
+        <member segment="dend_0_2" />
+        <member segment="dend_0_3" />
+        <member segment="dend_0_4" />
+        <member segment="dend_0_5" />
+        <member segment="dend_0_6" />
+        <member segment="dend_0_7" />
+        <member segment="dend_0_8" />
+        <member segment="dend_0_9" />
+        <member segment="dend_1_0" />
+        <member segment="dend_1_1" />
+        <member segment="dend_1_2" />
+        <member segment="dend_1_3" />
+        <member segment="dend_1_4" />
+        <member segment="dend_1_5" />
+        <member segment="dend_1_6" />
+        <member segment="dend_1_7" />
+        <member segment="dend_1_8" />
+        <member segment="dend_1_9" />
+        <member segment="dend_2_0" />
+        <member segment="dend_2_1" />
+        <member segment="dend_2_2" />
+        <member segment="dend_2_3" />
+        <member segment="dend_2_4" />
+        <member segment="dend_2_5" />
+        <member segment="dend_2_6" />
+        <member segment="dend_2_7" />
+        <member segment="dend_2_8" />
+        <member segment="dend_2_9" />
+      </segmentGroup>
+    </morphology>
+    <morphology id="WithAxon">
+      <!-- Segments -->
+      <segment id="soma">
+        <proximal x="0" y="0" z="0" diameter="27" />
+        <distal x="0" y="0" z="27" diameter="27" />
+      </segment>
+      <segment id="dend_0_0">
+        <parent segment="soma" fractionAlong="0.5" />
+        <distal x="11.3" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_1">
+        <parent segment="dend_0_0" />
+        <distal x="22.6" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_2">
+        <parent segment="dend_0_1" />
+        <distal x="33.9" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_3">
+        <parent segment="dend_0_2" />
+        <distal x="45.2" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_4">
+        <parent segment="dend_0_3" />
+        <distal x="56.5" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_5">
+        <parent segment="dend_0_4" />
+        <distal x="67.8" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_6">
+        <parent segment="dend_0_5" />
+        <distal x="79.1" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_7">
+        <parent segment="dend_0_6" />
+        <distal x="90.4" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_8">
+        <parent segment="dend_0_7" />
+        <distal x="101.7" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_0_9">
+        <parent segment="dend_0_8" />
+        <distal x="113.0" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_0">
+        <parent segment="soma" fractionAlong="0.5" />
+        <distal x="-11.3" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_1">
+        <parent segment="dend_1_0" />
+        <distal x="-22.6" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_2">
+        <parent segment="dend_1_1" />
+        <distal x="-33.9" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_3">
+        <parent segment="dend_1_2" />
+        <distal x="-45.2" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_4">
+        <parent segment="dend_1_3" />
+        <distal x="-56.5" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_5">
+        <parent segment="dend_1_4" />
+        <distal x="-67.8" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_6">
+        <parent segment="dend_1_5" />
+        <distal x="-79.1" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_7">
+        <parent segment="dend_1_6" />
+        <distal x="-90.4" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_8">
+        <parent segment="dend_1_7" />
+        <distal x="-101.7" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_1_9">
+        <parent segment="dend_1_8" />
+        <distal x="-113.0" y="0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_0">
+        <parent segment="soma" fractionAlong="0.5" />
+        <distal x="0" y="11.3" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_1">
+        <parent segment="dend_2_0" />
+        <distal x="0" y="22.6" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_2">
+        <parent segment="dend_2_1" />
+        <distal x="0" y="33.9" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_3">
+        <parent segment="dend_2_2" />
+        <distal x="0" y="45.2" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_4">
+        <parent segment="dend_2_3" />
+        <distal x="0" y="56.5" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_5">
+        <parent segment="dend_2_4" />
+        <distal x="0" y="67.8" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_6">
+        <parent segment="dend_2_5" />
+        <distal x="0" y="79.1" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_7">
+        <parent segment="dend_2_6" />
+        <distal x="0" y="90.4" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_8">
+        <parent segment="dend_2_7" />
+        <distal x="0" y="101.7" z="13.5" diameter="3" />
+      </segment>
+      <segment id="dend_2_9">
+        <parent segment="dend_2_8" />
+        <distal x="0" y="113.0" z="13.5" diameter="3" />
+      </segment>
+      <segment id="axon_0">
+        <parent segment="soma" fractionAlong="0.5" />
+        <distal x="0.0" y="-12.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_1">
+        <parent segment="axon_0" />
+        <distal x="0.0" y="-24.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_2">
+        <parent segment="axon_1" />
+        <distal x="0.0" y="-36.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_3">
+        <parent segment="axon_2" />
+        <distal x="0.0" y="-48.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_4">
+        <parent segment="axon_3" />
+        <distal x="0.0" y="-60.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_5">
+        <parent segment="axon_4" />
+        <distal x="0.0" y="-72.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_6">
+        <parent segment="axon_5" />
+        <distal x="0.0" y="-84.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_7">
+        <parent segment="axon_6" />
+        <distal x="0.0" y="-96.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_8">
+        <parent segment="axon_7" />
+        <distal x="0.0" y="-108.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_9">
+        <parent segment="axon_8" />
+        <distal x="0.0" y="-120.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_10">
+        <parent segment="axon_9" />
+        <distal x="0.0" y="-132.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_11">
+        <parent segment="axon_10" />
+        <distal x="0.0" y="-144.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_12">
+        <parent segment="axon_11" />
+        <distal x="0.0" y="-156.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_13">
+        <parent segment="axon_12" />
+        <distal x="0.0" y="-168.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_14">
+        <parent segment="axon_13" />
+        <distal x="0.0" y="-180.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_15">
+        <parent segment="axon_14" />
+        <distal x="0.0" y="-192.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_16">
+        <parent segment="axon_15" />
+        <distal x="0.0" y="-204.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_17">
+        <parent segment="axon_16" />
+        <distal x="0.0" y="-216.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_18">
+        <parent segment="axon_17" />
+        <distal x="0.0" y="-228.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_19">
+        <parent segment="axon_18" />
+        <distal x="0.0" y="-240.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_20">
+        <parent segment="axon_19" />
+        <distal x="0.0" y="-252.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_21">
+        <parent segment="axon_20" />
+        <distal x="0.0" y="-264.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_22">
+        <parent segment="axon_21" />
+        <distal x="0.0" y="-276.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_23">
+        <parent segment="axon_22" />
+        <distal x="0.0" y="-288.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_24">
+        <parent segment="axon_23" />
+        <distal x="0.0" y="-300.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_25">
+        <parent segment="axon_24" />
+        <distal x="0.0" y="-312.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_26">
+        <parent segment="axon_25" />
+        <distal x="0.0" y="-324.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_27">
+        <parent segment="axon_26" />
+        <distal x="0.0" y="-336.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_28">
+        <parent segment="axon_27" />
+        <distal x="0.0" y="-348.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_29">
+        <parent segment="axon_28" />
+        <distal x="0.0" y="-360.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_30">
+        <parent segment="axon_29" />
+        <distal x="0.0" y="-372.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_31">
+        <parent segment="axon_30" />
+        <distal x="0.0" y="-384.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_32">
+        <parent segment="axon_31" />
+        <distal x="0.0" y="-396.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_33">
+        <parent segment="axon_32" />
+        <distal x="0.0" y="-408.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_34">
+        <parent segment="axon_33" />
+        <distal x="0.0" y="-420.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_35">
+        <parent segment="axon_34" />
+        <distal x="0.0" y="-432.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_36">
+        <parent segment="axon_35" />
+        <distal x="0.0" y="-444.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_37">
+        <parent segment="axon_36" />
+        <distal x="0.0" y="-456.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_38">
+        <parent segment="axon_37" />
+        <distal x="0.0" y="-468.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_39">
+        <parent segment="axon_38" />
+        <distal x="0.0" y="-480.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_40">
+        <parent segment="axon_39" />
+        <distal x="0.0" y="-492.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_41">
+        <parent segment="axon_40" />
+        <distal x="0.0" y="-504.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_42">
+        <parent segment="axon_41" />
+        <distal x="0.0" y="-516.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_43">
+        <parent segment="axon_42" />
+        <distal x="0.0" y="-528.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_44">
+        <parent segment="axon_43" />
+        <distal x="0.0" y="-540.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_45">
+        <parent segment="axon_44" />
+        <distal x="0.0" y="-552.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_46">
+        <parent segment="axon_45" />
+        <distal x="0.0" y="-564.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_47">
+        <parent segment="axon_46" />
+        <distal x="0.0" y="-576.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_48">
+        <parent segment="axon_47" />
+        <distal x="0.0" y="-588.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_49">
+        <parent segment="axon_48" />
+        <distal x="0.0" y="-600.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_50">
+        <parent segment="axon_49" />
+        <distal x="0.0" y="-612.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_51">
+        <parent segment="axon_50" />
+        <distal x="0.0" y="-624.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_52">
+        <parent segment="axon_51" />
+        <distal x="0.0" y="-636.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_53">
+        <parent segment="axon_52" />
+        <distal x="0.0" y="-648.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_54">
+        <parent segment="axon_53" />
+        <distal x="0.0" y="-660.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_55">
+        <parent segment="axon_54" />
+        <distal x="0.0" y="-672.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_56">
+        <parent segment="axon_55" />
+        <distal x="0.0" y="-684.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_57">
+        <parent segment="axon_56" />
+        <distal x="0.0" y="-696.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_58">
+        <parent segment="axon_57" />
+        <distal x="0.0" y="-708.0" z="13.5" diameter="2.4" />
+      </segment>
+      <segment id="axon_59">
+        <parent segment="axon_58" />
+        <distal x="0.0" y="-720.0" z="13.5" diameter="2.4" />
+        </segment>WithoutAxon
+        <segment id="axon_60">
+          <parent segment="axon_59" />
+          <distal x="0.0" y="-732.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_61">
+          <parent segment="axon_60" />
+          <distal x="0.0" y="-744.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_62">
+          <parent segment="axon_61" />
+          <distal x="0.0" y="-756.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_63">
+          <parent segment="axon_62" />
+          <distal x="0.0" y="-768.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_64">
+          <parent segment="axon_63" />
+          <distal x="0.0" y="-780.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_65">
+          <parent segment="axon_64" />
+          <distal x="0.0" y="-792.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_66">
+          <parent segment="axon_65" />
+          <distal x="0.0" y="-804.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_67">
+          <parent segment="axon_66" />
+          <distal x="0.0" y="-816.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_68">
+          <parent segment="axon_67" />
+          <distal x="0.0" y="-828.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_69">
+          <parent segment="axon_68" />
+          <distal x="0.0" y="-840.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_70">
+          <parent segment="axon_69" />
+          <distal x="0.0" y="-852.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_71">
+          <parent segment="axon_70" />
+          <distal x="0.0" y="-864.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_72">
+          <parent segment="axon_71" />
+          <distal x="0.0" y="-876.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_73">
+          <parent segment="axon_72" />
+          <distal x="0.0" y="-888.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_74">
+          <parent segment="axon_73" />
+          <distal x="0.0" y="-900.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_75">
+          <parent segment="axon_74" />
+          <distal x="0.0" y="-912.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_76">
+          <parent segment="axon_75" />
+          <distal x="0.0" y="-924.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_77">
+          <parent segment="axon_76" />
+          <distal x="0.0" y="-936.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_78">
+          <parent segment="axon_77" />
+          <distal x="0.0" y="-948.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_79">
+          <parent segment="axon_78" />
+          <distal x="0.0" y="-960.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_80">
+          <parent segment="axon_79" />
+          <distal x="0.0" y="-972.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_81">
+          <parent segment="axon_80" />
+          <distal x="0.0" y="-984.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_82">
+          <parent segment="axon_81" />
+          <distal x="0.0" y="-996.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_83">
+          <parent segment="axon_82" />
+          <distal x="0.0" y="-1008.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_84">
+          <parent segment="axon_83" />
+          <distal x="0.0" y="-1020.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_85">
+          <parent segment="axon_84" />
+          <distal x="0.0" y="-1032.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_86">
+          <parent segment="axon_85" />
+          <distal x="0.0" y="-1044.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_87">
+          <parent segment="axon_86" />
+          <distal x="0.0" y="-1056.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_88">
+          <parent segment="axon_87" />
+          <distal x="0.0" y="-1068.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_89">
+          <parent segment="axon_88" />
+          <distal x="0.0" y="-1080.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_90">
+          <parent segment="axon_89" />
+          <distal x="0.0" y="-1092.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_91">
+          <parent segment="axon_90" />
+          <distal x="0.0" y="-1104.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_92">
+          <parent segment="axon_91" />
+          <distal x="0.0" y="-1116.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_93">
+          <parent segment="axon_92" />
+          <distal x="0.0" y="-1128.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_94">
+          <parent segment="axon_93" />
+          <distal x="0.0" y="-1140.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_95">
+          <parent segment="axon_94" />
+          <distal x="0.0" y="-1152.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_96">
+          <parent segment="axon_95" />
+          <distal x="0.0" y="-1164.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_97">
+          <parent segment="axon_96" />
+          <distal x="0.0" y="-1176.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_98">
+          <parent segment="axon_97" />
+          <distal x="0.0" y="-1188.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segment id="axon_99">
+          <parent segment="axon_98" />
+          <distal x="0.0" y="-1200.0" z="13.5" diameter="2.4" />
+        </segment>
+        <segmentGroup id="soma" default="True">
+          <member segment="soma" default="True" />
+        </segmentGroup>
+        <segmentGroup id="dendrite">
+          <member segment="dend_0_0" default="True" />
+          <member segment="dend_0_1" />
+          <member segment="dend_0_2" />
+          <member segment="dend_0_3" />
+          <member segment="dend_0_4" />
+          <member segment="dend_0_5" />
+          <member segment="dend_0_6" />
+          <member segment="dend_0_7" />
+          <member segment="dend_0_8" />
+          <member segment="dend_0_9" />
+          <member segment="dend_1_0" />
+          <member segment="dend_1_1" />
+          <member segment="dend_1_2" />
+          <member segment="dend_1_3" />
+          <member segment="dend_1_4" />
+          <member segment="dend_1_5" />
+          <member segment="dend_1_6" />
+          <member segment="dend_1_7" />
+          <member segment="dend_1_8" />
+          <member segment="dend_1_9" />
+          <member segment="dend_2_0" />
+          <member segment="dend_2_1" />
+          <member segment="dend_2_2" />
+          <member segment="dend_2_3" />
+          <member segment="dend_2_4" />
+          <member segment="dend_2_5" />
+          <member segment="dend_2_6" />
+          <member segment="dend_2_7" />
+          <member segment="dend_2_8" />
+          <member segment="dend_2_9" />
+        </segmentGroup>
+        <segmentGroup id="axon">
+          <member segment="axon_0" default="True" />
+          <member segment="axon_1" />
+          <member segment="axon_2" />
+          <member segment="axon_3" />
+          <member segment="axon_4" />
+          <member segment="axon_5" />
+          <member segment="axon_6" />
+          <member segment="axon_7" />
+          <member segment="axon_8" />
+          <member segment="axon_9" />
+          <member segment="axon_10" />
+          <member segment="axon_11" />
+          <member segment="axon_12" />
+          <member segment="axon_13" />
+          <member segment="axon_14" />
+          <member segment="axon_15" />
+          <member segment="axon_16" />
+          <member segment="axon_17" />
+          <member segment="axon_18" />
+          <member segment="axon_19" />
+          <member segment="axon_20" />
+          <member segment="axon_21" />
+          <member segment="axon_22" />
+          <member segment="axon_23" />
+          <member segment="axon_24" />
+          <member segment="axon_25" />
+          <member segment="axon_26" />
+          <member segment="axon_27" />
+          <member segment="axon_28" />
+          <member segment="axon_29" />
+          <member segment="axon_30" />
+          <member segment="axon_31" />
+          <member segment="axon_32" />
+          <member segment="axon_33" />
+          <member segment="axon_34" />
+          <member segment="axon_35" />
+          <member segment="axon_36" />
+          <member segment="axon_37" />
+          <member segment="axon_38" />
+          <member segment="axon_39" />
+          <member segment="axon_40" />
+          <member segment="axon_41" />
+          <member segment="axon_42" />
+          <member segment="axon_43" />
+          <member segment="axon_44" />
+          <member segment="axon_45" />
+          <member segment="axon_46" />
+          <member segment="axon_47" />
+          <member segment="axon_48" />
+          <member segment="axon_49" />
+          <member segment="axon_50" />
+          <member segment="axon_51" />
+          <member segment="axon_52" />
+          <member segment="axon_53" />
+          <member segment="axon_54" />
+          <member segment="axon_55" />
+          <member segment="axon_56" />
+          <member segment="axon_57" />
+          <member segment="axon_58" />
+          <member segment="axon_59" />
+          <member segment="axon_60" />
+          <member segment="axon_61" />
+          <member segment="axon_62" />
+          <member segment="axon_63" />
+          <member segment="axon_64" />
+          <member segment="axon_65" />
+          <member segment="axon_66" />
+          <member segment="axon_67" />
+          <member segment="axon_68" />
+          <member segment="axon_69" />
+          <member segment="axon_70" />
+          <member segment="axon_71" />
+          <member segment="axon_72" />
+          <member segment="axon_73" />
+          <member segment="axon_74" />
+          <member segment="axon_75" />
+          <member segment="axon_76" />
+          <member segment="axon_77" />
+          <member segment="axon_78" />
+          <member segment="axon_79" />
+          <member segment="axon_80" />
+          <member segment="axon_81" />
+          <member segment="axon_82" />
+          <member segment="axon_83" />
+          <member segment="axon_84" />
+          <member segment="axon_85" />
+          <member segment="axon_86" />
+          <member segment="axon_87" />
+          <member segment="axon_88" />
+          <member segment="axon_89" />
+          <member segment="axon_90" />
+          <member segment="axon_91" />
+          <member segment="axon_92" />
+          <member segment="axon_93" />
+          <member segment="axon_94" />
+          <member segment="axon_95" />
+          <member segment="axon_96" />
+          <member segment="axon_97" />
+          <member segment="axon_98" />
+          <member segment="axon_99" />
+        </segmentGroup>
+      </morphology>
+      <biophysicalProperties id="GolgiBiophys">
+        <defaultBuildOptions>
+          <build tool="nemo" simulator="neuron" method="derivimplicit">
+            <kinetic comp_id="SK2_z" />
+          </build>
+          <build tool="nemo" simulator="nest" method="gsl" />
+        </defaultBuildOptions>
+        <!-- FIXME: celsius = 23 Not sure where to put this -->
+        <membraneProperties>
+          <ncml:input name="v"/>
+          <ncml:input name="celsius"/>
+          <ncml:component type="defaults">
+            <ncml:const name="V_t" value="-35"/>
+            <ncml:const name="celsius" value="23"/>
+            <ncml:output name="celsius"/>
+            <ncml:output name="V_t"/>
+          </ncml:component>
+          <ncml:component type="membrane-capacitance">
+            <ncml:const name="c" value="0.001"/>
+            <ncml:output name="c"/>
+          </ncml:component>
+          <ncml:decayingPool name="ca">
+            <ncml:input name="ica" from="ion-currents"/>
+            <ncml:const name="F" value="96485.3"/>
+            <ncml:const name="d" value="0.2"/>
+            <ncml:const name="cao" value="2.0"/>
+            <ncml:const name="cai0" value="5e-05"/>
+            <ncml:const name="beta" value="1.3"/>
+            <ncml:rate name="ca"><ncml:expr>((neg (ica) / (2 * F * d)) * 10000.0 - (beta * (ca - cai0)))</ncml:expr>
+            <ncml:initial>cai0</ncml:initial>
+            </ncml:rate>
+            <ncml:output name="ca"/>
+            <ncml:output name="cao"/>
+          </ncml:decayingPool>
+          <ncml:decayingPool name="ca2">
+            <ncml:input name="ica2" from="ion-currents"/>
+            <ncml:const name="valence" value="2"/>
+            <ncml:const name="F" value="96485.3"/>
+            <ncml:const name="d" value="0.2"/>
+            <ncml:const name="ca2o" value="2.0"/>
+            <ncml:const name="ca2i0" value="5e-05"/>
+            <ncml:const name="beta" value="1.3"/>
+            <ncml:rate name="ca2"><ncml:expr>((neg (ica2) / (2 * F * d)) * 10000.0 - (beta * (ca2 - ca2i0)))</ncml:expr>
+            <ncml:initial>ca2i0</ncml:initial>
+            </ncml:rate>
+            <ncml:output name="ca2"/>
+            <ncml:output name="ca2o"/>
+            <ncml:output name="valence"/>
+          </ncml:decayingPool>
+          <ncml:ionicCurrent name="CaHVA">
+            <ncml:input name="cai" from="ion-pools"/>
+            <ncml:input name="cao" from="ion-pools"/>
+            <ncml:component type="gate">
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:const name="Aalpha_s" value="0.04944"/>
+              <ncml:const name="Kalpha_s" value="15.87301587302"/>
+              <ncml:const name="V0alpha_s" value="-29.06"/>
+              <ncml:const name="Abeta_s" value="0.08298"/>
+              <ncml:const name="Kbeta_s" value="-25.641"/>
+              <ncml:const name="V0beta_s" value="-18.66"/>
+              <ncml:const name="Aalpha_u" value="0.0013"/>
+              <ncml:const name="Kalpha_u" value="-18.183"/>
+              <ncml:const name="V0alpha_u" value="-48"/>
+              <ncml:const name="Abeta_u" value="0.0013"/>
+              <ncml:const name="Kbeta_u" value="83.33"/>
+              <ncml:const name="V0beta_u" value="-48"/>
+              <ncml:defun name="alpha_s">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_s * exp ((v - V0alpha_s) / Kalpha_s))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_s">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_s * exp ((v - V0beta_s) / Kbeta_s))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="alpha_u">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_u * exp ((v - V0alpha_u) / Kalpha_u))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_u">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_u * exp ((v - V0beta_u) / Kbeta_u))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="s_inf"><ncml:expr>((alpha_s (v Q10)) / (alpha_s (v Q10) + beta_s (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_s"><ncml:expr>(1 / (alpha_s (v Q10) + beta_s (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="u_inf"><ncml:expr>((alpha_u (v Q10)) / (alpha_u (v Q10) + beta_u (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_u"><ncml:expr>(1 / (alpha_u (v Q10) + beta_u (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:hh_ionic_gate name="CaHVA"><ncml:initial_m>s_inf</ncml:initial_m>
+              <ncml:initial_h>u_inf</ncml:initial_h>
+              <ncml:m_power>2</ncml:m_power>
+              <ncml:h_power>1</ncml:h_power>
+              <ncml:m_inf>s_inf</ncml:m_inf>
+              <ncml:m_tau>tau_s</ncml:m_tau>
+              <ncml:h_inf>u_inf</ncml:h_inf>
+              <ncml:h_tau>tau_s</ncml:h_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.00046"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="ca">
+              <ncml:const name="F" value="96485.3"/>
+              <ncml:const name="R" value="8.31342"/>
+              <ncml:asgn name="e"><ncml:expr>((1000.0) * (R * (celsius + 273.15)) / (2 * F) * ln (cao / cai))</ncml:expr>
+              </ncml:asgn>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="CaHVA">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="CaLVA">
+            <ncml:input name="ca2i" from="ion-pools"/>
+            <ncml:input name="ca2o" from="ion-pools"/>
+            <ncml:component type="gate">
+              <ncml:const name="shift" value="2"/>
+              <ncml:const name="v0_m_inf" value="-50"/>
+              <ncml:const name="v0_h_inf" value="-78"/>
+              <ncml:const name="k_m_inf" value="-7.4"/>
+              <ncml:const name="k_h_inf" value="5.0"/>
+              <ncml:const name="C_tau_m" value="3"/>
+              <ncml:const name="A_tau_m" value="1.0"/>
+              <ncml:const name="v0_tau_m1" value="-25"/>
+              <ncml:const name="v0_tau_m2" value="-100"/>
+              <ncml:const name="k_tau_m1" value="10"/>
+              <ncml:const name="k_tau_m2" value="-15"/>
+              <ncml:const name="C_tau_h" value="85"/>
+              <ncml:const name="A_tau_h" value="1.0"/>
+              <ncml:const name="v0_tau_h1" value="-46"/>
+              <ncml:const name="v0_tau_h2" value="-405"/>
+              <ncml:const name="k_tau_h1" value="4"/>
+              <ncml:const name="k_tau_h2" value="-50"/>
+              <ncml:asgn name="phi_m"><ncml:expr>(pow (5.0 ((celsius - 24) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="phi_h"><ncml:expr>(pow (3.0 ((celsius - 24) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="m_inf"><ncml:expr>(1.0 / (1 + exp ((v + shift - v0_m_inf) / k_m_inf)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="h_inf"><ncml:expr>(1.0 / (1 + exp ((v + shift - v0_h_inf) / k_h_inf)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_m"><ncml:expr>((C_tau_m + A_tau_m / (exp ((v + shift - v0_tau_m1) / k_tau_m1) + exp ((v + shift - v0_tau_m2) / k_tau_m2))) / phi_m)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_h"><ncml:expr>((C_tau_h + A_tau_h / (exp ((v + shift - v0_tau_h1) / k_tau_h1) + exp ((v + shift - v0_tau_h2) / k_tau_h2))) / phi_h)</ncml:expr>
+              </ncml:asgn>
+              <ncml:hh_ionic_gate name="CaLVA"><ncml:initial_m>m_inf</ncml:initial_m>
+              <ncml:initial_h>h_inf</ncml:initial_h>
+              <ncml:m_power>2</ncml:m_power>
+              <ncml:h_power>1</ncml:h_power>
+              <ncml:m_inf>m_inf</ncml:m_inf>
+              <ncml:m_tau>tau_m</ncml:m_tau>
+              <ncml:h_inf>h_inf</ncml:h_inf>
+              <ncml:h_tau>tau_h</ncml:h_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.00025"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="ca2">
+              <ncml:const name="valence" value="2"/>
+              <ncml:const name="F" value="96485.3"/>
+              <ncml:const name="R" value="8.31342"/>
+              <ncml:asgn name="e"><ncml:expr>((1000.0) * (R * (celsius + 273.15)) / (2 * F) * ln (ca2o / ca2i))</ncml:expr>
+              </ncml:asgn>
+              <ncml:output name="e"/>
+              <ncml:output name="valence"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="CaLVA">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="200"/>
+            <ncml:const name="vcbdur" value="250"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="HCN1">
+            <ncml:const name="Ehalf" value="-72.49"/>
+            <ncml:const name="c" value="0.11305"/>
+            <ncml:const name="rA" value="0.002096"/>
+            <ncml:const name="rB" value="0.97596"/>
+            <ncml:defun name="r">
+              <ncml:arg>potential</ncml:arg>
+              <ncml:body>((rA * potential) + rB)</ncml:body>
+            </ncml:defun>
+            <ncml:defun name="tau">
+              <ncml:arg>potential</ncml:arg><ncml:arg>t1</ncml:arg><ncml:arg>t2</ncml:arg><ncml:arg>t3</ncml:arg>
+              <ncml:body>(exp (((t1 * potential) - t2) * t3))</ncml:body>
+            </ncml:defun>
+            <ncml:defun name="o_inf">
+              <ncml:arg>potential</ncml:arg><ncml:arg>Ehalf</ncml:arg><ncml:arg>c</ncml:arg>
+              <ncml:body>(1 / (1 + exp ((potential - Ehalf) * c)))</ncml:body>
+            </ncml:defun>
+            <ncml:component type="gate">
+              <ncml:const name="tCs" value="0.01451"/>
+              <ncml:const name="tDs" value="-4.056"/>
+              <ncml:const name="tEs" value="2.302585092"/>
+              <ncml:asgn name="o_slow_inf"><ncml:expr>((1 - r (v)) * o_inf (v Ehalf c))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_s"><ncml:expr>(tau (v tCs tDs tEs))</ncml:expr>
+              </ncml:asgn>
+              <ncml:rate name="o_slow"><ncml:expr>((o_slow_inf - o_slow) / tau_s)</ncml:expr>
+              <ncml:initial>o_slow_inf</ncml:initial>
+              </ncml:rate>
+              <ncml:output name="o_slow"/>
+            </ncml:component>
+            <ncml:component type="gate">
+              <ncml:const name="tCf" value="0.01371"/>
+              <ncml:const name="tDf" value="-3.368"/>
+              <ncml:const name="tEf" value="2.302585092"/>
+              <ncml:asgn name="o_fast_inf"><ncml:expr>(r (v) * o_inf (v Ehalf c))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_f"><ncml:expr>(tau (v tCf tDf tEf))</ncml:expr>
+              </ncml:asgn>
+              <ncml:rate name="o_fast"><ncml:expr>((o_fast_inf - o_fast) / tau_f)</ncml:expr>
+              <ncml:initial>o_fast_inf</ncml:initial>
+              </ncml:rate>
+              <ncml:output name="o_fast"/>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="5e-05"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="non-specific">
+              <ncml:const name="e" value="-20"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="HCN1">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="HCN2">
+            <ncml:const name="Ehalf" value="-81.95"/>
+            <ncml:const name="c" value="0.1661"/>
+            <ncml:const name="rA" value="-0.0227"/>
+            <ncml:const name="rB" value="-1.4694"/>
+            <ncml:defun name="r">
+              <ncml:arg>potential</ncml:arg><ncml:arg>r1</ncml:arg><ncml:arg>r2</ncml:arg>
+              <ncml:body>(if (potential &gt;= -64.7) then 0.0 else (if (potential &lt;= -108.7) then 1.0 else (r1 * potential) + r2))</ncml:body>
+            </ncml:defun>
+            <ncml:defun name="o_inf">
+              <ncml:arg>potential</ncml:arg><ncml:arg>Ehalf</ncml:arg><ncml:arg>c</ncml:arg>
+              <ncml:body>(1 / (1 + exp ((potential - Ehalf) * c)))</ncml:body>
+            </ncml:defun>
+            <ncml:component type="gate">
+              <ncml:const name="tCs" value="0.0152"/>
+              <ncml:const name="tDs" value="-5.2944"/>
+              <ncml:const name="tEs" value="2.3026"/>
+              <ncml:defun name="tau_slow">
+                <ncml:arg>potential</ncml:arg><ncml:arg>t1</ncml:arg><ncml:arg>t2</ncml:arg><ncml:arg>t3</ncml:arg>
+                <ncml:body>(exp (t3 * ((t1 * potential) - t2)))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="o_slow_inf"><ncml:expr>((1 - r (v rA rB)) * o_inf (v Ehalf c))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_s"><ncml:expr>(tau_slow (v tCs tDs tEs))</ncml:expr>
+              </ncml:asgn>
+              <ncml:rate name="o_slow"><ncml:expr>((o_slow_inf - o_slow) / tau_s)</ncml:expr>
+              <ncml:initial>o_slow_inf</ncml:initial>
+              </ncml:rate>
+              <ncml:output name="o_slow"/>
+            </ncml:component>
+            <ncml:component type="gate">
+              <ncml:const name="tCf" value="0.0269"/>
+              <ncml:const name="tDf" value="-5.6111"/>
+              <ncml:const name="tEf" value="2.3026"/>
+              <ncml:defun name="tau_fast">
+                <ncml:arg>potential</ncml:arg><ncml:arg>t1</ncml:arg><ncml:arg>t2</ncml:arg><ncml:arg>t3</ncml:arg>
+                <ncml:body>(exp (t3 * ((t1 * potential) - t2)))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="o_fast_inf"><ncml:expr>(r (v rA rB) * o_inf (v Ehalf c))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_f"><ncml:expr>(tau_fast (v tCf tDf tEf))</ncml:expr>
+              </ncml:asgn>
+              <ncml:rate name="o_fast"><ncml:expr>((o_fast_inf - o_fast) / tau_f)</ncml:expr>
+              <ncml:initial>o_fast_inf</ncml:initial>
+              </ncml:rate>
+              <ncml:output name="o_fast"/>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="8e-05"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="non-specific">
+              <ncml:const name="e" value="-20"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="HCN2">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="KA">
+            <ncml:defun name="sigm">
+              <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
+              <ncml:body>(1 / (exp (x / y) + 1))</ncml:body>
+            </ncml:defun>
+            <ncml:component type="gate">
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 25.5) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:const name="Aalpha_a" value="0.8147"/>
+              <ncml:const name="Kalpha_a" value="-23.32708"/>
+              <ncml:const name="V0alpha_a" value="-9.17203"/>
+              <ncml:const name="Abeta_a" value="0.1655"/>
+              <ncml:const name="Kbeta_a" value="19.47175"/>
+              <ncml:const name="V0beta_a" value="-18.27914"/>
+              <ncml:const name="Aalpha_b" value="0.0368"/>
+              <ncml:const name="Kalpha_b" value="12.8433"/>
+              <ncml:const name="V0alpha_b" value="-111.33209"/>
+              <ncml:const name="Abeta_b" value="0.0345"/>
+              <ncml:const name="Kbeta_b" value="-8.90123"/>
+              <ncml:const name="V0beta_b" value="-49.9537"/>
+              <ncml:const name="V0_ainf" value="-38"/>
+              <ncml:const name="K_ainf" value="-17"/>
+              <ncml:const name="V0_binf" value="-78.8"/>
+              <ncml:const name="K_binf" value="8.4"/>
+              <ncml:defun name="alpha_a">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_a * sigm ((v - V0alpha_a) Kalpha_a))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_a">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * (Abeta_a / exp ((v - V0beta_a) / Kbeta_a)))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="alpha_b">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_b * sigm ((v - V0alpha_b) Kalpha_b))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_b">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_b * sigm ((v - V0beta_b) Kbeta_b))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="a_inf"><ncml:expr>(1 / (1 + exp ((v - V0_ainf) / K_ainf)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_a"><ncml:expr>(1 / (alpha_a (v Q10) + beta_a (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="b_inf"><ncml:expr>(1 / (1 + exp ((v - V0_binf) / K_binf)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_b"><ncml:expr>(1 / (alpha_b (v Q10) + beta_b (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:hh_ionic_gate name="KA"><ncml:initial_m>(a_inf)</ncml:initial_m>
+              <ncml:initial_h>(b_inf)</ncml:initial_h>
+              <ncml:m_power>3</ncml:m_power>
+              <ncml:h_power>1</ncml:h_power>
+              <ncml:m_inf>a_inf</ncml:m_inf>
+              <ncml:m_tau>tau_a</ncml:m_tau>
+              <ncml:h_inf>b_inf</ncml:h_inf>
+              <ncml:h_tau>tau_b</ncml:h_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.008"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="k">
+              <ncml:const name="e" value="-84.69"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="KA">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="KCa">
+            <ncml:input name="cai" from="ion-pools"/>
+            <ncml:component type="gate">
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 30) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:const name="Aalpha_c" value="7"/>
+              <ncml:const name="Balpha_c" value="0.0015"/>
+              <ncml:const name="Kalpha_c" value="-11.765"/>
+              <ncml:const name="Abeta_c" value="1.0"/>
+              <ncml:const name="Bbeta_c" value="0.00015"/>
+              <ncml:const name="Kbeta_c" value="-11.765"/>
+              <ncml:defun name="alpha_c">
+                <ncml:arg>v</ncml:arg><ncml:arg>cai</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_c / (1 + (Balpha_c * exp (v / Kalpha_c) / cai)))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_c">
+                <ncml:arg>v</ncml:arg><ncml:arg>cai</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_c / (1 + (cai / (Bbeta_c * exp (v / Kbeta_c)))))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="c_inf"><ncml:expr>((alpha_c (v cai Q10)) / (alpha_c (v cai Q10) + beta_c (v cai Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_c"><ncml:expr>(1 / (alpha_c (v cai Q10) + beta_c (v cai Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:hh_ionic_gate name="KCa"><ncml:initial_m>c_inf</ncml:initial_m>
+              <ncml:m_power>1</ncml:m_power>
+              <ncml:h_power>0</ncml:h_power>
+              <ncml:m_inf>c_inf</ncml:m_inf>
+              <ncml:m_tau>tau_c</ncml:m_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.003"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="k">
+              <ncml:const name="e" value="-84.69"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+            <ncml:component type="modulating-ion" name="ca">
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="KCa">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="KM">
+            <ncml:component type="gate">
+              <ncml:const name="Aalpha_n" value="0.0033"/>
+              <ncml:const name="Kalpha_n" value="40"/>
+              <ncml:const name="V0alpha_n" value="-30"/>
+              <ncml:const name="Abeta_n" value="0.0033"/>
+              <ncml:const name="Kbeta_n" value="-20"/>
+              <ncml:const name="V0beta_n" value="-30"/>
+              <ncml:const name="V0_ninf" value="-35"/>
+              <ncml:const name="B_ninf" value="6"/>
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 22) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:defun name="alpha_n">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_n * exp ((v - V0alpha_n) / Kalpha_n))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_n">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_n * exp ((v - V0beta_n) / Kbeta_n))</ncml:body>
+              </ncml:defun>
+              <ncml:hh_ionic_gate name="KM"><ncml:initial_m>((1 / (1 + exp ((neg (v - V0_ninf)) / B_ninf))))</ncml:initial_m>
+              <ncml:m_power>1</ncml:m_power>
+              <ncml:h_power>0</ncml:h_power>
+              <ncml:m_inf>((1 / (1 + exp ((neg (v - V0_ninf)) / B_ninf))))</ncml:m_inf>
+              <ncml:m_tau>((1 / (alpha_n (v Q10) + beta_n (v Q10))))</ncml:m_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.001"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="k">
+              <ncml:const name="e" value="-84.69"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="KM">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="KV">
+            <ncml:defun name="linoid">
+              <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
+              <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2))) else (x / (exp (x / y) - 1)))</ncml:body>
+            </ncml:defun>
+            <ncml:component type="gate">
+              <ncml:const name="Aalpha_n" value="-0.01"/>
+              <ncml:const name="Kalpha_n" value="-10"/>
+              <ncml:const name="V0alpha_n" value="-26"/>
+              <ncml:const name="Abeta_n" value="0.125"/>
+              <ncml:const name="Kbeta_n" value="-80"/>
+              <ncml:const name="V0beta_n" value="-36"/>
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 6.3) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:defun name="alpha_n">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_n * linoid ((v - V0alpha_n) Kalpha_n))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_n">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_n * exp ((v - V0beta_n) / Kbeta_n))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="n_inf"><ncml:expr>((alpha_n (v Q10)) / (alpha_n (v Q10) + beta_n (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_n"><ncml:expr>(1 / (alpha_n (v Q10) + beta_n (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:hh_ionic_gate name="KV"><ncml:initial_m>n_inf</ncml:initial_m>
+              <ncml:m_power>4</ncml:m_power>
+              <ncml:h_power>0</ncml:h_power>
+              <ncml:m_inf>(n_inf)</ncml:m_inf>
+              <ncml:m_tau>(tau_n)</ncml:m_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.032"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="k">
+              <ncml:const name="e" value="-84.69"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="KV">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="SK2">
+            <ncml:input name="cai" from="ion-pools"/>
+            <ncml:component type="gate">
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 23) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:const name="diff" value="3"/>
+              <ncml:const name="invc1" value="0.08"/>
+              <ncml:const name="invc2" value="0.08"/>
+              <ncml:const name="invc3" value="0.2"/>
+              <ncml:const name="invo1" value="1"/>
+              <ncml:const name="invo2" value="0.1"/>
+              <ncml:const name="diro1" value="0.16"/>
+              <ncml:const name="diro2" value="1.2"/>
+              <ncml:const name="dirc2" value="200"/>
+              <ncml:const name="dirc3" value="160"/>
+              <ncml:const name="dirc4" value="80"/>
+              <ncml:asgn name="invc1_t"><ncml:expr>(invc1 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="invc2_t"><ncml:expr>(invc2 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="invc3_t"><ncml:expr>(invc3 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="invo1_t"><ncml:expr>(invo1 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="invo2_t"><ncml:expr>(invo2 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="diro1_t"><ncml:expr>(diro1 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="diro2_t"><ncml:expr>(diro2 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="dirc2_t"><ncml:expr>(dirc2 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="dirc3_t"><ncml:expr>(dirc3 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="dirc4_t"><ncml:expr>(dirc4 * Q10)</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="dirc2_t_ca"><ncml:expr>(dirc2_t * (cai / diff))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="dirc3_t_ca"><ncml:expr>(dirc3_t * (cai / diff))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="dirc4_t_ca"><ncml:expr>(dirc4_t * (cai / diff))</ncml:expr>
+              </ncml:asgn>
+              <ncml:reaction name="SK2_z"><ncml:open>o1,o2</ncml:open>
+              <ncml:power>1</ncml:power>
+              <ncml:transitions><ncml:transition src="c1" dst="c2">
+                <ncml:rate>dirc2_t_ca </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="c2" dst="c1">
+                <ncml:rate>invc1_t </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="c2" dst="c3">
+                <ncml:rate>dirc3_t_ca </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="c3" dst="c2">
+                <ncml:rate>invc2_t </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="c3" dst="c4">
+                <ncml:rate>dirc4_t_ca </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="c4" dst="c3">
+                <ncml:rate>invc3_t </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="c3" dst="o1">
+                <ncml:rate>diro1_t </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="o1" dst="c3">
+                <ncml:rate>invo1_t </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="c4" dst="o2">
+                <ncml:rate>diro2_t </ncml:rate>
+              </ncml:transition>
+              <ncml:transition src="o2" dst="c4">
+                <ncml:rate>invo2_t </ncml:rate>
+              </ncml:transition>
+              </ncml:transitions>
+              </ncml:reaction>
+              <ncml:output name="SK2_z"/>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.038"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="k">
+              <ncml:const name="e" value="-84.69"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+            <ncml:component type="modulating-ion" name="ca">
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="SK2">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-69"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="8"/>
+            <ncml:const name="vchdur" value="30"/>
+            <ncml:const name="vcbdur" value="100"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="Na">
+            <ncml:defun name="linoid">
+              <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
+              <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2))) else (x / (1 - exp (x / y))))</ncml:body>
+            </ncml:defun>
+            <ncml:component type="gate">
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:const name="Aalpha_u" value="0.3"/>
+              <ncml:const name="Kalpha_u" value="-10"/>
+              <ncml:const name="V0alpha_u" value="-25"/>
+              <ncml:const name="Abeta_u" value="12"/>
+              <ncml:const name="Kbeta_u" value="-18.182"/>
+              <ncml:const name="V0beta_u" value="-50"/>
+              <ncml:const name="Aalpha_v" value="0.21"/>
+              <ncml:const name="Kalpha_v" value="-3.333"/>
+              <ncml:const name="V0alpha_v" value="-50"/>
+              <ncml:const name="Abeta_v" value="3"/>
+              <ncml:const name="Kbeta_v" value="-5"/>
+              <ncml:const name="V0beta_v" value="-17"/>
+              <ncml:defun name="alpha_u">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_u * linoid ((v - V0alpha_u) Kalpha_u))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_u">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_u * exp ((v - V0beta_u) / Kbeta_u))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="alpha_v">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_v * exp ((v - V0alpha_v) / Kalpha_v))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_v">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_v / (1 + exp ((v - V0beta_v) / Kbeta_v)))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="u_inf"><ncml:expr>((alpha_u (v Q10)) / (alpha_u (v Q10) + beta_u (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_u"><ncml:expr>(1 / (alpha_u (v Q10) + beta_u (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="v_inf"><ncml:expr>((alpha_v (v Q10)) / (alpha_v (v Q10) + beta_v (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_v"><ncml:expr>(1 / (alpha_v (v Q10) + beta_v (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:hh_ionic_gate name="Na"><ncml:initial_m>(u_inf)</ncml:initial_m>
+              <ncml:initial_h>(v_inf)</ncml:initial_h>
+              <ncml:m_power>3</ncml:m_power>
+              <ncml:h_power>1</ncml:h_power>
+              <ncml:m_inf>(u_inf)</ncml:m_inf>
+              <ncml:m_tau>(tau_u)</ncml:m_tau>
+              <ncml:h_inf>(v_inf)</ncml:h_inf>
+              <ncml:h_tau>(tau_v)</ncml:h_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.048"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="na">
+              <ncml:const name="e" value="87.39"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="Na">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-60"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="9"/>
+            <ncml:const name="vchdur" value="100"/>
+            <ncml:const name="vcbdur" value="200"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="NaP">
+            <ncml:defun name="linoid">
+              <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
+              <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2))) else (x / (exp (x / y) - 1)))</ncml:body>
+            </ncml:defun>
+            <ncml:component type="gate">
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 30) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:const name="Aalpha_m" value="-0.91"/>
+              <ncml:const name="Kalpha_m" value="-5"/>
+              <ncml:const name="V0alpha_m" value="-40"/>
+              <ncml:const name="Abeta_m" value="0.62"/>
+              <ncml:const name="Kbeta_m" value="5"/>
+              <ncml:const name="V0beta_m" value="-40"/>
+              <ncml:const name="V0_minf" value="-43"/>
+              <ncml:const name="B_minf" value="5"/>
+              <ncml:defun name="alpha_m">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_m * linoid ((v - V0alpha_m) Kalpha_m))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_m">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_m * linoid ((v - V0beta_m) Kbeta_m))</ncml:body>
+              </ncml:defun>
+              <ncml:hh_ionic_gate name="NaP"><ncml:initial_m>((1 / (1 + exp ((neg (v - V0_minf)) / B_minf))))</ncml:initial_m>
+              <ncml:m_power>1</ncml:m_power>
+              <ncml:h_power>0</ncml:h_power>
+              <ncml:m_inf>((1 / (1 + exp ((neg (v - V0_minf)) / B_minf))))</ncml:m_inf>
+              <ncml:m_tau>((5 / (alpha_m (v Q10) + beta_m (v Q10))))</ncml:m_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.00019"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="na">
+              <ncml:const name="e" value="87.39"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="NaP">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-60"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="9"/>
+            <ncml:const name="vchdur" value="100"/>
+            <ncml:const name="vcbdur" value="150"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="NaR">
+            <ncml:component type="gate">
+              <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:const name="Aalpha_s" value="-0.00493"/>
+              <ncml:const name="V0alpha_s" value="-4.48754"/>
+              <ncml:const name="Kalpha_s" value="-6.81881"/>
+              <ncml:const name="Shiftalpha_s" value="8e-05"/>
+              <ncml:const name="Abeta_s" value="0.01558"/>
+              <ncml:const name="V0beta_s" value="43.97494"/>
+              <ncml:const name="Kbeta_s" value="0.10818"/>
+              <ncml:const name="Shiftbeta_s" value="0.04752"/>
+              <ncml:const name="Aalpha_f" value="0.31836"/>
+              <ncml:const name="V0alpha_f" value="-80"/>
+              <ncml:const name="Kalpha_f" value="-62.52621"/>
+              <ncml:const name="Abeta_f" value="0.01014"/>
+              <ncml:const name="V0beta_f" value="-83.3332"/>
+              <ncml:const name="Kbeta_f" value="16.05379"/>
+              <ncml:defun name="alpha_s">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * (Shiftalpha_s + ((Aalpha_s * ((v + V0alpha_s))) / (exp ((v + V0alpha_s) / Kalpha_s) - 1))))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_s">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(let ((x1 ((v + V0beta_s) / Kbeta_s))) (Q10 * (Shiftbeta_s + Abeta_s * ((v + V0beta_s) / (exp ((if (x1 &gt; 200) then 200 else x1)) - 1)))))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="alpha_f">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Aalpha_f * exp ((v - V0alpha_f) / Kalpha_f))</ncml:body>
+              </ncml:defun>
+              <ncml:defun name="beta_f">
+                <ncml:arg>v</ncml:arg><ncml:arg>Q10</ncml:arg>
+                <ncml:body>(Q10 * Abeta_f * exp ((v - V0beta_f) / Kbeta_f))</ncml:body>
+              </ncml:defun>
+              <ncml:asgn name="s_inf"><ncml:expr>((alpha_s (v Q10)) / (alpha_s (v Q10) + beta_s (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_s"><ncml:expr>(1 / (alpha_s (v Q10) + beta_s (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="f_inf"><ncml:expr>((alpha_f (v Q10)) / (alpha_f (v Q10) + beta_f (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:asgn name="tau_f"><ncml:expr>(1 / (alpha_f (v Q10) + beta_f (v Q10)))</ncml:expr>
+              </ncml:asgn>
+              <ncml:hh_ionic_gate name="NaR"><ncml:initial_m>(s_inf)</ncml:initial_m>
+              <ncml:initial_h>(f_inf)</ncml:initial_h>
+              <ncml:m_power>1</ncml:m_power>
+              <ncml:h_power>1</ncml:h_power>
+              <ncml:m_inf>(s_inf)</ncml:m_inf>
+              <ncml:m_tau>(tau_s)</ncml:m_tau>
+              <ncml:h_inf>(f_inf)</ncml:h_inf>
+              <ncml:h_tau>(tau_f)</ncml:h_tau>
+              </ncml:hh_ionic_gate>
+            </ncml:component>
+            <ncml:component type="pore">
+              <ncml:const name="gbar" value="0.0017"/>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="na">
+              <ncml:const name="e" value="87.39"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+          <ncml:component type="voltage-clamp" name="NaR">
+            <ncml:const name="vchold" value="-71"/>
+            <ncml:const name="vcbase" value="-60"/>
+            <ncml:const name="vcinc" value="10"/>
+            <ncml:const name="vcsteps" value="9"/>
+            <ncml:const name="vchdur" value="100"/>
+            <ncml:const name="vcbdur" value="200"/>
+            <ncml:output name="vchold"/>
+            <ncml:output name="vcbase"/>
+            <ncml:output name="vcinc"/>
+            <ncml:output name="vcsteps"/>
+            <ncml:output name="vchdur"/>
+            <ncml:output name="vcbdur"/>
+          </ncml:component>
+          <ncml:ionicCurrent name="Lkg">
+            <ncml:component type="pore">
+              <ncml:const name="gbar">
+                (2.1e-05)
+              </ncml:const>
+              <ncml:output name="gbar"/>
+            </ncml:component>
+            <ncml:component type="permeating-ion" name="non-specific">
+              <ncml:const name="e" value="-55"/>
+              <ncml:output name="e"/>
+            </ncml:component>
+          </ncml:ionicCurrent>
+        </membraneProperties>
+        <intracellularProperties>
+          <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
+        </intracellularProperties>
+        <synapses>
+          <conductanceSynapse id="AMPA_MossyFiber" type="Exp2Syn" segmentGroup="soma">
+            <parameter name="tau1" value="0.3" units="ms" />
+            <parameter name="tau2" value="0.5" units="ms" />
+            <parameter name="e" value="0.0" units="mV" />
+          </conductanceSynapse>
+          <conductanceSynapse id="AMPA_Granule" type="Exp2Syn" segmentGroup="soma">
+            <parameter name="tau1" value="1" units="ms" />
+            <parameter name="tau2" value="13.3" units="ms" />
+            <parameter name="e" value="0.0" units="mV" />
+          </conductanceSynapse>
+          <gapJunction id="Gap" type="Gap" segmentGroup="soma" />
+        </synapses>
+        <initalConditions>
+          <membranePotential value='-65 mV' />
+          <ionConcentration species="ca" value="50e-6" />
+          <ionConcentration species="ca2" value="50e-6" />
+        </initalConditions>
+      </biophysicalProperties>
+    </cell>
+  </ncml:model>
