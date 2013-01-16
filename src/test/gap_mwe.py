@@ -61,7 +61,7 @@ if mpi_rank == 0:
     pre_cell = h.Section()
     pre_cell.insert('pas')
     # Connect the voltage of the pre-synaptic cell to the gap junction on the post-synaptic cell
-    pc.source_var(pre_cell(0.5)._ref_v, GID_FOR_VARS)    
+    #pc.source_var(pre_cell(0.5)._ref_v, GID_FOR_VARS)    
     # Stimulate the first cell to make it obvious whether gap junction is working
     stim = h.IClamp(pre_cell(0.5))
     stim.delay = 50
@@ -76,10 +76,10 @@ if mpi_rank == (num_processes - 1):
     post_cell = h.Section()
     post_cell.insert('pas')    
     # Insert gap junction
-    gap_junction = h.gap(0.5, sec=post_cell)
-    gap_junction.g = 1.0
+    #gap_junction = h.gap(0.5, sec=post_cell)
+    #gap_junction.g = 1.0
     # Connect gap junction to pre-synaptic cell
-    pc.target_var(gap_junction._ref_vgap, GID_FOR_VARS)
+    #pc.target_var(gap_junction._ref_vgap, GID_FOR_VARS)
     # Record Voltage of post-synaptic cell
     post_v = h.Vector()
     post_v.record(post_cell(0.5)._ref_v)
@@ -91,6 +91,8 @@ rec_t.record(h._ref_t)
 print "Finished network construction on process {}".format(mpi_rank)
     
 # Run simulation    
+# Set timestep
+h.dt = 0.25
 print "Setting maxstep on process {}".format(mpi_rank)
 pc.set_maxstep(10)
 print "Finitialise on process {}".format(mpi_rank)
