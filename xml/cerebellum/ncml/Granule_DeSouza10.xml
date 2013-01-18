@@ -29,7 +29,7 @@
         <build tool="nemo" simulator="nest" method="gsl" />
         <!-- -p pyparams={paramsdir} nmodl={nmodldir} nmodl-method=derivimplicit nmodl-kinetic=Na_z" -->
         <!-- -p pyparams={paramsdir} nest={nmodldir} nest-method=cvode" -->
-      </defaultBuildOptions>
+      </defaultBuildOptions> 
       <actionPotentialThreshold v="-21" />
       <membraneProperties>
         <ncml:input name="v"/>
