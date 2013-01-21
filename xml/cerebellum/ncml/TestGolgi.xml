@@ -439,7 +439,6 @@
                     <!-- <ncml:arg name="tau1_1" value="0.31" units="ms" /> <ncml:arg name="tau2_1" value="300" 
                         units="ms" /> <ncml:arg name="e_1" value="-75.0" units="mV" /> -->
                 </conductanceSynapse>
-                 <gapJunction id="Gap" type="Gap" segmentGroup="soma" />
             </synapses>            
             <initalConditions>
                 <membranePotential value='-65 mV'/>

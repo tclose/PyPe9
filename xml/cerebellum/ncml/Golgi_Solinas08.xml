@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ncml:model xmlns:ncml="ncml" name="Golgi">
+<ncml:model xmlns:ncml="ncml" name="Golgi_Solinas08">
   <!--<include href="SimpleIonChannel.xml"/> Contains ionChannel NaConductance -->
   <ncml:sxslt>
     <!-- XML syntactic sugar stylesheet -->
@@ -1758,7 +1758,6 @@
             <parameter name="tau2" value="13.3" units="ms" />
             <parameter name="e" value="0.0" units="mV" />
           </conductanceSynapse>
-          <gapJunction id="Gap" segmentGroup="soma" />
         </synapses>
         <initalConditions>
           <membranePotential value='-65 mV' />
