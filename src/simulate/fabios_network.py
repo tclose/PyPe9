@@ -85,7 +85,6 @@ else:
     stim_seed = int(args.stim_seed)
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
-from ninemlp.nest import *
 exec("from ninemlp.%s import *" % args.simulator)
 # Set flags for the construction of the network
 flags = []
