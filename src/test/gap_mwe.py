@@ -82,7 +82,7 @@ if mpi_rank == (num_processes - 1):
     post_v = h.Vector()
     post_v.record(post_cell(0.5)._ref_v)
 # Finalise construction of parallel context
-pc.setup_transfer()    
+pc.setup_transfer()
 # Record time
 rec_t = h.Vector()
 rec_t.record(h._ref_t)    
