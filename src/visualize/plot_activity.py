@@ -58,6 +58,8 @@ def main(arguments):
     parser.add_argument('--no_show', action='store_true',
                         help="Don't show the plots initially (waiting for other plots to be " \
                              "plotted")
+    parser.add_argument('--title_prefix', action='store_true',
+                        help="Include the filenames of the files in the subplot titles")
     args = parser.parse_args(arguments)
     # Set up the common axis to plot the results on
     num_spike_trains = 0
@@ -316,10 +318,12 @@ def main(arguments):
                     combine_legend.append(leg)
             else:
                 var_axes[var_count].legend(sorted_IDs)
-                var_axes[var_count].set_title('{label}{extra_label} - {variable_name} vs Time'.\
+                title = '{prefix} {label}{extra_label} - {variable_name} vs Time'.\
                                               format(label=label,
                                               extra_label=args.extra_label,
-                                              variable_name=header['variable']))
+                                              variable_name=header['variable'],
+                                              prefix=(filename_prefix if args.title_prefix else ""))
+                var_axes[var_count].set_title(title)
                 var_axes[var_count].set_xlabel('Time (ms)')
                 if variable_name == 'v':
                     ylabel = 'Voltage (mV)'
