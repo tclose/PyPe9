@@ -1,0 +1,84 @@
+<TestProgram>
+	<Dimensions>1</Dimensions>	
+	<VerboseLevel>1</VerboseLevel>
+	<Seed>500</Seed>
+	<SamplingFrequency>50</SamplingFrequency>
+	
+	<StartingPoints>
+	0.1
+  </StartingPoints>
+            
+	<Bounds>
+                0.001   0.55
+	</Bounds>
+
+	<WorkingDirectory>NEUROFITTERSCRATCH/bin</WorkingDirectory>
+
+	<PrintParameterFile>1</PrintParameterFile>
+
+	<FitterType>Random</FitterType>
+    <FitterParameters>
+        <NumberOfPoints>2000</NumberOfPoints>
+    </FitterParameters>
+		
+
+	<TracesReaderType>Normal</TracesReaderType>
+    	<TracesReaderParameters>
+			<NumberOfRuns>5</NumberOfRuns>
+            <NumberOfRunParameters>1</NumberOfRunParameters>
+            <RunParameters>
+		0.0000332  2000
+                0.000064  1000
+                0.000114  500
+                0.000183  250
+		0.000264 125
+            </RunParameters>
+
+            <NumberOfPeriods>2</NumberOfPeriods>
+            <Periods>
+                    500 550 1.0
+		    550 5000 1.0
+            </Periods>
+
+        	<NumberOfRecordSites>1</NumberOfRecordSites>
+        	<RecordSites>
+            		1
+        	</RecordSites>
+
+        	<OutputFilePrefix>output</OutputFilePrefix>
+    	</TracesReaderParameters>
+	
+	<ModelType>Executable</ModelType>
+    <ModelParameters>
+            <ExecuteCommand>unset DISPLAY; cd SCRATCH/model; x86_64/special -nogui runModel3_Nannuli4_dia_1_1.hoc</ExecuteCommand>
+            <OutputDirectory>SCRATCH/outputs</OutputDirectory>
+            <ParameterFile>SCRATCH/model/param.dat</ParameterFile>
+            <ShowExecuteOutput>0</ShowExecuteOutput>
+    </ModelParameters>
+
+	<ExperimentType>FileList</ExperimentType>
+    <ExperimentParameters>
+            <FilesList>
+                SHAREDDIR/data/Testg33e-6_Nannuli4_dia_1_1_May13.dat
+                SHAREDDIR/data/Testg64e-6_Nannuli4_dia_1_1_May13.dat
+                SHAREDDIR/data/Testg114e-6_Nannuli4_dia_1_1_May13.dat
+                SHAREDDIR/data/Testg183e-6_Nannuli4_dia_1_1_May13.dat
+		SHAREDDIR/data/Testg264e-6_Nannuli4_dia_1_1_May13.dat
+            </FilesList>
+    </ExperimentParameters>
+
+	
+    <ErrorValueCalculatorType>MPI</ErrorValueCalculatorType>
+    <ErrorValueCalculatorParameters>
+	<ErrorValueCalculatorType>RMS</ErrorValueCalculatorType>
+    	<ErrorValueCalculatorParameters>
+                <enableFileExport>0</enableFileExport>
+		<enableTracesExport>0</enableTracesExport>
+                <exportFile>ErrorValue.dat</exportFile>
+	</ErrorValueCalculatorParameters>
+	<enableFileExport>1</enableFileExport>
+        <exportFile>/users/anwar/TuningCaDynamicsNeurofitterDend_depthOnly/Dia1_1/work/pfs/BestFit.dat.JOBID</exportFile>
+   </ErrorValueCalculatorParameters>
+	
+</TestProgram>
+

@@ -19,8 +19,12 @@ import os.path #@UnusedImport
 import re
 import subprocess
 from difflib import context_diff
-from visualize.activity_plot import activity_plot #@UnusedImport
+from visualize.plot_activity import plot_activity #@UnusedImport
+from visualize.connection_matrix import plot_overlap_matrix #@UnusedImport
 from collections import defaultdict, namedtuple
+
+# For legacy inotebooks
+activity_plot = plot_activity
 
 PROJECT_DIR = None
 

@@ -58,6 +58,8 @@ def main(arguments):
     parser.add_argument('--no_show', action='store_true',
                         help="Don't show the plots initially (waiting for other plots to be " \
                              "plotted")
+    parser.add_argument('--title_prefix', action='store_true',
+                        help="Include the filenames of the files in the subplot titles")
     args = parser.parse_args(arguments)
     # Set up the common axis to plot the results on
     num_spike_trains = 0
@@ -101,7 +103,9 @@ def main(arguments):
     var_count = 0
     dat_count = 0 # Counts the number of 'v_dat' files that are plotted to give them an index
     for filename in args.filenames:
-        variable_name = filename.split('.')[-1]
+        spit_filename = filename.split('.')
+        filename_prefix = '.'.join(spit_filename[:-1])
+        variable_name = spit_filename[-1]
         # If variable uses the 'dat' extention only, assume that it is a voltage file and change to
         # the 'v_dat' variable name
         if variable_name == 'dat':
@@ -306,17 +310,20 @@ def main(arguments):
                 sorted_IDs.append(ID)
             if args.combine:
                 for ID in sorted_IDs:
-                    leg = '{variable_name} - ID{ID}'.\
-                          format(variable_name=variable_name.capitalize(), ID=ID)
+                    leg = '{prefix} - {variable_name} - ID{ID}'.\
+                          format(prefix=filename_prefix, 
+                                 variable_name=variable_name.capitalize(), ID=ID)
                     if rescale:
                         leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
                     combine_legend.append(leg)
             else:
                 var_axes[var_count].legend(sorted_IDs)
-                var_axes[var_count].set_title('{label}{extra_label} - {variable_name} vs Time'.\
+                title = '{prefix} {label}{extra_label} - {variable_name} vs Time'.\
                                               format(label=label,
                                               extra_label=args.extra_label,
-                                              variable_name=header['variable']))
+                                              variable_name=header['variable'],
+                                              prefix=(filename_prefix if args.title_prefix else ""))
+                var_axes[var_count].set_title(title)
                 var_axes[var_count].set_xlabel('Time (ms)')
                 if variable_name == 'v':
                     ylabel = 'Voltage (mV)'
@@ -334,7 +341,7 @@ def main(arguments):
     if not args.no_show:
         plt.show()
 
-def activity_plot(arguments):
+def plot_activity(arguments):
     import shlex
     main(shlex.split(arguments))
 
