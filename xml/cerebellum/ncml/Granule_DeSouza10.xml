@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ncml:model xmlns:ncml="ncml" name="Granule">
+<ncml:model xmlns:ncml="ncml" name="Granule_DeSouza10">
   <!--<include href="SimpleIonChannel.xml"/> -->
   <ncml:sxslt>
     <!-- XML syntactic sugar stylesheet -->
@@ -27,9 +27,7 @@
           <kinetic comp_id="Na_z" />
         </build>
         <build tool="nemo" simulator="nest" method="gsl" />
-        <!-- -p pyparams={paramsdir} nmodl={nmodldir} nmodl-method=derivimplicit nmodl-kinetic=Na_z" -->
-        <!-- -p pyparams={paramsdir} nest={nmodldir} nest-method=cvode" -->
-      </defaultBuildOptions>
+      </defaultBuildOptions> 
       <actionPotentialThreshold v="-21" />
       <membraneProperties>
         <ncml:input name="v"/>
