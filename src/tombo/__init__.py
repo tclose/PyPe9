@@ -82,7 +82,7 @@ def init_work_dir(work_dir, required_dirs, time_str):
     """
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
-        print "Copying '{}' sub-directory to work directory"
+        print "Copying '{}' sub-directory to work directory".format(directory)
         shutil.copytree(os.path.join(get_project_dir(),directory), 
                         os.path.join(work_dir,directory), symlinks=True)
     # Make output directory for the generated files
