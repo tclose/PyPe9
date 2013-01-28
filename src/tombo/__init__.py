@@ -14,6 +14,10 @@ import shutil
 import subprocess
 from copy import copy
 
+PYTHON_INSTALL_DIR='/apps/python/272'
+OPEN_MPI_INSTALL_DIR='/opt/mpi/gnu/openmpi-1.6.3'
+NEURON_INSTALL_DIR='/apps/DeschutterU/NEURON-7.2'
+
 def get_project_dir():
     """
     Returns the root directory of the project
@@ -104,11 +108,11 @@ def create_env(work_dir):
     """
     env = os.environ.copy()
     env['PATH'] = env['PATH'] + os.pathsep + \
-                  '/apps/python/272/bin' + os.pathsep + \
-                  '/opt/mpi/gnu/openmpi-1.4.3/bin' + os.pathsep + \
-                  '/apps/DeschutterU/NEURON-7.2/x86_64/bin'
+                  os.path.join(PYTHON_INSTALL_DIR, 'bin') + os.pathsep + \
+                  os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep + \
+                  os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin')
     env['PYTHONPATH'] = os.path.join(work_dir, 'src')
-    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib'
+    env['LD_LIBRARY_PATH'] = os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
     return env
     
