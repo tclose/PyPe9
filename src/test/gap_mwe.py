@@ -71,7 +71,7 @@ if mpi_rank == (num_processes - 1):
     post_cell.insert('pas')
 #    nc = h.NetCon(post_cell(0.5)._ref_v, None, sec=post_cell)
     # Insert gap junction
-    gap_junction = h.gap(0.5, sec=post_cell)
+    gap_junction = h.Gap(0.5, sec=post_cell)
     gap_junction.g = 1.0
     # Connect gap junction to pre-synaptic cell
     pc.target_var(gap_junction._ref_vgap, GID_FOR_VARS)
