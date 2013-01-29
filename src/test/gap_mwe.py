@@ -99,7 +99,7 @@ pc.psolve(100)
 print "Running worker on process {}".format(mpi_rank)
 pc.runworker()
 print "Completing parallel context on process {}".format(mpi_rank)
-pc.done()
+#pc.done()
 print "Finished run on process {}".format(mpi_rank)
 
 # Convert recorded data into Numpy arrays
