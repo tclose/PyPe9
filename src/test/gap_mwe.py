@@ -53,7 +53,7 @@ if mpi_rank == 0:
     # Create the pre-synaptic cell
     pre_cell = h.Section()
     pre_cell.insert('pas')
-#    nc1 = h.NetCon(pre_cell(0.5)._ref_v, None, sec=pre_cell)
+    #nc1 = h.NetCon(pre_cell(0.5)._ref_v, None, sec=pre_cell)
     # Connect the voltage of the pre-synaptic cell to the gap junction on the post-synaptic cell
     pc.source_var(pre_cell(0.5)._ref_v, GID_FOR_VARS)
     # Stimulate the first cell to make it obvious whether gap junction is working
@@ -69,7 +69,7 @@ if mpi_rank == (num_processes - 1):
     # Create the post-synaptic cell
     post_cell = h.Section()
     post_cell.insert('pas')
-#    nc = h.NetCon(post_cell(0.5)._ref_v, None, sec=post_cell)
+    #nc = h.NetCon(post_cell(0.5)._ref_v, None, sec=post_cell)
     # Insert gap junction
     gap_junction = h.gap(0.5, sec=post_cell)
     gap_junction.g = 1.0
