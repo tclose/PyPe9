@@ -16,12 +16,13 @@ parser.add_argument('--np', type=int, default=1, help='The the number of process
 parser.add_argument('--que_name', type=str, default='shortP', help='The the que to submit the job to(default: %(default)s)')
 parser.add_argument('--mwe', action='store_true', help='Use the MWE instead')
 args = parser.parse_args()
+# Create work directory and get path for output directory
+required_dirs = ['src']    
 if args.mwe:
     script_name='gap_mwe'
 else:
     script_name='gap_test'
-# Create work directory and get path for output directory
-required_dirs = ['src', 'xml']    
+    required_dirs.append('xml')
 work_dir, output_dir = tombo.create_work_dir(script_name, args.output_dir, required_dirs=required_dirs)
 # Set gap mechanism dir as a script arg if required
 if args.mwe:

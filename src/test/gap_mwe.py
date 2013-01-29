@@ -19,12 +19,8 @@ try:
     from mpi4py import MPI #@UnresolvedImport @UnusedImport
 except:
     print "mpi4py was not found, MPI will remain disabled if MPI initialized==false on startup"
-from neuron import h, load_mechanisms
-h.load_file('stdrun.hoc')
+from neuron import h
 from ninemlp.neuron.build import compile_nmodl
-# The GID used for the gap junction connection. NB: this number is completely independent from the 
-# GID's used for NEURON sections.
-GID_FOR_VARS = 0
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--plot', action='store_true', help="Plot the data instead of saving it")
@@ -46,38 +42,43 @@ num_processes = int(pc.nhost())
 mpi_rank = int(pc.id())
 print "On process {} of {}".format(mpi_rank + 1, num_processes)
 print "Creating test network..."
-# The pre-synaptic cell is created on the first node and the post-synaptic cell on the last node 
+# The first section is created on the first node and the post-synaptic section on the last node 
 # (NB: which will obviously be the same if there is only one node)
 if mpi_rank == 0:
-    print "Creating pre cell on process {}".format(mpi_rank)
-    # Create the pre-synaptic cell
-    pre_cell = h.Section()
-    pre_cell.insert('pas')
-    #nc1 = h.NetCon(pre_cell(0.5)._ref_v, None, sec=pre_cell)
-    # Connect the voltage of the pre-synaptic cell to the gap junction on the post-synaptic cell
-    pc.source_var(pre_cell(0.5)._ref_v, GID_FOR_VARS)
-    # Stimulate the first cell to make it obvious whether gap junction is working
-    stim = h.IClamp(pre_cell(0.5))
+    print "Creating pre section on process {}".format(mpi_rank)
+    # Create the first section
+    section1 = h.Section()
+    section1.insert('pas')
+    # Set up the voltage of the first section to the gap junction on the second section
+    pc.source_var(section1(0.5)._ref_v, 0)
+    # Insert gap junction
+    gap_junction1 = h.Gap(0.5, sec=section1)
+    gap_junction1.g = 100.0
+    # Set up the gap junction on the first section to connect with the second section voltage
+    pc.target_var(gap_junction1._ref_vgap, 1)
+    # Stimulate the first section to make it obvious whether gap junction is working
+    stim = h.IClamp(section1(0.5))
     stim.delay = 50
     stim.amp = 10
     stim.dur = 100
-    # Record Voltage of pre-synaptic cell
-    pre_v = h.Vector()
-    pre_v.record(pre_cell(0.5)._ref_v)
+    # Record Voltage of first section
+    v1 = h.Vector()
+    v1.record(section1(0.5)._ref_v)
 if mpi_rank == (num_processes - 1):
-    print "Creating post cell on process {}".format(mpi_rank)
-    # Create the post-synaptic cell
-    post_cell = h.Section()
-    post_cell.insert('pas')
-    #nc = h.NetCon(post_cell(0.5)._ref_v, None, sec=post_cell)
+    print "Creating post section on process {}".format(mpi_rank)
+    # Create the second section
+    section2 = h.Section()
+    section2.insert('pas')
+    # Connect the voltage of the second section to the gap junction on the first section
+    pc.source_var(section2(0.5)._ref_v, 1)
     # Insert gap junction
-    gap_junction = h.Gap(0.5, sec=post_cell)
-    gap_junction.g = 1.0
-    # Connect gap junction to pre-synaptic cell
-    pc.target_var(gap_junction._ref_vgap, GID_FOR_VARS)
-    # Record Voltage of post-synaptic cell
-    post_v = h.Vector()
-    post_v.record(post_cell(0.5)._ref_v)
+    gap_junction2 = h.Gap(0.5, sec=section2)
+    gap_junction2.g = 100.0
+    # Set up the gap junction on the second section to connect with the first section voltage
+    pc.target_var(gap_junction2._ref_vgap, 0)
+    # Record Voltage of second section
+    v2 = h.Vector()
+    v2.record(section2(0.5)._ref_v)
 # Finalise construction of parallel context
 pc.setup_transfer()
 # Record time
@@ -85,7 +86,7 @@ rec_t = h.Vector()
 rec_t.record(h._ref_t)
 print "Finished network construction on process {}".format(mpi_rank)
 
-# Run simulation    
+# Steps to run simulation    
 # Set timestep
 h.dt = 0.25
 print "Setting maxstep on process {}".format(mpi_rank)
@@ -104,9 +105,9 @@ print "Finished run on process {}".format(mpi_rank)
 # Convert recorded data into Numpy arrays
 t_array = np.array(rec_t)
 if mpi_rank == 0:
-    pre_v_array = np.array(pre_v)
+    v1_array = np.array(v1)
 if mpi_rank == (num_processes - 1):
-    post_v_array = np.array(post_v)
+    v2_array = np.array(v2)
 
 # Either plot the recorded values
 if args.plot and num_processes == 1:
@@ -114,14 +115,14 @@ if args.plot and num_processes == 1:
     import matplotlib.pyplot as plt
     if mpi_rank == 0:
         pre_fig = plt.figure()
-        plt.plot(t_array, pre_v_array)
-        plt.title("Pre-synaptic cell voltage")
+        plt.plot(t_array, v1_array)
+        plt.title("Section 1 voltage")
         plt.xlabel("Time (ms)")
         plt.ylabel("Voltage (mV)")
     if mpi_rank == (num_processes - 1):
         pre_fig = plt.figure()
-        plt.plot(t_array, post_v_array)
-        plt.title("Post-synaptic cell voltage")
+        plt.plot(t_array, v2_array)
+        plt.title("Section 2 voltage")
         plt.xlabel("Time (ms)")
         plt.ylabel("Voltage (mV)")
     plt.show()
@@ -129,9 +130,9 @@ else:
     # Save data
     print "Saving data..."
     if mpi_rank == 0:
-        np.savetxt(os.path.join(args.output_dir, "pre_v.dat"),
-                   np.transpose(np.vstack((t_array, pre_v_array))))
+        np.savetxt(os.path.join(args.output_dir, "v1.dat"),
+                   np.transpose(np.vstack((t_array, v1_array))))
     if mpi_rank == (num_processes - 1):
-        np.savetxt(os.path.join(args.output_dir, "post_v.dat"),
-                   np.transpose(np.vstack((t_array, post_v_array))))
+        np.savetxt(os.path.join(args.output_dir, "v2.dat"),
+                   np.transpose(np.vstack((t_array, v2_array))))
 print "Done."
