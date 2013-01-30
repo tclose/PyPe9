@@ -42,14 +42,15 @@ num_processes = int(pc.nhost())
 mpi_rank = int(pc.id())
 print "On process {} of {}".format(mpi_rank + 1, num_processes)
 print "Creating test network..."
-# The first section is created on the first node and the post-synaptic section on the last node 
+# The first section is created on the first node and the second section on the last node 
 # (NB: which will obviously be the same if there is only one node)
 if mpi_rank == 0:
     print "Creating pre section on process {}".format(mpi_rank)
     # Create the first section
     section1 = h.Section()
     section1.insert('pas')
-    # Set up the voltage of the first section to the gap junction on the second section
+    # Set up the voltage of the first section to be able to connect to the gap junction on the 
+    # second section
     pc.source_var(section1(0.5)._ref_v, 0)
     # Insert gap junction
     gap_junction1 = h.Gap(0.5, sec=section1)
@@ -69,7 +70,8 @@ if mpi_rank == (num_processes - 1):
     # Create the second section
     section2 = h.Section()
     section2.insert('pas')
-    # Connect the voltage of the second section to the gap junction on the first section
+    # Set up the voltage of the second section to be able to connect to the gap junction on the 
+    # first section
     pc.source_var(section2(0.5)._ref_v, 1)
     # Insert gap junction
     gap_junction2 = h.Gap(0.5, sec=section2)
