@@ -38,8 +38,11 @@ def main(arguments):
     test1.inject(current_source)
     test1.record_v()
     test2.record_v()
+    print "Created Network"
     net.describe()
+    print "Starting run..."
     run(200)
+    print "Finished run. Saving..."
     test1.print_v(args.output + 'Test1.v')
     test2.print_v(args.output + 'Test2.v')
     print "Simulated gap test network"
