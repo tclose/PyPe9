@@ -89,15 +89,14 @@ rec_t.record(h._ref_t)
 print "Finished network construction on process {}".format(mpi_rank)
 
 # Steps to run simulation    
-# Set timestep
 h.dt = 0.25
 print "Setting maxstep on process {}".format(mpi_rank)
 pc.set_maxstep(10)
 print "Finitialise on process {}".format(mpi_rank)
 h.finitialize(-60)
-#h.stdinit()
-print "Solving on process {}".format(mpi_rank)
+print "Running simulation on process {}".format(mpi_rank)
 pc.psolve(100)
+print "Finished run on process {}".format(mpi_rank)
 
 # Convert recorded data into Numpy arrays
 t_array = np.array(rec_t)
@@ -125,17 +124,16 @@ if args.plot and num_processes == 1:
     plt.show()
 else:
     # Save data
-    print "Saving data..."
+    print "Saving data on process {}...".format(mpi_rank)
     if mpi_rank == 0:
         np.savetxt(os.path.join(args.output_dir, "v1.dat"),
                    np.transpose(np.vstack((t_array, v1_array))))
     if mpi_rank == (num_processes - 1):
         np.savetxt(os.path.join(args.output_dir, "v2.dat"),
                    np.transpose(np.vstack((t_array, v2_array))))
-print "Finished run on process {}".format(mpi_rank)
 if mpi_rank == 0:
-    print "Allowing worker process to complete on process 0"
+    print "Allowing other processes (if present) to complete on process 0"
     pc.runworker()
-    print "Completing parallel context"
+    print "Completing parallel context from process 0"
     pc.done()
 print "Finished process {}".format(mpi_rank)
