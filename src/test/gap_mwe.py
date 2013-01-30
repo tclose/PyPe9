@@ -40,7 +40,6 @@ if args.build == 'build_only':
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
 mpi_rank = int(pc.id())
-print "On process {} of {}".format(mpi_rank + 1, num_processes)
 print "Creating test network..."
 # The first section is created on the first node and the second section on the last node 
 # (NB: which will obviously be the same if there is only one node)
