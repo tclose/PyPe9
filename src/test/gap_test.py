@@ -25,6 +25,7 @@ def main(arguments):
                         default=os.path.join(PROJECT_PATH, 'output', 'gap_test.'), 
                         help='The output location of the recording files')    
     args = parser.parse_args(arguments)
+    print "args.build: {}".format(args.build)
     ninemlp.pyNN_build_mode = args.build
     from ninemlp.neuron import Network, run, StepCurrentSource
     print "Building network"
