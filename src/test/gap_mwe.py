@@ -98,11 +98,6 @@ h.finitialize(-60)
 #h.stdinit()
 print "Solving on process {}".format(mpi_rank)
 pc.psolve(100)
-print "Running worker on process {}".format(mpi_rank)
-pc.runworker()
-print "Completing parallel context on process {}".format(mpi_rank)
-#pc.done()
-print "Finished run on process {}".format(mpi_rank)
 
 # Convert recorded data into Numpy arrays
 t_array = np.array(rec_t)
@@ -137,4 +132,10 @@ else:
     if mpi_rank == (num_processes - 1):
         np.savetxt(os.path.join(args.output_dir, "v2.dat"),
                    np.transpose(np.vstack((t_array, v2_array))))
-print "Done."
+print "Finished run on process {}".format(mpi_rank)
+if mpi_rank == 0:
+    print "Allowing worker process to complete on process 0"
+    pc.runworker()
+    print "Completing parallel context"
+    pc.done()
+print "Finished process {}".format(mpi_rank)
