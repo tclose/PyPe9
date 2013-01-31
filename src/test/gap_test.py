@@ -25,6 +25,7 @@ def main(arguments):
                         default=os.path.join(PROJECT_PATH, 'output', 'gap_test.'), 
                         help='The output location of the recording files')    
     args = parser.parse_args(arguments)
+    print "args.build: {}".format(args.build)
     ninemlp.pyNN_build_mode = args.build
     from ninemlp.neuron import Network, run, StepCurrentSource
     print "Building network"
@@ -37,8 +38,11 @@ def main(arguments):
     test1.inject(current_source)
     test1.record_v()
     test2.record_v()
+    print "Created Network"
     net.describe()
+    print "Starting run..."
     run(200)
+    print "Finished run. Saving..."
     test1.print_v(args.output + 'Test1.v')
     test2.print_v(args.output + 'Test2.v')
     print "Simulated gap test network"

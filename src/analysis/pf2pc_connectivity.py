@@ -14,7 +14,7 @@ import os.path
 import argparse
 import numpy as np
 import ninemlp
-from ninemlp.connectivity.morphology import Forest, Tree, NeurolucidaXMLHandler
+from ninemlp.connectivity.morphology import Forest, Tree, NeurolucidaTreeXMLHandler
 
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 
@@ -84,7 +84,7 @@ def main(arguments):
         if args.shift_pfs:
             start_point = (0.0, 0.0, forest_min[2], args.pf_diam)
             finish_point = (0.0, 0.0, forest_max[2], args.pf_diam)
-            pf_branch = NeurolucidaXMLHandler.Branch((start_point, finish_point), [])
+            pf_branch = NeurolucidaTreeXMLHandler.Branch((start_point, finish_point), [])
             pf_init = Tree(pf_branch, 2)
         for i, (x, y) in enumerate(zip(pf_X.ravel(), pf_Y.ravel())):
             if args.shift_pfs:
@@ -92,7 +92,7 @@ def main(arguments):
             else:
                 start_point = (x, y, forest_min[2], args.pf_diam)
                 finish_point = (x, y, forest_max[2], args.pf_diam)
-                pf_branch = NeurolucidaXMLHandler.Branch((start_point, finish_point), [])
+                pf_branch = NeurolucidaTreeXMLHandler.Branch((start_point, finish_point), [])
                 pf = Tree(pf_branch)
             for purkinje in forest:
                 num_overlap = purkinje.num_overlapping(pf, args.vox_size)

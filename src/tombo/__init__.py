@@ -14,6 +14,10 @@ import shutil
 import subprocess
 from copy import copy
 
+PYTHON_INSTALL_DIR='/apps/python/272'
+OPEN_MPI_INSTALL_DIR='/opt/mpi/gnu/openmpi-1.6.3'
+NEURON_INSTALL_DIR='/apps/DeschutterU/NEURON-7.2'
+
 def get_project_dir():
     """
     Returns the root directory of the project
@@ -82,6 +86,7 @@ def init_work_dir(work_dir, required_dirs, time_str):
     """
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
+        print "Copying '{}' sub-directory to work directory".format(directory)
         shutil.copytree(os.path.join(get_project_dir(),directory), 
                         os.path.join(work_dir,directory), symlinks=True)
     # Make output directory for the generated files
@@ -103,11 +108,11 @@ def create_env(work_dir):
     """
     env = os.environ.copy()
     env['PATH'] = env['PATH'] + os.pathsep + \
-                  '/apps/python/272/bin' + os.pathsep + \
-                  '/opt/mpi/gnu/openmpi-1.4.3/bin' + os.pathsep + \
-                  '/apps/DeschutterU/NEURON-7.2/x86_64/bin'
+                  os.path.join(PYTHON_INSTALL_DIR, 'bin') + os.pathsep + \
+                  os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep + \
+                  os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin')
     env['PYTHONPATH'] = os.path.join(work_dir, 'src')
-    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib'
+    env['LD_LIBRARY_PATH'] = os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
     return env
     
@@ -155,8 +160,8 @@ def compile_custom(script_name, work_dir, env=None, script_dir='test', script_ar
                                   script_args),
                           shell=True, env=env)
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, 
-               copy_to_output=['xml'], strip_build_from_copy=True):
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', max_memory='4G',
+               env=None, copy_to_output=['xml'], strip_build_from_copy=True):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
     
@@ -206,6 +211,9 @@ cp -r {origin} {destination}
 # use OpenMPI parallel environment with {np} processes
 #$ -pe openmpi {np}
 
+# Set the maximum memory use for the script
+#$ -l h_vmem={max_mem}
+
 # Export the following env variables:
 #$ -v HOME
 #$ -v PATH
@@ -244,7 +252,7 @@ cp {work_dir}/output_stream {output_dir}/output
 echo "============== Done ===============" 
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=os.path.join(work_dir,'src'), np=np,
-      que_name=que_name,cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd, 
+      que_name=que_name, max_mem=max_memory, cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd, 
       jobscript_path=jobscript_path))
     f.close()
     # Submit job
