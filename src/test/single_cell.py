@@ -40,7 +40,7 @@ def main(arguments):
     else:
         raise Exception("Could not find xml file either as a full path or relative to the cwd and" \
                         " '<kbrain-home>/xml/cerebellum' directories")
-    ninemlp.BUILD_MODE = args.build
+    ninemlp.pyNN_build_mode = args.build
     exec("from ninemlp.%s import *" % args.simulator)
     print "Building network"
     net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_delay, #@UndefinedVariable
