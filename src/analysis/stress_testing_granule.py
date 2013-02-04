@@ -32,6 +32,11 @@ def main(arguments):
     parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection. If TYPE is ''step'' ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' ARG1=mean and ARG2=stdev', metavar=('TYPE', 'ARG1', 'ARG2'))
     parser.add_argument('--print_all', action='store_true', help='Prints details for all sections instead of just soma')
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
+    parser.add_argument('--input_rate', type=float, default=5, help="Mean firing rate of the input population "
+                                                             "(default: %(default)s)")
+    parser.add_argument('--start_input', type=float, default=1000, help="The start time of the input population"
+                                                                    " stimulation "
+                                                                    "(default: %(default)s)")
     args = parser.parse_args(arguments)
     if os.path.exists(args.xml_filename):
         network_xml_location = args.xml_filename
@@ -46,8 +51,9 @@ def main(arguments):
     net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_delay, #@UndefinedVariable
                   max_delay=2.0, silent_build=args.silent_build) 
     # Get population and print the soma section of the single cell.
-    pop = net.all_populations()[0]
+    granules = net.get_population("Granules")
     nmda_input = net.get_population("NMDAInput")
+    nmda_input.set_poisson_spikes(args.input_rate, args.start_input, args.time)
 #    cell = pop[0]._cell
 #    soma = cell.soma_seg
 #    from neuron import h
@@ -58,29 +64,29 @@ def main(arguments):
 #            print "ID: {0}".format(seg_id)
 #            h.psection(sec=seg)
     # Create the input current and times vectors
-    if args.inject:
-        inject_type = args.inject[0]
-        if inject_type == 'step':
-            current_source = StepCurrentSource({'amplitudes': [float(args.inject[1])],  #@UndefinedVariable
-                                                 'times': [float(args.inject[2])]}) 
-        elif inject_type == 'noise':
-            current_source = NoisyCurrentSource({'mean': float(args.inject[1]),#@UndefinedVariable
-                                                 'stdev':float(args.inject[2]),
-                                                 'stop': args.time,
-                                                 'dt': 1.0})                                                                                
-        else:
-            raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
-                            "or 'noise'".format(inject_type))
-        pop[0].inject(current_source)
+#    if args.inject:
+#        inject_type = args.inject[0]
+#        if inject_type == 'step':
+#            current_source = StepCurrentSource({'amplitudes': [float(args.inject[1])],  #@UndefinedVariable
+#                                                 'times': [float(args.inject[2])]}) 
+#        elif inject_type == 'noise':
+#            current_source = NoisyCurrentSource({'mean': float(args.inject[1]),#@UndefinedVariable
+#                                                 'stdev':float(args.inject[2]),
+#                                                 'stop': args.time,
+#                                                 'dt': 1.0})                                                                                
+#        else:
+#            raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
+#                            "or 'noise'".format(inject_type))
+#        granules[0].inject(current_source)
     net.record_spikes()
-    pop.record_v()
+    granules.record_v()
     print "------Miscellaneous hoc variables to print------"
     net.describe()
     print "Starting run"
     run(args.time) #@UndefinedVariable
     end() #@UndefinedVariable
     net.print_spikes(args.output)
-    pop.print_v(args.output + pop.label + ".v")
+    granules.print_v(args.output + granules.label + ".v")
     print "Saved recorded data to files '{}*.*'".format(args.output)
     print "Simulated single cell for %f milliseconds" % args.time
    

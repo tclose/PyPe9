@@ -6,5 +6,13 @@
             <timestep value="0.025" />
         </simulationDefaults>
         <population id="Granules" cell="Granule_DeSouza10" size="1"/>
+        <population id="NMDAInput" cell="SpikeSourceArray" size="1" />
+        <projection id="NMDAInput_Granules">
+            <source id="NMDAInput" />
+            <destination id="Granules" synapse="NMDA" segment="soma" />
+            <connection pattern="OneToOne"/>
+			<weight pattern="Constant" value="0.2244 nS" />
+            <delay pattern="Constant" value="2000 us/um" />
+        </projection>
     </network>
 </nineml>
