@@ -43,7 +43,11 @@
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
             </intracellularProperties>
             <synapses>
-                <gapJunction id="Gap" type="Gap" segmentGroup="soma" />
+              <conductanceSynapse id="Excitatory" type="Exp2Syn" segmentGroup="soma">
+                <parameter name="tau1" value="0.3" units="ms" />
+                <parameter name="tau2" value="0.5" units="ms" />
+                <parameter name="e" value="0.0" units="mV" />
+              </conductanceSynapse>
             </synapses>
         </biophysicalProperties>
     </cell>

@@ -30,7 +30,7 @@ def main(arguments):
     from ninemlp.neuron import Network, run, StepCurrentSource
     print "Building network"
     net = Network(os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'gap_test.xml'),
-                  timestep=0.002, min_delay=0.0025, max_delay=2.0, temperature=25.0,
+                  timestep=0.001, min_delay=0.0025, max_delay=2.0, temperature=25.0,
                   silent_build=False, build_mode=args.build) 
     test1 = net.get_population('Test1')
     test2 = net.get_population('Test2')
