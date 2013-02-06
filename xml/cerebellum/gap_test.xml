@@ -11,12 +11,12 @@
             <connection pattern="AllToAll"/>
             <weight pattern="Constant" value="1.5 uS" />
         </projection> 
-        <projection id="Test_non_gap">
+        <!-- <projection id="Test_non_gap">
             <source id="Test1" segment="soma" />
             <destination id="Test2" segment="soma" synapse="Excitatory" />
             <connection pattern="AllToAll"/>
             <weight pattern="Constant" value="1.5 uS" />
             <delay pattern="Constant" value="1 ms" />
-        </projection>
+          </projection>-->
     </network>
 </nineml>
