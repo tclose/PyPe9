@@ -2,8 +2,8 @@
 <nineml>
     <network id="GapTest">
         <!-- Populations -->
-        <population id="Test1" cell="Test" size="1" />
-        <population id="Test2" cell="Test" size="1" />
+        <population id="Test1" cell="Test" size="2" />
+        <population id="Test2" cell="Test" size="2" />
         <!-- Projections -->
         <projection id="Gap_test" synapseFamily="Electrical">
             <source id="Test1" segment="soma" />
