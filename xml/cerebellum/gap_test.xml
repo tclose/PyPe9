@@ -2,16 +2,25 @@
 <nineml>
     <network id="GapTest">
         <!-- Populations -->
-        <population id="Test1" cell="Test" size="2" />
-        <population id="Test2" cell="Test" size="2" />
+        <population id="Test1" cell="Test" size="10" />
+        <population id="Test2" cell="Test" size="10" />
         <!-- Projections -->
-        <projection id="Gap_test" synapseFamily="Electrical">
+        <!--        <projection id="Gap_test" synapseFamily="Electrical">
             <source id="Test1" segment="soma" />
             <destination id="Test2" segment="soma" />
             <connection pattern="AllToAll"/>
             <weight pattern="Constant" value="1.5 uS" />
-        </projection> 
-        <!-- <projection id="Test_non_gap">
+          </projection>  -->
+        <projection id="Gap_test" synapseFamily="Electrical">
+            <source id="Test1" segment="soma" />
+            <destination id="Test2" segment="soma" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
+                exponent="-0.03" />
+            <comment> These are the golgi gap junction projection connections.
+            </comment>
+        </projection>
+         <!-- <projection id="Test_non_gap">
             <source id="Test1" segment="soma" />
             <destination id="Test2" segment="soma" synapse="Excitatory" />
             <connection pattern="AllToAll"/>
