@@ -39,6 +39,7 @@ if args.build == 'build_only':
 # Get the parallel context and related parameters
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
+last_process = num_processes - 1
 mpi_rank = int(pc.id())
 print "Creating test network..."
 # The first section is created on the first node and the second section on the last node 
@@ -64,7 +65,7 @@ if mpi_rank == 0:
     # Record Voltage of first section
     v1 = h.Vector()
     v1.record(section1(0.5)._ref_v)
-if mpi_rank == (num_processes - 1):
+if mpi_rank == last_process:
     print "Creating post section on process {}".format(mpi_rank)
     # Create the second section
     section2 = h.Section()
@@ -80,28 +81,29 @@ if mpi_rank == (num_processes - 1):
     # Record Voltage of second section
     v2 = h.Vector()
     v2.record(section2(0.5)._ref_v)
-# Finalise construction of parallel context
-pc.setup_transfer()
-# Record time
-rec_t = h.Vector()
-rec_t.record(h._ref_t)
-print "Finished network construction on process {}".format(mpi_rank)
-
-# Steps to run simulation    
-h.dt = 0.25
-print "Setting maxstep on process {}".format(mpi_rank)
-pc.set_maxstep(10)
-print "Finitialise on process {}".format(mpi_rank)
-h.finitialize(-60)
-print "Running simulation on process {}".format(mpi_rank)
-pc.psolve(100)
-print "Finished run on process {}".format(mpi_rank)
-
-# Convert recorded data into Numpy arrays
-t_array = np.array(rec_t)
+if mpi_rank == 0 or mpi_rank == last_process:
+    # Finalise construction of parallel context
+    pc.setup_transfer()
+    # Record time
+    rec_t = h.Vector()
+    rec_t.record(h._ref_t)
+    print "Finished network construction on process {}".format(mpi_rank)
+    
+    # Steps to run simulation    
+    h.dt = 0.25
+    print "Setting maxstep on process {}".format(mpi_rank)
+    pc.set_maxstep(10)
+    print "Finitialise on process {}".format(mpi_rank)
+    h.finitialize(-60)
+    print "Running simulation on process {}".format(mpi_rank)
+    pc.psolve(100)
+    print "Finished run on process {}".format(mpi_rank)
+    
+    # Convert recorded data into Numpy arrays
+    t_array = np.array(rec_t)
 if mpi_rank == 0:
     v1_array = np.array(v1)
-if mpi_rank == (num_processes - 1):
+if mpi_rank == last_process:
     v2_array = np.array(v2)
 
 # Either plot the recorded values
@@ -114,20 +116,20 @@ if args.plot and num_processes == 1:
         plt.title("Section 1 voltage")
         plt.xlabel("Time (ms)")
         plt.ylabel("Voltage (mV)")
-    if mpi_rank == (num_processes - 1):
+    if mpi_rank == last_process:
         pre_fig = plt.figure()
         plt.plot(t_array, v2_array)
         plt.title("Section 2 voltage")
         plt.xlabel("Time (ms)")
         plt.ylabel("Voltage (mV)")
     plt.show()
-else:
+elif mpi_rank == 0 or mpi_rank == last_process:
     # Save data
     print "Saving data on process {}...".format(mpi_rank)
     if mpi_rank == 0:
         np.savetxt(os.path.join(args.output_dir, "v1.dat"),
                    np.transpose(np.vstack((t_array, v1_array))))
-    if mpi_rank == (num_processes - 1):
+    if mpi_rank == last_process:
         np.savetxt(os.path.join(args.output_dir, "v2.dat"),
                    np.transpose(np.vstack((t_array, v2_array))))
 if mpi_rank == 0:
