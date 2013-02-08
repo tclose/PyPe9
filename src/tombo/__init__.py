@@ -16,7 +16,7 @@ from copy import copy
 
 PYTHON_INSTALL_DIR='/apps/python/272'
 OPEN_MPI_INSTALL_DIR='/opt/mpi/gnu/openmpi-1.6.3'
-NEURON_INSTALL_DIR='/apps/DeschutterU/NEURON-7.2'
+NEURON_INSTALL_DIR='/apps/DeschutterU/NEURON-7.3'
 
 def get_project_dir():
     """
