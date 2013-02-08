@@ -74,7 +74,7 @@
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="DistanceBased" geometry="RectangleMask" x_scale="2500.0"
                 y_scale="102.6" probability="0.5" />
-            <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />  
+              <!--<connection pattern="Extension" engine="Brep" id="Granule-Golgi" />  -->
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" 
                 offset="300 us"/>
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
