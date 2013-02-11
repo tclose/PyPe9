@@ -44,6 +44,7 @@ mpi_rank = int(pc.id())
 print "Creating test network..."
 # The first section is created on the first node and the second section on the last node 
 # (NB: which will obviously be the same if there is only one node)
+dummy_section = h.Section()
 if mpi_rank == 0:
     print "Creating pre section on process {}".format(mpi_rank)
     # Create the first section
@@ -81,26 +82,21 @@ if mpi_rank == last_process:
     # Record Voltage of second section
     v2 = h.Vector()
     v2.record(section2(0.5)._ref_v)
-if mpi_rank == 0 or mpi_rank == last_process:
-    # Finalise construction of parallel context
-    pc.setup_transfer()
-    # Record time
-    rec_t = h.Vector()
-    rec_t.record(h._ref_t)
-    print "Finished network construction on process {}".format(mpi_rank)
-    
-    # Steps to run simulation    
-    h.dt = 0.25
-    print "Setting maxstep on process {}".format(mpi_rank)
-    pc.set_maxstep(10)
-    print "Finitialise on process {}".format(mpi_rank)
-    h.finitialize(-60)
-    print "Running simulation on process {}".format(mpi_rank)
-    pc.psolve(100)
-    print "Finished run on process {}".format(mpi_rank)
-    
-    # Convert recorded data into Numpy arrays
-    t_array = np.array(rec_t)
+# Finalise construction of parallel context
+pc.setup_transfer()
+# Record time
+rec_t = h.Vector()
+rec_t.record(h._ref_t)
+# Steps to run simulation    
+h.dt = 0.25
+print "Setting maxstep on process {}".format(mpi_rank)
+pc.set_maxstep(10)
+print "Finitialise on process {}".format(mpi_rank)
+h.finitialize(-60)
+print "Running simulation on process {}".format(mpi_rank)
+pc.psolve(100)
+# Convert recorded data into Numpy arrays
+t_array = np.array(rec_t)
 if mpi_rank == 0:
     v1_array = np.array(v1)
 if mpi_rank == last_process:
