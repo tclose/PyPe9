@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <!-- The base network from which to build the main network -->
-    <network id="CerebellarGranularLayer">
+    <network id="MorphTest">
         <simulationDefaults>
             <temperature value="23" />
         </simulationDefaults>
         <!-- Populations -->
         <population id="Purkinjes" cell="Purkinje_Khaliq03">
             <structure type="MorphologyBased" format="Neurolicda" file="morph/purkinjes.xml">
-                <layout pattern="tiled" x="3" z="20" />
+                <layout pattern="Tiled" x="3" z="20" />
             </structure>
             <initialConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
@@ -16,7 +16,8 @@
         </population>
         <population id="Golgis" cell="Golgi_Solinas08">
             <structure type="MorphologyBased" format="Neurolicda" file="morph/golgis.xml">
-                <layout pattern="DistributedSoma" type="uniform" low="200 10 200" high="400 150 400" />
+                <layout pattern="DistributedSoma" type="uniform" size="16" low="200 10 200"
+                    high="400 150 400" />
             </structure>
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
