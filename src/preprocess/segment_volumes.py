@@ -121,29 +121,35 @@ class SWCTree:
         print 'Loaded %d sections (%d) from file: %s' % (line_count, len(self.dendrite_sections),
                                                                                            filename)
 
+    @classmethod
+    def _write_branch_xml(cls, f, branch, indent):
+        if math.isnan(branch.radius):
+            diam = branch.children[0].radius * 2.0
+        else:
+            diam = branch.radius * 2.0
+        f.write('{indent}<point x="{coord[0]}" y="{coord[1]}" z="{coord[2]}" d="{diam}" />\n'
+                .format(indent=indent, coord=branch.coord, diam=diam))
+        if branch.is_fork():
+            f.write('{indent}<branch>\n'.format(indent=indent))
+            for child in branch.children:
+                cls._write_branch_xml(f, child, indent + '    ')
+            f.write('{indent}</branch>\n'.format(indent=indent))
+        elif not branch.is_branch_end():
+            cls._write_branch_xml(f, branch.children[0], indent)
+
     def save_xml(self, filename):           
         """
         Saves the SWC tree into the Neurolucida XML file format
         
         @param filename [str]: The path of the file to save the xml to
         """
-        # Create function to handle the recursive part of the algorithm
-        def write_branch(f, branch, indent):
-            f.write('{indent}<point x="{coord[0]}" y="{coord[1]}" z="{coord[2]}" d="{diam}" />\n'
-                    .format(indent=indent, coord=branch.coord, diam=branch.radius * 2.0))
-            if len(branch.children()) > 1:
-                f.write('{indent}<branch>\n'.format(indent=indent))
-                for child in branch.children:
-                    write_branch(f, child, indent + '    ')
-                f.write('{indent}</branch>')
-            elif len(branch.children()):
-                write_branch(f, self.children[0], indent)
-                
+        print "Writing dendritic tree to xml file '{}'...".format(filename)
         # Open up the file and write all the branches
         with open(filename, 'w') as f:
             f.write('<tree>\n')            
-            write_branch(f, self.start, '    ')
+            self._write_branch_xml(f, self.start, '    ') 
             f.write('</tree>\n')            
+        print "Finished writing tree"
 
 def main():
     """
