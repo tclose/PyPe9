@@ -3,10 +3,10 @@
     <network id="GapTest">
         <!-- Populations -->
         <population id="Test1" cell="Test" size="2"/>
-          <!--    <layout type="Extension" engine="Brep" id="debug_Golgis" />
+          <!--    <structure type="Extension" engine="Brep" id="debug_Golgis" />
         </population>-->
         <population id="Test2" cell="Test">
-          <layout type="Extension" engine="Brep" id="debug_Golgis" />
+          <structure type="Extension" engine="Brep" id="debug_Golgis" />
         </population>
         <!-- Projections -->
         <projection id="Gap_test" synapseFamily="Electrical">
