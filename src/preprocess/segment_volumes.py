@@ -16,62 +16,11 @@
 #
 #######################################################################################
 import math
-import argparse
 import numpy as np
-from visualisation import draw_bounding_box
-
-def main():
-    """
-    Used for testing the NeurolucidaTree class
-    """
-    parser = argparse.ArgumentParser(description='A script to read SWC files and print their segment\
-                                     volumes to file with the format ''x y z volume''')
-    parser.add_argument('input', type=str, help="Path of the input file to read the SWC data from")
-    parser.add_argument('output', type=str, help="Path of the output file to print the data to")
-    parser.add_argument('--plot', action='store_true', help='Flag to plot the loaded positions')
-    parser.add_argument('--axis_order', nargs=3, type=int, help='The order in which the loaded axes will be interpreted. For example "z y x" will interpret the x and z being flipped)')
-    args = parser.parse_args()
-
-    if args.axis_order:
-        x = args.axis_order.find('x')
-        y = args.axis_order.find('y')
-        z = args.axis_order.find('z')
-    else:
-        x = 0
-        y = 1
-        z = 2
-
-    tree = NeurolucidaTree()
-    tree.load(args.input, verbose=False)
-    f = open(args.output, 'w')
-    f.write("# min_bounds: %f %f %f\n" % (tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]))
-    f.write("# max_bounds: %f %f %f\n" % (tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]))
-    if args.plot:
-        xs = []
-        ys = []
-        zs = []
-    for seg in tree.dendrite_sections.values():
-        f.write("%f %f %f %f\n" % (seg.coord[x], seg.coord[y], seg.coord[z], seg.volume()))
-        if args.plot:
-            xs.append(seg.coord[x])
-            ys.append(seg.coord[y])
-            zs.append(seg.coord[z])
-    print "Saved output volumes to '%s'" % args.output
-    if args.plot:
-        from mpl_toolkits.mplot3d import Axes3D #@UnusedImport
-        import matplotlib.pyplot as plt
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        ax.scatter(xs=xs, ys=ys, zs=zs, marker='+')
-        draw_bounding_box(ax, [tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]],
-                              [tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]])
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        plt.show()
+from visualize import draw_bounding_box
 
 
-class NeurolucidaTree:
+class SWCTree:
 
     class Section:
         def __init__(self, section_id, coord, radius, parent):
@@ -113,13 +62,15 @@ class NeurolucidaTree:
         def volume(self):
             return self.length() * math.pi * (self.radius * self.radius)
 
-    def __init__(self):
+    def __init__(self, filename=None):
         self.start = None
         ## Stores all the sections of the tree in a dictionary indexed by the SWC ID
         self.dendrite_sections = dict()
         self.soma_sections = dict()
         self.min_bounds = np.ones(3) * float('inf')
         self.max_bounds = np.ones(3) * float('-inf')
+        if filename:
+            self.load(filename)
 
     def load(self, filename, verbose=True):
         f = open(filename, 'r')
@@ -143,7 +94,7 @@ class NeurolucidaTree:
                     # If section is part of soma add it to list so that the dendritic sections can 
                     # Note that the "radius" of soma sections is not relevant as it does not 
                     # correspond to the radius of the actual soma
-                    self.soma_sections[section_id] = NeurolucidaTree.Section(section_id, coord,
+                    self.soma_sections[section_id] = SWCTree.Section(section_id, coord,
                                                                                 float('NaN'), None)
                 elif section_type == 2:
                     if verbose:
@@ -156,22 +107,97 @@ class NeurolucidaTree:
                         if coord[d] > self.max_bounds[d]:
                             self.max_bounds[d] = coord[d]
                     if parent_id == -1:
-                        self.start = NeurolucidaTree.Section(section_id, coord, float('NaN'), None)
+                        self.start = SWCTree.Section(section_id, coord, float('NaN'), None)
                         parent = self.start
                     elif parent_id in self.soma_sections.keys():
                         self.start = self.soma_sections[parent_id]
                         parent = self.start
                     else:
                         parent = self.dendrite_sections[parent_id]
-                    self.dendrite_sections[section_id] = NeurolucidaTree.Section(section_id, coord,
+                    self.dendrite_sections[section_id] = SWCTree.Section(section_id, coord,
                                                                                     radius, parent)
                 else:
                     raise Exception('Unrecognised section type (%d)' % section_type)
         print 'Loaded %d sections (%d) from file: %s' % (line_count, len(self.dendrite_sections),
                                                                                            filename)
 
-if __name__ == "__main__":
-    main()
+    def save_xml(self, filename):           
+        """
+        Saves the SWC tree into the Neurolucida XML file format
+        
+        @param filename [str]: The path of the file to save the xml to
+        """
+        # Create function to handle the recursive part of the algorithm
+        def write_branch(f, branch, indent):
+            f.write('{indent}<point x="{coord[0]}" y="{coord[1]}" z="{coord[2]}" d="{diam}" />\n'
+                    .format(indent=indent, coord=branch.coord, diam=branch.radius * 2.0))
+            if len(branch.children()) > 1:
+                f.write('{indent}<branch>\n'.format(indent=indent))
+                for child in branch.children:
+                    write_branch(f, child, indent + '    ')
+                f.write('{indent}</branch>')
+            elif len(branch.children()):
+                write_branch(f, self.children[0], indent)
+                
+        # Open up the file and write all the branches
+        with open(filename, 'w') as f:
+            f.write('<tree>\n')            
+            write_branch(f, self.start, '    ')
+            f.write('</tree>\n')            
 
+def main():
+    """
+    Used for testing the SWCTree class
+    """
+    import argparse
+    parser = argparse.ArgumentParser(description='A script to read SWC files and print their segment\
+                                     volumes to file with the format ''x y z volume''')
+    parser.add_argument('input', type=str, help="Path of the input file to read the SWC data from")
+    parser.add_argument('output', type=str, help="Path of the output file to print the data to")
+    parser.add_argument('--plot', action='store_true', help='Flag to plot the loaded positions')
+    parser.add_argument('--axis_order', nargs=3, type=int, help='The order in which the loaded axes will be interpreted. For example "z y x" will interpret the x and z being flipped)')
+    args = parser.parse_args()
 
+    if args.axis_order:
+        x = args.axis_order.find('x')
+        y = args.axis_order.find('y')
+        z = args.axis_order.find('z')
+    else:
+        x = 0
+        y = 1
+        z = 2
+
+    tree = SWCTree()
+    tree.load(args.input, verbose=False)
+    f = open(args.output, 'w')
+    f.write("# min_bounds: %f %f %f\n" % (tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]))
+    f.write("# max_bounds: %f %f %f\n" % (tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]))
+    if args.plot:
+        xs = []
+        ys = []
+        zs = []
+    for seg in tree.dendrite_sections.values():
+        f.write("%f %f %f %f\n" % (seg.coord[x], seg.coord[y], seg.coord[z], seg.volume()))
+        if args.plot:
+            xs.append(seg.coord[x])
+            ys.append(seg.coord[y])
+            zs.append(seg.coord[z])
+    print "Saved output volumes to '%s'" % args.output
+    if args.plot:
+        from mpl_toolkits.mplot3d import Axes3D #@UnusedImport
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(xs=xs, ys=ys, zs=zs, marker='+')
+        draw_bounding_box(ax, [tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]],
+                              [tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]])
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        plt.show()
+
+if __name__ == '__main__':
+    swc_tree = SWCTree('/home/tclose/kbrain/morph/Golgi/swc/Golgi-cell-040408-C1.CNG.swc')
+    swc_tree.save_xml('/home/tclose/kbrain/morph/Golgi/xml/Golgi-cell-040408-C1.CNG.xml')    
+    
 

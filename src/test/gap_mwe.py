@@ -15,10 +15,10 @@ import numpy as np
 # This is a hack I use on our cluster, to get MPI initialised=True. There is probably something
 # wrong with our setup but I can't be bothered trying to work out what it is at this point. All
 # suggestions welcome :)
-try:
-    from mpi4py import MPI #@UnresolvedImport @UnusedImport
-except:
-    print "mpi4py was not found, MPI will remain disabled if MPI initialized==false on startup"
+#try:
+    #from mpi4py import MPI #@UnresolvedImport @UnusedImport
+#except:
+    #print "mpi4py was not found, MPI will remain disabled if MPI initialized==false on startup"
 from neuron import h
 from ninemlp.neuron.build import compile_nmodl
 # Arguments to the script
@@ -40,6 +40,7 @@ if args.build == 'build_only':
 pc = h.ParallelContext()
 num_processes = int(pc.nhost())
 mpi_rank = int(pc.id())
+dummy_section = h.Section()
 print "Creating test network..."
 # The first section is created on the first node and the second section on the last node 
 # (NB: which will obviously be the same if there is only one node)
@@ -135,4 +136,5 @@ if mpi_rank == 0:
     pc.runworker()
     print "Completing parallel context from process 0"
     pc.done()
+h.quit()
 print "Finished process {}".format(mpi_rank)
