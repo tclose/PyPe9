@@ -2,25 +2,12 @@
 <nineml>
     <!-- The base network from which to build the main network -->
     <network id="CerebellarGranularLayer">
-        <freeParameters>
-            <flags>
-                <flag id="includeGap" default="False" />
-                <flag id="GranuleToGolgi" default="True" />
-            </flags>
-            <scalars />
-        </freeParameters>
         <simulationDefaults>
             <temperature value="23" />
         </simulationDefaults>
         <!-- Populations -->
-        <population id="Purkinjes" cell="Purkinje_Ackermann">
+        <population id="Purkinjes" cell="Purkinje_Khaliq03">
             <layout type="Explicit" format="Neurolicda" file="morph/purkinjes.xml" />
-            <cellParameters>
-<!--                <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
-                    high="-13.2" units="nA" />
-                <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um"
-                    segmentGroup="soma" /> -->
-            </cellParameters>
             <initialConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
@@ -44,7 +31,7 @@
         <projection id="MossyFibers_Purkinjes_AMPA">
             <source id="MossyFibers" />
             <destination id="Purkinjes" synapse="AMPA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="39" -->
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> 
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -52,19 +39,11 @@
         <projection id="Golgis_Purkinjes">
             <source id="Golgis" />
             <destination id="Purkinjes" synapse="GABA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="EllipseMask" x_scale="200 um"
-                y_scale="58.35 um" /> <!-- x_scale="600 um" -->
+            <connection pattern="MorphologyBased" geometry="ExponentialWithDistance"
+                vox_size="1.0 1.0 1.0" scale="1.0" decay_rate="0.1" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
-            <comment> There are about 400 Golgi cells per granule cell in the mouse. The axon does
-                not seem to be confined as the dendrite, but it is rather flat and oriented in the
-                same direction. Every granule cell receives from about 10 Golgi cells. I am not sure
-                about this number. Better way to estimate it is to measure the axonal length and
-                multiply by the density of synapses per um of axon. Currently we position the Golgi
-                cells with a uniform distribution. We calculate the number of Golgi cells by 1.
-                estimating the number of granule cells via density 2. multiplying that number by 400
-            </comment>
         </projection>
     </network>
 </nineml>

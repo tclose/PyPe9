@@ -146,9 +146,10 @@ class SWCTree:
         print "Writing dendritic tree to xml file '{}'...".format(filename)
         # Open up the file and write all the branches
         with open(filename, 'w') as f:
-            f.write('<tree>\n')
+            f.write("<!-- Generated xml file from '{}' SWC file -->\n".format(filename))
+            f.write("<tree>\n")
             self._write_branch_xml(f, self.start, '    ')
-            f.write('</tree>\n')
+            f.write("</tree>\n")
         print "Finished writing tree"
 
 
