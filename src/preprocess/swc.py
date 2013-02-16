@@ -137,7 +137,7 @@ class SWCTree:
         elif not branch.is_branch_end():
             cls._write_branch_xml(f, branch.children[0], indent)
 
-    def save_xml(self, filename):           
+    def save_xml(self, filename):
         """
         Saves the SWC tree into the Neurolucida XML file format
         
@@ -146,12 +146,13 @@ class SWCTree:
         print "Writing dendritic tree to xml file '{}'...".format(filename)
         # Open up the file and write all the branches
         with open(filename, 'w') as f:
-            f.write('<tree>\n')            
-            self._write_branch_xml(f, self.start, '    ') 
-            f.write('</tree>\n')            
+            f.write('<tree>\n')
+            self._write_branch_xml(f, self.start, '    ')
+            f.write('</tree>\n')
         print "Finished writing tree"
 
-def main():
+
+if __name__ == '__main__':
     """
     Used for testing the SWCTree class
     """
@@ -163,47 +164,56 @@ def main():
     parser.add_argument('--plot', action='store_true', help='Flag to plot the loaded positions')
     parser.add_argument('--axis_order', nargs=3, type=int, help='The order in which the loaded axes will be interpreted. For example "z y x" will interpret the x and z being flipped)')
     args = parser.parse_args()
+    if args.input.split('.')[-1] != 'swc':
+        raise Exception("Input file needs to have extension 'swc' (found '{}')"
+                        .format(args.input.split('.')[-1]))
+    # Get the file extension of the output file to determine the action to take
+    output_file_ext = args.output.split('.')[-1]
+    # Save morphology in xml format
+    if  output_file_ext == 'xml':
+        swc_tree = SWCTree(args.input)
+        swc_tree.save_xml(args.output)
+    # Save the volumes of the tree segments
+    elif output_file_ext == 'vol':
+        if args.axis_order:
+            x = args.axis_order.find('x')
+            y = args.axis_order.find('y')
+            z = args.axis_order.find('z')
+        else:
+            x = 0
+            y = 1
+            z = 2
 
-    if args.axis_order:
-        x = args.axis_order.find('x')
-        y = args.axis_order.find('y')
-        z = args.axis_order.find('z')
-    else:
-        x = 0
-        y = 1
-        z = 2
-
-    tree = SWCTree()
-    tree.load(args.input, verbose=False)
-    f = open(args.output, 'w')
-    f.write("# min_bounds: %f %f %f\n" % (tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]))
-    f.write("# max_bounds: %f %f %f\n" % (tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]))
-    if args.plot:
-        xs = []
-        ys = []
-        zs = []
-    for seg in tree.dendrite_sections.values():
-        f.write("%f %f %f %f\n" % (seg.coord[x], seg.coord[y], seg.coord[z], seg.volume()))
+        tree = SWCTree()
+        tree.load(args.input, verbose=False)
+        f = open(args.output, 'w')
+        f.write("# min_bounds: %f %f %f\n" % (tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]))
+        f.write("# max_bounds: %f %f %f\n" % (tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]))
         if args.plot:
-            xs.append(seg.coord[x])
-            ys.append(seg.coord[y])
-            zs.append(seg.coord[z])
-    print "Saved output volumes to '%s'" % args.output
-    if args.plot:
-        from mpl_toolkits.mplot3d import Axes3D #@UnusedImport
-        import matplotlib.pyplot as plt
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        ax.scatter(xs=xs, ys=ys, zs=zs, marker='+')
-        draw_bounding_box(ax, [tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]],
-                              [tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]])
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        plt.show()
+            xs = []
+            ys = []
+            zs = []
+        for seg in tree.dendrite_sections.values():
+            f.write("%f %f %f %f\n" % (seg.coord[x], seg.coord[y], seg.coord[z], seg.volume()))
+            if args.plot:
+                xs.append(seg.coord[x])
+                ys.append(seg.coord[y])
+                zs.append(seg.coord[z])
+        print "Saved output volumes to '%s'" % args.output
+        if args.plot:
+            from mpl_toolkits.mplot3d import Axes3D #@UnusedImport
+            import matplotlib.pyplot as plt
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            ax.scatter(xs=xs, ys=ys, zs=zs, marker='+')
+            draw_bounding_box(ax, [tree.min_bounds[x], tree.min_bounds[y], tree.min_bounds[z]],
+                                  [tree.max_bounds[x], tree.max_bounds[y], tree.max_bounds[z]])
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+            ax.set_zlabel('Z')
+            plt.show()
+    else:
+        raise Exception("No action associated with the output extension '{}'"
+                        .format(output_file_ext))
 
-if __name__ == '__main__':
-    swc_tree = SWCTree('/home/tclose/kbrain/morph/Golgi/swc/Golgi-cell-040408-C1.CNG.swc')
-    swc_tree.save_xml('/home/tclose/kbrain/morph/Golgi/xml/Golgi-cell-040408-C1.CNG.xml')    
-    
 
