@@ -1,1 +1,584 @@
-../../cerebellum/ncml/Purkinje_Khaliq03.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ncml:model xmlns:ncml="ncml" name="Purkinje_Khaliq03">
+  <!--<include href="SimpleIonChannel.xml"/> -->
+  <ncml:sxslt>
+    <!-- XML syntactic sugar stylesheet -->
+    ( (sxml:match 'ncml:ionicCurrent (lambda (node bindings root env) (let ((id (or (sxml:attr
+    node 'id) (sxml:attr node 'name))) (kids (sxml:kids node))) `(ncml:component (@ (type
+    "ionic-current") (name ,id)) . ,kids) ))) (sxml:match 'ncml:decayingPool (lambda (node
+    bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
+    (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
+  </ncml:sxslt>
+  <cell id="Purkinje_Khaliq03">
+    <notes>A model of a Purkinje cell soma</notes>
+    <morphology id="PurkinjeMorph">
+    </morphology>
+    <biophysicalProperties id="Cerebellar Purkinje Cell">
+      <defaultBuildOptions>
+        <build tool="nemo" simulator="neuron" method="derivimplicit">
+          <kinetic comp_id="Na_z" />
+        </build>
+        <build tool="nemo" simulator="nest" method="gsl" />
+        <!-- -p pyparams={paramsdir} nmodl={nmodldir} nmodl-method=derivimplicit nmodl-kinetic=Na_z" -->
+        <!-- -p pyparams={paramsdir} nest={nmodldir} nest-method=cvode" -->
+      </defaultBuildOptions>
+      <actionPotentialThreshold v="-21" />
+      <membraneProperties>
+        <ncml:input name="v"/>
+        <ncml:input name="cai" from="ion-pools"/>
+        <ncml:input name="cao" from="ion-pools"/>
+        <ncml:input name="ica" from="ion-currents"/>
+        <ncml:const name="ena" value="60"/>
+        <ncml:const name="ek" value="-88"/>
+        <ncml:const name="ca0" value="0.0001"/>
+        <ncml:component type="ionic-current" name="CaBK">
+          <ncml:component type="gate">
+            <ncml:const name="ztau" value="1.0"/>
+            <ncml:asgn name="CaBK_v"><ncml:expr>(v + 5)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="minf"><ncml:expr>(let ((vh -28.9) (k 6.2)) (1.0 / (1.0 + exp (neg ((CaBK_v - vh) / k)))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="mtau"><ncml:expr>(let ((y0 0.000505) (vh1 -33.3) (k1 -10.0) (vh2 86.4) (k2 10.1)) ((1000.0) * (y0 + 1 / (exp ((CaBK_v + vh1) / k1) + exp ((CaBK_v + vh2) / k2)))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="hinf"><ncml:expr>(let ((y0 0.085) (vh -32.0) (k 5.8)) (y0 + (1 - y0) / (1 + exp ((CaBK_v - vh) / k))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="htau"><ncml:expr>(let ((y0 0.0019) (vh1 -54.2) (k1 -12.9) (vh2 48.5) (k2 5.2)) ((1000.0) * (y0 + 1 / (exp ((CaBK_v + vh1) / k1) + exp ((CaBK_v + vh2) / k2)))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="zinf"><ncml:expr>(let ((k 0.001)) (1 / (1 + (k / cai))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="z_alpha"><ncml:expr>(zinf / ztau)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="z_beta"><ncml:expr>((1 - zinf) / ztau)</ncml:expr>
+            </ncml:asgn>
+            <ncml:reaction name="z"><ncml:open>O</ncml:open>
+            <ncml:power>2</ncml:power>
+            <ncml:transitions><ncml:transition src="O" dst="C">
+              <ncml:rate>z_alpha </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C" dst="O">
+              <ncml:rate>z_beta </ncml:rate>
+            </ncml:transition>
+            </ncml:transitions>
+            <ncml:initial>((let ((k 0.001)) (1 / (1 + k / ca0))))</ncml:initial>
+            </ncml:reaction>
+            <ncml:output name="z"/>
+            <ncml:hh_ionic_gate name="CaBK"><ncml:initial_m>(minf)</ncml:initial_m>
+            <ncml:initial_h>(hinf)</ncml:initial_h>
+            <ncml:m_power>3</ncml:m_power>
+            <ncml:h_power>1</ncml:h_power>
+            <ncml:m_inf>(minf)</ncml:m_inf>
+            <ncml:m_tau>(mtau)</ncml:m_tau>
+            <ncml:h_inf>(hinf)</ncml:h_inf>
+            <ncml:h_tau>(htau)</ncml:h_tau>
+            </ncml:hh_ionic_gate>
+          </ncml:component>
+          <ncml:component type="pore">
+            <ncml:const name="gbar_CaBK" value="0.007"/>
+            <ncml:output name="gbar_CaBK"/>
+          </ncml:component>
+          <ncml:component type="permeating-ion" name="k">
+            <ncml:const name="e_CaBK">
+              ek
+            </ncml:const>
+            <ncml:output name="e_CaBK"/>
+          </ncml:component>
+        </ncml:component>
+        <ncml:ionicCurrent name="CaP">
+          <ncml:component type="gate">
+            <ncml:asgn name="inf"><ncml:expr>(let ((cv -19) (ck 5.5)) (1.0 / (1.0 + exp (neg ((v - cv) / ck)))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="tau"><ncml:expr>((1000.0) * (if (v &gt; -50) then (0.000191 + (0.00376 * exp (neg (((v + 41.9) / 27.8) ^ 2)))) else (0.00026367 + (0.1278 * exp (0.10327 * v)))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:hh_ionic_gate name="CaP"><ncml:initial_m>(inf)</ncml:initial_m>
+            <ncml:m_power>1</ncml:m_power>
+            <ncml:h_power>0</ncml:h_power>
+            <ncml:m_inf>inf</ncml:m_inf>
+            <ncml:m_tau>tau</ncml:m_tau>
+            </ncml:hh_ionic_gate>
+          </ncml:component>
+          <ncml:component type="permeability">
+            <ncml:defun name="ghk">
+              <ncml:arg>v</ncml:arg><ncml:arg>ci</ncml:arg><ncml:arg>co</ncml:arg>
+              <ncml:body>((let ((F 96485.0) (R 8.3145) (T (22 + 273.19)) (Z 2) (E ((0.001) * v))) (let ((k0 ((Z * (F * E)) / (R * T)))) (let ((k1 (exp (neg (k0)))) (k2 (((Z ^ 2) * (E * (F ^ 2))) / (R * T)))) (1e-06) * (if (abs (1 - k1) &lt; 1e-06) then (Z * F * (ci - (co * k1)) * (1 - k0)) else (k2 * (ci - (co * k1)) / (1 - k1)))))))</ncml:body>
+            </ncml:defun>
+            <ncml:const name="pcabar" value="5e-05"/>
+            <ncml:asgn name="pca"><ncml:expr>(pcabar * ghk (v cai cao))</ncml:expr>
+            </ncml:asgn>
+            <ncml:output name="pca"/>
+          </ncml:component>
+          <ncml:component type="permeating-ion" name="ca">
+          </ncml:component>
+        </ncml:ionicCurrent>
+        <ncml:ionicCurrent name="K1">
+          <ncml:component type="gate">
+            <ncml:asgn name="K1_v"><ncml:expr>(v + 11)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="minf"><ncml:expr>(let ((mivh -24) (mik 15.4)) (1 / (1 + exp (neg (K1_v - mivh) / mik))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="mtau"><ncml:expr>(let ((mty0 0.00012851) (mtvh1 100.7) (mtk1 12.9) (mtvh2 -56.0) (mtk2 -23.1)) (1000.0 * (if (K1_v &lt; -35) then (3.0 * (3.4225e-05 + 0.00498 * exp (neg (K1_v) / -28.29))) else (mty0 + 1.0 / (exp ((K1_v + mtvh1) / mtk1) + exp ((K1_v + mtvh2) / mtk2))))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="hinf"><ncml:expr>(let ((hiy0 0.31) (hiA 0.78) (hivh -5.802) (hik 11.2)) (hiy0 + hiA / (1 + exp ((K1_v - hivh) / hik))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="htau"><ncml:expr>(1000.0 * (if (K1_v &gt; 0) then (0.0012 + 0.0023 * exp (-0.141 * K1_v)) else (1.2202e-05 + 0.012 * exp (neg (((K1_v - (-56.3)) / 49.6) ^ 2)))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:hh_ionic_gate name="K1"><ncml:initial_m>(minf)</ncml:initial_m>
+            <ncml:initial_h>(hinf)</ncml:initial_h>
+            <ncml:m_power>3</ncml:m_power>
+            <ncml:h_power>1</ncml:h_power>
+            <ncml:m_inf>(minf)</ncml:m_inf>
+            <ncml:m_tau>(mtau)</ncml:m_tau>
+            <ncml:h_inf>(hinf)</ncml:h_inf>
+            <ncml:h_tau>(htau)</ncml:h_tau>
+            </ncml:hh_ionic_gate>
+          </ncml:component>
+          <ncml:component type="pore">
+            <ncml:const name="gbar" value="0.004"/>
+            <ncml:output name="gbar"/>
+          </ncml:component>
+          <ncml:component type="permeating-ion" name="k">
+            <ncml:const name="e">
+              ek
+            </ncml:const>
+            <ncml:output name="e"/>
+          </ncml:component>
+        </ncml:ionicCurrent>
+        <ncml:ionicCurrent name="K2">
+          <ncml:component type="gate">
+            <ncml:asgn name="K2_v"><ncml:expr>(v + 11)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="minf"><ncml:expr>(let ((mivh -24) (mik 20.4)) (1 / (1 + exp ((neg (K2_v - mivh)) / mik))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="mtau"><ncml:expr>((1000.0) * (if (K2_v &lt; -20) then (0.000688 + 1 / (exp ((K2_v + 64.2) / 6.5) + exp ((K2_v - 141.5) / -34.8))) else (0.00016 + 0.0008 * exp (-0.0267 * K2_v))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:hh_ionic_gate name="K2"><ncml:initial_m>(minf)</ncml:initial_m>
+            <ncml:m_power>4</ncml:m_power>
+            <ncml:h_power>0</ncml:h_power>
+            <ncml:m_inf>(minf)</ncml:m_inf>
+            <ncml:m_tau>(mtau)</ncml:m_tau>
+            </ncml:hh_ionic_gate>
+          </ncml:component>
+          <ncml:component type="pore">
+            <ncml:const name="gbar" value="0.002"/>
+            <ncml:output name="gbar"/>
+          </ncml:component>
+          <ncml:component type="permeating-ion" name="k">
+            <ncml:const name="e">
+              ek
+            </ncml:const>
+            <ncml:output name="e"/>
+          </ncml:component>
+        </ncml:ionicCurrent>
+        <ncml:ionicCurrent name="K3">
+          <ncml:component type="gate">
+            <ncml:asgn name="K3_v"><ncml:expr>(v + 11)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="minf"><ncml:expr>(let ((mivh -16.5) (mik 18.4)) (1 / (1 + exp ((neg (K3_v - mivh)) / mik))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="mtau"><ncml:expr>((1000.0) * (0.000796 + 1.0 / (exp ((K3_v + 73.2) / 11.7) + exp ((K3_v - 306.7) / -74.2))))</ncml:expr>
+            </ncml:asgn>
+            <ncml:hh_ionic_gate name="K3"><ncml:initial_m>(minf)</ncml:initial_m>
+            <ncml:m_power>4</ncml:m_power>
+            <ncml:h_power>0</ncml:h_power>
+            <ncml:m_inf>(minf)</ncml:m_inf>
+            <ncml:m_tau>(mtau)</ncml:m_tau>
+            </ncml:hh_ionic_gate>
+          </ncml:component>
+          <ncml:component type="pore">
+            <ncml:const name="gbar" value="0.004"/>
+            <ncml:output name="gbar"/>
+          </ncml:component>
+          <ncml:component type="permeating-ion" name="k">
+            <ncml:const name="e">
+              ek
+            </ncml:const>
+            <ncml:output name="e"/>
+          </ncml:component>
+        </ncml:ionicCurrent>
+        <ncml:ionicCurrent name="Narsg">
+          <ncml:component type="gate">
+            <ncml:const name="Con" value="0.005"/>
+            <ncml:const name="Coff" value="0.5"/>
+            <ncml:const name="Oon" value="0.75"/>
+            <ncml:const name="Ooff" value="0.005"/>
+            <ncml:const name="alfac">
+              (pow ((Oon / Con) (1.0 / 4.0)))
+            </ncml:const>
+            <ncml:const name="btfac">
+              (pow ((Ooff / Coff) (1.0 / 4.0)))
+            </ncml:const>
+            <ncml:const name="alpha" value="150"/>
+            <ncml:const name="beta" value="3"/>
+            <ncml:const name="gamma" value="150"/>
+            <ncml:const name="delta" value="40"/>
+            <ncml:const name="epsilon" value="1.75"/>
+            <ncml:const name="zeta" value="0.03"/>
+            <ncml:const name="x1" value="20"/>
+            <ncml:const name="x2" value="-20"/>
+            <ncml:const name="x3" value="1000000000000.0"/>
+            <ncml:const name="x4" value="-1000000000000.0"/>
+            <ncml:const name="x5" value="1000000000000.0"/>
+            <ncml:const name="x6" value="-25"/>
+            <ncml:asgn name="f01"><ncml:expr>(4.0 * alpha * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f02"><ncml:expr>(3.0 * alpha * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f03"><ncml:expr>(2.0 * alpha * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f04"><ncml:expr>(alpha * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f0O"><ncml:expr>(gamma * exp (v / x3))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="fip"><ncml:expr>(epsilon * exp (v / x5))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f11"><ncml:expr>(4.0 * alpha * alfac * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f12"><ncml:expr>(3.0 * alpha * alfac * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f13"><ncml:expr>(2.0 * alpha * alfac * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f14"><ncml:expr>(alpha * alfac * exp (v / x1))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="f1n"><ncml:expr>(gamma * exp (v / x3))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="fi1"><ncml:expr>(Con)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="fi2"><ncml:expr>(Con * alfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="fi3"><ncml:expr>(Con * alfac * alfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="fi4"><ncml:expr>(Con * alfac * alfac * alfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="fi5"><ncml:expr>(Con * alfac * alfac * alfac * alfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="fin"><ncml:expr>(Oon)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b01"><ncml:expr>(beta * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b02"><ncml:expr>(2.0 * beta * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b03"><ncml:expr>(3.0 * beta * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b04"><ncml:expr>(4.0 * beta * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b0O"><ncml:expr>(delta * exp (v / x4))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="bip"><ncml:expr>(zeta * exp (v / x6))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b11"><ncml:expr>(beta * btfac * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b12"><ncml:expr>(2.0 * beta * btfac * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b13"><ncml:expr>(3.0 * beta * btfac * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b14"><ncml:expr>(4.0 * beta * btfac * exp (v / x2))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="b1n"><ncml:expr>(delta * exp (v / x4))</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="bi1"><ncml:expr>(Coff)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="bi2"><ncml:expr>(Coff * btfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="bi3"><ncml:expr>(Coff * btfac * btfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="bi4"><ncml:expr>(Coff * btfac * btfac * btfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="bi5"><ncml:expr>(Coff * btfac * btfac * btfac * btfac)</ncml:expr>
+            </ncml:asgn>
+            <ncml:asgn name="bin"><ncml:expr>(Ooff)</ncml:expr>
+            </ncml:asgn>
+            <ncml:reaction name="z"><ncml:open>O</ncml:open>
+            <ncml:power>1</ncml:power>
+            <ncml:transitions><ncml:transition src="C1" dst="C2">
+              <ncml:rate>f01 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C2" dst="C1">
+              <ncml:rate>b01 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C2" dst="C3">
+              <ncml:rate>f02 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C3" dst="C2">
+              <ncml:rate>b02 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C3" dst="C4">
+              <ncml:rate>f03 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C4" dst="C3">
+              <ncml:rate>b03 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C4" dst="C5">
+              <ncml:rate>f04 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C5" dst="C4">
+              <ncml:rate>b04 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C5" dst="O">
+              <ncml:rate>f0O </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="O" dst="C5">
+              <ncml:rate>b0O </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="O" dst="B">
+              <ncml:rate>fip </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="B" dst="O">
+              <ncml:rate>bip </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="O" dst="I6">
+              <ncml:rate>fin </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I6" dst="O">
+              <ncml:rate>bin </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C1" dst="I1">
+              <ncml:rate>fi1 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I1" dst="C1">
+              <ncml:rate>bi1 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C2" dst="I2">
+              <ncml:rate>fi2 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I2" dst="C2">
+              <ncml:rate>bi2 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C3" dst="I3">
+              <ncml:rate>fi3 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I3" dst="C3">
+              <ncml:rate>bi3 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C4" dst="I4">
+              <ncml:rate>fi4 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I4" dst="C4">
+              <ncml:rate>bi4 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="C5" dst="I5">
+              <ncml:rate>fi5 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I5" dst="C5">
+              <ncml:rate>bi5 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I1" dst="I2">
+              <ncml:rate>f11 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I2" dst="I1">
+              <ncml:rate>b11 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I2" dst="I3">
+              <ncml:rate>f12 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I3" dst="I2">
+              <ncml:rate>b12 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I3" dst="I4">
+              <ncml:rate>f13 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I4" dst="I3">
+              <ncml:rate>b13 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I4" dst="I5">
+              <ncml:rate>f14 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I5" dst="I4">
+              <ncml:rate>b14 </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I5" dst="I6">
+              <ncml:rate>f1n </ncml:rate>
+            </ncml:transition>
+            <ncml:transition src="I6" dst="I5">
+              <ncml:rate>b1n </ncml:rate>
+            </ncml:transition>
+          </ncml:transitions>
+        </ncml:reaction>
+        <ncml:output name="z"/>
+      </ncml:component>
+      <ncml:component type="pore">
+        <ncml:const name="gbar" value="0.015"/>
+        <ncml:output name="gbar"/>
+      </ncml:component>
+      <ncml:component type="permeating-ion" name="na">
+        <ncml:const name="e">
+          ena
+        </ncml:const>
+        <ncml:output name="e"/>
+      </ncml:component>
+    </ncml:ionicCurrent>
+    <ncml:ionicCurrent name="Ih">
+      <ncml:component type="gate">
+        <ncml:asgn name="inf"><ncml:expr>(1.0 / (1.0 + exp ((v + 90.1) / 9.9)))</ncml:expr>
+        </ncml:asgn>
+        <ncml:asgn name="tau"><ncml:expr>((1000.0) * (0.19 + 0.72 * exp (neg (((v - (-81.5)) / 11.9) ^ 2))))</ncml:expr>
+        </ncml:asgn>
+        <ncml:hh_ionic_gate name="Ih"><ncml:initial_m>(inf)</ncml:initial_m>
+        <ncml:m_power>1</ncml:m_power>
+        <ncml:h_power>0</ncml:h_power>
+        <ncml:m_inf>(inf)</ncml:m_inf>
+        <ncml:m_tau>(tau)</ncml:m_tau>
+        </ncml:hh_ionic_gate>
+      </ncml:component>
+      <ncml:component type="pore">
+        <ncml:const name="gbar" value="0.0001"/>
+        <ncml:output name="gbar"/>
+      </ncml:component>
+      <ncml:component type="permeating-ion" name="non-specific">
+        <ncml:const name="e" value="-30"/>
+        <ncml:output name="e"/>
+      </ncml:component>
+    </ncml:ionicCurrent>
+    <ncml:ionicCurrent name="Leak">
+      <ncml:component type="pore">
+        <ncml:const name="gbar" value="5e-05"/>
+        <ncml:output name="gbar"/>
+      </ncml:component>
+      <ncml:component type="permeating-ion" name="non-specific">
+        <ncml:const name="e" value="-60"/>
+        <ncml:output name="e"/>
+      </ncml:component>
+    </ncml:ionicCurrent>
+    <ncml:decayingPool name="ca">
+      <ncml:const name="F" value="96485.0"/>
+      <ncml:const name="cao" value="2.4"/>
+      <ncml:const name="ca_depth" value="0.1"/>
+      <ncml:const name="ca_beta" value="1.0"/>
+      <ncml:rate name="ca"><ncml:expr>((neg (ica) / (2 * ca0 * F * ca_depth)) - ((if (ca &lt; ca0) then ca0 else ca) * ca_beta))</ncml:expr>
+      <ncml:initial>ca0</ncml:initial>
+      </ncml:rate>
+      <ncml:asgn name="cac"><ncml:expr>(if (ca &lt; ca0) then ca0 else ca)</ncml:expr>
+      </ncml:asgn>
+      <ncml:output name="cac"/>
+      <ncml:output name="cao"/>
+    </ncml:decayingPool>
+    <ncml:component type="membrane-capacitance">
+      <ncml:const name="C_m">
+        (0.001)
+      </ncml:const>
+      <ncml:output name="C_m"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="K1">
+      <ncml:const name="vchold" value="-71"/>
+      <ncml:const name="vcbase" value="-69"/>
+      <ncml:const name="vcinc" value="10"/>
+      <ncml:const name="vcsteps" value="8"/>
+      <ncml:const name="vchdur" value="30"/>
+      <ncml:const name="vcbdur" value="100"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="K2">
+      <ncml:const name="vchold" value="-71"/>
+      <ncml:const name="vcbase" value="-69"/>
+      <ncml:const name="vcinc" value="10"/>
+      <ncml:const name="vcsteps" value="9"/>
+      <ncml:const name="vchdur" value="30"/>
+      <ncml:const name="vcbdur" value="100"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="K3">
+      <ncml:const name="vchold" value="-71"/>
+      <ncml:const name="vcbase" value="-61"/>
+      <ncml:const name="vcinc" value="10"/>
+      <ncml:const name="vcsteps" value="8"/>
+      <ncml:const name="vchdur" value="30"/>
+      <ncml:const name="vcbdur" value="100"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="CaBK">
+      <ncml:const name="vchold" value="-90"/>
+      <ncml:const name="vcbase" value="-40"/>
+      <ncml:const name="vcinc" value="10"/>
+      <ncml:const name="vcsteps" value="5"/>
+      <ncml:const name="vchdur" value="5"/>
+      <ncml:const name="vcbdur" value="20"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="CaP">
+      <ncml:const name="vchold" value="-90"/>
+      <ncml:const name="vcbase" value="-90"/>
+      <ncml:const name="vcinc" value="10"/>
+      <ncml:const name="vcsteps" value="11"/>
+      <ncml:const name="vchdur" value="5"/>
+      <ncml:const name="vcbdur" value="10"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="Ih">
+      <ncml:const name="vchold" value="-50"/>
+      <ncml:const name="vcbase" value="-60"/>
+      <ncml:const name="vcinc" value="-10"/>
+      <ncml:const name="vcsteps" value="7"/>
+      <ncml:const name="vchdur" value="300"/>
+      <ncml:const name="vcbdur" value="1200"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="Leak">
+      <ncml:const name="vchold" value="-71"/>
+      <ncml:const name="vcbase" value="-91"/>
+      <ncml:const name="vcinc" value="10"/>
+      <ncml:const name="vcsteps" value="5"/>
+      <ncml:const name="vchdur" value="30"/>
+      <ncml:const name="vcbdur" value="100"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+    <ncml:component type="voltage-clamp" name="Narsg">
+      <ncml:const name="vchold" value="-71"/>
+      <ncml:const name="vcbase" value="-60"/>
+      <ncml:const name="vcinc" value="10"/>
+      <ncml:const name="vcsteps" value="9"/>
+      <ncml:const name="vchdur" value="30"/>
+      <ncml:const name="vcbdur" value="100"/>
+      <ncml:output name="vchold"/>
+      <ncml:output name="vcbase"/>
+      <ncml:output name="vcinc"/>
+      <ncml:output name="vcsteps"/>
+      <ncml:output name="vchdur"/>
+      <ncml:output name="vcbdur"/>
+    </ncml:component>
+
+    <!-- Tom's additions below here -->
+    <specificCapacitance value="1.0" units="uF_per_cm2" />
+    <reversalPotential species="na" value="60" units="mV" />
+    <reversalPotential species="k" value="-88" units="mV" />
+  </membraneProperties>
+  <intracellularProperties>
+    <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
+  </intracellularProperties>
+  <synapses>
+  </synapses>
+</biophysicalProperties>
+</cell>
+</ncml:model>

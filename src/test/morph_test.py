@@ -21,9 +21,8 @@ import ninemlp
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--output', type=str, 
-                    default=os.path.join(PROJECT_PATH, 'output', 'morph_test.'), 
-                    help="The output location of the recording files")
+parser.add_argument('--output', type=str, help="The output location of the recording files", 
+                    default=os.path.join(PROJECT_PATH, 'output', 'morph_test.')) 
 args = parser.parse_args()
 network_xml_location = os.path.join(PROJECT_PATH, 'xml', 'test', 'morph_test.xml')
 # Set the build mode for pyNN before importing the simulator specific modules

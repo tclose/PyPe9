@@ -146,10 +146,14 @@ class SWCTree:
         print "Writing dendritic tree to xml file '{}'...".format(filename)
         # Open up the file and write all the branches
         with open(filename, 'w') as f:
+            f.write('<?xml version="1.0" encoding="ISO-8859-1"?>\n'
+                    '<mbf version="4.0" xmlns="http://www.mbfbioscience.com/2007/neurolucida" '
+                    'xmlns:nl="http://www.mbfbioscience.com/2007/neurolucida" appname="Neurolucida" '
+                    'appversion="10.40 (64-bit)">\n')
             f.write("<!-- Generated xml file from '{}' SWC file -->\n".format(filename))
-            f.write("<tree>\n")
+            f.write('<tree  type="Dendrite" leaf="Normal">\n')
             self._write_branch_xml(f, self.start, '    ')
-            f.write("</tree>\n")
+            f.write("</mbf>\n</tree>\n")
         print "Finished writing tree"
 
 

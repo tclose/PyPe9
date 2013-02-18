@@ -6,16 +6,16 @@
             <temperature value="23" />
         </simulationDefaults>
         <!-- Populations -->
-        <population id="Purkinjes" cell="Purkinje_Khaliq03">
-            <structure type="MorphologyBased" format="Neurolicda" file="morph/purkinjes.xml">
+        <population id="Purkinjes" cell="ncml/Golgi_Solinas08.xml">
+            <structure type="MorphologyBased" morphology="morph/purkinjes.xml">
                 <layout pattern="Tiled" x="3" z="20" />
             </structure>
             <initialConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
         </population>
-        <population id="Golgis" cell="Golgi_Solinas08">
-            <structure type="MorphologyBased" format="Neurolicda" file="morph/golgis.xml">
+        <population id="Golgis" cell="ncml/Golgi_Solinas08.xml">
+            <structure type="MorphologyBased" morphology="morph/golgis.xml">
                 <layout pattern="DistributedSoma" type="uniform" size="16" low="200 10 200"
                     high="400 150 400" />
             </structure>
@@ -29,13 +29,11 @@
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
         </population>
-        <population id="MossyFibers" cell="SpikeSourceArray">
-            <structure type="Extension" engine="Brep" id="MossyFibers" />
-        </population>
+        <population id="MossyFibers" cell="SpikeSourceArray" size="10" />
         <!-- Projections -->
         <projection id="MossyFibers_Purkinjes_AMPA">
             <source id="MossyFibers" />
-            <destination id="Purkinjes" synapse="AMPA" segment="soma" />
+            <destination id="Purkinjes" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
@@ -43,8 +41,8 @@
         </projection>
         <projection id="Golgis_Purkinjes">
             <source id="Golgis" />
-            <destination id="Purkinjes" synapse="GABA" segment="soma" />
-            <connection pattern="MorphologyBased" geometry="ExponentialWithDistance"
+            <destination id="Purkinjes" synapse="AMPA_MossyFiber" segment="soma" />
+            <connection pattern="MorphologyBased" kernel="Gaussian"
                 vox_size="1.0 1.0 1.0" scale="1.0" decay_rate="0.1" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />

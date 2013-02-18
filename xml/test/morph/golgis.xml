@@ -1,5 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<mbf version="4.0" xmlns="http://www.mbfbioscience.com/2007/neurolucida" xmlns:nl="http://www.mbfbioscience.com/2007/neurolucida" appname="Neurolucida" appversion="10.40 (64-bit)">
 <!-- Golgi-cell-040408-C1.CNG -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="0.0" y="0.0" z="0.0" d="2.14" />
     <branch>
         <point x="6.71" y="-6.19" z="1.32" d="2.14" />
@@ -1839,7 +1841,7 @@
     </branch>
 </tree>
 <!-- Golgi-cell-051108-C0-cell1.CNG.swc -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="0.0" y="0.0" z="0.0" d="2.66" />
     <branch>
         <point x="5.47" y="-7.15" z="-1.03" d="2.66" />
@@ -3687,7 +3689,7 @@
     </branch>
 </tree>
 <!-- Golgi-cell-051108-C0-cell2.CNG.xml -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="0.0" y="0.0" z="0.0" d="1.41" />
     <branch>
         <point x="4.92" y="0.58" z="0.55" d="1.41" />
@@ -5830,7 +5832,7 @@
     </branch>
 </tree>
 <!-- 210710C0.CNG.xml -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="1.92" y="6.89" z="-5.78" d="0.67" />
     <branch>
         <point x="-4.88" y="11.96" z="-5.78" d="0.67" />
@@ -9446,7 +9448,7 @@
     </branch>
 </tree>
 <!-- 210710C1.CNG.xml -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="-7.63" y="5.29" z="0.0" d="2.07" />
     <branch>
         <point x="2.0" y="15.29" z="0.0" d="2.07" />
@@ -11477,7 +11479,7 @@
     </branch>
 </tree>
 <!-- 240710C0.CNG.xml -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="3.23" y="-7.84" z="0.0" d="1.04" />
     <branch>
         <point x="-3.03" y="-2.14" z="0.0" d="1.04" />
@@ -14424,7 +14426,7 @@
     </branch>
 </tree>
 <!-- 270111C0.CNG.xml -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="-1.24" y="5.61" z="-0.08" d="0.96" />
     <branch>
         <point x="-6.14" y="8.49" z="0.03" d="0.96" />
@@ -15987,7 +15989,7 @@
     </branch>
 </tree>
 <!-- 270111C3.CNG.xml -->
-<tree>
+<tree type="Dendrite" leaf="Normal">
     <point x="11.62" y="2.13" z="0.0" d="1.18" />
     <branch>
         <point x="7.99" y="-1.77" z="-0.03" d="1.18" />
@@ -17392,3 +17394,4 @@
         </branch>
     </branch>
 </tree>
+</mbf>
