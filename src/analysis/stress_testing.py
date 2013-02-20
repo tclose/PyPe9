@@ -47,15 +47,16 @@ def main(arguments):
                   max_delay=2.0, silent_build=args.silent_build) 
     # Get population and print the soma section of the single cell.
     pop = net.all_populations()[0]
-    cell = pop[0]._cell
-    soma = cell.soma_seg
-    from neuron import h
-    h.psection(sec=soma)
-    if args.print_all:
-        from neuron import h
-        for seg_id, seg in sorted(cell.segments.items(), key=itemgetter(0)):
-            print "ID: {0}".format(seg_id)
-            h.psection(sec=seg)
+    nmda_input = net.get_population("NMDAInput")
+#    cell = pop[0]._cell
+#    soma = cell.soma_seg
+#    from neuron import h
+#    h.psection(sec=soma)
+#    if args.print_all:
+#        from neuron import h
+#        for seg_id, seg in sorted(cell.segments.items(), key=itemgetter(0)):
+#            print "ID: {0}".format(seg_id)
+#            h.psection(sec=seg)
     # Create the input current and times vectors
     if args.inject:
         inject_type = args.inject[0]
@@ -71,19 +72,16 @@ def main(arguments):
             raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
                             "or 'noise'".format(inject_type))
         pop[0].inject(current_source)
-    pop.record_all(args.output + pop.label)
+    net.record_spikes()
+    pop.record_v()
     print "------Miscellaneous hoc variables to print------"
-    potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
-    for var in potential_variables:
-        try:
-            print var + ": " + str(getattr(soma, var))
-        except:
-            pass
-    from neuron import h
-    print "celsius: " + str(h.celsius)
+    net.describe()
     print "Starting run"
     run(args.time) #@UndefinedVariable
     end() #@UndefinedVariable
+    net.print_spikes(args.output)
+    pop.print_v(args.output + pop.label + ".v")
+    print "Saved recorded data to files '{}*.*'".format(args.output)
     print "Simulated single cell for %f milliseconds" % args.time
    
 def single_cell(arguments):

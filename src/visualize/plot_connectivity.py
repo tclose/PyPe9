@@ -17,7 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 from mpl_toolkits.mplot3d import Axes3D #@UnusedImport
-from common import tube_mesh, ellipse_tube_mesh
+from visualize import tube_mesh, ellipse_tube_mesh
 from copy import copy
 
 def quit_figure(event):
