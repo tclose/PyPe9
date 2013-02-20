@@ -16,8 +16,8 @@
         </population>
         <population id="Golgis" cell="ncml/Golgi_Solinas08.xml">
             <structure type="MorphologyBased" morphology="morph/golgis.xml">
-                <layout pattern="DistributedSoma" type="uniform" size="16" low="200 10 200"
-                    high="400 150 400" />
+                <layout pattern="DistributedSoma" type="uniform" size="16" low_x="200" low_y="10"
+                    low_z="200" high_x="400" high_y="150" high_z="400" />
             </structure>
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
@@ -42,8 +42,8 @@
         <projection id="Golgis_Purkinjes">
             <source id="Golgis" />
             <destination id="Purkinjes" synapse="AMPA_MossyFiber" segment="soma" />
-            <connection pattern="MorphologyBased" kernel="Gaussian"
-                vox_size="1.0 1.0 1.0" scale="1.0" decay_rate="0.1" />
+            <connection pattern="MorphologyBased" kernel="Gaussian" scale="1.0"
+                decay_rate="0.1" vox_x="1.0" vox_y="1.0" vox_z="1.0" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
