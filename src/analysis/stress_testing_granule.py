@@ -54,6 +54,8 @@ def main(arguments):
     granules = net.get_population("Granules")
     nmda_input = net.get_population("NMDAInput")
     nmda_input.set_poisson_spikes(args.input_rate, args.start_input, args.time)
+#    granules_nmda_input = net.get_projection("NMDAInput_Granules")
+#    granules_nmda_input.setWeights(new_weight)
 #    cell = pop[0]._cell
 #    soma = cell.soma_seg
 #    from neuron import h
