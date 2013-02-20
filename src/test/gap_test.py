@@ -27,10 +27,10 @@ def main(arguments):
     args = parser.parse_args(arguments)
     print "args.build: {}".format(args.build)
     ninemlp.pyNN_build_mode = args.build
-    from ninemlp.neuron import Network, run, StepCurrentSource
+    from ninemlp.neuron import Network, run, StepCurrentSource, simulator
     print "Building network"
     net = Network(os.path.join(PROJECT_PATH, 'xml', 'cerebellum', 'gap_test.xml'),
-                  timestep=0.002, min_delay=0.0025, max_delay=2.0, temperature=25.0,
+                  timestep=0.25, min_delay=0.5, max_delay=10.0, temperature=25.0,
                   silent_build=False, build_mode=args.build) 
     test1 = net.get_population('Test1')
     test2 = net.get_population('Test2')
@@ -41,6 +41,7 @@ def main(arguments):
     print "Created Network"
     net.describe()
     print "Starting run..."
+    #simulator.state.parallel_context.timeout = 10
     run(200)
     print "Finished run. Saving..."
     test1.print_v(args.output + 'Test1.v')

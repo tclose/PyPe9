@@ -12,19 +12,19 @@
         </extensions>
         <!-- Populations -->
         <population id="Granule" cell="Granule">
-            <layout type="External" engine="Brep" id="Granule"> Brep args could go here
+            <structure type="External" engine="Brep" id="Granule"> Brep args could go here
             </layout>
         </population>
         <population id="Purkinje" cell="Purkinje">
-            <layout type="External" engine="Brep" id="Purkinje"> Brep args could go here
+            <structure type="External" engine="Brep" id="Purkinje"> Brep args could go here
             </layout>
         </population>
         <population id="MossyFiber" cell="MossyFiber">
-            <layout type="External" engine="Brep" id="MossyFiber"> Brep args could go here
+            <structure type="External" engine="Brep" id="MossyFiber"> Brep args could go here
             </layout>
         </population>
         <population id="Golgi" cell="Golgi">
-            <layout type="Grid2D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
+            <structure type="Grid2D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
                 y_extent="1 um" x_number="20" y_number="20">
                 <scale param="x_offset" scalar="patch_size"/>
                 <scale param="y_offset" scalar="patch_size"/>
@@ -32,11 +32,11 @@
             </layout>
         </population>
         <population id="Stellate" cell="Stellate">
-            <layout type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
+            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
                 y_extent="1 um" x_number="50" y_number="50" />
         </population>
         <population id="Basket" cell="Basket">
-            <layout type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
+            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
                 y_extent="1 um" z_extent="1 um" x_number="50" y_number="50" z_number="50" />
         </population>
         <!-- Projections -->
