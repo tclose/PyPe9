@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <network id="CerebellarGranularLayer">
+        <simulationDefaults>
+            <temperature value="23" />
+        </simulationDefaults>
+        <extensions>
+            <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
+        </extensions>
+        <!-- Populations -->
+        <population id="PostsynapticPop" cell="Granule_DeSouza10">
+            <structure type="Extension" engine="Brep" id="Golgis" />
+        </population>
+        <population id="PresynapticPop" cell="SpikeSourceArray">
+            <structure type="Extension" engine="Brep" id="Golgis" />
+        </population>
+        <!-- Projections -->
+        <projection id="PresynapticPop_PostsynapticPop_">
+            <source id="PresynapticPop" />
+            <destination id="PostsynapticPop" synapse="AMPA" segment="soma" />
+            <connection pattern="DistanceBased" geometry="EllipsoidMask" scale="200" orient_x="1.0" orient_y="0.0" orient_z="0.0" isotropy="2.0" />
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+        </projection>
+    </network>
+</nineml>
