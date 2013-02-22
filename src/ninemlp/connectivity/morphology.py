@@ -5,6 +5,7 @@
 
   @author Tom Close
 
+
 """
 #######################################################################################
 #
@@ -108,7 +109,7 @@ class Forest(object):
         if dtype == bool:
             for i, tree in enumerate(self):
                 mask.add_tree(tree)
-                print "Added {} tree to volume mask".format(i)
+       #         print "Added {} tree to volume mask".format(i)
         else:
             bool_mask = VolumeMask(vox_size, np.vstack([tree.points for tree in self.trees]),
                                    np.hstack([tree.diams for tree in self.trees]), bool)
@@ -116,7 +117,7 @@ class Forest(object):
                 tree_mask = deepcopy(bool_mask)
                 tree_mask.add_tree(tree)
                 mask += tree_mask
-                print "Added {} tree to volume mask".format(i)
+        #        print "Added {} tree to volume mask".format(i)
         return mask
 
     def plot_volume_mask(self, vox_size, show=True, dtype=bool, colour_map=None):
@@ -494,6 +495,7 @@ class Mask(object):
         self.limit = self.finish_index * self.vox_size
         # Initialise the actual numpy array to hold the values
         self.dim = self.finish_index - self.start_index
+        #print self.offset,self.limit
         # Create an grid of the voxel centres for convenient (and more efficient) 
         # calculation of the distance from voxel centres to the tree _points. Regarding the 
         # slightly odd notation of the numpy.mgrid function, the complex numbers ('1j') are used 
