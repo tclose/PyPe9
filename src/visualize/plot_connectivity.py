@@ -21,6 +21,7 @@ parser.add_argument('pre', type=str, help="The locations of the presynaptic neur
 parser.add_argument('post', type=str, help="The locations of the postsynaptic neurons")
 parser.add_argument('projection', type=str, help="The filename of the saved pyNN connections")
 parser.add_argument('--save', type=str, help="The path to save the figure to")
+parser.add_argument('--include', type=int, nargs='+', help="Selection of neurons for plotting")
 args = parser.parse_args()
 # Set up 3D figure
 fig = plt.figure()
@@ -28,6 +29,20 @@ ax = fig.add_subplot(111, projection='3d')
 # Load pre and post positions
 pre = np.loadtxt(args.pre)
 post = np.loadtxt(args.post)
+#print pre [5]
+#print pre [7]
+#print pre [8]
+##Integration of optional '--include' argument
+#if args.include != None:
+#    sorted_include_list = sorted(args.include)
+#    i=0
+#    modified_pre = []
+#    while i < len(sorted_include_list):
+#        j=int(sorted_include_list[i])
+#        print j
+#        modified_pre.append(pre[j,:])
+#        i=i+1
+#    pre = np.array(modified_pre)
 #Plot positions of pre and post populations
 for pop, colour in zip((pre, post), ('r', 'g')):
     ax.scatter(xs=pop[:, 0], ys=pop[:, 1], zs=pop[:, 2], c=colour)
@@ -37,8 +52,11 @@ ax.set_zlabel('Z')
 # Load projections from PyNN format file
 projections_array = np.loadtxt(args.projection)
 projections = np.array(projections_array[:, :2], dtype=int)
+
+include = args.include if args.include else range(pre.shape[0])
+
 # Plot connections between cells
-for pre_id in xrange(pre.shape[0]):
+for pre_id in include:
     post_ids = projections[projections[:, 0] == pre_id, 1]
     # Basically adds another dimension to the front of the post_positions array
     pre_pos = pre[pre_id, :]

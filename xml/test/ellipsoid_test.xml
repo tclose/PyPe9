@@ -9,16 +9,16 @@
         </extensions>
         <!-- Populations -->
         <population id="PostsynapticPop" cell="IF_curr_alpha">
-            <structure type="Extension" engine="Brep" id="Golgis" />
+            <structure type="Extension" engine="Brep" id="EllipseTest" />
         </population>
         <population id="PresynapticPop" cell="SpikeSourceArray">
-            <structure type="Extension" engine="Brep" id="Golgis" />
+            <structure type="Extension" engine="Brep" id="EllipseTest" />
         </population>
         <!-- Projections -->
         <projection id="PresynapticPop_PostsynapticPop_">
             <source id="PresynapticPop" />
             <destination id="PostsynapticPop" synapse="excitatory" />
-            <connection pattern="DistanceBased" geometry="EllipsoidMask" scale="200" orient_x="1.0" orient_y="0.0" orient_z="0.0" isotropy="2.0" />
+            <connection pattern="DistanceBased" geometry="EllipsoidMask" scale="0.5" orient_x="1.0" orient_y="0.0" orient_z="0.0" isotropy="1.0" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
