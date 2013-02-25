@@ -5,6 +5,6 @@
             <temperature value="30" />
             <timestep value="0.025" />
         </simulationDefaults>
-        <population id="Granules" cell="Granule" size="1"/>
+        <population id="Granules" cell="ncml/Granule_DeSouza10.xml" size="1"/>
     </network>
 </nineml>

@@ -43,8 +43,8 @@ def main(arguments):
     elif os.path.exists(os.path.join(PROJECT_PATH, 'xml', args.xml_filename)):
         network_xml_location = os.path.join(PROJECT_PATH, 'xml', args.xml_filename)
     else:
-        raise Exception("Could not find xml file either as a full path or relative to the cwd and" \
-                        " '<kbrain-home>/xml/cerebellum' directories")
+        raise Exception("Could not find xml file '{}' either as a full path or relative to the cwd and"
+                        " '<kbrain-home>/xml/cerebellum' directories".format(args.xml_filename))
     ninemlp.pyNN_build_mode = args.build
     exec("from ninemlp.%s import *" % args.simulator)
     print "Building network"
