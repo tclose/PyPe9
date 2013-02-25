@@ -16,7 +16,7 @@
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
         <!-- Populations -->
-        <population id="Granules" cell="Granule_DeSouza10">
+        <population id="Granules" cell="ncml/Granule_DeSouza10.xml">
             <structure type="Extension" engine="Brep" id="debug_Granules" />
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
@@ -28,7 +28,7 @@
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
         </population>
-        <population id="Golgis" cell="Golgi_Solinas08">
+        <population id="Golgis" cell="ncml/Golgi_Solinas08.xml">
             <structure type="Extension" engine="Brep" id="debug_Golgis" />
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
