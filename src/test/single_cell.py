@@ -44,18 +44,10 @@ def main(arguments):
     exec("from ninemlp.%s import *" % args.simulator)
     print "Building network"
     net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_delay, #@UndefinedVariable
-                  max_delay=2.0, silent_build=args.silent_build) 
+                  max_delay=2.0, silent_build=args.silent_build, build_mode=args.build)
+    net.describe() 
     # Get population and print the soma section of the single cell.
     pop = net.all_populations()[0]
-    cell = pop[0]._cell
-    soma = cell.soma_seg
-    from neuron import h
-    h.psection(sec=soma)
-    if args.print_all:
-        from neuron import h
-        for seg_id, seg in sorted(cell.segments.items(), key=itemgetter(0)):
-            print "ID: {0}".format(seg_id)
-            h.psection(sec=seg)
     # Create the input current and times vectors
     if args.inject:
         inject_type = args.inject[0]
@@ -71,7 +63,7 @@ def main(arguments):
             raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
                             "or 'noise'".format(inject_type))
         pop[0].inject(current_source)
-    pop.record_all(args.output + pop.label)
+#    pop.record_all(args.output + pop.label)
     print "------Miscellaneous hoc variables to print------"
     potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
     for var in potential_variables:
