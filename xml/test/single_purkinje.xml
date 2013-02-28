@@ -7,12 +7,12 @@
         </simulationDefaults>
         <population id="Purkinjes" cell="ncml/Purkinje_Khaliq03.xml" size="1"/>
         <population id="AMPAInput" cell="SpikeSourceArray" size="1" />
-        <projection id="AMPAInput_Granules">
-            <source id="AMPAInput" />
-            <destination id="Purkinjes" synapse="AMPA" />
-            <connection pattern="OneToOne" />
-            <weight pattern="Constant" value="2.6 nS" />
-            <delay pattern="Constant" value="100 us" />
-        </projection>
+<!--         <projection id="AMPAInput_Granules"> -->
+<!--             <source id="AMPAInput" /> -->
+<!--             <destination id="Purkinjes" synapse="AMPA" /> -->
+<!--             <connection pattern="OneToOne" /> -->
+<!--             <weight pattern="Constant" value="2.6 nS" /> -->
+<!--             <delay pattern="Constant" value="100 us" /> -->
+<!--         </projection> -->
     </network>
 </nineml>
