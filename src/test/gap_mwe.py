@@ -41,7 +41,7 @@ pc = h.ParallelContext()
 num_processes = int(pc.nhost())
 last_process = num_processes - 1
 mpi_rank = int(pc.id())
-dummy_section = h.Section()
+#print "timeout set to: {}".format(pc.timeout(0))
 print "Creating test network..."
 # The first section is created on the first node and the second section on the last node 
 # (NB: which will obviously be the same if there is only one node)
