@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<nineml>
-    <network id="CerebellarGranularLayer">
-        <simulationDefaults>
-            <temperature value="23" />
-        </simulationDefaults>
-        <population id="Golgis" cell="Golgi" size="1" morphology="WithoutAxon" />
-    </network>
-</nineml>
