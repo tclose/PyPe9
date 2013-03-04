@@ -18,6 +18,57 @@ Requires NeuronVisio,to install NeuronVisio see http://mattions.github.com/neuro
 
 from ninemlp.neuron.ncml import load_cell_type
 
+#def plot_morphology(xml_filename):
+#    """Draw the model.
+#    Params:
+#    controls - the main gui obj."""
+#
+#    # Draw the new one
+#    h.define_shape()
+#    num_sections = 0
+#
+#    # Disable the render. Faster drawing.
+#    self.mayavi.visualization.scene.disable_render = True
+#
+#
+#    x, y, z, d = [], [], [], []
+#    voltage = []
+#    connections = []
+#    for sec in h.allsec():
+#        x_sec, y_sec, z_sec, d_sec = self.retrieve_coordinate(sec)
+#        self.sec2coords[sec.name()] = [x_sec, y_sec, z_sec]
+#        # Store the section. later.
+#        radius = sec.diam / 2.
+#        sec_coords_bound = ((x_sec.min(), x_sec.max()),
+#                            (y_sec.min() - radius,
+#                             y_sec.max() + radius),
+#                            (z_sec.min() - radius,
+#                             z_sec.max() + radius))
+#        self.cyl2sec[sec_coords_bound] = sec
+#        self.sec2cyl[sec] = sec_coords_bound
+#
+#
+#        for i, xi in enumerate(x_sec):
+#            x.append(x_sec[i])
+#            y.append(y_sec[i])
+#            z.append(z_sec[i])
+#            d.append(d_sec[i])
+#            indx_geom_seg = len(x) - 1
+#
+#            if len(x) > 1 and i > 0:
+#                connections.append([indx_geom_seg, indx_geom_seg - 1])
+#
+#    self.edges = connections
+#    self.x = x
+#    self.y = y
+#    self.z = z
+#
+#    # Mayavi pipeline        
+#    d = np.array(d) # Transforming for easy division
+#
+#    self.draw_mayavi(x, y, z, d, self.edges)
+
+
 def plot_morphology(xml_filename, cell_id, morph_id=None):  
     """
     The main function that actually runs the script
