@@ -105,6 +105,7 @@
             <ncml:asgn name="pca"><ncml:expr>(pcabar * ghk (v cai cao))</ncml:expr>
             </ncml:asgn>
             <ncml:output name="pca"/>
+            <ncml:output name="pcabar"/>
           </ncml:component>
           <ncml:component type="permeating-ion" name="ca">
           </ncml:component>
