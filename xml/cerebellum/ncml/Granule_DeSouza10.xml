@@ -619,6 +619,13 @@
               <ncml:rate>Ooff </ncml:rate>
             </ncml:transition>
           </ncml:transitions>
+          <ncml:conserve>
+            <ncml:conseq val="1">
+              <ncml:expr>
+                (C1 + C2 + C3 + C4 + C5 + O + B + I1 + I2 + I3 + I4 + I5 + I6)
+              </ncml:expr>
+            </ncml:conseq>
+          </ncml:conserve>
         </ncml:reaction>
         <ncml:output name="Na_z"/>
       </ncml:component>
