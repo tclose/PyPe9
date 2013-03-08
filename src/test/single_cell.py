@@ -14,7 +14,6 @@
 import os.path
 import argparse
 import ninemlp
-from operator import itemgetter
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 def main(arguments):
     parser = argparse.ArgumentParser(description=__doc__)
@@ -31,6 +30,7 @@ def main(arguments):
     parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
     parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection. If TYPE is ''step'' ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' ARG1=mean and ARG2=stdev', metavar=('TYPE', 'ARG1', 'ARG2'))
     parser.add_argument('--print_all', action='store_true', help='Prints details for all sections instead of just soma')
+    parser.add_argument('--no_description', action='store_true', help="Suppresses the pyNN description")
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
     args = parser.parse_args(arguments)
     if os.path.exists(args.xml_filename):
@@ -45,9 +45,14 @@ def main(arguments):
     print "Building network"
     net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_delay, #@UndefinedVariable
                   max_delay=2.0, silent_build=args.silent_build, build_mode=args.build)
-    net.describe() 
+    if not args.no_description:
+        net.describe() 
     # Get population and print the soma section of the single cell.
     pop = net.all_populations()[0]
+    soma = pop[0]._cell.source_section
+    if args.simulator == 'neuron':
+        from neuron import h
+        h.psection(sec=soma)
     # Create the input current and times vectors
     if args.inject:
         inject_type = args.inject[0]
@@ -62,8 +67,7 @@ def main(arguments):
         else:
             raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
                             "or 'noise'".format(inject_type))
-        pop[0].inject(current_source)
-#    pop.record_all(args.output + pop.label)
+        pop.inject(current_source)
     print "------Miscellaneous hoc variables to print------"
     potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
     for var in potential_variables:
