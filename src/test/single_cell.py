@@ -25,7 +25,7 @@ def main(arguments):
                                 help='Option to build the NMODL files before running (can be one of \
                                 %s.' % ninemlp.BUILD_MODE_OPTIONS)
     parser.add_argument('--time', type=float, default=2000.0, help='The run time of the simulation (ms)')
-    parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.') , help='The output location of the recording files')
+    parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.v') , help='The output location of the recording files')
     parser.add_argument('--min_delay', type=float, default=0.05, help='The minimum synaptic delay in the network')
     parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
     parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection. If TYPE is ''step'' ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' ARG1=mean and ARG2=stdev', metavar=('TYPE', 'ARG1', 'ARG2'))
@@ -68,6 +68,7 @@ def main(arguments):
             raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
                             "or 'noise'".format(inject_type))
         pop.inject(current_source)
+    pop.record_v()
     print "------Miscellaneous hoc variables to print------"
     potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
     for var in potential_variables:
@@ -79,8 +80,10 @@ def main(arguments):
     print "celsius: " + str(h.celsius)
     print "Starting run"
     run(args.time) #@UndefinedVariable
-    end() #@UndefinedVariable
     print "Simulated single cell for %f milliseconds" % args.time
+    print "Saved voltage trace to '{}'".format(args.output)
+    pop.print_v(args.output)
+    end() #@UndefinedVariable
    
 def single_cell(arguments):
     import shlex

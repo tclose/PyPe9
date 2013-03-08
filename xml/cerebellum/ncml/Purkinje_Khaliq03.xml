@@ -156,21 +156,25 @@
                         </ncml:asgn>
                         <ncml:asgn name="minf">
                             <ncml:expr>(let ((vh -28.9) (k 6.2)) (1.0 / (1.0 + exp (neg ((CaBK_v -
-                                vh) / k)))))</ncml:expr>
+                                vh) / k)))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="mtau">
                             <ncml:expr>(let ((y0 0.000505) (vh1 -33.3) (k1 -10.0) (vh2 86.4) (k2
                                 10.1)) ((1000.0) * (y0 + 1 / (exp ((CaBK_v + vh1) / k1) + exp
-                                ((CaBK_v + vh2) / k2)))))</ncml:expr>
+                                ((CaBK_v + vh2) / k2)))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="hinf">
                             <ncml:expr>(let ((y0 0.085) (vh -32.0) (k 5.8)) (y0 + (1 - y0) / (1 +
-                                exp ((CaBK_v - vh) / k))))</ncml:expr>
+                                exp ((CaBK_v - vh) / k))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="htau">
                             <ncml:expr>(let ((y0 0.0019) (vh1 -54.2) (k1 -12.9) (vh2 48.5) (k2 5.2))
                                 ((1000.0) * (y0 + 1 / (exp ((CaBK_v + vh1) / k1) + exp ((CaBK_v +
-                                vh2) / k2)))))</ncml:expr>
+                                vh2) / k2)))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="zinf">
                             <ncml:expr>(let ((k 0.001)) (1 / (1 + (k / cai))))</ncml:expr>
@@ -220,12 +224,14 @@
                     <ncml:component type="gate">
                         <ncml:asgn name="inf">
                             <ncml:expr>(let ((cv -19) (ck 5.5)) (1.0 / (1.0 + exp (neg ((v - cv) /
-                                ck)))))</ncml:expr>
+                                ck)))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="tau">
                             <ncml:expr>((1000.0) * (if (v &gt; -50) then (0.000191 + (0.00376 * exp
                                 (neg (((v + 41.9) / 27.8) ^ 2)))) else (0.00026367 + (0.1278 * exp
-                                (0.10327 * v)))))</ncml:expr>
+                                (0.10327 * v))))) 
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="CaP">
                             <ncml:initial_m>(inf)</ncml:initial_m>
@@ -244,7 +250,8 @@
                                 ((0.001) * v))) (let ((k0 ((Z * (F * E)) / (R * T)))) (let ((k1 (exp
                                 (neg (k0)))) (k2 (((Z ^ 2) * (E * (F ^ 2))) / (R * T)))) (1e-06) *
                                 (if (abs (1 - k1) &lt; 1e-06) then (Z * F * (ci - (co * k1)) * (1 -
-                                k0)) else (k2 * (ci - (co * k1)) / (1 - k1)))))))</ncml:body>
+                                k0)) else (k2 * (ci - (co * k1)) / (1 - k1))))))) 
+                            </ncml:body>
                         </ncml:defun>
                         <ncml:const name="pcabar" value="5e-05" />
                         <ncml:asgn name="pca">
@@ -252,8 +259,7 @@
                         </ncml:asgn>
                         <ncml:output name="pca" />
                     </ncml:component>
-                    <ncml:component type="permeating-ion" name="ca">
-                    </ncml:component>
+                    <ncml:component type="permeating-ion" name="ca" />
                 </ncml:ionicCurrent>
                 <ncml:ionicCurrent name="K1">
                     <ncml:component type="gate">
@@ -262,23 +268,26 @@
                         </ncml:asgn>
                         <ncml:asgn name="minf">
                             <ncml:expr>(let ((mivh -24) (mik 15.4)) (1 / (1 + exp (neg (K1_v - mivh)
-                                / mik))))</ncml:expr>
+                                / mik))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="mtau">
                             <ncml:expr>(let ((mty0 0.00012851) (mtvh1 100.7) (mtk1 12.9) (mtvh2
                                 -56.0) (mtk2 -23.1)) (1000.0 * (if (K1_v &lt; -35) then (3.0 *
                                 (3.4225e-05 + 0.00498 * exp (neg (K1_v) / -28.29))) else (mty0 + 1.0
-                                / (exp ((K1_v + mtvh1) / mtk1) + exp ((K1_v + mtvh2) / mtk2))))))
+                                / (exp ((K1_v + mtvh1) / mtk1) + exp ((K1_v + mtvh2) / mtk2)))))) 
                             </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="hinf">
                             <ncml:expr>(let ((hiy0 0.31) (hiA 0.78) (hivh -5.802) (hik 11.2)) (hiy0
-                                + hiA / (1 + exp ((K1_v - hivh) / hik))))</ncml:expr>
+                                + hiA / (1 + exp ((K1_v - hivh) / hik))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="htau">
                             <ncml:expr>(1000.0 * (if (K1_v &gt; 0) then (0.0012 + 0.0023 * exp
                                 (-0.141 * K1_v)) else (1.2202e-05 + 0.012 * exp (neg (((K1_v -
-                                (-56.3)) / 49.6) ^ 2)))))</ncml:expr>
+                                (-56.3)) / 49.6) ^ 2))))) 
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="K1">
                             <ncml:initial_m>(minf)</ncml:initial_m>
@@ -308,12 +317,14 @@
                         </ncml:asgn>
                         <ncml:asgn name="minf">
                             <ncml:expr>(let ((mivh -24) (mik 20.4)) (1 / (1 + exp ((neg (K2_v -
-                                mivh)) / mik))))</ncml:expr>
+                                mivh)) / mik))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="mtau">
                             <ncml:expr>((1000.0) * (if (K2_v &lt; -20) then (0.000688 + 1 / (exp
                                 ((K2_v + 64.2) / 6.5) + exp ((K2_v - 141.5) / -34.8))) else (0.00016
-                                + 0.0008 * exp (-0.0267 * K2_v))))</ncml:expr>
+                                + 0.0008 * exp (-0.0267 * K2_v)))) 
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="K2">
                             <ncml:initial_m>(minf)</ncml:initial_m>
@@ -340,11 +351,13 @@
                         </ncml:asgn>
                         <ncml:asgn name="minf">
                             <ncml:expr>(let ((mivh -16.5) (mik 18.4)) (1 / (1 + exp ((neg (K3_v -
-                                mivh)) / mik))))</ncml:expr>
+                                mivh)) / mik))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="mtau">
                             <ncml:expr>((1000.0) * (0.000796 + 1.0 / (exp ((K3_v + 73.2) / 11.7) +
-                                exp ((K3_v - 306.7) / -74.2))))</ncml:expr>
+                                exp ((K3_v - 306.7) / -74.2))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="K3">
                             <ncml:initial_m>(minf)</ncml:initial_m>
@@ -615,7 +628,8 @@
                         </ncml:asgn>
                         <ncml:asgn name="tau">
                             <ncml:expr>((1000.0) * (0.19 + 0.72 * exp (neg (((v - (-81.5)) / 11.9) ^
-                                2))))</ncml:expr>
+                                2))))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="Ih">
                             <ncml:initial_m>(inf)</ncml:initial_m>
@@ -651,7 +665,8 @@
                     <ncml:const name="ca_beta" value="1.0" />
                     <ncml:rate name="ca">
                         <ncml:expr>((neg (ica) / (2 * ca0 * F * ca_depth)) - ((if (ca &lt; ca0) then
-                            ca0 else ca) * ca_beta))</ncml:expr>
+                            ca0 else ca) * ca_beta)) 
+                        </ncml:expr>
                         <ncml:initial>ca0</ncml:initial>
                     </ncml:rate>
                     <ncml:asgn name="cac">
@@ -786,11 +801,11 @@
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
             </intracellularProperties>
             <synapses>
-<!--                 <conductanceSynapse id="AMPA" type="Exp2Syn" segmentGroup="soma"> -->
-<!--                     <parameter name="tau1" value="0.5" units="ms" /> -->
-<!--                     <parameter name="tau2" value="1.2" units="ms" /> -->
-<!--                     <parameter name="e" value="0.0" units="mV" /> -->
-<!--                 </conductanceSynapse> -->
+                <!-- <conductanceSynapse id="AMPA" type="Exp2Syn" segmentGroup="soma"> -->
+                <!-- <parameter name="tau1" value="0.5" units="ms" /> -->
+                <!-- <parameter name="tau2" value="1.2" units="ms" /> -->
+                <!-- <parameter name="e" value="0.0" units="mV" /> -->
+                <!-- </conductanceSynapse> -->
             </synapses>
         </biophysicalProperties>
     </cell>
