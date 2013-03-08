@@ -20,7 +20,7 @@ def main(arguments):
     parser.add_argument('xml_filename', type=str, help='The name of the xml file to load the cell from.')
     parser.add_argument('--simulator', type=str, default='neuron',
                                                help="simulator for NINEML+ (either 'neuron' or 'nest')")
-    parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE, 
+    parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             metavar='BUILD_MODE',
                                 help='Option to build the NMODL files before running (can be one of \
                                 %s.' % ninemlp.BUILD_MODE_OPTIONS)
@@ -43,10 +43,10 @@ def main(arguments):
     ninemlp.pyNN_build_mode = args.build
     exec("from ninemlp.%s import *" % args.simulator)
     print "Building network"
-    net = Network(network_xml_location,timestep=args.timestep, min_delay=args.min_delay, #@UndefinedVariable
+    net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, #@UndefinedVariable
                   max_delay=2.0, silent_build=args.silent_build, build_mode=args.build)
     if not args.no_description:
-        net.describe() 
+        net.describe()
     # Get population and print the soma section of the single cell.
     pop = net.all_populations()[0]
     soma = pop[0]._cell.source_section
@@ -57,13 +57,13 @@ def main(arguments):
     if args.inject:
         inject_type = args.inject[0]
         if inject_type == 'step':
-            current_source = StepCurrentSource({'amplitudes': [float(args.inject[1])],  #@UndefinedVariable
-                                                 'times': [float(args.inject[2])]}) 
+            current_source = StepCurrentSource({'amplitudes': [float(args.inject[1])], #@UndefinedVariable
+                                                 'times': [float(args.inject[2])]})
         elif inject_type == 'noise':
-            current_source = NoisyCurrentSource({'mean': float(args.inject[1]),#@UndefinedVariable
+            current_source = NoisyCurrentSource({'mean': float(args.inject[1]), #@UndefinedVariable
                                                  'stdev':float(args.inject[2]),
                                                  'stop': args.time,
-                                                 'dt': 1.0})                                                                                
+                                                 'dt': 1.0})
         else:
             raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
                             "or 'noise'".format(inject_type))
@@ -84,11 +84,11 @@ def main(arguments):
     print "Saved voltage trace to '{}'".format(args.output)
     pop.print_v(args.output)
     end() #@UndefinedVariable
-   
+
 def single_cell(arguments):
     import shlex
-    main(shlex.split(arguments))   
-    
+    main(shlex.split(arguments))
+
 if __name__ == '__main__':
     import sys
     main(sys.argv[1:])
