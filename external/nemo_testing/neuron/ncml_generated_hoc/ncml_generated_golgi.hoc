@@ -71,13 +71,13 @@ for i=0,2 {
         celsius = 23
         
         insert Golgi_Solinas08_Lkg
-        for k=0, 25 {
-            exc[(i*26)+k] = new Synapse(0.5)
-        }
-        for k=0, 8 {
-            inh[(i*9)+k] = new Synapse(0.5)
-            inh[(i*9)+k].Erev = -60
-        }
+        //for k=0, 25 {
+            //exc[(i*26)+k] = new Synapse(0.5)
+        //}
+        //for k=0, 8 {
+            //inh[(i*9)+k] = new Synapse(0.5)
+            //inh[(i*9)+k].Erev = -60
+        //}
         psection()
     }
     connect dend[i](0), soma(1) 
