@@ -867,7 +867,7 @@
             <ncml:const name="c" value="0.001"/>
             <ncml:output name="c"/>
           </ncml:component>
-          <ncml:decayingPool name="ca">
+          <ncml:decayingPool name="ca" segmentGroup="soma">
             <ncml:input name="ica" from="ion-currents"/>
             <ncml:const name="F" value="96485.3"/>
             <ncml:const name="d" value="0.2"/>
@@ -880,7 +880,7 @@
             <ncml:output name="ca"/>
             <ncml:output name="cao"/>
           </ncml:decayingPool>
-          <ncml:decayingPool name="ca2">
+          <ncml:decayingPool name="ca2" segmentGroup="soma">
             <ncml:input name="ica2" from="ion-currents"/>
             <ncml:const name="valence" value="2"/>
             <ncml:const name="F" value="96485.3"/>
@@ -895,7 +895,7 @@
             <ncml:output name="ca2o"/>
             <ncml:output name="valence"/>
           </ncml:decayingPool>
-          <ncml:ionicCurrent name="CaHVA">
+          <ncml:ionicCurrent name="CaHVA" segmentGroup="soma">
             <ncml:input name="cai" from="ion-pools"/>
             <ncml:input name="cao" from="ion-pools"/>
             <ncml:component type="gate">
@@ -973,7 +973,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="CaLVA">
+          <ncml:ionicCurrent name="CaLVA" segmentGroup="soma">
             <ncml:input name="ca2i" from="ion-pools"/>
             <ncml:input name="ca2o" from="ion-pools"/>
             <ncml:component type="gate">
@@ -1044,7 +1044,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="HCN1">
+          <ncml:ionicCurrent name="HCN1" segmentGroup="soma">
             <ncml:const name="Ehalf" value="-72.49"/>
             <ncml:const name="c" value="0.11305"/>
             <ncml:const name="rA" value="0.002096"/>
@@ -1110,7 +1110,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="HCN2">
+          <ncml:ionicCurrent name="HCN2" segmentGroup="soma">
             <ncml:const name="Ehalf" value="-81.95"/>
             <ncml:const name="c" value="0.1661"/>
             <ncml:const name="rA" value="-0.0227"/>
@@ -1180,7 +1180,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="KA">
+          <ncml:ionicCurrent name="KA" segmentGroup="soma">
             <ncml:defun name="sigm">
               <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
               <ncml:body>(1 / (exp (x / y) + 1))</ncml:body>
@@ -1261,7 +1261,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="KCa">
+          <ncml:ionicCurrent name="KCa" segmentGroup="soma">
             <ncml:input name="cai" from="ion-pools"/>
             <ncml:component type="gate">
               <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 30) / 10)))</ncml:expr>
@@ -1316,7 +1316,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="KM">
+          <ncml:ionicCurrent name="KM" segmentGroup="soma">
             <ncml:component type="gate">
               <ncml:const name="Aalpha_n" value="0.0033"/>
               <ncml:const name="Kalpha_n" value="40"/>
@@ -1366,7 +1366,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="KV">
+          <ncml:ionicCurrent name="KV" segmentGroup="soma">
             <ncml:defun name="linoid">
               <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
               <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2))) else (x / (exp (x / y) - 1)))</ncml:body>
@@ -1422,7 +1422,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="SK2">
+          <ncml:ionicCurrent name="SK2" segmentGroup="soma">
             <ncml:input name="cai" from="ion-pools"/>
             <ncml:component type="gate">
               <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 23) / 10)))</ncml:expr>
@@ -1525,7 +1525,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="Na">
+          <ncml:ionicCurrent name="Na" segmentGroup="soma">
             <ncml:defun name="linoid">
               <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
               <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2))) else (x / (1 - exp (x / y))))</ncml:body>
@@ -1602,7 +1602,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="NaP">
+          <ncml:ionicCurrent name="NaP" segmentGroup="soma">
             <ncml:defun name="linoid">
               <ncml:arg>x</ncml:arg><ncml:arg>y</ncml:arg>
               <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2))) else (x / (exp (x / y) - 1)))</ncml:body>
@@ -1656,7 +1656,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="NaR">
+          <ncml:ionicCurrent name="NaR" segmentGroup="soma">
             <ncml:component type="gate">
               <ncml:asgn name="Q10"><ncml:expr>(pow (3 ((celsius - 20) / 10)))</ncml:expr>
               </ncml:asgn>
@@ -1731,7 +1731,7 @@
             <ncml:output name="vchdur"/>
             <ncml:output name="vcbdur"/>
           </ncml:component>
-          <ncml:ionicCurrent name="Lkg">
+          <ncml:ionicCurrent name="Lkg" segmentGroup="soma">
             <ncml:component type="pore">
               <ncml:const name="gbar">
                 (2.1e-05)
