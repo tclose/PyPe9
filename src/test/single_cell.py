@@ -51,7 +51,7 @@ def main(arguments):
     pop = net.all_populations()[0]
     if args.simulator == 'neuron':
         from neuron import h
-        for seg in pop[0]._cell.segments:
+        for seg in pop[0]._cell.segments.values():
             h.psection(sec=seg)
     # Create the input current and times vectors
     if args.inject:
