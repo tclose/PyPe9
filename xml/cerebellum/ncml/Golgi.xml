@@ -547,7 +547,7 @@
             <segment id="axon_59">
                 <parent segment="axon_58" />
                 <distal x="0.0" y="-720.0" z="13.5" diameter="2.4" />
-            </segment>WithoutAxon
+            </segment>
             <segment id="axon_60">
                 <parent segment="axon_59" />
                 <distal x="0.0" y="-732.0" z="13.5" diameter="2.4" />

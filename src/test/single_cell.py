@@ -49,10 +49,10 @@ def main(arguments):
         net.describe()
     # Get population and print the soma section of the single cell.
     pop = net.all_populations()[0]
-    soma = pop[0]._cell.source_section
     if args.simulator == 'neuron':
         from neuron import h
-        h.psection(sec=soma)
+        for seg in pop[0]._cell.segments:
+            h.psection(sec=seg)
     # Create the input current and times vectors
     if args.inject:
         inject_type = args.inject[0]
