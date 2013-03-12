@@ -963,7 +963,7 @@
                             <ncml:m_inf>s_inf</ncml:m_inf>
                             <ncml:m_tau>tau_s</ncml:m_tau>
                             <ncml:h_inf>u_inf</ncml:h_inf>
-                            <ncml:h_tau>tau_s</ncml:h_tau>
+                            <ncml:h_tau>tau_u</ncml:h_tau>
                         </ncml:hh_ionic_gate>
                     </ncml:component>
                     <ncml:component type="pore">
