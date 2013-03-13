@@ -1018,7 +1018,7 @@
                             <ncml:m_inf>s_inf</ncml:m_inf>
                             <ncml:m_tau>tau_s</ncml:m_tau>
                             <ncml:h_inf>u_inf</ncml:h_inf>
-                            <ncml:h_tau>tau_s</ncml:h_tau>
+                            <ncml:h_tau>tau_u</ncml:h_tau>
                         </ncml:hh_ionic_gate>
                     </ncml:component>
                     <ncml:component type="pore">
@@ -1218,7 +1218,8 @@
                         <ncml:arg>r1</ncml:arg>
                         <ncml:arg>r2</ncml:arg>
                         <ncml:body>(if (potential &gt;= -64.7) then 0.0 else (if (potential &lt;=
-                            -108.7) then 1.0 else (r1 * potential) + r2))</ncml:body>
+                            -108.7) then 1.0 else (r1 * potential) + r2))
+                        </ncml:body>
                     </ncml:defun>
                     <ncml:defun name="o_inf">
                         <ncml:arg>potential</ncml:arg>
@@ -1409,7 +1410,8 @@
                             <ncml:arg>cai</ncml:arg>
                             <ncml:arg>Q10</ncml:arg>
                             <ncml:body>(Q10 * Aalpha_c / (1 + (Balpha_c * exp (v / Kalpha_c) /
-                                cai)))</ncml:body>
+                                cai)))
+                            </ncml:body>
                         </ncml:defun>
                         <ncml:defun name="beta_c">
                             <ncml:arg>v</ncml:arg>
@@ -1420,7 +1422,8 @@
                         </ncml:defun>
                         <ncml:asgn name="c_inf">
                             <ncml:expr>((alpha_c (v cai Q10)) / (alpha_c (v cai Q10) + beta_c (v cai
-                                Q10)))</ncml:expr>
+                                Q10)))
+                            </ncml:expr>
                         </ncml:asgn>
                         <ncml:asgn name="tau_c">
                             <ncml:expr>(1 / (alpha_c (v cai Q10) + beta_c (v cai Q10)))</ncml:expr>
@@ -1443,8 +1446,7 @@
                         </ncml:asgn>
                         <ncml:output name="e" />
                     </ncml:component>
-                    <ncml:component type="modulating-ion" name="ca">
-                    </ncml:component>
+                    <ncml:component type="modulating-ion" name="ca" />
                 </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="KCa">
                     <ncml:const name="vchold" value="-71" />
@@ -1522,7 +1524,8 @@
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
                         <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2)))
-                            else (x / (exp (x / y) - 1)))</ncml:body>
+                            else (x / (exp (x / y) - 1)))
+                        </ncml:body>
                     </ncml:defun>
                     <ncml:component type="gate">
                         <ncml:const name="Aalpha_n" value="-0.01" />
@@ -1676,6 +1679,12 @@
                                     <ncml:rate>invo2_t</ncml:rate>
                                 </ncml:transition>
                             </ncml:transitions>
+                            <ncml:conserve>
+                                <ncml:conseq val="1">
+                                    <ncml:expr> (c1 + c2 + c3 + c4 + o1 + o2)
+                                    </ncml:expr>
+                                </ncml:conseq>
+                            </ncml:conserve>
                         </ncml:reaction>
                         <ncml:output name="SK2_z" />
                     </ncml:component>
@@ -1689,8 +1698,7 @@
                         </ncml:asgn>
                         <ncml:output name="e" />
                     </ncml:component>
-                    <ncml:component type="modulating-ion" name="ca">
-                    </ncml:component>
+                    <ncml:component type="modulating-ion" name="ca" />
                 </ncml:ionicCurrent>
                 <ncml:component type="voltage-clamp" name="SK2">
                     <ncml:const name="vchold" value="-71" />
@@ -1711,7 +1719,8 @@
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
                         <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2)))
-                            else (x / (1 - exp (x / y))))</ncml:body>
+                            else (x / (1 - exp (x / y))))
+                        </ncml:body>
                     </ncml:defun>
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
@@ -1807,7 +1816,8 @@
                         <ncml:arg>x</ncml:arg>
                         <ncml:arg>y</ncml:arg>
                         <ncml:body>(if ((abs (x / y)) &lt; 1e-06) then (y * (1 - ((x / y) / 2)))
-                            else (x / (exp (x / y) - 1)))</ncml:body>
+                            else (x / (exp (x / y) - 1)))
+                        </ncml:body>
                     </ncml:defun>
                     <ncml:component type="gate">
                         <ncml:asgn name="Q10">
@@ -1890,14 +1900,16 @@
                             <ncml:arg>v</ncml:arg>
                             <ncml:arg>Q10</ncml:arg>
                             <ncml:body>(Q10 * (Shiftalpha_s + ((Aalpha_s * ((v + V0alpha_s))) / (exp
-                                ((v + V0alpha_s) / Kalpha_s) - 1))))</ncml:body>
+                                ((v + V0alpha_s) / Kalpha_s) - 1))))
+                            </ncml:body>
                         </ncml:defun>
                         <ncml:defun name="beta_s">
                             <ncml:arg>v</ncml:arg>
                             <ncml:arg>Q10</ncml:arg>
                             <ncml:body>(let ((x1 ((v + V0beta_s) / Kbeta_s))) (Q10 * (Shiftbeta_s +
                                 Abeta_s * ((v + V0beta_s) / (exp ((if (x1 &gt; 200) then 200 else
-                                x1)) - 1)))))</ncml:body>
+                                x1)) - 1)))))
+                            </ncml:body>
                         </ncml:defun>
                         <ncml:defun name="alpha_f">
                             <ncml:arg>v</ncml:arg>

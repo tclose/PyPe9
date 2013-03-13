@@ -548,7 +548,6 @@
                 <parent segment="axon_58" />
                 <distal x="0.0" y="-720.0" z="13.5" diameter="2.4" />
             </segment>
-            WithoutAxon
             <segment id="axon_60">
                 <parent segment="axon_59" />
                 <distal x="0.0" y="-732.0" z="13.5" diameter="2.4" />
@@ -963,7 +962,7 @@
                             <ncml:m_inf>s_inf</ncml:m_inf>
                             <ncml:m_tau>tau_s</ncml:m_tau>
                             <ncml:h_inf>u_inf</ncml:h_inf>
-                            <ncml:h_tau>tau_s</ncml:h_tau>
+                            <ncml:h_tau>tau_u</ncml:h_tau>
                         </ncml:hh_ionic_gate>
                     </ncml:component>
                     <ncml:component type="pore">
@@ -1618,6 +1617,12 @@
                                     <ncml:rate>invo2_t</ncml:rate>
                                 </ncml:transition>
                             </ncml:transitions>
+                            <ncml:conserve>
+                                <ncml:conseq val="1">
+                                    <ncml:expr> (c1 + c2 + c3 + c4 + o1 + o2)
+                                    </ncml:expr>
+                                </ncml:conseq>
+                            </ncml:conserve>
                         </ncml:reaction>
                         <ncml:output name="SK2_z" />
                     </ncml:component>
@@ -1893,7 +1898,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="Lkg" segmentGroup="soma">
+                <ncml:ionicCurrent name="Lkg">
                     <ncml:component type="pore">
                         <ncml:const name="gbar"> (2.1e-05)
                         </ncml:const>
