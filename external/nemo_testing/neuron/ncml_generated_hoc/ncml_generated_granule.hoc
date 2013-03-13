@@ -1,7 +1,7 @@
 stim_amp=0.01875
 
 // This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
-nrn_load_dll("/home/tclose/kbrain/external/nemo_testing/neuron/ncml_build_dir/Granule_DeSouza10/install/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain/xml/test/ncml/build/neuron/Granule_DeSouza10/install/x86_64/.libs/libnrnmech.so")
 
 //object variable will refer to a list that will hold an arbitrary number of NetCon objects.
 
