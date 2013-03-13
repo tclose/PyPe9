@@ -855,6 +855,12 @@
             </defaultBuildOptions>
             <!-- FIXME: celsius = 23 Not sure where to put this -->
             <membraneProperties>
+                <ncml:component type="geometry" name="soma">
+                    <ncml:const name="diam" value="27" />
+                    <ncml:const name="L" value="27" />
+                    <ncml:output name="diam" />
+                    <ncml:output name="L" />
+                </ncml:component>
                 <ncml:input name="v" />
                 <ncml:input name="celsius" />
                 <ncml:component type="defaults">

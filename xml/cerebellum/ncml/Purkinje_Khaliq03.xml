@@ -148,6 +148,12 @@
                 <ncml:const name="ena" value="60" />
                 <ncml:const name="ek" value="-88" />
                 <ncml:const name="ca0" value="0.0001" />
+                <ncml:component type="geometry" name="soma">
+                    <ncml:const name="diam" value="27" />
+                    <ncml:const name="L" value="27" />
+                    <ncml:output name="diam" />
+                    <ncml:output name="L" />
+                </ncml:component>
                 <ncml:component type="ionic-current" name="CaBK">
                     <ncml:component type="gate">
                         <ncml:const name="ztau" value="1.0" />
@@ -230,7 +236,7 @@
                         <ncml:asgn name="tau">
                             <ncml:expr>((1000.0) * (if (v &gt; -50) then (0.000191 + (0.00376 * exp
                                 (neg (((v + 41.9) / 27.8) ^ 2)))) else (0.00026367 + (0.1278 * exp
-                                (0.10327 * v))))) 
+                                (0.10327 * v)))))
                             </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="CaP">
@@ -250,7 +256,7 @@
                                 ((0.001) * v))) (let ((k0 ((Z * (F * E)) / (R * T)))) (let ((k1 (exp
                                 (neg (k0)))) (k2 (((Z ^ 2) * (E * (F ^ 2))) / (R * T)))) (1e-06) *
                                 (if (abs (1 - k1) &lt; 1e-06) then (Z * F * (ci - (co * k1)) * (1 -
-                                k0)) else (k2 * (ci - (co * k1)) / (1 - k1))))))) 
+                                k0)) else (k2 * (ci - (co * k1)) / (1 - k1)))))))
                             </ncml:body>
                         </ncml:defun>
                         <ncml:const name="pcabar" value="5e-05" />
@@ -258,6 +264,7 @@
                             <ncml:expr>(pcabar * ghk (v cai cao))</ncml:expr>
                         </ncml:asgn>
                         <ncml:output name="pca" />
+                        <ncml:output name="pcabar" />
                     </ncml:component>
                     <ncml:component type="permeating-ion" name="ca" />
                 </ncml:ionicCurrent>
@@ -286,7 +293,7 @@
                         <ncml:asgn name="htau">
                             <ncml:expr>(1000.0 * (if (K1_v &gt; 0) then (0.0012 + 0.0023 * exp
                                 (-0.141 * K1_v)) else (1.2202e-05 + 0.012 * exp (neg (((K1_v -
-                                (-56.3)) / 49.6) ^ 2))))) 
+                                (-56.3)) / 49.6) ^ 2)))))
                             </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="K1">
@@ -323,7 +330,7 @@
                         <ncml:asgn name="mtau">
                             <ncml:expr>((1000.0) * (if (K2_v &lt; -20) then (0.000688 + 1 / (exp
                                 ((K2_v + 64.2) / 6.5) + exp ((K2_v - 141.5) / -34.8))) else (0.00016
-                                + 0.0008 * exp (-0.0267 * K2_v)))) 
+                                + 0.0008 * exp (-0.0267 * K2_v))))
                             </ncml:expr>
                         </ncml:asgn>
                         <ncml:hh_ionic_gate name="K2">
@@ -665,7 +672,7 @@
                     <ncml:const name="ca_beta" value="1.0" />
                     <ncml:rate name="ca">
                         <ncml:expr>((neg (ica) / (2 * ca0 * F * ca_depth)) - ((if (ca &lt; ca0) then
-                            ca0 else ca) * ca_beta)) 
+                            ca0 else ca) * ca_beta))
                         </ncml:expr>
                         <ncml:initial>ca0</ncml:initial>
                     </ncml:rate>
