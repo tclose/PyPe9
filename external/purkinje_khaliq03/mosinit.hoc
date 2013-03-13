@@ -1,0 +1,2 @@
+//load_file("/home/tclose/kbrain/external/purkinje_khaliq03/resurgesim.hoc")
+load_file("resurgesim.hoc")

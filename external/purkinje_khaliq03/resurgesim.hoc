@@ -1,0 +1,23 @@
+//nrn_load_dll("/home/tclose/kbrain/external/purkinje_khaliq03/x86_64/.libs/libnrnmech.so")
+
+create soma
+access soma
+
+insert naRsg
+insert kpkj
+insert kpkj2
+insert kpkjslow
+insert bkpkj
+insert cadiff
+insert cap
+insert lkpkj
+insert hpkj
+
+soma {
+	L = 20
+	diam = 20
+	ena = 60
+	ek = -88
+}
+
+xopen("default.ses")
