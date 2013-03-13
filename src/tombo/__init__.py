@@ -88,10 +88,10 @@ def init_work_dir(work_dir, required_dirs, time_str):
     for directory in required_dirs:
         print "Copying '{}' sub-directory to work directory".format(directory)
         try:
-            subprocess.check_call("cd {project}; tar -czf {dir}.tar.gz {dir}; mv /tmp/{dir} {work};"
-                              "cd {work}; tar -xzf {work}/{dir}.tar.gz; rm {work}/{dir}.tar.gz"
-                              .format(project=get_project_dir(), dir=directory, work=work_dir), 
-                              shell=True) 
+            subprocess.check_call("cd {project}; tar -czf {dir}.tar.gz {dir}; mv {dir}.tar.gz {work}/;"
+                                  "cd {work}; tar -xzf {work}/{dir}.tar.gz; rm {work}/{dir}.tar.gz"
+                                  .format(project=get_project_dir(), dir=directory, work=work_dir), 
+                                  shell=True) 
         except IOError as e:
             raise Exception("Could not copy directory '{}' to work directory ({})"
                             .format(directory, e))
