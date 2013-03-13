@@ -43,6 +43,10 @@ def main(arguments):
                              'last index (1st) and first index (2nd) of the range that will be '
                              'plotted, and the number of columns to split the connectivity matrix '
                              'into (3rd).')
+    parser.add_argument('--overlap_matrix', nargs="*", metavar=('NORMALISE'), 
+                        help="Plot a matrix showing the shared overlap between Purkinje cells. "
+                             "The optional argument flags whether the matrix will be normalised "
+                             "along its rows by the value on the diagonal.")
     parser.add_argument('--title', type=str, help='The title of the plot')
     parser.add_argument('--x_label', type=str, help='The x label of the plot')
     parser.add_argument('--y_label', type=str, help='The y label of the plot')
@@ -93,78 +97,103 @@ def main(arguments):
             pylab.ylabel(args.y_label)
         else:
             pylab.ylabel(y_label)
-    else:
+    elif args.histogram:
         bool_matrix = np.array(matrix, dtype=bool)
         pc_counts = np.sum(bool_matrix, axis=1)
-        if args.histogram:
-            pylab.hist(pc_counts, bins=range(1, matrix.shape[1]))
-            if args.title:
-                pylab.title(args.title)
-            else:
-                pylab.title('Number of Purkinjes connections by each Parallel fiber')
-            if args.x_label:
-                pylab.xlabel(args.x_label)
-            else:
-                pylab.xlabel('Number of Purkinje connections')
-            if args.y_label:
-                pylab.ylabel(args.y_label)
-            else:
-                pylab.ylabel('Frequency')
-        elif args.sorted is not None: # Can't use 'if args.sorted' because it could be an empty list
-            sorted_pf_indices = np.argsort(pc_counts)
-            if args.sorted:
-                if len(args.sorted) > 1:
-                    from_index = args.sorted[1]
-                else:
-                    from_index = 0
-                to_index = args.sorted[0]
-                if to_index < from_index:
-                    raise Exception("To index of sorted ({}) is below that of from index ({})"
-                                    .format(to_index, from_index))
-                sorted_pf_indices = sorted_pf_indices[(-1 - from_index):-to_index:-1]
-                num_cols = args.sorted[2] if len(args.sorted) == 3 else 1
+        pylab.hist(pc_counts, bins=range(1, matrix.shape[1]))
+        if args.title:
+            pylab.title(args.title)
+        else:
+            pylab.title('Number of Purkinjes connections by each Parallel fiber')
+        if args.x_label:
+            pylab.xlabel(args.x_label)
+        else:
+            pylab.xlabel('Number of Purkinje connections')
+        if args.y_label:
+            pylab.ylabel(args.y_label)
+        else:
+            pylab.ylabel('Frequency')
+    elif args.sorted is not None: # Can't use 'if args.sorted' because it could be an empty list
+        bool_matrix = np.array(matrix, dtype=bool)
+        pc_counts = np.sum(bool_matrix, axis=1)        
+        sorted_pf_indices = np.argsort(pc_counts)
+        if args.sorted:
+            if len(args.sorted) > 1:
+                from_index = args.sorted[1]
             else:
                 from_index = 0
-                num_cols = 1
-            pf_sorted = matrix[sorted_pf_indices, :]
-            purkinje_zs = np.array(eval(header['purkinje_zs']), dtype=float)
-            sorted_pc_indices = np.argsort(purkinje_zs)
-            sorted_matrix = np.array(pf_sorted[:, sorted_pc_indices], dtype=bool)
-            pylab.figure()
-            num_pfs = sorted_matrix.shape[0]
-            col_size = num_pfs // num_cols
-            for i in xrange(num_cols):
-                ax = pylab.subplot(1, num_cols, i + 1)
-                show_matrix = sorted_matrix[(i * col_size):((i + 1) * col_size), :]
-                pylab.imshow(show_matrix,
-                             interpolation='nearest',
-                             cmap=pylab.get_cmap('PuBu'))
-                if i == num_cols // 2:
-                    if args.title:
-                        pylab.title(args.title)
-                    else:
-                        pylab.title('Parallel fiber to Purkinje connections')
-                    if args.x_label:
-                        pylab.xlabel(args.x_label)
-                    else:
-                        pylab.xlabel('Purkinjes sorted by mean z')
-                if not i:
-                    if args.y_label:
-                        pylab.ylabel(args.y_label)
-                    else:
-                        pylab.ylabel('Parallel fibers sorted by number of Purkinje connections')
-                pylab.yticks(range(0, col_size, col_size // 5))
-                ax.set_yticklabels(range(i * col_size + from_index, (i + 1) * col_size + from_index,
-                                         col_size // 5))
-            pylab.figure()
-            pylab.plot(purkinje_zs[sorted_pc_indices])
-            pylab.title('Mean z position of Purkinje cells')
-            pylab.xlabel('Purkinje cell indices')
-            pylab.ylabel('Mean z position')
+            to_index = args.sorted[0]
+            if to_index < from_index:
+                raise Exception("To index of sorted ({}) is below that of from index ({})"
+                                .format(to_index, from_index))
+            sorted_pf_indices = sorted_pf_indices[(-1 - from_index):-to_index:-1]
+            num_cols = args.sorted[2] if len(args.sorted) == 3 else 1
         else:
-            raise Exception("At least one plot option needs to be specified ('plot_slice', 'sorted'"
-                            " or 'histogram'")
+            from_index = 0
+            num_cols = 1
+        pf_sorted = matrix[sorted_pf_indices, :]
+        purkinje_zs = np.array(eval(header['purkinje_zs']), dtype=float)
+        sorted_pc_indices = np.argsort(purkinje_zs)
+        sorted_matrix = np.array(pf_sorted[:, sorted_pc_indices], dtype=bool)
+        pylab.figure()
+        num_pfs = sorted_matrix.shape[0]
+        col_size = num_pfs // num_cols
+        for i in xrange(num_cols):
+            ax = pylab.subplot(1, num_cols, i + 1)
+            show_matrix = sorted_matrix[(i * col_size):((i + 1) * col_size), :]
+            pylab.imshow(show_matrix,
+                         interpolation='nearest',
+                         cmap=pylab.get_cmap('PuBu'))
+            if i == num_cols // 2:
+                if args.title:
+                    pylab.title(args.title)
+                else:
+                    pylab.title('Parallel fiber to Purkinje connections')
+                if args.x_label:
+                    pylab.xlabel(args.x_label)
+                else:
+                    pylab.xlabel('Purkinjes sorted by mean z')
+            if not i:
+                if args.y_label:
+                    pylab.ylabel(args.y_label)
+                else:
+                    pylab.ylabel('Parallel fibers sorted by number of Purkinje connections')
+            pylab.yticks(range(0, col_size, col_size // 5))
+            ax.set_yticklabels(range(i * col_size + from_index, (i + 1) * col_size + from_index,
+                                     col_size // 5))
+        pylab.figure()
+        pylab.plot(purkinje_zs[sorted_pc_indices])
+        pylab.title('Mean z position of Purkinje cells')
+        pylab.xlabel('Purkinje cell indices')
+        pylab.ylabel('Mean z position')
+    elif args.overlap_matrix is not None:
+        num_purkinjes = matrix.shape[1]
+        overlap_matrix = np.zeros((num_purkinjes, num_purkinjes), dtype=float)
+        for row_i in xrange(num_purkinjes):
+            for col_i in xrange(num_purkinjes):            
+                for pf_connections in matrix:
+                    if pf_connections[row_i] and pf_connections[col_i]:
+                        overlap_matrix[row_i, col_i] += 1.0
+        # If there is an argument provided to the overlap_matrix option and it is not 0 normalise
+        # the rows of the overlap matrix by the value of the diagonal (the total number of 
+        # connections for that Purkinje cell)
+        title = 'Number of mutually overlapping PFs'
+        if len(args.overlap_matrix) and int(args.overlap_matrix[0]):
+            for row_i in xrange(num_purkinjes):
+                overlap_matrix[row_i, :] /= overlap_matrix[row_i, row_i]
+            title += ", rows normalised by diagonal"
+        pylab.imshow(overlap_matrix, interpolation='nearest')
+        pylab.title(title)
+        pylab.xlabel('Purkinje cell indices')
+        pylab.ylabel('Purkinje cell indices')                  
+    else:
+        raise Exception("At least one plot option needs to be specified ('plot_slice', 'sorted'"
+                        " or 'histogram'")
     pylab.show()
+
+def plot_overlap_matrix(arguments):
+    import shlex
+    main(shlex.split(arguments))
 
 if __name__ == '__main__':
     import sys

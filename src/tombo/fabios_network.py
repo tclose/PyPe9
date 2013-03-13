@@ -22,7 +22,7 @@ parser.add_argument('--time', type=float, default=2000.0,
                     help='The run time of the simulation (ms)  (default: %(default)s)')
 parser.add_argument('--start_input', type=float, default=1000, 
                     help='The start time of the mossy fiber stimulation (default: %(default)s)')
-parser.add_argument('--min_delay', type=float, default=0.02, 
+parser.add_argument('--min_delay', type=float, default=0.020001, 
                     help='The minimum synaptic delay in the network (default: %(default)s)')
 parser.add_argument('--timestep', type=float, default=0.02, 
                     help='The time step used for the simulation (default: %(default)s)')
@@ -33,7 +33,7 @@ parser.add_argument('--np', type=int, default=96,
                          "(default: %(default)s)")
 parser.add_argument('--que_name', type=str, default='shortP', 
                     help='The the que to submit the job to(default: %(default)s)')
-parser.add_argument('--volt_trace', nargs='+', action='append', default=None, 
+parser.add_argument('--volt_trace', nargs='+', action='append', default=[], 
                     metavar=('POP_ID', 'SLICE_INDICES'), 
                     help="The population label and cell ID of a cell to record its voltage trace")
 parser.add_argument('--debug', action='store_true', 

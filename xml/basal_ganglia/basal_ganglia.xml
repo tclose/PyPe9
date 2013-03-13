@@ -3,10 +3,10 @@
     <network id="BasalGangliaNetwork">
         <!-- Populations -->
         <population id="Pop1" cell="Pop1Cell">
-            <layout pattern="Grid2D" x="100" y="100" />
+            <structure pattern="Grid2D" x="100" y="100" />
         </population>
         <population id="Pop2" cell="Pop2Cell">
-            <layout pattern="Grid2D" x="100" y="100" />
+            <structure pattern="Grid2D" x="100" y="100" />
         </population>
         <!-- Projections -->        
         <projection id="Pop1_Pop2">

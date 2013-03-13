@@ -7,8 +7,7 @@
                 <flag id="includeGap" default="False" />
                 <flag id="GranuleToGolgi" default="True" />
             </flags>
-            <scalars>
-            </scalars>
+            <scalars />
         </freeParameters>
         <simulationDefaults>
             <temperature value="23" />
@@ -17,8 +16,8 @@
             <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
         <!-- Populations -->
-        <population id="Granules" cell="Granule">
-            <layout type="Extension" engine="Brep" id="Granules" />
+        <population id="Granules" cell="Granule_DeSouza10">
+            <structure type="Extension" engine="Brep" id="Granules" />
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
                     high="-13.2" units="nA" />
@@ -29,8 +28,8 @@
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
         </population>
-        <population id="Golgis" cell="Golgi">
-            <layout type="Extension" engine="Brep" id="Golgis" />
+        <population id="Golgis" cell="Golgi_Solinas08">
+            <structure type="Extension" engine="Brep" id="Golgis" />
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
                     segmentGroup="soma" />
@@ -42,14 +41,13 @@
             </initialConditions>
         </population>
         <population id="MossyFibers" cell="SpikeSourceArray">
-            <layout type="Extension" engine="Brep" id="MossyFibers" />
+            <structure type="Extension" engine="Brep" id="MossyFibers" />
         </population>
         <!-- Projections -->
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
-                number="39" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="39" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -57,15 +55,14 @@
         <projection id="MossyFibers_Granules_NMDA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="NMDA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um"
-                number="25" />
+            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="25" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
             <comment> The mossy fiber branches before the cerebellum and in the granular layer and
                 gives off the rosettes/glomeruli (estimates say that one mossy fiber gives off about
                 150 rosettes, which may cross folia. The rosettes are at a distance of about 100um
-                of each other. Each rosette talks to about 20+ granule cells, and about one Go Axon.
+                of each other. Each rosette talks to about 20+ granule cells, and about one GoC Axon.
                 Distribution of Glomeruli: Preferably homogeneous. Euclidean distance between
                 rosettes about 85um (can be used as the radius of a sphere). Each Glomerulus
                 contacts about 21 gr cells. One Glomerulus is contacted by a Golgi cell axon. We do
@@ -76,7 +73,7 @@
             <source id="MossyFibers" />
             <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
-                number="21" />
+                probability="0.3"/> <!-- number="21"  -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -84,9 +81,15 @@
         <projection id="Granules_Golgis" flags="GranuleToGolgi">
             <source id="Granules" />
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
-            <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />
-            <weight pattern="Constant" value="2.6 nS"/>
-            <!-- NB: Delay is set by brep -->  
+            <connection pattern="DistanceBased" geometry="RectangleMask" x_scale="2500.0"
+                y_scale="102.6" probability="0.5" />
+<!--            <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />  -->
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" 
+                offset="300 us"/>
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+                exponent="-0.01" />
+<!--             <weight pattern="Constant" value="2.6 nS" /> -->
+            <!-- NB: Delay is set by brep -->
             <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
                 The dendritic tree size is 200 x 600 x 180μm in cats. A simple way to get this
@@ -98,7 +101,7 @@
             <source id="Golgis" />
             <destination id="Granules" synapse="GABA" segment="soma" />
             <connection pattern="DistanceBased" geometry="EllipseMask" x_scale="200 um"
-                y_scale="58.35 um" number="350" /> <!-- x_scale="600 um" -->
+                y_scale="58.35 um" /> <!-- x_scale="600 um" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -111,13 +114,13 @@
                 estimating the number of granule cells via density 2. multiplying that number by 400
             </comment>
         </projection>
-        <projection id="Golgis_Golgis_Gap" flags="includeGap">
-            <source id="Golgis" />
-            <destination id="Golgis" synapse="Gap" segment="soma" />
+        <projection id="Golgis_Golgis_Gap" synapseFamily="Electrical" flags="includeGap">
+            <source id="Golgis" segment="soma" />
+            <destination id="Golgis" segment="soma" />
+            <!-- The connection radius is set very large because in the model each golgi is connected 
+                to each other golgi, but currently AllToAll cannot be used with distance-based weight -->
             <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
-            <!-- radius is set very large because in the model each golgi is connected to each other 
-                golgi, but I can't use AllToAll and distance-based weight geometry at this point -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="15000 nS"
                 exponent="-0.03" />
             <comment> These are the golgi gap junction projection connections.
             </comment>

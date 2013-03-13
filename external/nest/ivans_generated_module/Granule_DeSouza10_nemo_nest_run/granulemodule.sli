@@ -1,0 +1,14 @@
+/* 
+ * Initialization file for GranuleModule.
+ * Run automatically when GranuleModule is loaded.
+ */
+
+M_DEBUG (granulemodule.sli) (Initializing SLI support for GranuleModule.) message
+
+/granulemodule /SLI ($Revision: 7918 $) provide-component
+/granulemodule /C++ (7165) require-component
+
+/StepPatternConnect [ /arraytype /integertype /arraytype /integertype /literaltype ]
+{ 
+  StepPatternConnect_Vi_i_Vi_i_l
+} def
