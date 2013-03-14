@@ -1,4 +1,4 @@
-//load_file("/home/tclose/kbrain/external/purkinje_khaliq03/resurgesim.hoc")
+//load_file("/home/tclose/kbrain/xml/cerebellum/ncml/build/neuron/Purkinje_Khaliq03/install")
 //load_file("resurgesim.hoc")
 
 create soma
