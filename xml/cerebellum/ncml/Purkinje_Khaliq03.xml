@@ -9,8 +9,17 @@
         bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
         (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
     </ncml:sxslt>
-    <cell id="Purkinje_Khaliq03">
+    <cell id="Purkinje_Khaliq03" defaultMorphology="SomaOnly">
         <notes>A model of a Purkinje cell soma</notes>
+        <morphology id="SomaOnly">
+            <segment id="soma">
+                <proximal x="0" y="0" z="0" diameter="17.5" />
+                <distal x="0" y="0" z="15" diameter="17.5" />
+            </segment>
+            <segmentGroup id="soma">
+                <member segment="soma"/>
+            </segmentGroup>
+        </morphology>
         <morphology id="FourBranches">
             <!-- Segments -->
             <!-- Soma segment -->
@@ -101,17 +110,17 @@
                 <distal x="0" y="93.75" z="265" diameter="0.5" />
             </segment>
             <!-- Segment groups -->
-            <segmentGroup id="soma_group">
+            <segmentGroup id="soma">
                 <member segment="soma" />
             </segmentGroup>
-            <segmentGroup id="trunk_group">
+            <segmentGroup id="trunk">
                 <member segment="trunk" />
             </segmentGroup>
-            <segmentGroup id="fork_group">
+            <segmentGroup id="fork">
                 <member segment="fork_0" />
                 <member segment="fork_1" />
             </segmentGroup>
-            <segmentGroup id="leaves_group">
+            <segmentGroup id="leaves">
                 <member segment="leaf_0_0" />
                 <member segment="leaf_0_1" />
                 <member segment="leaf_0_2" />
