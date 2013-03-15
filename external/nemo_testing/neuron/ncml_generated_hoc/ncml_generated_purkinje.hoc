@@ -1,4 +1,4 @@
-nrn_load_dll("/home/tclose/kbrain/xml/test/ncml/build/neuron/Purkinje_Khaliq03/install/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("/home/tclose/kbrain/xml/cerebellum/ncml/build/neuron/Purkinje_Khaliq03/install/x86_64/.libs/libnrnmech.so")
 
 create soma
 access soma
