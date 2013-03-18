@@ -120,7 +120,7 @@
             <!-- The connection radius is set very large because in the model each golgi is connected 
                 to each other golgi, but currently AllToAll cannot be used with distance-based weight -->
             <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="15000 nS"
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
                 exponent="-0.03" />
             <comment> These are the golgi gap junction projection connections.
             </comment>
