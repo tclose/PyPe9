@@ -12,6 +12,7 @@ SCRIPT_NAME = 'fabios_network'
 # Required imports
 import tombo
 import argparse
+import os.path
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -56,7 +57,8 @@ args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 if args.legacy_hoc:
-    required_dirs = ['external']
+    args.que = 'short'
+    required_dirs = [os.path.join('external', 'fabios_network')]
 else:
     required_dirs = ['src', 'xml']
 # Create work directory and get path for output directory
