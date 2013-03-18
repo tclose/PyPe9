@@ -60,7 +60,7 @@
             <source id="Granule" />
             <destination id="Purkinje" synapse="Exp2Syn" />
             <pattern type="External" engine="Brep" id="Granule-Purkinje" />
-        </projection>        
+        </projection>
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />
@@ -145,7 +145,7 @@
         <projection id="Granules_Baskets">
             <source id="Granules" />
             <destination id="Basket" />
-            <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="174 um" number="50" />
+            <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="174 um" prob="" />
             <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the
                 rat is half that number. These neurons are most likely confined to travel
                 para-saggitally, perpendicular to the PFs. The best numbers for the connectivity
@@ -163,7 +163,8 @@
         <projection id="Granules_Stellates">
             <source id="Granules" />
             <destination id="Stellates" />
-            <pattern type="DistanceBased" geometry="Ellipsoid" x="50 um" y="174 um" number="50" />
+            <pattern type="DistanceBased" geometry="Ellipsoid" x="50 um" y="174 um" z="100 um"
+                number="50" />
             <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the
                 rat is half that number. These neurons are most likely confined to travel
                 para-saggitally, perpendicular to the PFs. The best numbers for the connectivity
@@ -211,5 +212,6 @@
                 purkinjes presuming no arbors overlap in volume. To find whether a PF contacts a PN
                 we look if the PF's yz coordinates fall within the yz of the PN arbor.
             </comment>
-        </projection>        
-    </network></nineml>
+        </projection>
+    </network>
+</nineml>
