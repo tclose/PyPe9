@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nineml>
     <!-- The base network from which to build the main network -->
-    <network id="CerebellarGranularLayer">
+    <network id="CerebellarNetwork">
+        <!-- This is a prototype idea to allow easy scaling of network without having to update each 
+            attributes by hand -->
         <freeParameters>
-            <flags>
-                <flag id="includeGap" default="False" />
-                <flag id="GranuleToGolgi" default="True" />
-            </flags>
-            <scalars />
+            <scalars>
+                <scalar name="patch_size" value="1.0" />
+            </scalars>
         </freeParameters>
         <simulationDefaults>
             <temperature value="23" />
         </simulationDefaults>
         <extensions>
-            <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
+            <extension id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
         </extensions>
         <!-- Populations -->
-        <population id="Granules" cell="ncml/Granule_DeSouza10.xml">
+        <population id="Granule" cell="ncml/Granule_DeSouza10.xml">
             <structure type="Extension" engine="Brep" id="Granules" />
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
@@ -28,7 +28,10 @@
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
         </population>
-        <population id="Golgis" cell="ncml/Golgi_Solinas08.xml">
+        <population id="Purkinje" cell="ncml/Purkinje_Khaliq03.xml">
+            <structure type="External" engine="Brep" id="Purkinjes"/>
+        </population>
+        <population id="Golgi" cell="ncml/Golgi_Solinas08.xml">
             <structure type="Extension" engine="Brep" id="Golgis" />
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
@@ -38,75 +41,43 @@
             </cellParameters>
             <initialConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
-            </initialConditions>
+            </initialConditions>            
         </population>
-        <population id="MossyFibers" cell="SpikeSourceArray">
+        <population id="MossyFiber" cell="SpikeSourceArray">
             <structure type="Extension" engine="Brep" id="MossyFibers" />
         </population>
-        <population id="Purkinjes" cell="ncml/Purkinje_Khaliq03.xml">
-            <structure type="External" engine="Brep" id="Purkinjes" />
+        <population id="Stellate" cell="Stellate">
+            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
+                y_extent="1 um" x_number="50" y_number="50" />
         </population>
-        <population id="Stellates" cell="Stellate">
-            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um"
-                x_extent="1 um" y_extent="1 um" x_number="50" y_number="50" />
-        </population>
-        <population id="Baskets" cell="Basket">
-            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um"
-                x_extent="1 um" y_extent="1 um" z_extent="1 um" x_number="50" y_number="50"
-                z_number="50" />
+        <population id="Basket" cell="Basket">
+            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" x_extent="1 um"
+                y_extent="1 um" z_extent="1 um" x_number="50" y_number="50" z_number="50" />
         </population>
         <!-- Projections -->
         <projection id="Granule_Purkinje">
             <source id="Granule" />
             <destination id="Purkinje" synapse="Exp2Syn" />
             <pattern type="External" engine="Brep" id="Granule-Purkinje" />
-        </projection>        
-        <projection id="MossyFibers_Granules_AMPA">
-            <source id="MossyFibers" />
-            <destination id="Granules" synapse="AMPA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="39" -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
-                exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
-        <projection id="MossyFibers_Granules_NMDA">
-            <source id="MossyFibers" />
-            <destination id="Granules" synapse="NMDA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="25" -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
-                exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+        <projection id="MossyFiber_Granule">
+            <source id="MossyFiber" />
+            <destination id="Granule" synapse="??" />
+            <pattern type="DistanceBased" geometry="Circle" radius="85 um" number="21" />
             <comment> The mossy fiber branches before the cerebellum and in the granular layer and
                 gives off the rosettes/glomeruli (estimates say that one mossy fiber gives off about
                 150 rosettes, which may cross folia. The rosettes are at a distance of about 100um
-                of each other. Each rosette talks to about 20+ granule cells, and about one GoC
-                Axon. Distribution of Glomeruli: Preferably homogeneous. Euclidean distance between
+                of each other. Each rosette talks to about 20+ granule cells, and about one Go Axon.
+                Distribution of Glomeruli: Preferably homogeneous. Euclidean distance between
                 rosettes about 85um (can be used as the radius of a sphere). Each Glomerulus
                 contacts about 21 gr cells. One Glomerulus is contacted by a Golgi cell axon. We do
                 not have that yet.
             </comment>
         </projection>
-        <projection id="MossyFibers_Golgis_AMPA">
-            <source id="MossyFibers" />
-            <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
-                probability="0.3" /> <!-- number="21" -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
-                exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
-        </projection>
-        <projection id="Granules_Golgis" flags="GranuleToGolgi">
-            <source id="Granules" />
-            <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
-            <connection pattern="DistanceBased" geometry="RectangleMask" x_scale="2500.0"
-                y_scale="102.6" probability="0.5" />
-            <!-- <connection pattern="Extension" engine="Brep" id="Granule-Golgi" /> -->
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um"
-                offset="300 us" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
-                exponent="-0.01" />
-            <!-- <weight pattern="Constant" value="2.6 nS" /> -->
-            <!-- NB: Delay is set by brep -->
+        <projection id="Granule_Golgi">
+            <source id="Granule" />
+            <destination id="Golgi" synapse="??" />
+            <pattern type="External" engine="Brep" id="" />
             <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
                 The dendritic tree size is 200 x 600 x 180μm in cats. A simple way to get this
@@ -114,14 +85,10 @@
                 of synapses as above.
             </comment>
         </projection>
-        <projection id="Golgis_Granules">
-            <source id="Golgis" />
-            <destination id="Granules" synapse="GABA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="EllipseMask" x_scale="200 um"
-                y_scale="58.35 um" /> <!-- x_scale="600 um" -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
-                exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+        <projection id="Golgi_Granule">
+            <source id="Golgi" />
+            <destination id="Granule" synapse="??" />
+            <pattern type="DistanceBased" geometry="Ellipse" x="200 um" y="600 um" number="10" />
             <comment> There are about 400 Golgi cells per granule cell in the mouse. The axon does
                 not seem to be confined as the dendrite, but it is rather flat and oriented in the
                 same direction. Every granule cell receives from about 10 Golgi cells. I am not sure
@@ -131,19 +98,8 @@
                 estimating the number of granule cells via density 2. multiplying that number by 400
             </comment>
         </projection>
-        <projection id="Golgis_Golgis_Gap" synapseFamily="Electrical" flags="includeGap">
-            <source id="Golgis" segment="soma" />
-            <destination id="Golgis" segment="soma" />
-            <!-- The connection radius is set very large because in the model each golgi is connected 
-                to each other golgi, but currently AllToAll cannot be used with distance-based weight -->
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
-                exponent="-0.03" />
-            <comment> These are the golgi gap junction projection connections.
-            </comment>
-        </projection>
-        <projection id="Granules_Baskets">
-            <source id="Granules" />
+        <projection id="Granule_Basket">
+            <source id="Granule" />
             <destination id="Basket" />
             <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="174 um" number="50" />
             <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the
@@ -160,9 +116,9 @@
                 it. My preference is to first distribute the I.I. regardless of their category.
             </comment>
         </projection>
-        <projection id="Granules_Stellates">
-            <source id="Granules" />
-            <destination id="Stellates" />
+        <projection id="Granule_Stellate">
+            <source id="Granule" />
+            <destination id="Stellate" />
             <pattern type="DistanceBased" geometry="Ellipsoid" x="50 um" y="174 um" number="50" />
             <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the
                 rat is half that number. These neurons are most likely confined to travel
@@ -178,9 +134,9 @@
                 it. My preference is to first distribute the I.I. regardless of their category.
             </comment>
         </projection>
-        <projection id="Baskets_Purkinjes">
-            <source id="Baskets" />
-            <destination id="Purkinjes" />
+        <projection id="Basket_Purkinje">
+            <source id="Basket" />
+            <destination id="Purkinje" />
             <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" />
             <comment> The PN should be divided between soma and dendrites. The I.I. close to
                 dendrites connect dendrites, and the ones close to the soma, to the soma. The axon
@@ -195,9 +151,9 @@
                 we look if the PF's yz coordinates fall within the yz of the PN arbor.
             </comment>
         </projection>
-        <projection id="Stellates_Purkinjes">
-            <source id="Stellates" />
-            <destination id="Purkinjes" />
+        <projection id="Stellate_Purkinje">
+            <source id="Stellate" />
+            <destination id="Purkinje" />
             <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" />
             <comment> The PN should be divided between soma and dendrites. The I.I. close to
                 dendrites connect dendrites, and the ones close to the soma, to the soma. The axon
@@ -211,5 +167,9 @@
                 purkinjes presuming no arbors overlap in volume. To find whether a PF contacts a PN
                 we look if the PF's yz coordinates fall within the yz of the PN arbor.
             </comment>
-        </projection>        
-    </network></nineml>
+        </projection>
+    </network>
+</nineml>
+<!-- Example showing off unimplmented population features. <population id="Purkinje" cell="Purkinje" 
+    layout="brep:Purkinje"> <paramDist param="ek" component="Kv1" distribution="uniform"> <arg name="lower" 
+    value="0.1"/> <arg name="upper" value="0.2"/> </paramDist> <initialValue arg="v" value="-65 mV"/> </population> -->
