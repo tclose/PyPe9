@@ -866,12 +866,12 @@
                     <ncml:output name="celsius" />
                     <ncml:output name="V_t" />
                 </ncml:component>
-                <ncml:component type="membrane-area" segmentGroup="soma">
-                    <ncml:const name="diam" value="27.0" />
-                    <ncml:const name="area"> (PI * diam * diam)
-                    </ncml:const>
-                    <ncml:output name="area" />
-                </ncml:component>
+<!--                 <ncml:component type="membrane-area" segmentGroup="soma"> -->
+<!--                     <ncml:const name="diam" value="27.0" /> -->
+<!--                     <ncml:const name="area"> (M_PI * diam * diam) -->
+<!--                     </ncml:const> -->
+<!--                     <ncml:output name="area" /> -->
+<!--                 </ncml:component> -->
                 <ncml:component type="membrane-capacitance">
                     <ncml:const name="c" value="1" />
                     <ncml:output name="c" />

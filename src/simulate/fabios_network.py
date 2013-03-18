@@ -72,7 +72,10 @@ if args.log:
     init_logging(args.log, debug=True)
 # Set the network xml location
 if args.debug_network:
-    xml_filename = 'debug_fabios.xml'
+    if args.simulator == 'nest':
+        xml_filename = 'debug_fabios_simple_synapse.xml'
+    else:
+        xml_filename = 'debug_fabios.xml'
 else:
     xml_filename = 'fabios_network.xml'
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)

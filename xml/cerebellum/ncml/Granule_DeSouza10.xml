@@ -49,12 +49,6 @@
                     </ncml:const>
                     <ncml:output name="C_m" />
                 </ncml:component>
-<!--                 <ncml:component type="membrane-area"> -->
-<!--                     <ncml:const name="diam" value="11.8" /> -->
-<!--                     <ncml:const name="area"> (PI * diam * diam) -->
-<!--                     </ncml:const> -->
-<!--                     <ncml:output name="area" /> -->
-<!--                 </ncml:component> -->
                 <ncml:decayingPool name="ca">
                     <ncml:input name="cai" from="ion-pools" />
                     <ncml:input name="ica" from="ion-currents" />
