@@ -17,8 +17,8 @@
         </extensions>
         <!-- Populations -->
         <population id="Granules" cell="ncml/Granule_DeSouza10.xml">
-            <structure type="RandomlyDistributed">
-                
+            <structure type="JitteredGrid">
+                <layout pattern="3D"
             </structure>
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
