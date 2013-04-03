@@ -12,13 +12,10 @@
         <simulationDefaults>
             <temperature value="23" />
         </simulationDefaults>
-        <extensions>
-            <engine id="Brep" cmd="brep" resource="brep_filename_goes_here.xml" output="build/brep" />
-        </extensions>
         <!-- Populations -->
-        <population id="Granules" cell="ncml/Granule_DeSouza10.xml">
-            <structure type="JitteredGrid">
-                <layout pattern="3D"
+        <population id="Granules" cell="ncml/Granule_DeSouza10.xml" size="900">
+            <structure type="PerturbedGrid2D" aspect_ratio="9" dx="5.5556" dy="5.5556" x0="0" y0="0">
+                <distribution type="uniform" low="-3.33336" high="3.33336" />
             </structure>
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
@@ -64,8 +61,8 @@
             <comment> The mossy fiber branches before the cerebellum and in the granular layer and
                 gives off the rosettes/glomeruli (estimates say that one mossy fiber gives off about
                 150 rosettes, which may cross folia. The rosettes are at a distance of about 100um
-                of each other. Each rosette talks to about 20+ granule cells, and about one GoC Axon.
-                Distribution of Glomeruli: Preferably homogeneous. Euclidean distance between
+                of each other. Each rosette talks to about 20+ granule cells, and about one GoC
+                Axon. Distribution of Glomeruli: Preferably homogeneous. Euclidean distance between
                 rosettes about 85um (can be used as the radius of a sphere). Each Glomerulus
                 contacts about 21 gr cells. One Glomerulus is contacted by a Golgi cell axon. We do
                 not have that yet.
@@ -75,7 +72,7 @@
             <source id="MossyFibers" />
             <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
-                probability="0.3"/> <!-- number="21"  -->
+                probability="0.3" /> <!-- number="21" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -85,12 +82,12 @@
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
             <connection pattern="DistanceBased" geometry="RectangleMask" x_scale="2500.0"
                 y_scale="102.6" probability="0.5" />
-<!--            <connection pattern="Extension" engine="Brep" id="Granule-Golgi" />  -->
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" 
-                offset="300 us"/>
+            <!-- <connection pattern="Extension" engine="Brep" id="Granule-Golgi" /> -->
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um"
+                offset="300 us" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
-<!--             <weight pattern="Constant" value="2.6 nS" /> -->
+            <!-- <weight pattern="Constant" value="2.6 nS" /> -->
             <!-- NB: Delay is set by brep -->
             <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
