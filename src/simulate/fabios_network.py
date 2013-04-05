@@ -46,6 +46,8 @@ parser.add_argument('--timestep', type=float, default=0.02, help="The timestep u
                                                                   "(default: %(default)s)")
 parser.add_argument('--save_connections', type=str, default=None, help="A path in which to save "
                                                                        "the generated connections")
+parser.add_argument('--save_cell_positions', type=str, default=None, help="A path in which to save "
+                                                                       "the generated cell positions")
 parser.add_argument('--stim_seed', type=int, default=None, help="The seed passed to the stimulated "
                                                                 "spikes")
 parser.add_argument('--para_unsafe', action='store_true', help="If set the network simulation will "
@@ -96,7 +98,7 @@ if args.no_granule_to_golgi:
     flags.append(('GranuleToGolgi', False))
 # Build the network
 print "Building network"
-net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
+net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable
                                 build_mode=args.build, silent_build=args.silent_build, flags=flags)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
@@ -123,6 +125,9 @@ net.describe()
 if args.save_connections:
     print "Saving connections"
     net.save_connections(args.save_connections)
+if args.save_cell_positions:
+    print "Saving cell positions"
+    net.save_positions(args.save_cell_positions)
 print "Starting run"
 # Print out basic parameters of the simulation
 print "Simulation time: %f" % args.time

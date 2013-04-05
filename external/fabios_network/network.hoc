@@ -95,7 +95,7 @@ max=Dxa*percentagea
 
 objref mf_file
 mf_file = new File()
-mf_file.wopen("mf.pos")
+mf_file.wopen("MossyFibers.pop")
 
 objref fiber[NumberCellsa]	//define objects for cells
 l=0
@@ -114,6 +114,8 @@ for i=0, NETDIM_Xa-1 {
   }
  }
 }
+
+mf_file.close()
 
 /////////////////////////////////////
 //GrC (Granule Cell) Layer         //
@@ -138,7 +140,7 @@ max=Dxb*percentageb
 
 objref gr_file
 gr_file = new File()
-gr_file.wopen("gr.pos")
+gr_file.wopen("Granules.pop")
 
 objref GrC[NumberCellsb]	//define objects for cells
 l=0
@@ -165,6 +167,8 @@ for i=0, NETDIM_Xb-1 {
   }
  }
 }
+
+gr_file.close()
 
 //////////////////////////
 //GoC (Golgi Cell) Layer//
@@ -197,7 +201,7 @@ yd=yd+max
 
 objref go_file
 go_file = new File()
-go_file.wopen("go.pos")
+go_file.wopen("Golgis.pop")
 
 objref GoC[NumberCellsd]	//define objects for cells
 l=0
@@ -231,6 +235,8 @@ GoC[l].soma.nai(0.5)=5
  }
 }
 
+go_file.close()
+
 ////////////////////////
 //CONNECT CELL OBJECTS//
 ////////////////////////
@@ -244,9 +250,9 @@ prob=new Random()
 
 objref mf_gr_ampa_file, mf_gr_nmda_file
 mf_gr_ampa_file = new File()
-mf_gr_ampa_file.wopen("mf_gr_ampa.connect")
+mf_gr_ampa_file.wopen("MossyFibers_Granules_AMPA.proj")
 mf_gr_nmda_file = new File()
-mf_gr_nmda_file.wopen("mf_gr_nmda.connect")
+mf_gr_nmda_file.wopen("MossyFibers_Granules_NMDA.proj")
 
 debug_count = 1
 for i=0, NumberCellsa-1{
@@ -288,9 +294,12 @@ for i=0, NumberCellsa-1{
  }
 }
 
+mf_gr_ampa_file.close()
+mf_gr_nmda_file.close()
+
 objref mf_go_file
 mf_go_file = new File()
-mf_go_file.wopen("mf_go.connect")
+mf_go_file.wopen("MossyFibers_Golgis.proj")
 
 ////////////////////
 //MF->GoC synapses//
@@ -329,9 +338,11 @@ for i=0, NumberCellsa-1{
 }
 
 
+mf_go_file.close()
+
 objref gr_go_file
 gr_go_file = new File()
-gr_go_file.wopen("gr_go.connect")
+gr_go_file.wopen("Granules_Golgis.proj")
 
 /////////////////////
 //GrC->GoC synapses//
@@ -369,10 +380,11 @@ for i=0, NumberCellsb-1{
  }
 }
 
+gr_go_file.close()
 
 objref go_gr_file
 go_gr_file = new File()
-go_gr_file.wopen("go_gr.connect")
+go_gr_file.wopen("Golgis_Granules.proj")
 
 ////////////////////
 //GoC>GrC synapses//
@@ -403,13 +415,15 @@ for i=0, NumberCellsd-1{
  }
 }
 
+go_gr_file.close()
+
 /////////////////////////
 //GoC>GoC Gap junctions//
 ////////////////////////
 
 objref go_go_file
 go_go_file = new File()
-go_go_file.wopen("go_go.connect")
+go_go_file.wopen("Golgis_Golgis.proj")
 
 objref gpre[255*255],gpost[255*255]
 objref index
@@ -463,10 +477,12 @@ gpost[index.getval(i,j)].g=($3+gprob)*E^(-$2*adist)
 }
 }
 
+
 if (GJ==1) {
  gapjunctions(CONNECTION_PROB_GoCGoC, k1_GoCGoC, Ggap, NumberCellsd)
 }
 
+go_go_file.close()
 
 /////////////////////////////
 //MF stimulation procedures//
