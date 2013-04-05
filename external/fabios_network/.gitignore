@@ -3,3 +3,13 @@
 /MFMatrixS.dat
 /GrCMatrixS.dat
 /data
+/go_go.connect
+/go_gr.connect
+/go.pos
+/gr_go.connect
+/gr.pos
+/mf_go.connect
+/mf_gr_ampa.connect
+/mf_gr_ndma.connect
+/mf_gr_nmda.connect
+/mf.pos
