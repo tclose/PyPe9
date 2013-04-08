@@ -22,6 +22,7 @@ import sys
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
+DEFAULT_TIMESTEP = 0.02
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron', help="simulator for NINEML+ (either "
                                                                     "'neuron' or 'nest')")
@@ -38,12 +39,10 @@ parser.add_argument('--output', type=str,
 parser.add_argument('--start_input', type=float, default=1000, help="The start time of the mossy "
                                                                     "fiber stimulation "
                                                                     "(default: %(default)s)")
-parser.add_argument('--min_delay', type=float, default=0.04, help="The minimum synaptic delay in "
-                                                                   "the network "
-                                                                   "(default: %(default)s)")
-parser.add_argument('--timestep', type=float, default=0.02, help="The timestep used for the "
-                                                                  "simulation "
-                                                                  "(default: %(default)s)")
+parser.add_argument('--min_delay', type=float, default=DEFAULT_TIMESTEP, 
+                    help="The minimum synaptic delay in the network (default: %(default)s)")
+parser.add_argument('--timestep', type=float, default=DEFAULT_TIMESTEP, 
+                    help="The timestep used for the simulation (default: %(default)s)")
 parser.add_argument('--save_connections', type=str, default=None, help="A path in which to save "
                                                                        "the generated connections")
 parser.add_argument('--save_cell_positions', type=str, default=None, help="A path in which to save "

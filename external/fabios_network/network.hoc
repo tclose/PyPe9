@@ -305,7 +305,6 @@ mf_go_file.wopen("MossyFibers_Golgis.proj")
 //MF->GoC synapses//
 ////////////////////
 
-//debug_count = 0
 for i=0, NumberCellsa-1{
  for j=0, NumberCellsd-1 {
   aprob=prob.uniform(0,1)
@@ -322,16 +321,8 @@ for i=0, NumberCellsa-1{
  
     adist =((xi-xj)^2+(yi-yj)^2+(zi-zj)^2)^(1/2)                 			
     if (adist< diameter_MFGoC) {  
-//       if (debug_count % 100 == 0) {       
-//         printf("mf coord: (%f, %f, %f)\n", xi, yi, zi)
-//         printf("go coord: (%f, %f, %f)\n", xj, yj, zj)            
-//         printf("dist: %f\n", adist)
-//         printf("MF->GoC connection weight: %f\n", CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist)))
-//         printf("MF->GoC connection delay: %f\n", CONNECTION_DELAY_MFGoC*adist)  
-//       }
       fiber[i].Presynapse GoC[j].nclist.append(new NetCon(&fiber[i].Presynapse.v(0.5),GoC[j].synAMPA1,CONNECTION_THRESHOLD_MFGoC,CONNECTION_DELAY_MFGoC*adist,CONNECTION_WEIGHT_AMPA_MFGoC*(E^(-k1_MFGoC*adist))))
       mf_go_file.printf("%d %d %f %f\n", i, j, CONNECTION_WEIGHT_AMPA_MFGoC*(E^(-k1_MFGoC*adist)), CONNECTION_DELAY_MFGoC*adist)          
-//      debug_count = debug_count + 1
     }
   }
  }
@@ -348,7 +339,7 @@ gr_go_file.wopen("Granules_Golgis.proj")
 //GrC->GoC synapses//
 //(PF synapses)    //
 /////////////////////
-//debug_count = 0
+
 for i=0, NumberCellsb-1{
  for j=0, NumberCellsd-1 {
   aprob=prob.uniform(0,1)
@@ -365,16 +356,9 @@ for i=0, NumberCellsb-1{
   
    adist =((xi-xj)^2+(yi-yj)^2+(zi-zj)^2)^(1/2)               			
    if (abs(xi-xj)<=2500 && abs(yi-yj)<=(2.6+100)) {
-//       if (debug_count % 100 == 0) {       
-//         printf("gr coord: (%f, %f, %f)\n", xi, yi, zi)
-//         printf("go coord: (%f, %f, %f)\n", xj, yj, zj)            
-//         printf("dist: %f\n", adist)
-//         printf("GrC->GoC AMPA connection weight: %f\n", CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist)))
-//         printf("GrC->GoC AMPA connection delay: %f\n", CONNECTION_DELAY_GrCGoC*adist+CONNECTION_DELAY_AF)  
-//       }
+
        GrC[i].soma GoC[j].nclist.append(new NetCon(&GrC[i].soma.v(0.5),GoC[j].synAMPA2, CONNECTION_THRESHOLD_GrCGoC_, CONNECTION_DELAY_GrCGoC*adist+CONNECTION_DELAY_AF, CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist))))
-       gr_go_file.printf("%d %d %f %f\n", i, j, CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist)), CONNECTION_DELAY_GrCGoC*adist+CONNECTION_DELAY_AF)               
-//       debug_count = debug_count + 1
+       gr_go_file.printf("%d %d %f %f\n", i, j, CONNECTION_WEIGHT_AMPA_GrCGoC*(E^(-k1_GrCGoC*adist)), CONNECTION_DELAY_GrCGoC*adist+CONNECTION_DELAY_AF)
      }
   }
  }
@@ -458,17 +442,17 @@ for j=i+1, $4-1 {
     yj=y3d(0)
     zj=0  
  
-    adist =((xi-xj)^2+(yi-yj)^2+(zi-zj)^2)^(1/2)          			
+      adist =((xi-xj)^2+(yi-yj)^2+(zi-zj)^2)^(1/2)          			
 
-GoC[i].soma gpre[index.getval(i,j)]=new Gap(0.5)
-GoC[j].soma gpost[index.getval(i,j)]=new Gap(0.5)
-setpointer gpre[index.getval(i,j)].vnb, GoC[j].soma.v(0.5)
-setpointer gpost[index.getval(i,j)].vnb, GoC[i].soma.v(0.5)
-
-gprob=prob.uniform(min,max) 
-
-gpre[index.getval(i,j)].g=($3+gprob)*E^(-$2*adist)
-gpost[index.getval(i,j)].g=($3+gprob)*E^(-$2*adist)
+      GoC[i].soma gpre[index.getval(i,j)]=new Gap(0.5)
+      GoC[j].soma gpost[index.getval(i,j)]=new Gap(0.5)
+      setpointer gpre[index.getval(i,j)].vnb, GoC[j].soma.v(0.5)
+      setpointer gpost[index.getval(i,j)].vnb, GoC[i].soma.v(0.5)
+    
+      gprob=prob.uniform(min,max) 
+    
+      gpre[index.getval(i,j)].g=($3+gprob)*E^(-$2*adist)
+      gpost[index.getval(i,j)].g=($3+gprob)*E^(-$2*adist)
 
      go_go_file.printf("%d %d %f\n", i, j, ($3+gprob)*E^(-$2*adist))    
 
@@ -561,3 +545,14 @@ for i=0,NumberCellsb-1 {
   recncs2.append(tobj2)
 }
 objref tobj2 
+
+// Save the voltage traces
+//objref granule_v_file, golgi_v_file
+//granule_v_file = new File()
+//granule_v_file.wopen("SingleMolecularLoop.Granules.v_dat")
+//golgi_v_file = new File()
+//golgi_v_file.wopen("SingleMolecularLoop.Golgis.v_dat")
+//for (i=0; i < time.size(); i=i+1) {
+//    granule_v_file.printf("%g %g\n", time.x[i], granule_v.x[i])
+//    golgi_v_file.printf("%g %g\n", time.x[i], golgi_v.x[i])      
+//}
