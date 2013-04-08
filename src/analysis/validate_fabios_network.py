@@ -94,10 +94,11 @@ for proj in proj_names:
         new_num_conns.append(np.count_nonzero(new[:,0] == id))
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
-    nprebins = min((int(len(legacy_pre_ids)), 50))
+    nprebins = min((max(max(legacy_pre_ids) - min(legacy_pre_ids), 
+                        max(new_pre_ids) - min(new_pre_ids))  + 1, 50))
     ax3.hist(legacy_num_conns, nprebins, color='r')
     ax3.hist(new_num_conns, nprebins, color='b')
-    plt.title(proj + " - Pre Connections Histogram {}".format(nprebins))
+    plt.title(proj + " - Pre Connections Histogram")
     # Get number of pre cells histogram
     legacy_post_ids = np.unique(legacy[:,1])
     legacy_num_conns = []
@@ -109,10 +110,11 @@ for proj in proj_names:
         new_num_conns.append(np.count_nonzero(new[:,1] == id))
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
-    npostbins = min((int(len(legacy_post_ids)), 50))
+    npostbins = min((max(max(legacy_post_ids) - min(legacy_post_ids), 
+                         max(new_post_ids) - min(new_post_ids)) + 1, 50))
     ax3.hist(legacy_num_conns, npostbins, color='r')
     ax3.hist(new_num_conns, npostbins, color='b')
-    plt.title(proj + " - Post Connections Histogram {}".format(npostbins))       
+    plt.title(proj + " - Post Connections Histogram")       
 
 plt.show()
 
