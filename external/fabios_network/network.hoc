@@ -407,7 +407,7 @@ go_gr_file.close()
 
 objref go_go_file
 go_go_file = new File()
-go_go_file.wopen("Golgis_Golgis.proj")
+go_go_file.wopen("Golgis_Golgis_Gap.proj")
 
 objref gpre[255*255],gpost[255*255]
 objref index

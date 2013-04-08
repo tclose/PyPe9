@@ -29,7 +29,7 @@ args = parser.parse_args()
 
 pop_names = ['Granules.pop','MossyFibers.pop','Golgis.pop']
 proj_names = ['Golgis_Granules.proj', 'MossyFibers_Golgis.proj', 'MossyFibers_Granules_AMPA.proj', 
-              'Granules_Golgis.proj',  'MossyFibers_Granules_NMDA.proj', 'Golgis_Golgis.proj']
+              'Granules_Golgis.proj',  'MossyFibers_Granules_NMDA.proj', 'Golgis_Golgis_Gap.proj']
 
 legacy_pops = {}
 new_pops = {}
@@ -71,11 +71,11 @@ for proj in proj_names:
         ax1 = fig1.add_subplot(111, projection='3d')
         ax1.scatter(legacy_dist[0:100], legacy[0:100:,2], legacy[0:100:,3], c='r')
         ax1.scatter(new_dist[0:100], new[0:100:,2], new[0:100:,3], c='b')
+        ax1.set_zlabel('Delay')
     else:
         raise Exception("Connections should either have 3 or 4 columns")
     ax1.set_xlabel('Distance')
     ax1.set_ylabel('Weight')
-    ax1.set_zlabel('Delay')
     plt.title(proj + " - Weights and Delays vs Distance")
     # Plot connection distances histogram
     fig2 = plt.figure()
@@ -94,10 +94,10 @@ for proj in proj_names:
         new_num_conns.append(np.count_nonzero(new[:,0] == id))
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
-    nprebins = int(len(legacy_pre_ids))
+    nprebins = min((int(len(legacy_pre_ids)), 50))
     ax3.hist(legacy_num_conns, nprebins, color='r')
     ax3.hist(new_num_conns, nprebins, color='b')
-    plt.title(proj + " - Pre Connections Histogram")
+    plt.title(proj + " - Pre Connections Histogram {}".format(nprebins))
     # Get number of pre cells histogram
     legacy_post_ids = np.unique(legacy[:,1])
     legacy_num_conns = []
@@ -109,10 +109,10 @@ for proj in proj_names:
         new_num_conns.append(np.count_nonzero(new[:,1] == id))
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
-    npostbins = int(len(legacy_post_ids))
+    npostbins = min((int(len(legacy_post_ids)), 50))
     ax3.hist(legacy_num_conns, npostbins, color='r')
     ax3.hist(new_num_conns, npostbins, color='b')
-    plt.title(proj + " - Post Connections Histogram")       
+    plt.title(proj + " - Post Connections Histogram {}".format(npostbins))       
 
 plt.show()
 
