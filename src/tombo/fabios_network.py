@@ -53,6 +53,10 @@ parser.add_argument('--dry_run', action='store_true', help="Runs the script but 
 parser.add_argument('--keep_build', action='store_true', help="Don't delete the build directory to "
                                                              "allow the script to be rerun")
 parser.add_argument('--log', action='store_true', help='Save logging information to file')
+parser.add_argument('--name', type=str, default=None, 
+                    help="Saves a file within the output directory with the name 'name' for easy "
+                         "renaming of the output directory after it is copied to its final "
+                         "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
@@ -107,4 +111,4 @@ else:
 if not args.dry_run:
     tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
                      copy_to_output=copy_to_output, que_name=args.que_name, 
-                     strip_build_from_copy=(not args.keep_build))
+                     strip_build_from_copy=(not args.keep_build), name=args.name)
