@@ -544,15 +544,32 @@ for i=0,NumberCellsb-1 {
   tobj2.record(timevec2, idvec2, i+1) 
   recncs2.append(tobj2)
 }
-objref tobj2 
+objref tobj2
 
-// Save the voltage traces
-//objref granule_v_file, golgi_v_file
-//granule_v_file = new File()
-//granule_v_file.wopen("SingleMolecularLoop.Granules.v_dat")
-//golgi_v_file = new File()
-//golgi_v_file.wopen("SingleMolecularLoop.Golgis.v_dat")
-//for (i=0; i < time.size(); i=i+1) {
-//    granule_v_file.printf("%g %g\n", time.x[i], granule_v.x[i])
-//    golgi_v_file.printf("%g %g\n", time.x[i], golgi_v.x[i])      
-//}
+objref time
+objref granule1_v, granule2_v, granule3_v, granule4_v, granule5_v
+objref golgi1_v, golgi2_v, golgi3_v, golgi4_v, golgi5_v
+time = new Vector()
+granule1_v = new Vector()
+granule2_v = new Vector()
+granule3_v = new Vector()
+granule4_v = new Vector()
+granule5_v = new Vector()
+golgi1_v = new Vector()
+golgi2_v = new Vector()
+golgi3_v = new Vector()
+golgi4_v = new Vector()
+golgi5_v = new Vector()
+
+time.record(&t)
+GrC[100].soma granule1_v.record(&granule.soma.v(0.5))
+GrC[200].soma granule2_v.record(&granule.soma.v(0.5))
+GrC[300].soma granule3_v.record(&granule.soma.v(0.5))
+GrC[400].soma granule4_v.record(&granule.soma.v(0.5))
+GrC[500].soma granule5_v.record(&granule.soma.v(0.5))
+GoC[50].soma golgi1_v.record(&golgi.soma.v(0.5))
+GoC[100].soma golgi2_v.record(&golgi.soma.v(0.5))
+GoC[150].soma golgi3_v.record(&golgi.soma.v(0.5))
+GoC[200].soma golgi4_v.record(&golgi.soma.v(0.5))
+GoC[250].soma golgi5_v.record(&golgi.soma.v(0.5))
+
