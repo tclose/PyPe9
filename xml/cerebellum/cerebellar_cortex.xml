@@ -18,6 +18,13 @@
         <!-- Populations -->
         <population id="Granules" cell="ncml/Granule_DeSouza10.xml">
             <structure type="Extension" engine="Brep" id="Granules" />
+            <comment>
+                - Uniformly distributed cell soma positions within granular layer (0-200 um)
+                - ascending fibers heights are uniformly disributed in molecular layer (230-430 um).
+                  This will probably have to be implemented in morphologies somehow.
+                - Synapse models require different seeds to determine synaptic failures 
+                  (possibly could be set by cell GID as a hack)
+            </comment>
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
                     high="-13.2" units="nA" />
@@ -29,6 +36,10 @@
             </initialConditions>
         </population>
         <population id="Golgis" cell="ncml/Golgi_Solinas08.xml">
+            <comment>
+                - Uniformly distributed cell soma positions within granular layer (0-200 um)
+                - Synapse models require different seeds to determine synaptic failures
+            </comment>
             <structure type="Extension" engine="Brep" id="Golgis" />
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
@@ -42,6 +53,10 @@
         </population>
         <population id="MossyFibers" cell="SpikeSourceArray">
             <structure type="Extension" engine="Brep" id="MossyFibers" />
+            <comment>
+                Cell position layout of the mossy fibers is uniformly distributed in the granular 
+                layer (0-200 um)
+            </comment>
         </population>
         <population id="Purkinjes" cell="ncml/Purkinje_Khaliq03.xml">
             <structure type="External" engine="Brep" id="Purkinjes" />
@@ -76,7 +91,14 @@
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
-            <comment> The mossy fiber branches before the cerebellum and in the granular layer and
+            <comment> 
+                - circleMask will do with probability in the case without glomeruli
+                - In the case with glomeruli a morphology-based approach is required with multiple 
+                  glomeruli (randomly constructed morphology) and Gaussian fields to granule cell
+                  soma). Can be flagged out. Their positions are randomly placed along z
+                
+            
+                The mossy fiber branches before the cerebellum and in the granular layer and
                 gives off the rosettes/glomeruli (estimates say that one mossy fiber gives off about
                 150 rosettes, which may cross folia. The rosettes are at a distance of about 100um
                 of each other. Each rosette talks to about 20+ granule cells, and about one GoC
@@ -87,6 +109,9 @@
             </comment>
         </projection>
         <projection id="MossyFibers_Golgis_AMPA">
+            <comment>
+              - same as MF->Granules but different params
+            </comment>
             <source id="MossyFibers" />
             <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
@@ -107,7 +132,14 @@
                 exponent="-0.01" />
             <!-- <weight pattern="Constant" value="2.6 nS" /> -->
             <!-- NB: Delay is set by brep -->
-            <comment> Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
+            <comment> 
+                - PF to GoC Box in y and z plane, with the z of the Granules taken from the PF bifurcation.
+                  Slightly difficult this one. Might need a special connector that takes into account
+                  dendrtic extent. Exponential in x
+                  
+                - Axon to GoC, check to see if axon is below Golgi cell, circle mask in x-y  
+                
+                Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
                 zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
                 The dendritic tree size is 200 x 600 x 180μm in cats. A simple way to get this
                 connectivity is to have an ellipsoid with the dendritic tree size. With the number
@@ -122,7 +154,10 @@
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
-            <comment> There are about 400 Golgi cells per granule cell in the mouse. The axon does
+            <comment> 
+                - rectangle mask in x-y plane
+            
+                There are about 400 Golgi cells per granule cell in the mouse. The axon does
                 not seem to be confined as the dendrite, but it is rather flat and oriented in the
                 same direction. Every granule cell receives from about 10 Golgi cells. I am not sure
                 about this number. Better way to estimate it is to measure the axonal length and
