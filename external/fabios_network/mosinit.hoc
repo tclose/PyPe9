@@ -3,7 +3,7 @@ load_file("nrngui.hoc")
 //Simulation parameters//
 ////////////////////////
 //tmax=150         
-tmax=2000         
+tmax=1000        
 cvode.active(0)  //Fixed time step 
 DT=0.025	
 
@@ -11,7 +11,7 @@ DT=0.025
 //MF stimulus parameters//   
 /////////////////////////
 MFfreq=5
-NETIN_SP_START=100
+NETIN_SP_START=500
 SEED=1
 
 ///////////////////////////////
@@ -54,7 +54,7 @@ for i=0, NumberCellsd-1 {
 continuerun(tmax) //run the rest of simulation
 
 //simulation finished
-fprintf("Finished simulation\n")
+printf("Finished simulation\n")
 
 /////////////////////////
 //Generate Raster Plots//
