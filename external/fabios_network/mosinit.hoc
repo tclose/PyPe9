@@ -54,6 +54,7 @@ for i=0, NumberCellsd-1 {
 continuerun(tmax) //run the rest of simulation
 
 //simulation finished
+fprintf("Finished simulation\n")
 
 /////////////////////////
 //Generate Raster Plots//
