@@ -25,15 +25,15 @@
                 - Synapse models require different seeds to determine synaptic failures 
                   (possibly could be set by cell GID as a hack)
             </comment>
-            <cellParameters>
-                <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
-                    high="-13.2" units="nA" />
-                <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um"
-                    segmentGroup="soma" />
-            </cellParameters>
-            <initialConditions>
-                <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
-            </initialConditions>
+<!--             <cellParameters> -->
+<!--                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8" -->
+<!--                     high="-13.2" units="nA" /> -->
+<!--                 <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um" -->
+<!--                     segmentGroup="soma" /> -->
+<!--             </cellParameters> -->
+<!--             <initialConditions> -->
+<!--                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" /> -->
+<!--             </initialConditions> -->
         </population>
         <population id="Golgis" cell="ncml/Golgi_Solinas08.xml">
             <comment>
@@ -41,15 +41,15 @@
                 - Synapse models require different seeds to determine synaptic failures
             </comment>
             <structure type="Extension" engine="Brep" id="Golgis" />
-            <cellParameters>
-                <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
-                    segmentGroup="soma" />
-                <distribution component="Lkg" attr="e_rev" type="uniform" low="-66"
-                    high="-44" units="nA" />
-            </cellParameters>
-            <initialConditions>
-                <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
-            </initialConditions>
+<!--             <cellParameters> -->
+<!--                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um" -->
+<!--                     segmentGroup="soma" /> -->
+<!--                 <distribution component="Lkg" attr="e_rev" type="uniform" low="-66" -->
+<!--                     high="-44" units="nA" /> -->
+<!--             </cellParameters> -->
+<!--             <initialConditions> -->
+<!--                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" /> -->
+<!--             </initialConditions> -->
         </population>
         <population id="MossyFibers" cell="SpikeSourceArray">
             <structure type="Extension" engine="Brep" id="MossyFibers" />
@@ -58,24 +58,24 @@
                 layer (0-200 um)
             </comment>
         </population>
-        <population id="Purkinjes" cell="ncml/Purkinje_Khaliq03.xml">
-            <structure type="External" engine="Brep" id="Purkinjes" />
-        </population>
-        <population id="Stellates" cell="Stellate">
-            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um"
-                x_extent="1 um" y_extent="1 um" x_number="50" y_number="50" />
-        </population>
-        <population id="Baskets" cell="Basket">
-            <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um"
-                x_extent="1 um" y_extent="1 um" z_extent="1 um" x_number="50" y_number="50"
-                z_number="50" />
-        </population>
+<!--         <population id="Purkinjes" cell="ncml/Purkinje_Khaliq03.xml"> -->
+<!--             <structure type="Extension" engine="Brep" id="Purkinjes" /> -->
+<!--         </population> -->
+<!--         <population id="Stellates" cell="Stellate"> -->
+<!--             <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" -->
+<!--                 x_extent="1 um" y_extent="1 um" x_number="50" y_number="50" /> -->
+<!--         </population> -->
+<!--         <population id="Baskets" cell="Basket"> -->
+<!--             <structure type="Grid3D" x_offset="0 um" y_offset="0 um" z_offset="0 um" -->
+<!--                 x_extent="1 um" y_extent="1 um" z_extent="1 um" x_number="50" y_number="50" -->
+<!--                 z_number="50" /> -->
+<!--         </population> -->
         <!-- Projections -->
-        <projection id="Granule_Purkinje">
-            <source id="Granule" />
-            <destination id="Purkinje" synapse="Exp2Syn" />
-            <pattern type="External" engine="Brep" id="Granule-Purkinje" />
-        </projection>
+<!--         <projection id="Granule_Purkinje"> -->
+<!--             <source id="Granule" /> -->
+<!--             <destination id="Purkinje" synapse="Exp2Syn" /> -->
+<!--             <pattern type="Extension" engine="Brep" id="Granule-Purkinje" /> -->
+<!--         </projection> -->
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />
@@ -87,7 +87,7 @@
         <projection id="MossyFibers_Granules_NMDA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="NMDA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="25" -->
+            <connection pattern="Clone" projection="MossyFibers_Granules_AMPA" /> <!-- The AMPA and NMDA receptors are part of the same synapse -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -177,76 +177,76 @@
             <comment> These are the golgi gap junction projection connections.
             </comment>
         </projection>
-        <projection id="Granules_Baskets">
-            <source id="Granules" />
-            <destination id="Basket" />
-            <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="174 um" prob="" />
-            <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the
-                rat is half that number. These neurons are most likely confined to travel
-                para-saggitally, perpendicular to the PFs. The best numbers for the connectivity
-                between PFs and Gr are the ones that Shyam has, we have to ask him. The arbors would
-                be best represented by very elongated ellipsoids of about 174+/- 60 um along the
-                parasaggital, with a short axis of maybe 50 um. The number of postsynaptic sites
-                (reading from PFs) we ask Shyam. The distribution of inhibitory interneuron's somata
-                is likely to be homogeneous. There is a morphological gradient from stellate to
-                basket cells, as they go closer to the PN layer. Basket cells are in the deeper
-                layers, and connect to purkinje somas. In the hoc, we first put stellates in the top
-                one third and baskets in the bottom two thirds of the molecular layer. I don't like
-                it. My preference is to first distribute the I.I. regardless of their category.
-            </comment>
-        </projection>
-        <projection id="Granules_Stellates">
-            <source id="Granules" />
-            <destination id="Stellates" />
-            <pattern type="DistanceBased" geometry="Ellipsoid" x="50 um" y="174 um" z="100 um"
-                number="50" />
-            <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the
-                rat is half that number. These neurons are most likely confined to travel
-                para-saggitally, perpendicular to the PFs. The best numbers for the connectivity
-                between PFs and Gr are the ones that Shyam has, we have to ask him. The arbors would
-                be best represented by very elongated ellipsoids of about 174+/- 60 um along the
-                parasaggital, with a short axis of maybe 50 um. The number of postsynaptic sites
-                (reading from PFs) we ask Shyam. The distribution of inhibitory interneuron's somata
-                is likely to be homogeneous. There is a morphological gradient from stellate to
-                basket cells, as they go closer to the PN layer. Stellate cells are in the deeper
-                layers, and connect to purkinje somas. In the hoc, we first put stellates in the top
-                one third and baskets in the bottom two thirds of the molecular layer. I don't like
-                it. My preference is to first distribute the I.I. regardless of their category.
-            </comment>
-        </projection>
-        <projection id="Baskets_Purkinjes">
-            <source id="Baskets" />
-            <destination id="Purkinjes" />
-            <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" />
-            <comment> The PN should be divided between soma and dendrites. The I.I. close to
-                dendrites connect dendrites, and the ones close to the soma, to the soma. The axon
-                reach on average was 345 μm (sd um 149). Looong. May connect to many PNs in the
-                parasaggital (up to 7 has been observed). Hence, the axon can also be approximated
-                by an elongated ellipsoid, even longer than the dendrites. Number of sites from I.I.
-                to PN we have to ask Shyam. PF to PNs We estimate the number of PNs as 1:800 to
-                granule cells. Their distribution is very regular in the parasaggital. The distance
-                between PN arbors is on the 30um. The number of postsynaptic sites is about 1e5 in
-                the mouse. The size of the arbor in the mouse is roughly 180x180x30. We position the
-                purkinjes presuming no arbors overlap in volume. To find whether a PF contacts a PN
-                we look if the PF's yz coordinates fall within the yz of the PN arbor.
-            </comment>
-        </projection>
-        <projection id="Stellates_Purkinjes">
-            <source id="Stellates" />
-            <destination id="Purkinjes" />
-            <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" />
-            <comment> The PN should be divided between soma and dendrites. The I.I. close to
-                dendrites connect dendrites, and the ones close to the soma, to the soma. The axon
-                reach on average was 345 μm (sd um 149). Looong. May connect to many PNs in the
-                parasaggital (up to 7 has been observed). Hence, the axon can also be approximated
-                by an elongated ellipsoid, even longer than the dendrites. Number of sites from I.I.
-                to PN we have to ask Shyam. PF to PNs We estimate the number of PNs as 1:800 to
-                granule cells. Their distribution is very regular in the parasaggital. The distance
-                between PN arbors is on the 30um. The number of postsynaptic sites is about 1e5 in
-                the mouse. The size of the arbor in the mouse is roughly 180x180x30. We position the
-                purkinjes presuming no arbors overlap in volume. To find whether a PF contacts a PN
-                we look if the PF's yz coordinates fall within the yz of the PN arbor.
-            </comment>
-        </projection>
+<!--         <projection id="Granules_Baskets"> -->
+<!--             <source id="Granules" /> -->
+<!--             <destination id="Basket" /> -->
+<!--             <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="174 um" prob="" /> -->
+<!--             <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the -->
+<!--                 rat is half that number. These neurons are most likely confined to travel -->
+<!--                 para-saggitally, perpendicular to the PFs. The best numbers for the connectivity -->
+<!--                 between PFs and Gr are the ones that Shyam has, we have to ask him. The arbors would -->
+<!--                 be best represented by very elongated ellipsoids of about 174+/- 60 um along the -->
+<!--                 parasaggital, with a short axis of maybe 50 um. The number of postsynaptic sites -->
+<!--                 (reading from PFs) we ask Shyam. The distribution of inhibitory interneuron's somata -->
+<!--                 is likely to be homogeneous. There is a morphological gradient from stellate to -->
+<!--                 basket cells, as they go closer to the PN layer. Basket cells are in the deeper -->
+<!--                 layers, and connect to purkinje somas. In the hoc, we first put stellates in the top -->
+<!--                 one third and baskets in the bottom two thirds of the molecular layer. I don't like -->
+<!--                 it. My preference is to first distribute the I.I. regardless of their category. -->
+<!--             </comment> -->
+<!--         </projection> -->
+<!--         <projection id="Granules_Stellates"> -->
+<!--             <source id="Granules" /> -->
+<!--             <destination id="Stellates" /> -->
+<!--             <pattern type="DistanceBased" geometry="Ellipsoid" x="50 um" y="174 um" z="100 um" -->
+<!--                 number="50" /> -->
+<!--             <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the -->
+<!--                 rat is half that number. These neurons are most likely confined to travel -->
+<!--                 para-saggitally, perpendicular to the PFs. The best numbers for the connectivity -->
+<!--                 between PFs and Gr are the ones that Shyam has, we have to ask him. The arbors would -->
+<!--                 be best represented by very elongated ellipsoids of about 174+/- 60 um along the -->
+<!--                 parasaggital, with a short axis of maybe 50 um. The number of postsynaptic sites -->
+<!--                 (reading from PFs) we ask Shyam. The distribution of inhibitory interneuron's somata -->
+<!--                 is likely to be homogeneous. There is a morphological gradient from stellate to -->
+<!--                 basket cells, as they go closer to the PN layer. Stellate cells are in the deeper -->
+<!--                 layers, and connect to purkinje somas. In the hoc, we first put stellates in the top -->
+<!--                 one third and baskets in the bottom two thirds of the molecular layer. I don't like -->
+<!--                 it. My preference is to first distribute the I.I. regardless of their category. -->
+<!--             </comment> -->
+<!--         </projection> -->
+<!--         <projection id="Baskets_Purkinjes"> -->
+<!--             <source id="Baskets" /> -->
+<!--             <destination id="Purkinjes" /> -->
+<!--             <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" /> -->
+<!--             <comment> The PN should be divided between soma and dendrites. The I.I. close to -->
+<!--                 dendrites connect dendrites, and the ones close to the soma, to the soma. The axon -->
+<!--                 reach on average was 345 μm (sd um 149). Looong. May connect to many PNs in the -->
+<!--                 parasaggital (up to 7 has been observed). Hence, the axon can also be approximated -->
+<!--                 by an elongated ellipsoid, even longer than the dendrites. Number of sites from I.I. -->
+<!--                 to PN we have to ask Shyam. PF to PNs We estimate the number of PNs as 1:800 to -->
+<!--                 granule cells. Their distribution is very regular in the parasaggital. The distance -->
+<!--                 between PN arbors is on the 30um. The number of postsynaptic sites is about 1e5 in -->
+<!--                 the mouse. The size of the arbor in the mouse is roughly 180x180x30. We position the -->
+<!--                 purkinjes presuming no arbors overlap in volume. To find whether a PF contacts a PN -->
+<!--                 we look if the PF's yz coordinates fall within the yz of the PN arbor. -->
+<!--             </comment> -->
+<!--         </projection> -->
+<!--         <projection id="Stellates_Purkinjes"> -->
+<!--             <source id="Stellates" /> -->
+<!--             <destination id="Purkinjes" /> -->
+<!--             <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" /> -->
+<!--             <comment> The PN should be divided between soma and dendrites. The I.I. close to -->
+<!--                 dendrites connect dendrites, and the ones close to the soma, to the soma. The axon -->
+<!--                 reach on average was 345 μm (sd um 149). Looong. May connect to many PNs in the -->
+<!--                 parasaggital (up to 7 has been observed). Hence, the axon can also be approximated -->
+<!--                 by an elongated ellipsoid, even longer than the dendrites. Number of sites from I.I. -->
+<!--                 to PN we have to ask Shyam. PF to PNs We estimate the number of PNs as 1:800 to -->
+<!--                 granule cells. Their distribution is very regular in the parasaggital. The distance -->
+<!--                 between PN arbors is on the 30um. The number of postsynaptic sites is about 1e5 in -->
+<!--                 the mouse. The size of the arbor in the mouse is roughly 180x180x30. We position the -->
+<!--                 purkinjes presuming no arbors overlap in volume. To find whether a PF contacts a PN -->
+<!--                 we look if the PF's yz coordinates fall within the yz of the PN arbor. -->
+<!--             </comment> -->
+<!--         </projection> -->
     </network>
 </nineml>
