@@ -548,7 +548,6 @@
                 <parent segment="axon_58" />
                 <distal x="0.0" y="-720.0" z="13.5" diameter="2.4" />
             </segment>
-            WithoutAxon
             <segment id="axon_60">
                 <parent segment="axon_59" />
                 <distal x="0.0" y="-732.0" z="13.5" diameter="2.4" />
@@ -1972,7 +1971,7 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-                <ncml:ionicCurrent name="Lkg" segmentGroup="soma">
+                <ncml:ionicCurrent name="Lkg">
                     <ncml:component type="pore">
                         <ncml:const name="gbar"> (2.1e-05)
                         </ncml:const>
