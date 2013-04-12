@@ -41,7 +41,7 @@
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
         </population>
-        <population id="Golgis" cell="ncml/Golgi_Solinas08.xml" size="225">
+        <population id="Golgis" cell="ncml/Golgi_DeSouza10.xml" size="225">
             <structure type="Distributed">
                 <layout pattern="Grid2D" aspect_ratio="9" dx="33.3333" dy="33.3333"
                     x0="6.6667" y0="6.6667" z="200">
