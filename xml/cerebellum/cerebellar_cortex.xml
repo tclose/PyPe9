@@ -83,14 +83,6 @@
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
-        </projection>
-        <projection id="MossyFibers_Granules_NMDA">
-            <source id="MossyFibers" />
-            <destination id="Granules" synapse="NMDA" segment="soma" />
-            <connection pattern="Clone" projection="MossyFibers_Granules_AMPA" /> <!-- The AMPA and NMDA receptors are part of the same synapse -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
-                exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
             <comment> 
                 - circleMask will do with probability in the case without glomeruli
                 - In the case with glomeruli a morphology-based approach is required with multiple 
@@ -107,6 +99,14 @@
                 contacts about 21 gr cells. One Glomerulus is contacted by a Golgi cell axon. We do
                 not have that yet.
             </comment>
+        </projection>
+        <projection id="MossyFibers_Granules_NMDA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="NMDA" segment="soma" />
+            <connection pattern="Clone" projection="MossyFibers_Granules_AMPA" /> <!-- The AMPA and NMDA receptors are part of the same synapse -->
+            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
+                exponent="-0.01" />
+            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
         <projection id="MossyFibers_Golgis_AMPA">
             <comment>
