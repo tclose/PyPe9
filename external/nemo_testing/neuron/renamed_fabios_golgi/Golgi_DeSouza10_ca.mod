@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
 
 NEURON {
-        SUFFIX Golgi_DeSouza10_Ca
+        SUFFIX Golgi_DeSouza10_ca
         USEION ca READ ica, cao WRITE cai
         RANGE d, beta, cai0, ca_pump_i
 }

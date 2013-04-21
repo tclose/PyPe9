@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX Golgi_BK
+	SUFFIX Golgi_DeSouza10_KM
 	USEION k READ ek WRITE ik 
 	USEION ca READ cai
 	RANGE gkbar, ik, g

@@ -11,7 +11,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX Golgi_NaR
+	SUFFIX Golgi_DeSouza10_NaR
 	USEION na READ ena WRITE ina 
 	RANGE gnabar, ina, g
 	RANGE Aalpha_s,Abeta_s,V0alpha_s,V0beta_s,Kalpha_s,Kbeta_s 

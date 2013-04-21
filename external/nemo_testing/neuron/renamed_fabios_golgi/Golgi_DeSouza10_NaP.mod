@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX Golgi_NaP 
+	SUFFIX Golgi_DeSouza10_NaP 
 	USEION na READ ena WRITE ina 
 	RANGE gbar, ina, g
 	:RANGE Aalpha_m, Kalpha_m, V0alpha_m, alpha_m, beta_m
