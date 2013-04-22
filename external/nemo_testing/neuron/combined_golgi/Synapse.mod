@@ -1,0 +1,1 @@
+/home/tclose/git/kbrain/external/nemo_testing/neuron/renamed_fabios_golgi/Synapse.mod
