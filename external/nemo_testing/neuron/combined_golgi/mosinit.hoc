@@ -1,4 +1,4 @@
-// This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
+spike_freq = 0
 
 objref SpikeTrain, netcon, nil
 objref exc[78], inh[27], synapses
@@ -29,9 +29,11 @@ soma {
     insert Golgi_DeSouza10_NaP
     insert Golgi_DeSouza10_NaR
     insert Golgi_DeSouza10_SK2
+    insert Golgi_DeSouza10_k
+    insert Golgi_DeSouza10_na
     
-    usetable_GolgiLVA = 0
-    usetable_GolgiHVA = 0
+    usetable_Golgi_DeSouza10_LVA = 0
+    usetable_Golgi_DeSouza10_HVA = 0
     usetable_Golgi_DeSouza10_KA = 0
     usetable_Golgi_DeSouza10_KV = 0
     usetable_Golgi_DeSouza10_NaR = 0
@@ -44,8 +46,19 @@ soma {
     cai = cai0_ca_ion
     ca2i = cai
     ca2o = cao
-    cai0_Golgi_DeSouza10_Ca = cai0_ca_ion
-    ca2i0_Golgi_DeSouza10_Ca2 = cai0_ca_ion
+    
+    nai0_na_ion = 5
+    nai = nai0_na_ion
+    
+    ki0_k_ion = 140
+    ki = ki0_k_ion
+  
+    //Ionic Concentrations for a typical Mammalian cell (Johnston and Wu)
+    nao_nakpump=145 
+    ko_nakpump=5 
+    Nai_inf_nakpump=5
+    Ki_inf_nakpump=140
+    ATPi_nakpump=5     // 0 mM  
     
     ena=87.39
     ek=-84.69
@@ -143,8 +156,7 @@ run()
 
 objref output_file
 output_file = new File()
-printf("Writing output to 'combined.Golgi.v_dat'")
-output_file.wopen("output/combined.Golgi.v_dat")
+output_file.wopen("../../../../output/combined.Golgi.v_dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }
