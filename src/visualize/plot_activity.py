@@ -216,6 +216,7 @@ def main(arguments):
                 else:
                     var_axes[var_count].plot(t, data)
                 dat_count += 1
+                plt.title(args.extra_label)
         else:
             try:
                 dt = header['dt']

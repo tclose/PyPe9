@@ -1,4 +1,4 @@
-spike_freq = 0
+input_freq = 0 // Must be first line of file for automatic replacement in iPython notebook function to work
 
 objref SpikeTrain, netcon, nil
 objref exc[78], inh[27], synapses
@@ -132,7 +132,26 @@ seal {
 connect seal(1), soma(1)
 connect elec(1), seal(0)
     
-    
+  
+objref ns1, ns2, ns3, nc1, nc2, nc3
+if (input_freq != 0) {
+  
+  ns1 = new NetStim(0.5)
+  ns1.interval = 1000 / input_freq
+  ns1.number = input_freq * 2
+  ns2 = new NetStim(0.5)
+  ns2.interval = 1000 / input_freq
+  ns2.number = input_freq * 2
+  ns3 = new NetStim(0.5)
+  ns3.interval = 1000 / input_freq
+  ns3.number = input_freq * 2
+  
+  nc1 = new NetCon(ns1, exc[0])
+  nc2 = new NetCon(ns2, exc[26])
+  nc3 = new NetCon(ns3, exc[52])
+  
+}
+
 //access soma    
 //psection()
 
