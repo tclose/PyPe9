@@ -2002,8 +2002,8 @@
                 </conductanceSynapse>
                 <conductanceSynapse id="AMPA_Granule" type="Exp2Syn"
                     segmentGroup="soma">
-                    <parameter name="tau1" value="1" units="ms" />
-                    <parameter name="tau2" value="13.3" units="ms" />
+                    <parameter name="tau1" value="0.03" units="ms" />
+                    <parameter name="tau2" value="0.5" units="ms" />
                     <parameter name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
             </synapses>

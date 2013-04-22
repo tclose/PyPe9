@@ -89,6 +89,17 @@ for i=0,2 {
     connect dend[i](0), soma(1) 
 }  
 
+create axon
+axon {
+  nseg = 4
+  diam = 2.4 // gives 90 pF to get to the 145 pF Forti06
+  L = 1200
+  Ra = 125
+  celsius = 23
+  insert Golgi_DeSouza10_Lkg
+}
+connect axon(0), soma(0)
+
 objref ns, nc1, nc2
 if (input_freq != 0) {
   
@@ -97,6 +108,7 @@ if (input_freq != 0) {
   ns.number = input_freq * 2
   
   nc1 = new NetCon(ns, synAMPA1)
+  nc1.weight = 1
   nc2 = new NetCon(ns, synAMPA2)
 }
 
