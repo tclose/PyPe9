@@ -3,7 +3,6 @@ input_freq = 0 // Must be first line of file for automatic replacement in iPytho
 objref SpikeTrain, netcon, nil
 objref exc[78], inh[27], synapses
 objref RT_Vm, EL_Vm
-objref synAMPA1, synAMPA2
 
 RT_Vm = new Vector()
 EL_Vm = new Vector()
@@ -50,18 +49,6 @@ soma {
     netcon.threshold=-20
     netcon.record(SpikeTrain)
     
-    //Synapses
-    
-    synAMPA1=new Exp2Syn(0.5) //Adding synapse with rise and decay time
-    synAMPA1.tau1=0.03  // ms rise time (Maex)
-    synAMPA1.tau2=0.5  // ms decay time (Maex)
-    synAMPA1.e=0     // mV reversal potential (Maex)
-
-    synAMPA2=new Exp2Syn(0.5) //Adding synapse with rise and decay time
-    synAMPA2.tau1=0.03  // ms rise time (Maex)
-    synAMPA2.tau2=0.5  // ms decay time (Maex)
-    synAMPA2.e=0     // mV reversal potential (Maex)
-    
     RT_Vm.record(&v(0.5))
     psection()
 }
@@ -88,16 +75,24 @@ for i=0,2 {
     }
     connect dend[i](0), soma(1) 
 }  
-
-objref ns, nc1, nc2
+  
+objref ns1, ns2, ns3, nc1, nc2, nc3
 if (input_freq != 0) {
   
-  ns = new NetStim(0.5)
-  ns.interval = 1000 / input_freq
-  ns.number = input_freq * 2
+  ns1 = new NetStim(0.5)
+  ns1.interval = 1000 / input_freq
+  ns1.number = input_freq * 2
+  ns2 = new NetStim(0.5)
+  ns2.interval = 1000 / input_freq
+  ns2.number = input_freq * 2
+  ns3 = new NetStim(0.5)
+  ns3.interval = 1000 / input_freq
+  ns3.number = input_freq * 2
   
-  nc1 = new NetCon(ns, synAMPA1)
-  nc2 = new NetCon(ns, synAMPA2)
+  nc1 = new NetCon(ns1, exc[0])
+  nc2 = new NetCon(ns2, exc[26])
+  nc3 = new NetCon(ns3, exc[52])
+  
 }
 
 access soma    
