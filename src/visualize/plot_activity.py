@@ -111,8 +111,14 @@ def load_trace_hoc(filename, rescale_traces=False):
     t_data = numpy.loadtxt(filename)
     time = t_data[:, 0]
     values = t_data[:, 1]
-    ID = os.path.splitext(os.path.basename(filename))[0].capitalize()
-    return [time], [values], [ID]
+    # Create legend values
+    legend = os.path.splitext(os.path.basename(filename))[0].capitalize()
+    if rescale_traces:
+        abs_max = max(abs(numpy.min(values)), abs(numpy.max(values)))
+        order_of_mag = 10.0 ** math.floor(math.log(abs_max, 10.0))
+        legend += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
+        values /= order_of_mag
+    return [time], [values], [0], [legend] 
     
 def load_trace(filename, ext, dt, incr, rescale_traces=False):
     f = open(filename)
@@ -188,17 +194,11 @@ def load_trace(filename, ext, dt, incr, rescale_traces=False):
     times[-1].append(time_i * dt)
     if not len(values):
         raise Exception("No trace was loaded from file '{}'".format(filename))
-        # Sort the times and values by IDs
-    times, values, IDs = zip(sorted(zip(times, values, IDs), key=lambda tup: int(float(tup[2]))))
-    # Create legend values
-    abs_max = max(abs(numpy.min(data)), abs(numpy.max(data)))
-    order_of_mag = 10.0 ** math.floor(math.log(abs_max, 10.0))
-    leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
-    data /= order_of_mag
-    leg = '{variable_name} - ID{ID}'.format(
-            variable_name=os.path.splitext(os.path.basename(filename))[0].capitalize(),
-            ID=dat_count)
-    return times, values, IDs
+    # Sort the times and values by IDs
+    IDs, times, values = zip(sorted(zip(IDs, times, values), key=lambda tup: int(float(tup[0]))))
+    basename = os.path.basename(filename).split('.')[0].capitalize()
+    legends = ['{} - ID {}'.format(basename, ID) for ID in IDs]   
+    return times, values, IDs, legends
 
 def plot_trace(ax, label, time, trace):
     ax.plot(time, trace)
