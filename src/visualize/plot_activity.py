@@ -188,29 +188,21 @@ def load_trace(filename, ext, dt, incr, rescale_traces=False):
     times[-1].append(time_i * dt)
     if not len(values):
         raise Exception("No trace was loaded from file '{}'".format(filename))
-    # Sort the times and values by IDs
-    times, values, IDs = zip(sort(zip(times, values, IDs), key=lambda tup: int(float(tup[2]))))
-    return times, values, IDs
-
-def plot_trace(ax, label, time, trace, rescale=False):
-    t_data = numpy.loadtxt(filename)
-    t = t_data[:, 0]
-    data = t_data[:, 1]
+        # Sort the times and values by IDs
+    times, values, IDs = zip(sorted(zip(times, values, IDs), key=lambda tup: int(float(tup[2]))))
+    # Create legend values
+    abs_max = max(abs(numpy.min(data)), abs(numpy.max(data)))
+    order_of_mag = 10.0 ** math.floor(math.log(abs_max, 10.0))
+    leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
+    data /= order_of_mag
     leg = '{variable_name} - ID{ID}'.format(
             variable_name=os.path.splitext(os.path.basename(filename))[0].capitalize(),
             ID=dat_count)
-    if rescale:
-        abs_max = max(abs(numpy.min(data)), abs(numpy.max(data)))
-        order_of_mag = 10.0 ** math.floor(math.log(abs_max, 10.0))
-        leg += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
-        data /= order_of_mag
-    if args.combine:
-        combine_axis.plot(t, data)
-        combine_legend.append(leg)
-    else:
-        var_axes[var_count].plot(t, data)
-    dat_count += 1
-    plt.title(args.extra_label)
+    return times, values, IDs
+
+def plot_trace(ax, label, time, trace):
+    ax.plot(time, trace)
+    plt.title(label)
 
 def read_header(filename):
     filename_base, filename_ext = os.path.splitext(filename)
