@@ -13,11 +13,13 @@ Contains a method for plotting cell positions loaded from BRep export files
 #######################################################################################
 
 import sys
-import numpy
+import numpy.random
 import matplotlib.pyplot as plt
 import argparse
 import math
 import os.path
+
+SPIKE_COLOURS = ['b', 'r', 'g', 'c', 'm', 'y', 'k']
 
 def quit_figure(event):
     """
@@ -35,7 +37,7 @@ class FigureHandler(object):
         self._combine = combine
         # Create subplots
         if self._combine:
-            ax = self.fig.add_suplot(111)
+            ax = self.fig.add_subplot(111)
             self.axes = [ax] * num_figures # Create n copies of the reference to the same axes
         else:
             #Determine the most even dimensions that can fit all the required subplots
@@ -45,14 +47,19 @@ class FigureHandler(object):
                 num_wide += 1
             self.axes = []
             for i in xrange(num_figures):
-                self.axes.append(self.fig.add_subplot(num_high, num_wide, i))
+                self.axes.append(self.fig.add_subplot(num_high, num_wide, i+1))
     
     def __iter__(self):
         for ax in self.axes:
             yield ax
             
-    def __getitem__(self, index):
-        return self.axes[index]
+    def __len__(self):
+        return len(self.axes)
+            
+    def get_primary(self):
+        if not self._combine:
+            raise Exception("There is no primary axes for this figure handler (i.e. 'combine'==False)")
+        return self.axes[0]
             
 def load_spikes(filename):
     spikes_n_ids = numpy.loadtxt(filename)
@@ -90,7 +97,7 @@ def load_spikes_hoc(filename):
         raise Exception("No spikes were generated for selected population")
     return spikes, ids     
 
-def plot_spikes(ax, label, spikes, ids, time_start=None, time_stop=None):
+def plot_spikes(ax, label, spikes, ids, time_start=None, time_stop=None, colour='b'):
     # Set default values for time start and stop (first and last spikes)
     if not time_start:
         time_start = spikes.min()
@@ -98,7 +105,7 @@ def plot_spikes(ax, label, spikes, ids, time_start=None, time_stop=None):
         time_stop = spikes.max()
     length = time_stop - time_start
     # Plot spikes
-    ax.scatter(spikes, ids)
+    ax.scatter(spikes, ids, c=colour)
     # Set axis labels and limits
     ax.set_xlabel("Time (ms)")
     ax.set_ylabel("Neuron #")
@@ -195,21 +202,21 @@ def load_trace(filename, ext, dt, incr, rescale_traces=False):
     if not len(values):
         raise Exception("No trace was loaded from file '{}'".format(filename))
     # Sort the times and values by IDs
-    IDs, times, values = zip(sorted(zip(IDs, times, values), key=lambda tup: int(float(tup[0]))))
+    IDs, times, values = zip(*sorted(zip(IDs, times, values), key=lambda tup: int(float(tup[0]))))
     basename = os.path.basename(filename).split('.')[0].capitalize()
-    legends = ['{} - ID {}'.format(basename, ID) for ID in IDs]   
+    legends = ['ID {}'.format(ID) for ID in IDs]   
     return times, values, IDs, legends
 
-def plot_trace(ax, label, time, trace):
-    ax.plot(time, trace)
-    plt.title(label)
+def plot_traces(ax, times, traces):
+    for time, trace in zip(times, traces):              
+        ax.plot(time, trace)
 
-def read_header(filename):
+def read_header(filename, prefix_filename=False):
     filename_base, filename_ext = os.path.splitext(filename)
     if filename_ext[-3:] == 'dat':
         label = filename_base
         header = None
-        variable = filename_base
+        variable = ""
     else:
         #Read Header
         header = {}
@@ -239,6 +246,8 @@ def read_header(filename):
             variable = header['variable'].capitalize()
         except KeyError:
             raise Exception("'variable' key was not found in header")
+    if prefix_filename:
+        label = '.'.join(filename.split('.')[:-1])
     return label, header, variable
 
 def main(arguments):
@@ -251,89 +260,94 @@ def main(arguments):
     parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
     parser.add_argument('--time_start', type=float, default=None, help='The start of the plot')
     parser.add_argument('--time_stop', type=float, default=None, help='The stop of the plot')
-    parser.add_argument('--incr', type=float, default=0.0,
-                        help="The minimum increment required " \
-                             "before the next step in the variable trace is plotted")
+    parser.add_argument('--incr', type=float, default=0.01,
+                        help="The minimum increment required before the next step in the variable "
+                             "trace is plotted")
     parser.add_argument('--extra_label', type=str, default='', help='Additional label information')
     parser.add_argument('--combine', action='store_true',
                         help='Plot the variable figures on a single combined axis')
     parser.add_argument('--no_show', action='store_true',
                         help="Don't show the plots initially (waiting for other plots to be " \
                              "plotted")
-    parser.add_argument('--title_prefix', action='store_true',
+    parser.add_argument('--prefix_filename', action='store_true',
                         help="Include the filenames of the files in the subplot titles")
     args = parser.parse_args(arguments)
     # Set up the figure axes to plot the results ---------------------------------------------------
     # Get the different types of data
-    spike_filenames = [f for f in args.filenames if os.path.splitext(f)[:6] == 'spikes']
-    spike_axes = FigureHandler(len(spike_filenames), args.combine)
-    # Loop through each of the spike filenames and plot the spikes
-    spike_legend = []
-    for filename, ax in zip(spike_filenames, spike_axes):
-        header, label, variable, prefix = read_header(filename)
-        if os.path.splitext(filename) == 'spikes':
-            spikes, ids = load_spikes(filename)
+    spike_filenames = [f for f in args.filenames if f.split('.')[-1][:6] == 'spikes']
+    if len(spike_filenames):
+        spike_axes = FigureHandler(len(spike_filenames), args.combine)
+        if args.combine:
+            spike_colours = SPIKE_COLOURS
+            for i in xrange(len(SPIKE_COLOURS), len(spike_filenames)):
+                spike_colours.append(numpy.random.rand(3))
         else:
-            spikes, ids = load_spikes_hoc(filename)
-        plot_spikes(ax, label, spikes, ids, args.time_start, args.time_stop)
-        if not args.combine:
-            title = ('{prefix} {label}{extra_label} - Spike Times'.format(label=label, 
-                                                                          extra_label=args.extra_label,
-                                                                          variable_name=variable,
-                                                                          prefix=prefix))
-            ax.set_title(title)
+            spike_colours = ['b'] * len(spike_filenames)
+        # Loop through each of the spike filenames and plot the spikes
+        spike_legend = []
+        for filename, ax, colour in zip(spike_filenames, spike_axes, spike_colours):
+            label, header, variable = read_header(filename, prefix_filename=args.prefix_filename)
+            if filename.split('.')[-1] == 'spikes':
+                spikes, ids = load_spikes(filename)
+            else:
+                spikes, ids = load_spikes_hoc(filename)
+            plot_spikes(ax, label, spikes, ids, args.time_start, args.time_stop, colour=colour)
+            if args.combine:
+                spike_legend.append(label)
+            else:
+                title = "Spike Times"
+                if label or args.extra_label:
+                    title = label + args.extra_label + " - " + title
+                ax.set_title(title)
+                ax.set_xlabel('Time (ms)')
+                ax.set_ylabel('Cell Index')               
+        if args.combine:
+            ax = spike_axes.get_primary()
+            ax.legend(spike_legend)
+            title = "Spike Times"
+            if args.extra_label:
+                title = args.extra_label + " - " + title
+            ax.get_axes().set_title(title)
             ax.set_xlabel('Time (ms)')
-            ax.set_ylabel('Cell Index')
-        else:
-            spike_legend.append(variable)
-            
-    if args.combine:
-        spike_axes[0].legend(spike_legend)
-        spike_axes[0].get_axes().set_title('{} - Spike Times'.format(args.extra_label))
-        spike_axes[0].set_xlabel('Time (ms)')
-        spike_axes[0].set_ylabel('Cell index')
+            ax.set_ylabel('Cell index')
     # Load and plot the traces
-    trace_filenames = [f for f in args.filenames if f.split('.')[-1][1:6] != 'spikes']
-    trace_exts = [f.split('.')[-1][1:] for f in trace_filenames]
-    trace_axes = FigureHandler(len(trace_filenames), args.combine)
-    # Whether to rescale traces to common 0-1 
-    rescale_traces = (args.combine and 
-                      len(set(t[:-4] if t.endswith('_dat') else t for t in trace_exts)) > 1)
-    trace_legend = [] 
-    for filename, ext, ax in zip(trace_filenames, trace_exts, trace_axes):
-        header, label, variable, prefix = read_header(filename)
-        if ext.endswith('_dat'):
-            times, values, IDs = load_trace_hoc(filename)
-        else:
-            try:
-                dt = header['dt']
-            except KeyError:
-                raise Exception("Required header field 'dt' was not found in file header.")
-            times, values, IDs, mag_order = load_trace(filename, ext,  dt, incr=args.incr,
-                                                       rescale_traces=rescale_traces)
-        plot_trace(ax, label, times, values, IDs)
-        if not args.combine:
-            ax.legend(IDs)
-            title = '{prefix} {label}{extra_label} - {variable_name} vs Time'.\
-                                          format(label=label,
-                                          extra_label=args.extra_label,
-                                          variable_name=variable,
-                                          prefix=prefix)
-            ax.set_title(title)
+    trace_filenames = [f for f in args.filenames if f.split('.')[-1][:6] != 'spikes']
+    if len(trace_filenames):
+        trace_exts = [f.split('.')[-1] for f in trace_filenames]
+        trace_axes = FigureHandler(len(trace_filenames), args.combine)
+        # Whether to rescale traces to common 0-1 
+        rescale_traces = (args.combine and 
+                          len(set(t[:-4] if t.endswith('_dat') else t for t in trace_exts)) > 1)
+        trace_legends = [] 
+        for filename, ext, ax in zip(trace_filenames, trace_exts, trace_axes):
+            label, header, variable = read_header(filename, prefix_filename=args.prefix_filename)
+            if ext.endswith('_dat'):
+                times, values, IDs = load_trace_hoc(filename)
+            else:
+                try:
+                    dt = header['dt']
+                except KeyError:
+                    raise Exception("Required header field 'dt' was not found in file header.")
+                times, values, IDs, legends = load_trace(filename, ext,  dt, incr=args.incr,
+                                                         rescale_traces=rescale_traces)
+            plot_traces(ax, times, values)
+            if args.combine:
+                trace_legends += ['{} - {}'.format(label, l) for l in legends]
+            else:
+                ax.legend(IDs)
+                title = '{} - {} vs Time'.format(label, args.extra_label, variable)
+                ax.set_title(title)
+                ax.set_xlabel('Time (ms)')
+                ax.set_ylabel('Voltage (mV)' if (ext == 'v' or ext == 'v_dat') else variable)
+        if args.combine:
+            ax = trace_axes.get_primary()
+            ax.legend(trace_legends)
+            title = "Various States vs Time"
+            if args.extra_label:
+                title = args.extra_label + " - " + title
+            ax.get_axes().set_title(title)
             ax.set_xlabel('Time (ms)')
-            ax.set_ylabel('Voltage (mV)' if (ext == 'v' or ext == 'v_dat') else variable)
-        else:
-            for ID in IDs:
-                leg = '{prefix} - {variable_name} - ID{ID}'.format(prefix=prefix, 
-                                                                   variable_name=variable, ID=ID)
-                if rescale_traces:
-                    leg += ' (x10^{})'.format(mag_order)
-                trace_legend.append(leg)
-    if args.combine:
-        trace_axes[0].legend(trace_legend)
-        trace_axes[0].get_axes().set_title('{} - Various Values vs Time'.format(args.extra_label))
-        trace_axes[0].set_xlabel('Time (ms)')
-        trace_axes[0].set_ylabel('Sci. notation (see legend for magnitude)')
+            ax.set_ylabel('Sci. notation (see legend for magnitude)')
     # Show the plot
     if not args.no_show:
         plt.show()
