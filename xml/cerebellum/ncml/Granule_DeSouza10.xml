@@ -2,12 +2,20 @@
 <ncml:model xmlns:ncml="ncml" name="Granule_DeSouza10">
     <!--<include href="SimpleIonChannel.xml"/> -->
     <ncml:sxslt>
-        <!-- XML syntactic sugar stylesheet -->
-        ( (sxml:match 'ncml:ionicCurrent (lambda (node bindings root env) (let ((id (or (sxml:attr
-        node 'id) (sxml:attr node 'name))) (kids (sxml:kids node))) `(ncml:component (@ (type
-        "ionic-current") (name ,id)) . ,kids) ))) (sxml:match 'ncml:decayingPool (lambda (node
-        bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
-        (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
+    <!-- XML syntactic sugar stylesheet -->
+        ( (sxml:match 'ncml:ionicCurrent <br/>
+                      (lambda (node bindings root env) <br/>
+                        (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
+                              (kids (sxml:kids node))) <br/>
+                          `(ncml:component (@ (type "ionic-current") (name ,id)) . ,kids) ))) <br/>
+           <br/>
+          (sxml:match 'ncml:decayingPool <br/>
+                      (lambda (node bindings root env) <br/>
+                        (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
+                              (kids (sxml:kids node))) <br/>
+                          `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) <br/>
+           <br/>
+          )
     </ncml:sxslt>
     <cell id="Granule_DeSouza10">
         <notes>A model of a granule cell</notes>
@@ -32,6 +40,12 @@
             <membraneProperties>
                 <ncml:input name="v" />
                 <ncml:input name="celsius" />
+                <ncml:component type="geometry" name="soma">
+                    <ncml:const name="diam" value="11.8" />
+                    <ncml:const name="L" value="11.8" />
+                    <ncml:output name="diam" />
+                    <ncml:output name="L" />
+                </ncml:component>
                 <ncml:component type="defaults">
                     <ncml:const name="V_t" value="-35" />
                     <ncml:const name="celsius" value="30" />
@@ -745,7 +759,7 @@
             <synapses>
                 <!-- Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
                 <conductanceSynapse id="AMPA" type="Exp2Syn">
-                    <parameter name="tau1" value="0.3" units="ms" />
+                    <parameter name="tau1" value="0.03" units="ms" />
                     <parameter name="tau2" value="0.5" units="ms" />
                     <parameter name="e" value="0.0" units="mV" />
                 </conductanceSynapse>

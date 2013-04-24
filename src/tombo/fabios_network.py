@@ -12,6 +12,7 @@ SCRIPT_NAME = 'fabios_network'
 # Required imports
 import tombo
 import argparse
+import os.path
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -31,7 +32,7 @@ parser.add_argument('--stim_seed', default=None,
 parser.add_argument('--np', type=int, default=96, 
                     help="The the number of processes to use for the simulation " \
                          "(default: %(default)s)")
-parser.add_argument('--que_name', type=str, default='shortP', 
+parser.add_argument('--que_name', type=str, default='short', 
                     help='The the que to submit the job to(default: %(default)s)')
 parser.add_argument('--volt_trace', nargs='+', action='append', default=[], 
                     metavar=('POP_ID', 'SLICE_INDICES'), 
@@ -52,11 +53,16 @@ parser.add_argument('--dry_run', action='store_true', help="Runs the script but 
 parser.add_argument('--keep_build', action='store_true', help="Don't delete the build directory to "
                                                              "allow the script to be rerun")
 parser.add_argument('--log', action='store_true', help='Save logging information to file')
+parser.add_argument('--name', type=str, default=None, 
+                    help="Saves a file within the output directory with the name 'name' for easy "
+                         "renaming of the output directory after it is copied to its final "
+                         "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 if args.legacy_hoc:
-    required_dirs = ['external']
+    args.que = 'short'
+    required_dirs = [os.path.join('external', 'fabios_network')]
 else:
     required_dirs = ['src', 'xml']
 # Create work directory and get path for output directory
@@ -105,4 +111,4 @@ else:
 if not args.dry_run:
     tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
                      copy_to_output=copy_to_output, que_name=args.que_name, 
-                     strip_build_from_copy=(not args.keep_build))
+                     strip_build_from_copy=(not args.keep_build), name=args.name)

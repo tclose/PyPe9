@@ -51,7 +51,8 @@ def main(arguments):
     pop = net.all_populations()[0]
     if args.simulator == 'neuron':
         from neuron import h
-        for seg in pop[0]._cell.segments.values():
+        cell = pop[0]._cell
+        for seg in cell.segments.values():
             h.psection(sec=seg)
     # Create the input current and times vectors
     if args.inject:
@@ -69,15 +70,15 @@ def main(arguments):
                             "or 'noise'".format(inject_type))
         pop.inject(current_source)
     pop.record_v()
-    print "------Miscellaneous hoc variables to print------"
-    potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
-    for var in potential_variables:
-        try:
-            print var + ": " + str(getattr(soma, var))
-        except:
-            pass
-    from neuron import h
-    print "celsius: " + str(h.celsius)
+    if args.simulator == 'neuron':
+        print "------Miscellaneous hoc variables to print------"
+        potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
+        for var in potential_variables:
+            try:
+                print var + ": " + str(getattr(cell.soma_seg, var))
+            except:
+                pass
+        print "celsius: " + str(h.celsius)            
     print "Starting run"
     run(args.time) #@UndefinedVariable
     print "Simulated single cell for %f milliseconds" % args.time

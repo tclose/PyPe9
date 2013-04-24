@@ -3,7 +3,7 @@ load_file("nrngui.hoc")
 //Simulation parameters//
 ////////////////////////
 //tmax=150         
-tmax=2000         
+tmax=2000        
 cvode.active(0)  //Fixed time step 
 DT=0.025	
 
@@ -54,6 +54,7 @@ for i=0, NumberCellsd-1 {
 continuerun(tmax) //run the rest of simulation
 
 //simulation finished
+printf("Finished simulation\n")
 
 /////////////////////////
 //Generate Raster Plots//
@@ -92,6 +93,42 @@ GoCMatrixS.fprint(sav_GoCMatrixS," %g")
 sav_MFMatrixS.close()
 sav_GrCMatrixS.close()
 sav_GoCMatrixS.close()
+
+// Save the voltage traces of several golgi and granule cells
+objref granule1_v_file, granule2_v_file, granule3_v_file, granule4_v_file, granule5_v_file
+objref golgi1_v_file, golgi2_v_file, golgi3_v_file, golgi4_v_file, golgi5_v_file
+granule1_v_file = new File()
+granule2_v_file = new File()
+granule3_v_file = new File()
+granule4_v_file = new File()
+granule5_v_file = new File()
+granule1_v_file.wopen("Granule1.v_dat")
+granule2_v_file.wopen("Granule2.v_dat")
+granule3_v_file.wopen("Granule3.v_dat")
+granule4_v_file.wopen("Granule4.v_dat")
+granule5_v_file.wopen("Granule5.v_dat")
+golgi1_v_file = new File()
+golgi2_v_file = new File()
+golgi3_v_file = new File()
+golgi4_v_file = new File()
+golgi5_v_file = new File()
+golgi1_v_file.wopen("Golgi1.v_dat")
+golgi2_v_file.wopen("Golgi2.v_dat")
+golgi3_v_file.wopen("Golgi3.v_dat")
+golgi4_v_file.wopen("Golgi4.v_dat")
+golgi5_v_file.wopen("Golgi5.v_dat")
+for (i=0; i < time.size(); i=i+1) {
+    granule1_v_file.printf("%g %g\n", time.x[i], granule1_v.x[i])
+    granule2_v_file.printf("%g %g\n", time.x[i], granule2_v.x[i])
+    granule3_v_file.printf("%g %g\n", time.x[i], granule3_v.x[i])
+    granule4_v_file.printf("%g %g\n", time.x[i], granule4_v.x[i])
+    granule5_v_file.printf("%g %g\n", time.x[i], granule5_v.x[i])
+    golgi1_v_file.printf("%g %g\n", time.x[i], golgi1_v.x[i])      
+    golgi2_v_file.printf("%g %g\n", time.x[i], golgi2_v.x[i])      
+    golgi3_v_file.printf("%g %g\n", time.x[i], golgi3_v.x[i])      
+    golgi4_v_file.printf("%g %g\n", time.x[i], golgi4_v.x[i])      
+    golgi5_v_file.printf("%g %g\n", time.x[i], golgi5_v.x[i])      
+}
 
 strdef command
 sprint(command,"mv *.spikes_dat ../../output/")

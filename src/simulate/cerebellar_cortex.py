@@ -95,6 +95,7 @@ net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_d
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
 mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
+#mossy_fibers.set_spikes(your_custom_spikes) # <your_custom_spikes> is a matrix with the MF indices are the rows
 print "Setting up recorders"
 net.record_spikes()
 # Set up voltage traces    

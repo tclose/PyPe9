@@ -22,6 +22,7 @@ import sys
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
+DEFAULT_TIMESTEP = 0.02
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron', help="simulator for NINEML+ (either "
                                                                     "'neuron' or 'nest')")
@@ -38,14 +39,14 @@ parser.add_argument('--output', type=str,
 parser.add_argument('--start_input', type=float, default=1000, help="The start time of the mossy "
                                                                     "fiber stimulation "
                                                                     "(default: %(default)s)")
-parser.add_argument('--min_delay', type=float, default=0.04, help="The minimum synaptic delay in "
-                                                                   "the network "
-                                                                   "(default: %(default)s)")
-parser.add_argument('--timestep', type=float, default=0.02, help="The timestep used for the "
-                                                                  "simulation "
-                                                                  "(default: %(default)s)")
+parser.add_argument('--min_delay', type=float, default=DEFAULT_TIMESTEP, 
+                    help="The minimum synaptic delay in the network (default: %(default)s)")
+parser.add_argument('--timestep', type=float, default=DEFAULT_TIMESTEP, 
+                    help="The timestep used for the simulation (default: %(default)s)")
 parser.add_argument('--save_connections', type=str, default=None, help="A path in which to save "
                                                                        "the generated connections")
+parser.add_argument('--save_cell_positions', type=str, default=None, help="A path in which to save "
+                                                                       "the generated cell positions")
 parser.add_argument('--stim_seed', type=int, default=None, help="The seed passed to the stimulated "
                                                                 "spikes")
 parser.add_argument('--para_unsafe', action='store_true', help="If set the network simulation will "
@@ -62,8 +63,7 @@ parser.add_argument('--include_gap', action='store_true', help="Includes Golgi-t
 parser.add_argument('--no_granule_to_golgi', action='store_true', help="Deactivates the granule to "
                                                                        "golgi connection in the "
                                                                        "network.")
-parser.add_argument('--log', type=str, help="Save logging information to file",
-                    default=os.path.join(PROJECT_PATH, 'output', 'fabios_network.log'))
+parser.add_argument('--log', type=str, help="Save logging information to file")
 args = parser.parse_args()
 # Delete all system arguments once they are parsed to avoid conflicts in NEST module
 del sys.argv[1:]
@@ -73,7 +73,10 @@ if args.log:
     init_logging(args.log, debug=True)
 # Set the network xml location
 if args.debug_network:
-    xml_filename = 'debug_fabios.xml'
+    if args.simulator == 'nest':
+        xml_filename = 'debug_fabios_simple_synapse.xml'
+    else:
+        xml_filename = 'debug_fabios.xml'
 else:
     xml_filename = 'fabios_network.xml'
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)
@@ -94,7 +97,7 @@ if args.no_granule_to_golgi:
     flags.append(('GranuleToGolgi', False))
 # Build the network
 print "Building network"
-net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=2.0, #@UndefinedVariable
+net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable
                                 build_mode=args.build, silent_build=args.silent_build, flags=flags)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
@@ -121,6 +124,9 @@ net.describe()
 if args.save_connections:
     print "Saving connections"
     net.save_connections(args.save_connections)
+if args.save_cell_positions:
+    print "Saving cell positions"
+    net.save_positions(args.save_cell_positions)
 print "Starting run"
 # Print out basic parameters of the simulation
 print "Simulation time: %f" % args.time
