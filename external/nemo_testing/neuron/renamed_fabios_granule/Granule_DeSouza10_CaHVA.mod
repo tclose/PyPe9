@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
  
 NEURON { 
-	SUFFIX GRC_CA 
+	SUFFIX Granule_DeSouza10_CaHVA 
 	USEION ca READ eca WRITE ica 
 	RANGE gcabar, ica, g, alpha_s, beta_s, alpha_u, beta_u 
 	RANGE Aalpha_s, Kalpha_s, V0alpha_s

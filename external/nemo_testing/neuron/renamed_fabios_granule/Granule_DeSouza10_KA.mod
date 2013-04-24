@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
 
 NEURON { 
-	SUFFIX GRC_KA
+	SUFFIX Granule_DeSouza10_KA
 	USEION k READ ek WRITE ik 
 	RANGE gkbar, ik, g, alpha_a, beta_a, alpha_b, beta_b
 	RANGE Aalpha_a, Kalpha_a, V0alpha_a
