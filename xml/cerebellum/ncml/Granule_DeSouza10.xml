@@ -43,11 +43,11 @@
                     </ncml:const>
                     <ncml:output name="C_m" />
                 </ncml:component>
-                <ncml:component type="membrane-area">
+                <ncml:component type="geometry" name="soma">
+                    <ncml:const name="L" value="11.8" />
                     <ncml:const name="diam" value="11.8" />
-                    <ncml:const name="area"> (PI * diam * diam)
-                    </ncml:const>
-                    <ncml:output name="area" />
+                    <ncml:output name="L" />
+                    <ncml:output name="diam" />
                 </ncml:component>
                 <ncml:decayingPool name="ca">
                     <ncml:input name="cai" from="ion-pools" />
