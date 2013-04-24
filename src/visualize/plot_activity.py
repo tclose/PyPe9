@@ -19,8 +19,6 @@ import argparse
 import math
 import os.path
 
-
-
 def quit_figure(event):
     """
     Creates a shortcut to close the current window with the key 'q'
@@ -303,7 +301,7 @@ def main(arguments):
     parser.add_argument('--incr', type=float, default=0.01,
                         help="The minimum increment required before the next step in the variable "
                              "trace is plotted")
-    parser.add_argument('--extra_label', type=str, default='', help='Additional label information')
+    parser.add_argument('--label', type=str, default='', help='Additional label information')
     parser.add_argument('--combine', action='store_true',
                         help='Plot the variable figures on a single combined axis')
     parser.add_argument('--no_show', action='store_true',
@@ -342,8 +340,8 @@ def main(arguments):
                 spike_legend.append(label)
             else:
                 title = "Spike Times"
-                if label or args.extra_label:
-                    title = label + args.extra_label + " - " + title
+                if label or args.label:
+                    title = label + args.label + " - " + title
                 ax.set_title(title)
                 ax.set_xlabel('Time (ms)')
                 ax.set_ylabel('Cell Index')
@@ -351,8 +349,8 @@ def main(arguments):
             ax = spike_axes.get_primary()
             ax.legend(spike_legend)
             title = "Spike Times"
-            if args.extra_label:
-                title = args.extra_label + " - " + title
+            if args.label:
+                title = args.label + " - " + title
             ax.get_axes().set_title(title)
             ax.set_xlabel('Time (ms)')
             ax.set_ylabel('Cell index')
@@ -390,7 +388,7 @@ def main(arguments):
                 else:
                     ytitle = ylabel = variable
                 ax.legend(legends)
-                title = '{}{} - {} vs Time'.format(args.extra_label, label, ytitle)
+                title = '{}{} - {} vs Time'.format(args.label, label, ytitle)
                 ax.set_title(title)
                 ax.set_xlabel('Time (ms)')
                 ax.set_ylabel(ylabel)
@@ -403,8 +401,8 @@ def main(arguments):
             else:
                 ytitle = ylabel = 'Various States'
             title = "{} vs Time".format(ytitle)
-            if args.extra_label:
-                title = args.extra_label + " - " + title
+            if args.label:
+                title = args.label + " - " + title
             ax.get_axes().set_title(title)
             ax.set_xlabel('Time (ms)')
             if rescale_traces:
