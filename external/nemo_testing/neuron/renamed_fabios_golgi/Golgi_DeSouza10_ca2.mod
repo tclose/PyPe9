@@ -27,7 +27,7 @@ PARAMETER {
         celsius    (degC)
         d = .2          (um)
         ca2o        (mM)         
-        ca2i0     (mM)         
+        ca2i0 = 50e-6   (mM)         
         beta = 1.3        (/ms)
 }
 ASSIGNED {

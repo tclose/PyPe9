@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
 
 NEURON { 
-	SUFFIX Golgi_KA
+	SUFFIX Golgi_DeSouza10_KA
 	USEION k READ ek WRITE ik 
 	RANGE gkbar, ik, g
 	:RANGE Aalpha_a, Kalpha_a, V0alpha_a, alpha_a, beta_a, alpha_b

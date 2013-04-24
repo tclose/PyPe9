@@ -15,7 +15,7 @@ Published in:
 ENDCOMMENT
 
 NEURON{
-	SUFFIX Golgi_SK2
+	SUFFIX Golgi_DeSouza10_SK2
 	USEION ca READ cai
 	USEION k READ ek WRITE ik 
 	RANGE gkbar, g, ik, tcorr

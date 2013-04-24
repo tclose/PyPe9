@@ -1,103 +1,95 @@
 TITLE Cerebellum Golgi Cell Model
 
 COMMENT
-        K-slow channel
+        KCa channel
    
 	Author: E.DAngelo, T.Nieus, A. Fontana
 	Last revised: 8.5.2000
 ENDCOMMENT
-
+ 
 NEURON { 
-	SUFFIX Golgi_DeSouza10_KCa 
+	SUFFIX Golgi_DeSouza10_KCa
 	USEION k READ ek WRITE ik 
+	USEION ca READ cai
 	RANGE gkbar, ik, g
-	:RANGE Aalpha_n, Kalpha_n, V0alpha_n, alpha_n, beta_n 
-	:RANGE Abeta_n, Kbeta_n, V0beta_n
-	:RANGE V0_ninf, B_ninf
-	RANGE n, n_inf, tau_n, tcorr
+	RANGE Aalpha_c, Balpha_c, Kalpha_c, alpha_c, beta_c
+	RANGE Abeta_c, Bbeta_c, Kbeta_c 
+	RANGE c_inf, tau_c, c, tcorr
 } 
  
 UNITS { 
 	(mA) = (milliamp) 
 	(mV) = (millivolt) 
+	(molar) = (1/liter)
+	(mM) = (millimolar)
 } 
  
 PARAMETER { 
-	Aalpha_n = 0.0033 (/ms)
-	Kalpha_n = 40 (mV)
-	V0alpha_n = -30 (mV)
-	
-	Abeta_n = 0.0033 (/ms)
-	Kbeta_n = -20 (mV)
-	V0beta_n = -30 (mV)
-	
-	V0_ninf = -35 (mV)
-	B_ninf =  6 (mV)
-	
-	gkbar= 0.001 (mho/cm2)
-	ek   (mV)
+	Aalpha_c = 7 (/ms)
+	Balpha_c = 1.5e-3 (mM)
+
+	Kalpha_c =  -11.765 (mV)
+
+	Abeta_c = 1 (/ms)
+	Bbeta_c = 0.15e-3 (mM)
+
+	Kbeta_c = -11.765 (mV)
+
+	v (mV) 
+	cai (mM)
+	gkbar= 0.003 (mho/cm2) 
+	ek (mV)
 	celsius (degC) 
-	Q10 = 3	(1) 
-}
+	Q10 = 3		(1)
+} 
 
 STATE { 
-	n 
+	c 
 } 
 
 ASSIGNED { 
-	v (mV) 
 	ik (mA/cm2) 
-	n_inf 
-	tau_n (ms) 
+	ica (mA/cm2)
+
+	c_inf 
+	tau_c (ms) 
 	g (mho/cm2) 
-	alpha_n (/ms) 
-	beta_n (/ms) 
+	alpha_c (/ms) 
+	beta_c (/ms)
 	tcorr (1)
 } 
  
 INITIAL { 
 	rate(v) 
-	n = n_inf 
+	c = c_inf 
 } 
  
 BREAKPOINT { 
 	SOLVE states METHOD derivimplicit 
-	g = gkbar*n 
+	g = gkbar*c 
 	ik = g*(v - ek) 
-	alpha_n = alp_n(v) 
-	beta_n = bet_n(v) 
+	alpha_c = alp_c(v) 
+	beta_c = bet_c(v) 
 } 
  
 DERIVATIVE states { 
 	rate(v) 
-	n' =(n_inf - n)/tau_n 
+	c' =(c_inf - c)/tau_c 
 } 
  
-FUNCTION alp_n(v(mV))(/ms) { 
-	alp_n = Aalpha_n*exp((v-V0alpha_n)/Kalpha_n) 
+FUNCTION alp_c(v(mV))(/ms) { 
+	tcorr = Q10^((celsius-30(degC))/10(degC))
+	alp_c = tcorr*Aalpha_c/(1+(Balpha_c*exp(v/Kalpha_c)/cai)) 
 } 
  
-FUNCTION bet_n(v(mV))(/ms) { 
-	bet_n = Abeta_n*exp((v-V0beta_n)/Kbeta_n) 
+FUNCTION bet_c(v(mV))(/ms) {
+	tcorr = Q10^((celsius-30(degC))/10(degC))
+	bet_c = tcorr*Abeta_c/(1+cai/(Bbeta_c*exp(v/Kbeta_c))) 
 } 
-
-UNITSOFF
-
-LOCAL delta
-LOCAL q10
  
-PROCEDURE rate(v (mV)) {LOCAL a_n, b_n, s_n  
-	TABLE n_inf, tau_n 
-	DEPEND Aalpha_n, Kalpha_n, V0alpha_n, 
-	       Abeta_n, Kbeta_n, V0beta_n, V0_ninf, B_ninf, celsius FROM -100 TO 30 WITH 13000 
-	a_n = alp_n(v)  
-	b_n = bet_n(v)
-
-	tcorr = Q10^((celsius - 22)/10)
-	s_n = tcorr*(a_n + b_n) 
-	tau_n = 1/s_n
- 
-:  n_inf = a_n/(a_n + b_n) 
-	n_inf = 1/(1+exp(-(v-V0_ninf)/B_ninf))
-} 
-
+PROCEDURE rate(v (mV)) {LOCAL a_c, b_c 
+	a_c = alp_c(v)  
+	b_c = bet_c(v) 
+	tau_c = 1/(a_c + b_c) 
+	c_inf = a_c/(a_c + b_c) 
+}

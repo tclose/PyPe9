@@ -8,7 +8,7 @@ COMMENT
 ENDCOMMENT
 
 NEURON {
-        SUFFIX Golgi_DeSouza10_Ca
+        SUFFIX Golgi_DeSouza10_ca
         USEION ca READ ica, cao WRITE cai
         RANGE d, beta, cai0, ca_pump_i
 }
@@ -27,7 +27,7 @@ PARAMETER {
         celsius    (degC)
         d = .2          (um)
         cao = 2.        (mM)         
-        cai0 = 1e-4     (mM)         
+        cai0 = 50e-6     (mM)         
         beta = 1.3        (/ms)
 }
 
