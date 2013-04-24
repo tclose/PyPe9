@@ -19,7 +19,7 @@ import argparse
 import math
 import os.path
 
-SPIKE_COLOURS = ['b', 'r', 'g', 'c', 'm', 'y', 'k']
+
 
 def quit_figure(event):
     """
@@ -29,7 +29,7 @@ def quit_figure(event):
         plt.close(event.canvas.figure)
 
 class FigureHandler(object):
-    
+
     def __init__(self, num_figures, combine=False):
         self.fig = plt.figure()
         # Set event handler to quickly close figures (just for my convenience)
@@ -47,20 +47,55 @@ class FigureHandler(object):
                 num_wide += 1
             self.axes = []
             for i in xrange(num_figures):
-                self.axes.append(self.fig.add_subplot(num_high, num_wide, i+1))
-    
+                self.axes.append(self.fig.add_subplot(num_high, num_wide, i + 1))
+
     def __iter__(self):
         for ax in self.axes:
             yield ax
-            
+
     def __len__(self):
         return len(self.axes)
-            
+
     def get_primary(self):
         if not self._combine:
             raise Exception("There is no primary axes for this figure handler (i.e. 'combine'==False)")
         return self.axes[0]
+
+class ColourPicker(object):
+
+    BASE_COLOURS = ['b', 'r', 'g', 'c', 'm', 'y', 'k']
+
+    def __init__(self, combine):
+        self._colours = self.BASE_COLOURS
+        self._curr_index = 0
+        self._combine = combine
+
+    def reset(self):
+        self._curr_index = 0
+        
+    def _new_colour(self):
+        c = numpy.random.rand(3)
+        self._colours.append(c)
+        return c
+
+    def spike_iter(self):
+        if self._combine:
+            for c in self._colours:
+                yield c
+            while True:
+                yield self._new_colour()
+        else:
+            yield self._colours[0]
             
+    def get_trace_colours(self, num):           
+        colours = self._colours[self._curr_index:(self._curr_index + num)]
+        for i in xrange(len(colours), num): #@UnusedVariable i 
+            colours.append(self._new_colour())
+        if self._combine:
+            self._curr_index += num
+        return colours
+
+
 def load_spikes(filename):
     spikes_n_ids = numpy.loadtxt(filename)
     if not spikes_n_ids.shape[0]:
@@ -95,7 +130,7 @@ def load_spikes_hoc(filename):
     spikes = numpy.array(spikes)
     if not len(spikes):
         raise Exception("No spikes were generated for selected population")
-    return spikes, ids     
+    return spikes, ids
 
 def plot_spikes(ax, label, spikes, ids, time_start=None, time_stop=None, colour='b'):
     # Set default values for time start and stop (first and last spikes)
@@ -107,17 +142,21 @@ def plot_spikes(ax, label, spikes, ids, time_start=None, time_stop=None, colour=
     # Plot spikes
     ax.scatter(spikes, ids, c=colour)
     # Set axis labels and limits
-    ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Neuron #")
-    plt.title(label + ' - Spike Times')
     max_id = numpy.max(ids)
     ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
     ax.set_ylim(-2, max_id + 2)
 
-def load_trace_hoc(filename, rescale_traces=False):
+def load_trace_hoc(filename, rescale_traces=False, time_start=None, time_stop=None):
     t_data = numpy.loadtxt(filename)
     time = t_data[:, 0]
     values = t_data[:, 1]
+    if time_start is not None or time_stop is not None:
+        if time_start is not None:
+            indices = time >= time_start
+        if time_start is not None:
+            indices = time <= time_stop
+        time=time[indices]
+        values=values[indices]
     # Create legend values
     legend = os.path.splitext(os.path.basename(filename))[0].capitalize()
     if rescale_traces:
@@ -125,9 +164,9 @@ def load_trace_hoc(filename, rescale_traces=False):
         order_of_mag = 10.0 ** math.floor(math.log(abs_max, 10.0))
         legend += ' (x10^{order_of_mag})'.format(order_of_mag=order_of_mag)
         values /= order_of_mag
-    return [time], [values], [0], [legend] 
-    
-def load_trace(filename, ext, dt, incr, rescale_traces=False):
+    return [time], [values], [legend]
+
+def load_trace(filename, ext, dt, incr, rescale_traces=False, time_start=None, time_stop=None):
     f = open(filename)
     # Determine the range of the trace
     if ext == 'v' and not rescale_traces:
@@ -140,10 +179,10 @@ def load_trace(filename, ext, dt, incr, rescale_traces=False):
         for line in f:
             if line[0] != '#':
                 try:
-                    var, ID = line.split()
+                    var, GID = line.split()
                 except ValueError:
                     raise Exception("Incorrectly formatted line '{}', should be " \
-                                    "'value ID'.".format(line))
+                                    "'value GID'.".format(line))
                 var = float(var)
                 if var > max_var:
                     max_var = var
@@ -161,55 +200,56 @@ def load_trace(filename, ext, dt, incr, rescale_traces=False):
     # exceeds the provided increment            
     if not rescale_traces:
         incr = var_range * incr
-    time_i = 0
     # Make sure the the prev_var variable starts from a value that will always be at
     #  least 'incr' away from the first variable read
-    prev_ID = None
+    prev_GID = None
     values = []
     times = []
-    IDs = []
+    GIDs = []
+    time = 0.0
     for line in f:
         if line[0] != '#': # Check to see if the line is a comment
             try:
-                var, ID = line.split()
+                var, GID = line.split()
             except ValueError:
                 raise Exception("Incorrectly formatted line '{}', should be " \
-                                "'value' 'ID'.".format(line))
-            var = float(var) / order_of_mag if rescale_traces else float(var)
-            # If the ID signifies the start of a new cell reset the time index
-            if ID != prev_ID:
+                                "'value' 'GID'.".format(line))
+            # If the GID signifies the start of a new cell reset the time index
+            if GID != prev_GID:
                 # If not in the initial loop, append last value/time pair to fill out 
-                # the plot of the previous ID out to the right 
-                if prev_ID != None:
+                # the plot of the previous GID out to the right 
+                if prev_GID != None:
                     values[-1].append(var)
-                    times[-1].append(time_i * dt)
-                time_i = 0
-                prev_var = var - 2.0 * incr
-                prev_ID = ID
+                    times[-1].append(time if time_stop is None else time_stop)
+                time = 0.0
+                prev_var = None
+                prev_GID = GID
                 values.append([])
                 times.append([])
-                IDs.append(int(float(ID)))
-            # If the variable change is greater than the specified incr add it to the 
-            # vector
-            if abs(var - prev_var) >= incr:
-                values[-1].append(var)
-                times[-1].append(time_i * dt)
-                prev_var = var
-            time_i += 1
-    # Append last value/time pair to fill out plot of the final ID to the right
+                GIDs.append(int(float(GID)))
+            if ((time_start is None or time >= time_start) and 
+                (time_stop is None or time <= time_stop)):
+                var = float(var) / order_of_mag if rescale_traces else float(var)
+                # If the variable change is greater than the specified incr add it to the 
+                # vector
+                if prev_var is None or abs(var - prev_var) >= incr:
+                    values[-1].append(var)
+                    times[-1].append(time)
+                    prev_var = var
+            time += dt
+    # Append last value/time pair to fill out plot of the final GID to the right
     values[-1].append(var)
-    times[-1].append(time_i * dt)
+    times[-1].append(time if time_stop is None else time_stop)
     if not len(values):
         raise Exception("No trace was loaded from file '{}'".format(filename))
-    # Sort the times and values by IDs
-    IDs, times, values = zip(*sorted(zip(IDs, times, values), key=lambda tup: int(float(tup[0]))))
-    basename = os.path.basename(filename).split('.')[0].capitalize()
-    legends = ['ID {}'.format(ID) for ID in IDs]   
-    return times, values, IDs, legends
+    # Sort the times and values by GIDs
+    GIDs, times, values = zip(*sorted(zip(GIDs, times, values), key=lambda tup: int(float(tup[0]))))
+    legends = ['{}'.format(GID) for GID in GIDs]
+    return times, values, legends
 
-def plot_traces(ax, times, traces):
-    for time, trace in zip(times, traces):              
-        ax.plot(time, trace)
+def plot_traces(ax, times, traces, colour_picker):
+    for time, trace, colour in zip(times, traces, colour_picker.get_trace_colours(len(times))):
+        ax.plot(time, trace, c=colour)
 
 def read_header(filename, prefix_filename=False):
     filename_base, filename_ext = os.path.splitext(filename)
@@ -275,23 +315,29 @@ def main(arguments):
     # Set up the figure axes to plot the results ---------------------------------------------------
     # Get the different types of data
     spike_filenames = [f for f in args.filenames if f.split('.')[-1][:6] == 'spikes']
+    colour_picker = ColourPicker(args.combine)
     if len(spike_filenames):
         spike_axes = FigureHandler(len(spike_filenames), args.combine)
-        if args.combine:
-            spike_colours = SPIKE_COLOURS
-            for i in xrange(len(SPIKE_COLOURS), len(spike_filenames)):
-                spike_colours.append(numpy.random.rand(3))
-        else:
-            spike_colours = ['b'] * len(spike_filenames)
         # Loop through each of the spike filenames and plot the spikes
         spike_legend = []
-        for filename, ax, colour in zip(spike_filenames, spike_axes, spike_colours):
+        time_start = args.time_start
+        time_stop = args.time_stop
+        for filename, ax, colour in zip(spike_filenames, spike_axes, colour_picker.spike_iter()):
             label, header, variable = read_header(filename, prefix_filename=args.prefix_filename)
             if filename.split('.')[-1] == 'spikes':
                 spikes, ids = load_spikes(filename)
             else:
                 spikes, ids = load_spikes_hoc(filename)
-            plot_spikes(ax, label, spikes, ids, args.time_start, args.time_stop, colour=colour)
+            if args.combine:
+                if args.time_start is not None: 
+                    first_spike = spikes.min()
+                    if first_spike < time_start:
+                        time_start = first_spike
+                if args.time_stop is not None: 
+                    last_spike = spikes.max()
+                    if last_spike < time_stop:
+                        time_start = last_spike
+            plot_spikes(ax, label, spikes, ids, time_start, time_stop, colour=colour)
             if args.combine:
                 spike_legend.append(label)
             else:
@@ -300,7 +346,7 @@ def main(arguments):
                     title = label + args.extra_label + " - " + title
                 ax.set_title(title)
                 ax.set_xlabel('Time (ms)')
-                ax.set_ylabel('Cell Index')               
+                ax.set_ylabel('Cell Index')
         if args.combine:
             ax = spike_axes.get_primary()
             ax.legend(spike_legend)
@@ -313,41 +359,58 @@ def main(arguments):
     # Load and plot the traces
     trace_filenames = [f for f in args.filenames if f.split('.')[-1][:6] != 'spikes']
     if len(trace_filenames):
+        colour_picker.reset()
         trace_exts = [f.split('.')[-1] for f in trace_filenames]
         trace_axes = FigureHandler(len(trace_filenames), args.combine)
         # Whether to rescale traces to common 0-1 
-        rescale_traces = (args.combine and 
+        rescale_traces = (args.combine and
                           len(set(t[:-4] if t.endswith('_dat') else t for t in trace_exts)) > 1)
-        trace_legends = [] 
+        trace_legends = []
         for filename, ext, ax in zip(trace_filenames, trace_exts, trace_axes):
             label, header, variable = read_header(filename, prefix_filename=args.prefix_filename)
             if ext.endswith('_dat'):
-                times, values, IDs = load_trace_hoc(filename)
+                times, values, legends = load_trace_hoc(filename, time_start=args.time_start, 
+                                                        time_stop=args.time_stop)
             else:
                 try:
                     dt = header['dt']
                 except KeyError:
                     raise Exception("Required header field 'dt' was not found in file header.")
-                times, values, IDs, legends = load_trace(filename, ext,  dt, incr=args.incr,
-                                                         rescale_traces=rescale_traces)
-            plot_traces(ax, times, values)
+                times, values, legends = load_trace(filename, ext, dt, incr=args.incr,
+                                                    rescale_traces=rescale_traces,
+                                                    time_start=args.time_start, 
+                                                    time_stop=args.time_stop)
+            plot_traces(ax, times, values, colour_picker)
             if args.combine:
                 trace_legends += ['{} - {}'.format(label, l) for l in legends]
             else:
-                ax.legend(IDs)
-                title = '{} - {} vs Time'.format(label, args.extra_label, variable)
+                if (ext == 'v' or ext == 'v_dat'):
+                    ytitle = 'Voltage'
+                    ylabel = 'Voltage (mV)'
+                else:
+                    ytitle = ylabel = variable
+                ax.legend(legends)
+                title = '{}{} - {} vs Time'.format(args.extra_label, label, ytitle)
                 ax.set_title(title)
                 ax.set_xlabel('Time (ms)')
-                ax.set_ylabel('Voltage (mV)' if (ext == 'v' or ext == 'v_dat') else variable)
+                ax.set_ylabel(ylabel)
         if args.combine:
             ax = trace_axes.get_primary()
             ax.legend(trace_legends)
-            title = "Various States vs Time"
+            if all([e == 'v' or e == 'v_dat' for e in trace_exts]):
+                ytitle = 'Voltage'
+                ylabel = 'Voltage (mV)'
+            else:
+                ytitle = ylabel = 'Various States'
+            title = "{} vs Time".format(ytitle)
             if args.extra_label:
                 title = args.extra_label + " - " + title
             ax.get_axes().set_title(title)
             ax.set_xlabel('Time (ms)')
-            ax.set_ylabel('Sci. notation (see legend for magnitude)')
+            if rescale_traces:
+                ax.set_ylabel('Sci. notation (see legend for magnitude)')
+            else:
+                ax.set_ylabel(ylabel)
     # Show the plot
     if not args.no_show:
         plt.show()
