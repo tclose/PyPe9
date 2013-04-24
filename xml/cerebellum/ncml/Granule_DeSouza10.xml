@@ -2,12 +2,20 @@
 <ncml:model xmlns:ncml="ncml" name="Granule_DeSouza10">
     <!--<include href="SimpleIonChannel.xml"/> -->
     <ncml:sxslt>
-        <!-- XML syntactic sugar stylesheet -->
-        ( (sxml:match 'ncml:ionicCurrent (lambda (node bindings root env) (let ((id (or (sxml:attr
-        node 'id) (sxml:attr node 'name))) (kids (sxml:kids node))) `(ncml:component (@ (type
-        "ionic-current") (name ,id)) . ,kids) ))) (sxml:match 'ncml:decayingPool (lambda (node
-        bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
-        (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
+    <!-- XML syntactic sugar stylesheet -->
+        ( (sxml:match 'ncml:ionicCurrent <br/>
+                      (lambda (node bindings root env) <br/>
+                        (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
+                              (kids (sxml:kids node))) <br/>
+                          `(ncml:component (@ (type "ionic-current") (name ,id)) . ,kids) ))) <br/>
+           <br/>
+          (sxml:match 'ncml:decayingPool <br/>
+                      (lambda (node bindings root env) <br/>
+                        (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
+                              (kids (sxml:kids node))) <br/>
+                          `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) <br/>
+           <br/>
+          )
     </ncml:sxslt>
     <cell id="Granule_DeSouza10">
         <notes>A model of a granule cell</notes>
@@ -48,6 +56,12 @@
                     <ncml:const name="C_m"> (1)
                     </ncml:const>
                     <ncml:output name="C_m" />
+                </ncml:component>
+                <ncml:component type="geometry" name="soma">
+                    <ncml:const name="L" value="11.8" />
+                    <ncml:const name="diam" value="11.8" />
+                    <ncml:output name="L" />
+                    <ncml:output name="diam" />
                 </ncml:component>
                 <ncml:decayingPool name="ca">
                     <ncml:input name="cai" from="ion-pools" />
