@@ -1,11 +1,13 @@
-stim_amp=0.01875
+input_freq_AMPA = 0
+input_freq_NMDA = 0
+input_freq_GABA = 0
 
 //object variable will refer to a list that will hold an arbitrary number of NetCon objects.
 
 objectvar nclist  
 
 //synapses         
-objectvar synAMPA,synNMDA,synGABAa1,synGABAa2 
+objectvar synAMPA,synNMDA,synGABA,synGABAa2 
 
 //counting spikes
 objref spiketimes,spikecount
@@ -89,15 +91,10 @@ soma {
     synNMDA.tau2=13.3  // ms decay time 
     synNMDA.e=0     // mV reversal potential 
     
-    synGABAa1=new Exp2Syn(0.5) //Adding synapse with rise and decay time
-    synGABAa1.tau1=0.31  // ms rise time 
-    synGABAa1.tau2=8.8  // ms decay time 
-    synGABAa1.e=-75     // mV reversal potential 
-    
-    synGABAa2=new Exp2Syn(0.5) //Adding synapse with rise and decay time
-    synGABAa2.tau1=0.31  // ms rise time 
-    synGABAa2.tau2=300  // ms decay time 
-    synGABAa2.e=-75     // mV reversal potential 
+    synGABA=new Exp2Syn(0.5) //Adding synapse with rise and decay time
+    synGABA.tau1=0.31  // ms rise time 
+    synGABA.tau2=8.8  // ms decay time 
+    synGABA.e=-75     // mV reversal potential 
     
     //counting spikes
     spikecount=new APCount(0.5)
@@ -106,6 +103,35 @@ soma {
     
     //Saving Vm
     voltagem.record(&v(0.5))
+}
+
+
+objref ns_AMPA, nc_AMPA
+objref ns_NMDA, nc_NMDA
+objref ns_Gaba, nc_Gaba 
+if (input_freq != 0) {
+  
+  ns_AMPA = new NetStim(0.5)
+  ns_AMPA.interval = 1000 / input_freq_AMPA
+  ns_AMPA.number = input_freq * 2
+  
+  nc_AMPA = new NetCon(ns_AMPA, synAMPA)
+  nc_AMPA.weight = 1
+  
+  ns_NMDA = new NetStim(0.5)
+  ns_NMDA.interval = 1000 / input_freq_NMDA
+  ns_NMDA.number = input_freq * 2
+  
+  nc_NMDA = new NetCon(ns_NMDA, synNMDA)
+  nc_NMDA.weight = 1
+  
+  ns_Gaba = new NetStim(0.5)
+  ns_Gaba.interval = 1000 / input_freq_Gaba
+  ns_Gaba.number = input_freq * 2
+  
+  nc_Gaba = new NetCon(ns_Gaba, synGABA)
+  nc_Gaba.weight = 1
+  
 }
 
 
@@ -124,7 +150,6 @@ SogliaSpike=0
 
 access soma
 psection()
-
 
 printf("ena: %f", ena)
 printf("ek: %f", ek)
@@ -151,9 +176,10 @@ run()
 
 objref output_file
 output_file = new File()
-output_file.wopen("/home/tclose/kbrain/output/ncml_generated_granule_hoc.dat")
+output_file.wopen("../../../../output/combined.Granule.v_dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }
 output_file.close()
 quit()
+

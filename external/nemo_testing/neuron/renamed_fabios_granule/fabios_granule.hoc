@@ -1,13 +1,18 @@
 stim_amp=0.01875
 
+// This is the absolute path on my machine (feel free to add your own as it doesn't hurt)
+nrn_load_dll("/home/tclose/kbrain/external/nemo_testing/neuron/fabios_granule/x86_64/.libs/libnrnmech.so")
+
 //object variable will refer to a list that will hold an arbitrary number of NetCon objects.
 
 objectvar nclist  
 
 //synapses         
+
 objectvar synAMPA,synNMDA,synGABAa1,synGABAa2 
 
 //counting spikes
+
 objref spiketimes,spikecount
 
 objref voltagem
@@ -40,36 +45,35 @@ soma {
     
     Area = PI*soma.diam*soma.L*1e-8
 
-    insert Granule_DeSouza10_ca
-    insert Granule_DeSouza10_CaHVA    
-    insert Granule_DeSouza10_KA
-    insert Granule_DeSouza10_KCa 
-    insert Granule_DeSouza10_KM
-    insert Granule_DeSouza10_KV
-    insert Granule_DeSouza10_Kir
-    insert Granule_DeSouza10_Lkg1
-    insert Granule_DeSouza10_Lkg2
-    insert Granule_DeSouza10_Na 
+    insert GRC_CA
+    insert GRC_CALC
+    insert GRC_KA
+    insert GRC_KCA 
+    insert GRC_KIR    
+    insert GRC_KM
+    insert GRC_KV 
+    insert GRC_LKG1 
+    insert GRC_LKG2
+    insert GRC_NA 
 
-    gcabar_Granule_DeSouza10_ca= 0.00046    //2009 model
-    gkbar_Granule_DeSouza10_KCa = 0.04   //ajusted Version 3
-    gkbar_Granule_DeSouza10_KA = 0.0032   //2009 model
-    gkbar_Granule_DeSouza10_KV= 0.003    //2009 model
-    gkbar_Granule_DeSouza10_KM= 0.00025   //0.0001  //2009 model
-    gkbar_Granule_DeSouza10_Kir = 0.0009  //2009 model
-    gl_Granule_DeSouza10_Lkg1=5.68e-5   //2009 model
-    ggaba_Granule_DeSouza10_Lkg2 = 3e-05    //2009 model
-    gnabar_Granule_DeSouza10_Na= 0.013     //2009 model  
-
-    beta_GRC_ca = 1.5
+    gcabar_GRC_CA= 0.00046    //2009 model
+    gkbar_GRC_KCA = 0.04   //ajusted Version 3
+    gkbar_GRC_KV= 0.003    //2009 model
+    gkbar_GRC_KA = 0.0032   //2009 model
+    gkbar_GRC_KM= 0.00025   //0.0001  //2009 model
+    gkbar_GRC_KIR = 0.0009  //2009 model
+    gl_GRC_LKG1=5.68e-5   //2009 model
+    ggaba_GRC_LKG2 = 3e-05    //2009 model
+    gnabar_GRC_NA= 0.013     //2009 model  
+    beta_GRC_CALC = 1.5
     
-    usetable_Granule_DeSouza10_ca   = 0              
-    usetable_Granule_DeSouza10_KA   = 0
-    usetable_Granule_DeSouza10_KCa  = 0
-    usetable_Granule_DeSouza10_KM   = 0
-    usetable_Granule_DeSouza10_KV   = 0
-    usetable_Granule_DeSouza10_Kir  = 0   
-    usetable_Granule_DeSouza10_Na   = 0      
+    usetable_GRC_CA   = 0         
+    usetable_GRC_KA   = 0
+    usetable_GRC_KCA  = 0
+    usetable_GRC_KM   = 0
+    usetable_GRC_KV   = 0
+    usetable_GRC_KIR  = 0   
+    usetable_GRC_NA   = 0        
     
     ena = 87.39
     ek = -84.69
@@ -119,7 +123,7 @@ dt = 0.025
 
 secondorder=0  //method implicit backward euler
 
-celsius = 30 
+celsius = 30
 SogliaSpike=0
 
 access soma
@@ -151,7 +155,8 @@ run()
 
 objref output_file
 output_file = new File()
-output_file.wopen("/home/tclose/kbrain/output/ncml_generated_granule_hoc.dat")
+printf("Saving file to '/home/tclose/kbrain/output/fabios_granule_hoc.dat'")
+output_file.wopen("/home/tclose/kbrain/output/fabios_granule_hoc.dat")
 for (i=0; i < rec_v.size(); i=i+1) {
   output_file.printf("%g %g\n", rec_t.x[i], rec_v.x[i])
 }
