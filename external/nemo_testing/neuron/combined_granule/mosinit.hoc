@@ -108,29 +108,37 @@ soma {
 
 objref ns_AMPA, nc_AMPA
 objref ns_NMDA, nc_NMDA
-objref ns_Gaba, nc_Gaba 
-if (input_freq != 0) {
+objref ns_GABA, nc_GABA 
+
+if (input_freq_AMPA != 0) {
   
   ns_AMPA = new NetStim(0.5)
   ns_AMPA.interval = 1000 / input_freq_AMPA
-  ns_AMPA.number = input_freq * 2
+  ns_AMPA.number = input_freq_AMPA * 2
   
   nc_AMPA = new NetCon(ns_AMPA, synAMPA)
   nc_AMPA.weight = 1
   
+}
+
+if  (input_freq_NMDA != 0) {
   ns_NMDA = new NetStim(0.5)
   ns_NMDA.interval = 1000 / input_freq_NMDA
-  ns_NMDA.number = input_freq * 2
+  ns_NMDA.number = input_freq_NMDA * 2
   
   nc_NMDA = new NetCon(ns_NMDA, synNMDA)
   nc_NMDA.weight = 1
   
-  ns_Gaba = new NetStim(0.5)
-  ns_Gaba.interval = 1000 / input_freq_Gaba
-  ns_Gaba.number = input_freq * 2
+}
+
+if (input_freq_GABA != 0) {
   
-  nc_Gaba = new NetCon(ns_Gaba, synGABA)
-  nc_Gaba.weight = 1
+  ns_GABA = new NetStim(0.5)
+  ns_GABA.interval = 1000 / input_freq_GABA
+  ns_GABA.number = input_freq_GABA * 2
+  
+  nc_GABA = new NetCon(ns_GABA, synGABA)
+  nc_GABA.weight = 1
   
 }
 
@@ -156,11 +164,6 @@ printf("ek: %f", ek)
 printf("eca: %f", eca)
 printf("ecl: %f", ecl)
 printf("celsius: %f", celsius)
-objectvar stim
-soma stim = new IClamp(0.5)
-stim.del = 1000
-stim.dur = 1000
-stim.amp = stim_amp
  
 objref rec_v
 rec_v = new Vector()
