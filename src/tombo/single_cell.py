@@ -17,9 +17,10 @@ import ninemlp
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('xml_filename', type=str, help='The name of the xml file to load the cells from.')
+parser.add_argument('--solver', type=str, default='cvode', help="The solver used to simulate the cell models")
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
-parser.add_argument('--build', type=str, default=ninemlp.BUILD_MODE,
+parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
                             help='Option to build the NMODL files before running (can be one of \
                             %s.' % ninemlp.BUILD_MODE_OPTIONS)
 parser.add_argument('--time', type=float, default=25.0, help='The run time of the simulation (ms)')
@@ -36,7 +37,7 @@ required_dirs = ['src', 'xml']
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
 
 #Compile network
-tombo.compile_ninemlp(SCRIPT_NAME, work_dir, script_dir='test', script_args=args.xml_filename)
+tombo.compile_ninemlp(SCRIPT_NAME, work_dir, script_dir='test', script_args=args.xml_filename, simulator=args.simulator)
 # Set up command to run the script
 cmd_line = \
 "time mpirun python src/test/{script_name}.py {xml_filename} --output {work_dir}/output/ --time {time}  \

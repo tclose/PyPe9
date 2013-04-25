@@ -3,7 +3,7 @@ load_file("nrngui.hoc")
 //Simulation parameters//
 ////////////////////////
 //tmax=150         
-tmax=2000        
+tmax=2000
 cvode.active(0)  //Fixed time step 
 DT=0.025	
 
@@ -11,7 +11,7 @@ DT=0.025
 //MF stimulus parameters//   
 /////////////////////////
 MFfreq=5
-NETIN_SP_START=100
+NETIN_SP_START=1000
 SEED=1
 
 ///////////////////////////////
