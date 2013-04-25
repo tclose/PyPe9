@@ -17,6 +17,7 @@ from copy import copy
 PYTHON_INSTALL_DIR='/apps/python/272'
 OPEN_MPI_INSTALL_DIR='/opt/mpi/gnu/openmpi-1.6.3'
 NEURON_INSTALL_DIR='/apps/DeschutterU/NEURON-7.3'
+NEST_INSTALL_DIR='/apps/DeschutterU/nest-2.2.0'
 
 def get_project_dir():
     """
@@ -118,9 +119,11 @@ def create_env(work_dir):
     env['PATH'] = env['PATH'] + os.pathsep + \
                   os.path.join(PYTHON_INSTALL_DIR, 'bin') + os.pathsep + \
                   os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep + \
-                  os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin')
+                  os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin') + os.pathsep + \
+                  os.path.join(NEST_INSTALL_DIR, 'bin')
     env['PYTHONPATH'] = os.path.join(work_dir, 'src')
-    env['LD_LIBRARY_PATH'] = os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')
+    env['LD_LIBRARY_PATH'] = (os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')+ os.pathsep +
+                              os.path.join(NEST_INSTALL_DIR, 'bin'))
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
     return env
     
