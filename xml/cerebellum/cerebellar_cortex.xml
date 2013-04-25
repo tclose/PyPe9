@@ -17,7 +17,9 @@
         </extensions>
         <!-- Populations -->
         <population id="Granules" cell="ncml/Granule_DeSouza10.xml">
-            <structure type="Extension" engine="Brep" id="Granules" />
+            <structure type="Distributed">
+                <layout pattern="UniformWithinBox" width="" height="" depth="" x="" y="" z="" />
+            </structure>
             <comment>
                 - Uniformly distributed cell soma positions within granular layer (0-200 um)
                 - ascending fibers heights are uniformly disributed in molecular layer (230-430 um).
@@ -89,7 +91,8 @@
                   glomeruli (randomly constructed morphology) and Gaussian fields to granule cell
                   soma). Can be flagged out. Their positions are randomly placed along z
                 
-            
+                Mario's comments
+                ----------------
                 The mossy fiber branches before the cerebellum and in the granular layer and
                 gives off the rosettes/glomeruli (estimates say that one mossy fiber gives off about
                 150 rosettes, which may cross folia. The rosettes are at a distance of about 100um
@@ -132,38 +135,46 @@
                 exponent="-0.01" />
             <!-- <weight pattern="Constant" value="2.6 nS" /> -->
             <!-- NB: Delay is set by brep -->
-            <comment> 
-                - PF to GoC Box in y and z plane, with the z of the Granules taken from the PF bifurcation.
-                  Slightly difficult this one. Might need a special connector that takes into account
-                  dendrtic extent. Exponential in x
-                  
-                - Axon to GoC, check to see if axon is below Golgi cell, circle mask in x-y  
-                
-                Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
-                zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
-                The dendritic tree size is 200 x 600 x 180μm in cats. A simple way to get this
-                connectivity is to have an ellipsoid with the dendritic tree size. With the number
-                of synapses as above.
+            <comment>
+                Shyam's description
+                ---------------- 
+                    - PF to GoC Box in y and z plane, with the z of the Granules taken from the PF 
+                      bifurcation. Slightly difficult this one. Might need a special connector that 
+                      takes into account dendrtic extent. Exponential in x
+                      
+                    - Axon to GoC, check to see if axon is below Golgi cell, circle mask in x-y  
+                    
+                Mario's comments
+                ----------------
+                    Golgi cells read off the parallel fibers. Golgi cell dendrites are confined to
+                    zebrin stripes. Each Golgi is estimated to read from up to 4000 granule cells (cat).
+                    The dendritic tree size is 200 x 600 x 180μm in cats. A simple way to get this
+                    connectivity is to have an ellipsoid with the dendritic tree size. With the number
+                    of synapses as above.
             </comment>
         </projection>
         <projection id="Golgis_Granules">
             <source id="Golgis" />
             <destination id="Granules" synapse="GABA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="EllipseMask" x_scale="200 um"
+            <connection pattern="DistanceBased" geometry="RectangleMask" x_scale="200 um"
                 y_scale="58.35 um" /> <!-- x_scale="600 um" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
             <comment> 
+                Shyam's description
+                ----------------
                 - rectangle mask in x-y plane
             
-                There are about 400 Golgi cells per granule cell in the mouse. The axon does
-                not seem to be confined as the dendrite, but it is rather flat and oriented in the
-                same direction. Every granule cell receives from about 10 Golgi cells. I am not sure
-                about this number. Better way to estimate it is to measure the axonal length and
-                multiply by the density of synapses per um of axon. Currently we position the Golgi
-                cells with a uniform distribution. We calculate the number of Golgi cells by 1.
-                estimating the number of granule cells via density 2. multiplying that number by 400
+                Mario's comments
+                ----------------
+                    There are about 400 Golgi cells per granule cell in the mouse. The axon does
+                    not seem to be confined as the dendrite, but it is rather flat and oriented in the
+                    same direction. Every granule cell receives from about 10 Golgi cells. I am not sure
+                    about this number. Better way to estimate it is to measure the axonal length and
+                    multiply by the density of synapses per um of axon. Currently we position the Golgi
+                    cells with a uniform distribution. We calculate the number of Golgi cells by 1.
+                    estimating the number of granule cells via density 2. multiplying that number by 400
             </comment>
         </projection>
         <projection id="Golgis_Golgis_Gap" synapseFamily="Electrical" flags="includeGap">

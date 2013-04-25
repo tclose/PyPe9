@@ -124,7 +124,8 @@ def create_env(work_dir):
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
     return env
     
-def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', script_args=''):
+def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', script_args='',
+                    simulator='neuron'):
     """
     Compiles objects in the work directory that are required by the NINEML+ network
     
@@ -143,9 +144,9 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
     if os.path.exists(pynn_nmodl_path):
         shutil.rmtree(pynn_nmodl_path)
     print "Compiling required NINEML+ objects"
-    subprocess.check_call('python {} {} --build build_only'.\
+    subprocess.check_call('python {} {} --build build_only --simulator {}'.\
                            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
-                                  script_args),
+                                  script_args, simulator),
                           shell=True, env=env)
 
 def compile_custom(script_name, work_dir, env=None, script_dir='test', script_args=''):
