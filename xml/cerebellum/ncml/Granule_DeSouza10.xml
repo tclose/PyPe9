@@ -34,7 +34,7 @@
                 <build tool="nemo" simulator="neuron" method="derivimplicit">
                     <kinetic comp_id="Na_z" />
                 </build>
-                <build tool="nemo" simulator="nest" method="gsl" />
+                <build tool="nemo" simulator="nest" method="cvode" />
             </defaultBuildOptions>
             <actionPotentialThreshold v="-21" />
             <membraneProperties>

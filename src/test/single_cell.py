@@ -32,6 +32,8 @@ def main(arguments):
     parser.add_argument('--print_all', action='store_true', help='Prints details for all sections instead of just soma')
     parser.add_argument('--no_description', action='store_true', help="Suppresses the pyNN description")
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
+    parser.add_argument('--solver', type=str, default='cvode', 
+                        help="The name of the solver used to solve the cell dynamics")
     args = parser.parse_args(arguments)
     if os.path.exists(args.xml_filename):
         network_xml_location = args.xml_filename
@@ -44,7 +46,8 @@ def main(arguments):
     exec("from ninemlp.%s import *" % args.simulator)
     print "Building network"
     net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, #@UndefinedVariable
-                  max_delay=2.0, silent_build=args.silent_build, build_mode=args.build)
+                  max_delay=2.0, silent_build=args.silent_build, build_mode=args.build, 
+                  solver_name=args.solver)
     if not args.no_description:
         net.describe()
     # Get population and print the soma section of the single cell.
