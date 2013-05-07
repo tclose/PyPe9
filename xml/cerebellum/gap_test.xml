@@ -13,7 +13,7 @@
             <weight pattern="Constant" value="1.5 uS" />
         </projection>
         <!--<projection id="Gap_test" synapseFamily="Electrical"> <source id="Test1" segment="soma" /> 
-            <destination id="Test1" segment="soma" /> <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 
+            <destination id="Test1" segment="soma" /> <connection pattern="DistanceBased" geometry="CylinderMask" radius="10000000 
             um" /> <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS" exponent="-0.03" 
             /> <comment> These are the golgi gap junction projection connections. </comment> </projection> -->
         <!-- <projection id="Test_non_gap"> <source id="Test1" segment="soma" /> <destination id="Test2" 

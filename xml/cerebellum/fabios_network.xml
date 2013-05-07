@@ -15,21 +15,21 @@
         <!-- Populations -->
         <population id="MossyFibers" cell="SpikeSourceArray" size="900">
             <structure type="Distributed">
-                <somaPositions pattern="Grid2D" aspect_ratio="9" dx="16.6667" dy="16.6667"
+                <somas pattern="Grid2D" aspect_ratio="9" dx="16.6667" dy="16.6667"
                     x0="0" y0="0" z="0">
                     <distribution attr="x" type="uniform" low="-3.3333" high="3.3333" />
                     <distribution attr="y" type="uniform" low="-3.3333" high="3.3333" />
-                </somaPositions>
+                </somas>
             </structure>
         </population>
         <population id="Granules" cell="ncml/Granule_DeSouza10.xml" size="8100">
             <structure type="Distributed">
-                <somaPositions pattern="Grid2D" aspect_ratio="9" dx="5.5556" dy="5.5556"
+                <somas pattern="Grid2D" aspect_ratio="9" dx="5.5556" dy="5.5556"
                     x0="0" y0="0" z="150">
                     <distribution attr="x" type="uniform" low="-1.1111" high="1.1111" />
                     <distribution attr="y" type="uniform" low="-1.1111" high="1.1111" />
                     <distribution attr="z" type="uniform" low="-1.1111" high="0" />
-                </somaPositions>
+                </somas>
             </structure>
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
@@ -43,11 +43,11 @@
         </population>
         <population id="Golgis" cell="ncml/Golgi_DeSouza10.xml" size="225">
             <structure type="Distributed">
-                <somaPositions pattern="Grid2D" aspect_ratio="9" dx="33.3333" dy="33.3333"
+                <somas pattern="Grid2D" aspect_ratio="9" dx="33.3333" dy="33.3333"
                     x0="6.6667" y0="6.6667" z="200">
                     <distribution attr="x" type="uniform" low="-6.6667" high="6.6667" />
                     <distribution attr="y" type="uniform" low="-6.6667" high="6.6667" />
-                </somaPositions>
+                </somas>
             </structure>
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
@@ -63,7 +63,7 @@
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="39" -->
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="19.44 um" /> <!-- number="39" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -71,7 +71,7 @@
         <projection id="MossyFibers_Granules_NMDA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="NMDA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" /> <!-- number="25" -->
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="19.44 um" /> <!-- number="25" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -88,7 +88,7 @@
         <projection id="MossyFibers_Golgis">
             <source id="MossyFibers" />
             <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="291 um"
                 probability="0.3" /> <!-- number="21" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
@@ -115,7 +115,7 @@
         <projection id="Golgis_Granules">
             <source id="Golgis" />
             <destination id="Granules" synapse="GABA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="58.3328 um" /> <!-- x_scale="600 um" -->
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="58.3328 um" /> <!-- x_scale="600 um" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -133,7 +133,7 @@
             <destination id="Golgis" segment="soma" />
             <!-- The connection radius is set very large because in the model each golgi is connected 
                 to each other golgi, but currently AllToAll cannot be used with distance-based weight -->
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" />
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="10000000 um" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS"
                 exponent="-0.03" />
             <comment> These are the golgi gap junction projection connections.

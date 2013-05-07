@@ -47,7 +47,7 @@
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="excitatory" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" />
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="19.44 um" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -55,7 +55,7 @@
         <projection id="MossyFibers_Granules_NMDA" flags="NMDA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="excitatory" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="19.44 um" />
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="19.44 um" />
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
                 exponent="-0.01" />
             <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
@@ -63,7 +63,7 @@
         <projection id="MossyFibers_Golgis_AMPA">
             <source id="MossyFibers" />
             <destination id="Golgis" synapse="excitatory" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CircleMask" radius="291 um"
+            <connection pattern="DistanceBased" geometry="CylinderMask" radius="291 um"
                 probability="0.3" />  <!-- number="21" -->
             <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
@@ -102,7 +102,7 @@
         <!-- <destination id="Golgis" segment="soma" /> -->
         <!-- The connection radius is set very large because in the model each golgi is connected 
             to each other golgi, but I can't use AllToAll and distance-based weight geometry at this point -->
-        <!-- <connection pattern="DistanceBased" geometry="CircleMask" radius="10000000 um" /> -->
+        <!-- <connection pattern="DistanceBased" geometry="CylinderMask" radius="10000000 um" /> -->
         <!-- <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS" -->
         <!-- exponent="-0.03" /> -->
         <!-- <comment> These are the golgi gap junction projection connections. -->
