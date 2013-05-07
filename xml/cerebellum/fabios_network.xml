@@ -15,21 +15,21 @@
         <!-- Populations -->
         <population id="MossyFibers" cell="SpikeSourceArray" size="900">
             <structure type="Distributed">
-                <layout pattern="Grid2D" aspect_ratio="9" dx="16.6667" dy="16.6667"
+                <somaPositions pattern="Grid2D" aspect_ratio="9" dx="16.6667" dy="16.6667"
                     x0="0" y0="0" z="0">
                     <distribution attr="x" type="uniform" low="-3.3333" high="3.3333" />
                     <distribution attr="y" type="uniform" low="-3.3333" high="3.3333" />
-                </layout>
+                </somaPositions>
             </structure>
         </population>
         <population id="Granules" cell="ncml/Granule_DeSouza10.xml" size="8100">
             <structure type="Distributed">
-                <layout pattern="Grid2D" aspect_ratio="9" dx="5.5556" dy="5.5556"
+                <somaPositions pattern="Grid2D" aspect_ratio="9" dx="5.5556" dy="5.5556"
                     x0="0" y0="0" z="150">
                     <distribution attr="x" type="uniform" low="-1.1111" high="1.1111" />
                     <distribution attr="y" type="uniform" low="-1.1111" high="1.1111" />
                     <distribution attr="z" type="uniform" low="-1.1111" high="0" />
-                </layout>
+                </somaPositions>
             </structure>
             <cellParameters>
                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
@@ -43,11 +43,11 @@
         </population>
         <population id="Golgis" cell="ncml/Golgi_DeSouza10.xml" size="225">
             <structure type="Distributed">
-                <layout pattern="Grid2D" aspect_ratio="9" dx="33.3333" dy="33.3333"
+                <somaPositions pattern="Grid2D" aspect_ratio="9" dx="33.3333" dy="33.3333"
                     x0="6.6667" y0="6.6667" z="200">
                     <distribution attr="x" type="uniform" low="-6.6667" high="6.6667" />
                     <distribution attr="y" type="uniform" low="-6.6667" high="6.6667" />
-                </layout>
+                </somaPositions>
             </structure>
             <cellParameters>
                 <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
