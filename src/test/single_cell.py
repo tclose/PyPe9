@@ -61,13 +61,13 @@ def main(arguments):
     if args.inject:
         inject_type = args.inject[0]
         if inject_type == 'step':
-            current_source = StepCurrentSource({'amplitudes': [float(args.inject[1])], #@UndefinedVariable
-                                                 'times': [float(args.inject[2])]})
+            current_source = StepCurrentSource(amplitudes=[float(args.inject[1])], #@UndefinedVariable
+                                               times=[float(args.inject[2])])
         elif inject_type == 'noise':
-            current_source = NoisyCurrentSource({'mean': float(args.inject[1]), #@UndefinedVariable
-                                                 'stdev':float(args.inject[2]),
-                                                 'stop': args.time,
-                                                 'dt': 1.0})
+            current_source = NoisyCurrentSource(mean=float(args.inject[1]), #@UndefinedVariable
+                                                 stdev=float(args.inject[2]),
+                                                 stop=args.time,
+                                                 dt=1.0)
         else:
             raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
                             "or 'noise'".format(inject_type))
@@ -86,7 +86,7 @@ def main(arguments):
     run(args.time) #@UndefinedVariable
     print "Simulated single cell for %f milliseconds" % args.time
     print "Saved voltage trace to '{}'".format(args.output)
-    pop.print_v(args.output)
+    pop.write_data(args.output, 'v')
     end() #@UndefinedVariable
 
 def single_cell(arguments):
