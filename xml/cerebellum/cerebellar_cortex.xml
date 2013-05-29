@@ -113,11 +113,11 @@
         <projection id="MossyFibers_Granules_AMPA">
             <source id="MossyFibers" />
             <destination id="Granules" synapse="AMPA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CylinderMask" radius="30 um" 
+            <connection pattern="DisplacementBased" geometry="CylinderMask" radius="30 um" 
                     probability="0.8" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
             <comment> 
                 With Glomeruli
                 ------------
@@ -141,30 +141,30 @@
             <source id="MossyFibers" />
             <destination id="Granules" synapse="NMDA" segment="soma" />
             <connection pattern="Clone" projection="MossyFibers_Granules_AMPA" /> <!-- The AMPA and NMDA receptors are part of the same synapse -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
                 exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
         <projection id="MossyFibers_Golgis_AMPA">
             <comment> - same as MF->Granules but different params
             </comment>
             <source id="MossyFibers" />
             <destination id="Golgis" synapse="AMPA_MossyFiber" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CylinderMask" radius="70 um"
+            <connection pattern="DisplacementBased" geometry="CylinderMask" radius="70 um"
                 probability="0.8" /> <!-- number="21" -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
         <projection id="AscendingAxon_Golgis" flags="GranuleToGolgi">
             <source id="Granules" />
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CylinderMask" radius="15"
+            <connection pattern="DisplacementBased" geometry="CylinderMask" radius="15"
                 probability="0.5" />
             <!-- <connection pattern="Extension" engine="Brep" id="Granule-Golgi" /> -->
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um"
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um"
                 offset="300 us" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <!-- <weight pattern="Constant" value="2.6 nS" /> -->
             <!-- NB: Delay is set by brep -->
@@ -182,12 +182,12 @@
         <projection id="ParallelFibers_Golgis" flags="GranuleToGolgi">
             <source id="Granules" />
             <destination id="Golgis" synapse="AMPA_Granule" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CylinderMask" radius="5" axisX="1"
+            <connection pattern="DisplacementBased" geometry="CylinderMask" radius="5" axisX="1"
                 axisY="0" axisZ="0" probability="0.5" />
             <!-- <connection pattern="Extension" engine="Brep" id="Granule-Golgi" /> -->
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um"
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um"
                 offset="300 us" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
             <!-- <weight pattern="Constant" value="2.6 nS" /> -->
             <!-- NB: Delay is set by brep -->
@@ -205,11 +205,11 @@
         <projection id="Golgis_Granules">
             <source id="Golgis" />
             <destination id="Granules" synapse="GABA" segment="soma" />
-            <connection pattern="DistanceBased" geometry="RectangleMask" x_scale="180 um"
+            <connection pattern="DisplacementBased" geometry="RectangleMask" x_scale="180 um"
                 y_scale="650 um" probability="0.15" /> <!-- x_scale="600 um" -->
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
             <comment> Shyam's description ---------------- - rectangle mask in x-y plane 
             
             Mario's
@@ -228,9 +228,9 @@
             <destination id="Golgis" segment="soma" />
             <!-- The connection radius is set very large because in the model each golgi is connected 
                 to each other golgi, but currently AllToAll cannot be used with distance-based weight -->
-            <connection pattern="DistanceBased" geometry="BoltzmanWithDistance" a1="91" a2="-1745" 
+            <connection pattern="DisplacementBased" geometry="BoltzmanWithDistance" a1="91" a2="-1745" 
                 x0="267" dx="39" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.659 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="1.659 nS"
                 exponent="-0.01259" />
             <comment> These are the golgi gap junction projection connections.
             </comment>
@@ -238,7 +238,7 @@
         <!-- <projection id="Granules_Baskets"> -->
         <!-- <source id="Granules" /> -->
         <!-- <destination id="Basket" /> -->
-        <!-- <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="174 um" prob="" /> -->
+        <!-- <pattern type="DisplacementBased" geometry="Ellipse" x="50 um" y="174 um" prob="" /> -->
         <!-- <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the -->
         <!-- rat is half that number. These neurons are most likely confined to travel -->
         <!-- para-saggitally, perpendicular to the PFs. The best numbers for the connectivity -->
@@ -256,7 +256,7 @@
         <!-- <projection id="Granules_Stellates"> -->
         <!-- <source id="Granules" /> -->
         <!-- <destination id="Stellates" /> -->
-        <!-- <pattern type="DistanceBased" geometry="Ellipsoid" x="50 um" y="174 um" z="100 um" -->
+        <!-- <pattern type="DisplacementBased" geometry="Ellipsoid" x="50 um" y="174 um" z="100 um" -->
         <!-- number="50" /> -->
         <!-- <comment> In humans there are about 50:1 inhibitory interneurons to PC. Safe bet in the -->
         <!-- rat is half that number. These neurons are most likely confined to travel -->
@@ -275,7 +275,7 @@
         <!-- <projection id="Baskets_Purkinjes"> -->
         <!-- <source id="Baskets" /> -->
         <!-- <destination id="Purkinjes" /> -->
-        <!-- <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" /> -->
+        <!-- <pattern type="DisplacementBased" geometry="Ellipse" x="50 um" y="345 um" number="50" /> -->
         <!-- <comment> The PN should be divided between soma and dendrites. The I.I. close to -->
         <!-- dendrites connect dendrites, and the ones close to the soma, to the soma. The axon -->
         <!-- reach on average was 345 μm (sd um 149). Looong. May connect to many PNs in the -->
@@ -292,7 +292,7 @@
         <!-- <projection id="Stellates_Purkinjes"> -->
         <!-- <source id="Stellates" /> -->
         <!-- <destination id="Purkinjes" /> -->
-        <!-- <pattern type="DistanceBased" geometry="Ellipse" x="50 um" y="345 um" number="50" /> -->
+        <!-- <pattern type="DisplacementBased" geometry="Ellipse" x="50 um" y="345 um" number="50" /> -->
         <!-- <comment> The PN should be divided between soma and dendrites. The I.I. close to -->
         <!-- dendrites connect dendrites, and the ones close to the soma, to the soma. The axon -->
         <!-- reach on average was 345 μm (sd um 149). Looong. May connect to many PNs in the -->

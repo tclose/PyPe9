@@ -34,19 +34,19 @@
         <projection id="MossyFibers_Purkinjes_AMPA">
             <source id="MossyFibers" />
             <destination id="Purkinjes" synapse="AMPA_MossyFiber" segment="soma" />
-            <connection pattern="DistanceBased" geometry="CylinderMask" radius="19.44 um" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+            <connection pattern="DisplacementBased" geometry="CylinderMask" radius="19.44 um" />
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
         <projection id="Golgis_Purkinjes">
             <source id="Golgis" />
             <destination id="Purkinjes" synapse="AMPA_MossyFiber" segment="soma" />
             <connection pattern="MorphologyBased" kernel="Gaussian" scale="1.0"
                 decay_rate="0.1" vox_x="10.0" vox_y="10.0" vox_z="10.0" threshold="0.1" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="1.4 nS"
                 exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
     </network>
 </nineml>
