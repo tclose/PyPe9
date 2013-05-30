@@ -19,6 +19,7 @@ import argparse
 import ninemlp
 import time
 import sys
+
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
