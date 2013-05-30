@@ -121,7 +121,7 @@ def create_env(work_dir):
                   os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep + \
                   os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin') + os.pathsep + \
                   os.path.join(NEST_INSTALL_DIR, 'bin')
-    env['PYTHONPATH'] = os.path.join(work_dir, 'src')
+    env['PYTHONPATH'] = os.path.join(work_dir, 'src') + os.pathsep + '/apps/DeschutterU/pyNN'
     env['LD_LIBRARY_PATH'] = (os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')+ os.pathsep +
                               os.path.join(NEST_INSTALL_DIR, 'bin'))
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
