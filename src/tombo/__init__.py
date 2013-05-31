@@ -33,7 +33,8 @@ def create_seed(seed):
         seed = int(seed)
     return seed
 
-def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', 'xml']):
+def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', 'xml'], 
+                    dependencies=[('../PyNN/src', 'pyNN')]):
     """
     Generates unique paths for the work and output directories, creating the work directory in the 
     process.
@@ -75,16 +76,16 @@ def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', '
             # Replace old count at the end of work directory with new count
             work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) 
     output_dir = os.path.join(output_dir_parent, os.path.split(work_dir)[1])
-    init_work_dir(work_dir, required_dirs, time_str)   
+    init_work_dir(work_dir, required_dirs, time_str, dependencies)   
     return work_dir, output_dir
 
-def init_work_dir(work_dir, required_dirs, time_str):
+def init_work_dir(work_dir, required_dirs, time_str, dependencies):
     """
     Copies directories from the project directory to the work directory
     
     @param work_dir: The destination work directory
     @param required_dirs: The required sub-directories to be copied to the work directory
-    """
+    """   
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
         print "Copying '{}' sub-directory to work directory".format(directory)
@@ -98,6 +99,16 @@ def init_work_dir(work_dir, required_dirs, time_str):
 #                            .format(directory, e))
         shutil.copytree(os.path.join(get_project_dir(),directory), 
                         os.path.join(work_dir,directory), symlinks=True)
+    if dependencies:
+        dependency_dir = os.path.join(work_dir, 'depend') 
+        os.mkdir(dependency_dir)
+        for from_, to_ in dependencies:
+            # If not an absolute path prepend the project directory as a relative path (useful for
+            # getting dependencies from directories installed alongside the project directory
+            if not from_.startswith('/'):
+                from_ = get_project_dir() + os.path.sep + from_
+            shutil.copytree(from_, os.path.join(dependency_dir, to_))
+        
     # Make output directory for the generated files
     os.mkdir(os.path.join(work_dir, 'output'))
     # Save the git revision in the output folder for reference
@@ -121,7 +132,7 @@ def create_env(work_dir):
                   os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep + \
                   os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin') + os.pathsep + \
                   os.path.join(NEST_INSTALL_DIR, 'bin')
-    env['PYTHONPATH'] = os.path.join(work_dir, 'src')
+    env['PYTHONPATH'] = os.path.join(work_dir, 'src') + os.pathsep + os.path.join(work_dir, 'depend')
     env['LD_LIBRARY_PATH'] = (os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')+ os.pathsep +
                               os.path.join(NEST_INSTALL_DIR, 'bin'))
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
