@@ -19,6 +19,7 @@ import argparse
 import ninemlp
 import time
 import sys
+from pyNN.random import NumpyRNG
 
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
@@ -48,10 +49,14 @@ parser.add_argument('--save_connections', type=str, default=None, help="A path i
                                                                        "the generated connections")
 parser.add_argument('--save_cell_positions', type=str, default=None, help="A path in which to save "
                                                                        "the generated cell positions")
-parser.add_argument('--stim_seed', type=int, default=None, help="The seed passed to the stimulated "
-                                                                "spikes")
+parser.add_argument('--net_seed', type=int, default=None, help="The random seed used to generate the "
+                                                               "stochastic parts of the network") 
+parser.add_argument('--stim_seed', type=int, default=None, help="The random seed used to generate "
+                                                                " the stimulation spike train.")
 parser.add_argument('--para_unsafe', action='store_true', help="If set the network simulation will "
-                                                               "try to be parallel neuron safe")
+                                                               "run parallel unsafe (number of "
+                                                               "cores will alter network generated "
+                                                               "from the same seed).")
 parser.add_argument('--volt_trace', nargs='+', default=[], action='append', 
                     metavar=('POP_ID', 'SLICE_INDICES'), 
                     help="Save voltage traces for the given list of ('population name', 'cell ID') "
@@ -81,12 +86,22 @@ if args.debug_network:
 else:
     xml_filename = 'fabios_network.xml'
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)
-# Set the stimulation random seed
-if not args.stim_seed:
-    stim_seed = long(time.time() * 256)
-    print "Stimulation seed is %d" % stim_seed
-else:
+# Set the random seeds
+if args.net_seed:
+    net_seed = int(args.net_seed)
+else:    
+    net_seed = int(time.time() * 256)
+net_rng = NumpyRNG(net_seed)
+print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
+if args.stim_seed:
     stim_seed = int(args.stim_seed)
+else:
+    if args.net_seed:
+        stim_seed = int(time.time() * 256)
+    else:
+        stim_seed = net_seed + 1
+stim_rng = NumpyRNG(stim_seed)
+print "Random seed used to generate the stimulation spike train is %d" % stim_seed    
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
@@ -99,10 +114,10 @@ if args.no_granule_to_golgi:
 # Build the network
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable
-              build_mode=args.build, silent_build=args.silent_build, flags=flags)
+              build_mode=args.build, silent_build=args.silent_build, flags=flags, rng=net_rng)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
-mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time)
+mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
 print "Setting up recorders"
 net.record_spikes()
 # Set up voltage traces    
