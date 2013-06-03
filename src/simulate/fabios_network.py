@@ -92,7 +92,6 @@ if args.net_seed:
 else:    
     net_seed = int(time.time() * 256)
 net_rng = NumpyRNG(net_seed)
-print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
 if args.stim_seed:
     stim_seed = int(args.stim_seed)
 else:
@@ -101,7 +100,9 @@ else:
     else:
         stim_seed = net_seed + 1
 stim_rng = NumpyRNG(stim_seed)
-print "Random seed used to generate the stimulation spike train is %d" % stim_seed    
+if args.build != 'compile_only' or args.build != 'build_only':
+    print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
+    print "Random seed used to generate the stimulation spike train is %d" % stim_seed    
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
