@@ -27,8 +27,10 @@ parser.add_argument('--min_delay', type=float, default=0.020001,
                     help='The minimum synaptic delay in the network (default: %(default)s)')
 parser.add_argument('--timestep', type=float, default=0.02, 
                     help='The time step used for the simulation (default: %(default)s)')
-parser.add_argument('--stim_seed', default=None, 
-                    help='The seed passed to the stimulated spikes (defaults to time stamp)')
+parser.add_argument('--net_seed', help="The random seed used to generate the stochastic parts of "
+                    "the network", type=int, default=None) 
+parser.add_argument('--stim_seed', help="The random seed used to generate the stimulation spike "
+                                        "train.", type=int, default=None) 
 parser.add_argument('--np', type=int, default=96, 
                     help="The the number of processes to use for the simulation " \
                          "(default: %(default)s)")
@@ -104,6 +106,10 @@ else:
         cmd_line += ' --include_gap'
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
+    if args.net_seed:
+        cmd_line += ' --net_seed {}'.format(args.net_seed)
+    if args.stim_seed:
+        cmd_line += ' --stim_seed {}'.format(args.stim_seed)
     if args.log:
         cmd_line += ' --log {}/output/pyNN.log'.format(work_dir)
     copy_to_output = ['xml']
