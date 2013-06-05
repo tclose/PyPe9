@@ -154,9 +154,10 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
         env = copy(env)
     env['NINEMLP_MPI'] = '1'
     # Remove NMODL build directory for pyNN neuron so it can be recompiled in script
-    pynn_nmodl_path = os.path.join(work_dir, 'src', 'pyNN','neuron', 'nmodl', 'x86_64')
-    if os.path.exists(pynn_nmodl_path):
-        shutil.rmtree(pynn_nmodl_path)
+    pynn_nmodl_path = os.path.join(work_dir, 'depend', 'pyNN','neuron', 'nmodl')
+    if os.path.exists(os.path.join(pynn_nmodl_path, 'x86_64')):
+        shutil.rmtree(os.path.join(pynn_nmodl_path, 'x86_64'))
+    subprocess.check_call('cd {}; nrnivmodl'.format(pynn_nmodl_path))
     print "Compiling required NINEML+ objects"
     subprocess.check_call('python {} {} --build build_only --simulator {}'.\
                            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
