@@ -15,6 +15,7 @@ import os.path
 import argparse
 import ninemlp
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
+
 def main(arguments):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE, 
@@ -27,7 +28,11 @@ def main(arguments):
     parser.add_argument('--reverse_inject', help="Inject current into population 2 instead of "
                                                  "population 1 to check both connections are "
                                                  "working.", action='store_true')
-    args = parser.parse_args(arguments)
+    parser.add_argument('--log_file', help='The location of the log file', type=str, 
+                        default=os.path.join(PROJECT_PATH, 'output', 'gap_test.log'))
+    args = parser.parse_args(arguments)    
+    from pyNN.utility import init_logging
+    init_logging(args.log_file, debug=True)
     print "args.build: {}".format(args.build)
     ninemlp.pyNN_build_mode = args.build
     from ninemlp.neuron import Network, run, StepCurrentSource, simulator

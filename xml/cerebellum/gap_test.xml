@@ -10,6 +10,7 @@
             <source id="Test1" segment="soma" />
             <destination id="Test2" segment="soma" />
             <connection pattern="AllToAll" />
+<!--             <connection pattern="FixedProbability" p_connect="0.4" /> -->
             <weight pattern="Constant" value="1.5 uS" />
         </projection>
         <!--<projection id="Gap_test" synapseFamily="Electrical"> <source id="Test1" segment="soma" /> 
