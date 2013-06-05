@@ -13,6 +13,7 @@ import time
 import shutil
 import subprocess
 from copy import copy
+from ninemlp.common.build import path_to_exec
 
 PYTHON_INSTALL_DIR='/apps/python/272'
 OPEN_MPI_INSTALL_DIR='/opt/mpi/gnu/openmpi-1.6.3'
@@ -157,7 +158,7 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
     pynn_nmodl_path = os.path.join(work_dir, 'depend', 'pyNN','neuron', 'nmodl')
     if os.path.exists(os.path.join(pynn_nmodl_path, 'x86_64')):
         shutil.rmtree(os.path.join(pynn_nmodl_path, 'x86_64'))
-    subprocess.check_call('cd {}; nrnivmodl'.format(pynn_nmodl_path))
+    subprocess.check_call('cd {}; {}'.format(pynn_nmodl_path, path_to_exec('nrnivmodl')))
     print "Compiling required NINEML+ objects"
     subprocess.check_call('python {} {} --build build_only --simulator {}'.\
                            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
