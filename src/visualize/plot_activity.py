@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import argparse
 import math
 import os.path
+import pickle
 
 def quit_figure(event):
     """
@@ -93,8 +94,14 @@ class ColourPicker(object):
             self._curr_index += num
         return colours
 
-
 def load_spikes(filename):
+    with open(filename) as f:
+        data = pickle.load(f)
+    spikes = data.segments[0].spiketrain
+    ids = numpy.arange(spikes.shape[0])
+    return spikes, ids
+
+def load_txt_spikes(filename):
     spikes_n_ids = numpy.loadtxt(filename)
     if not spikes_n_ids.shape[0]:
         print "No spikes were generated for selected population"
@@ -144,6 +151,15 @@ def plot_spikes(ax, label, spikes, ids, time_start=None, time_stop=None, colour=
     ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
     ax.set_ylim(-2, max_id + 2)
 
+def load_trace(filename):
+    with open(filename) as f:
+        data = pickle.load(f)
+    signals = data.segments[0].analogsignalarrays
+    times = [numpy.arange(signals[0].t_start, signals[0].t_stop, signals[0].sampling_period)]
+    times *= len(signals)
+    legends = [str(i) for i in xrange(signals[0].shape[1])]
+    return times, signals, legends, signals[0].description
+
 def load_trace_hoc(filename, rescale_traces=False, time_start=None, time_stop=None):
     t_data = numpy.loadtxt(filename)
     time = t_data[:, 0]
@@ -164,7 +180,7 @@ def load_trace_hoc(filename, rescale_traces=False, time_start=None, time_stop=No
         values /= order_of_mag
     return [time], [values], [legend]
 
-def load_trace(filename, ext, dt, incr, rescale_traces=False, time_start=None, time_stop=None):
+def load_txt_trace(filename, ext, dt, incr, rescale_traces=False, time_start=None, time_stop=None):
     f = open(filename)
     # Determine the range of the trace
     if ext == 'v' and not rescale_traces:
@@ -249,44 +265,48 @@ def plot_traces(ax, times, traces, colour_picker):
     for time, trace, colour in zip(times, traces, colour_picker.get_trace_colours(len(times))):
         ax.plot(time, trace, c=colour)
 
-def read_header(filename, prefix_filename=False):
-    filename_base, filename_ext = os.path.splitext(filename)
-    if filename_ext[-3:] == 'dat':
-        label = filename_base
-        header = None
-        variable = ""
-    else:
-        #Read Header
-        header = {}
-        f = open(filename)
-        for line in f:
-            if line[0] != '#': # Check to see if the line is a comment
-                break
-            split_line = line.split()
-            key = split_line[1]
-            value = split_line[3]
-            # Try to convert to numeric value
-            try:
-                value = float(value)
-            except ValueError:
-                try:
-                    value = int(value)
-                except ValueError:
-                    pass
-            header[key] = value
-        f.close()
-        # Check loaded header
-        if not header:
-            raise Exception("Did not load a header from the passed file '{}', is it a pyNN " \
-                            "output file?".format(filename))
-        label = header.get('label', '')
+def read_txt_header(filename, prefix_filename=False):
+    #Read Header
+    header = {}
+    f = open(filename)
+    for line in f:
+        if line[0] != '#': # Check to see if the line is a comment
+            break
+        split_line = line.split()
+        key = split_line[1]
+        value = split_line[3]
+        # Try to convert to numeric value
         try:
-            variable = header['variable'].capitalize()
-        except KeyError:
-            raise Exception("'variable' key was not found in header")
+            value = float(value)
+        except ValueError:
+            try:
+                value = int(value)
+            except ValueError:
+                pass
+        header[key] = value
+    f.close()
+    # Check loaded header
+    if not header:
+        raise Exception("Did not load a header from the passed file '{}', is it a pyNN " \
+                        "output file?".format(filename))
+    label = header.get('label', '')
+    try:
+        variable = header['variable'].capitalize()
+    except KeyError:
+        raise Exception("'variable' key was not found in header")
     if prefix_filename:
         label = '.'.join(filename.split('.')[:-1])
     return label, header, variable
+
+def read_hoc_header(filename, prefix_filename=False):
+    filename_base, filename_ext = os.path.splitext(filename)
+    label = filename_base
+    header = None
+    variable = ""
+    if prefix_filename:
+        label = '.'.join(filename.split('.')[:-1])
+    return label, header, variable
+
 
 def main(arguments):
     """
@@ -312,7 +332,8 @@ def main(arguments):
     args = parser.parse_args(arguments)
     # Set up the figure axes to plot the results ---------------------------------------------------
     # Get the different types of data
-    spike_filenames = [f for f in args.filenames if f.split('.')[-1][:6] == 'spikes']
+    spike_filenames = [f for f in args.filenames if (f.split('.')[-1][:6] == 'spikes' or 
+                                                     f.split('.')[-2] == 'spikes')]
     colour_picker = ColourPicker(args.combine)
     if len(spike_filenames):
         spike_axes = FigureHandler(len(spike_filenames), args.combine)
@@ -321,10 +342,13 @@ def main(arguments):
         time_start = args.time_start
         time_stop = args.time_stop
         for filename, ax, colour in zip(spike_filenames, spike_axes, colour_picker.spike_iter()):
-            label, header, variable = read_header(filename, prefix_filename=args.prefix_filename)
             if filename.split('.')[-1] == 'spikes':
-                spikes, ids = load_spikes(filename)
+                label, header, variable = read_txt_header(filename, prefix_filename=args.prefix_filename)
+                spikes, ids = load_txt_spikes(filename)
+            elif filename.split('.')[-2] == 'spikes':
+                spikes, ids, label = load_spikes(filename)                
             else:
+                label, header, variable = read_hoc_header(filename, prefix_filename=args.prefix_filename)
                 spikes, ids = load_spikes_hoc(filename)
             if args.combine:
                 if args.time_start is not None: 
@@ -365,16 +389,21 @@ def main(arguments):
                           len(set(t[:-4] if t.endswith('_dat') else t for t in trace_exts)) > 1)
         trace_legends = []
         for filename, ext, ax in zip(trace_filenames, trace_exts, trace_axes):
-            label, header, variable = read_header(filename, prefix_filename=args.prefix_filename)
-            if ext.endswith('_dat'):
+            if ext.endswith('pkl'):
+                times, values, legends, label = load_trace(filename)
+            elif ext.endswith('_dat'):
+                label, header, variable = read_txt_header(filename, 
+                                                          prefix_filename=args.prefix_filename)
                 times, values, legends = load_trace_hoc(filename, time_start=args.time_start, 
                                                         time_stop=args.time_stop)
             else:
+                label, header, variable = read_hoc_header(filename, 
+                                                          prefix_filename=args.prefix_filename)
                 try:
                     dt = header['dt']
                 except KeyError:
                     raise Exception("Required header field 'dt' was not found in file header.")
-                times, values, legends = load_trace(filename, ext, dt, incr=args.incr,
+                times, values, legends = load_txt_trace(filename, ext, dt, incr=args.incr,
                                                     rescale_traces=rescale_traces,
                                                     time_start=args.time_start, 
                                                     time_stop=args.time_stop)
