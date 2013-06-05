@@ -25,6 +25,8 @@ def main(arguments):
     parser.add_argument('--output', type=str, 
                         default=os.path.join(PROJECT_PATH, 'output', 'gap_test.'), 
                         help='The output location of the recording files')
+    parser.add_argument('--simulator', help="Currently unused but needed to keep the tombo "
+                                            "script happy")
     parser.add_argument('--reverse_inject', help="Inject current into population 2 instead of "
                                                  "population 1 to check both connections are "
                                                  "working.", action='store_true')

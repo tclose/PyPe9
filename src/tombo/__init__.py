@@ -158,12 +158,14 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
     pynn_nmodl_path = os.path.join(work_dir, 'depend', 'pyNN','neuron', 'nmodl')
     if os.path.exists(os.path.join(pynn_nmodl_path, 'x86_64')):
         shutil.rmtree(os.path.join(pynn_nmodl_path, 'x86_64'))
-    subprocess.check_call('cd {}; {}'.format(pynn_nmodl_path, path_to_exec('nrnivmodl')))
+    subprocess.check_call('cd {}; {}'.format(pynn_nmodl_path, path_to_exec('nrnivmodl')), shell=True)
     print "Compiling required NINEML+ objects"
+    print 'python {} {} --build build_only --simulator {}'.\
+           format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
+                  script_args, simulator)
     subprocess.check_call('python {} {} --build build_only --simulator {}'.\
                            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
-                                  script_args, simulator),
-                          shell=True, env=env)
+                                  script_args, simulator), shell=True, env=env)
 
 def compile_custom(script_name, work_dir, env=None, script_dir='test', script_args=''):
     """
