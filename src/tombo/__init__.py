@@ -27,12 +27,19 @@ def get_project_dir():
     # Root directory of the project code
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')) 
 
-def create_seed(seed):
-    if not seed:
-        seed = long(time.time() * 256)
+def create_seed(*in_seeds):
+    seeder = long(time.time() * 256) 
+    out_seeds = []
+    for seed in in_seeds:
+        if seed:
+            out_seeds.append(int(seed))
+        else:
+            out_seeds.append(seeder)
+            seeder += 1
+    if len(in_seeds) == 1:
+        return out_seeds[0]
     else:
-        seed = int(seed)
-    return seed
+        return out_seeds
 
 def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', 'xml'], 
                     dependencies=[('../PyNN/src', 'pyNN')]):

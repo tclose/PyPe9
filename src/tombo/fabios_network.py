@@ -13,6 +13,7 @@ SCRIPT_NAME = 'fabios_network'
 import tombo
 import argparse
 import os.path
+import time
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -60,6 +61,7 @@ parser.add_argument('--name', type=str, default=None,
                          "renaming of the output directory after it is copied to its final "
                          "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
+net_seed, stim_seed = tombo.create_seed(args.net_seed, args.stim_seed)
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 if args.legacy_hoc:
@@ -91,11 +93,11 @@ else:
     cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
                "--time {time} --start_input {start_input} --mf_rate {mf_rate} " \
                "--min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \
-               "--stim_seed {stim_seed} --build require"\
+               "--net_seed {net_seed} --stim_seed {stim_seed} --build require"\
                .format(script_name=SCRIPT_NAME, work_dir=work_dir, mf_rate=args.mf_rate,
                start_input=args.start_input, time=args.time, min_delay=args.min_delay,
                simulator=args.simulator, timestep=args.timestep, 
-               stim_seed=tombo.create_seed(args.stim_seed))
+               net_seed=net_seed, stim_seed=stim_seed)
     if args.debug:
         cmd_line += " --debug"
     for volt_trace in args.volt_trace:
@@ -106,10 +108,6 @@ else:
         cmd_line += ' --include_gap'
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
-    if args.net_seed:
-        cmd_line += ' --net_seed {}'.format(args.net_seed)
-    if args.stim_seed:
-        cmd_line += ' --stim_seed {}'.format(args.stim_seed)
     if args.log:
         cmd_line += ' --log {}/output/pyNN.log'.format(work_dir)
     copy_to_output = ['xml']
