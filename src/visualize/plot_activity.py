@@ -19,6 +19,7 @@ import argparse
 import math
 import os.path
 import pickle
+from itertools import izip
 
 def quit_figure(event):
     """
@@ -97,9 +98,19 @@ class ColourPicker(object):
 def load_spikes(filename):
     with open(filename) as f:
         data = pickle.load(f)
-    spikes = data.segments[0].spiketrain
-    ids = numpy.arange(spikes.shape[0])
-    return spikes, ids
+    spike_trains = data.segments[0].spiketrains
+    spikes = []
+    IDs = []
+    time_start = float('inf')
+    time_stop = float('-inf')
+    for ID, train in enumerate(spike_trains):
+        spikes.extend(train)
+        IDs.extend(numpy.tile([ID], len(train)))
+        if train.t_start < time_start:
+            time_start = train.t_start
+        if train.t_stop > time_stop:
+            time_stop = train.t_stop            
+    return numpy.array(spikes), numpy.array(IDs), data.name + ' Spikes', time_start, time_stop
 
 def load_txt_spikes(filename):
     spikes_n_ids = numpy.loadtxt(filename)
@@ -139,17 +150,20 @@ def load_spikes_hoc(filename):
 
 def plot_spikes(ax, label, spikes, ids, time_start=None, time_stop=None, colour='b'):
     # Set default values for time start and stop (first and last spikes)
-    if not time_start:
-        time_start = spikes.min()
-    if not time_stop:
-        time_stop = spikes.max()
-    length = time_stop - time_start
-    # Plot spikes
-    ax.scatter(spikes, ids, c=colour)
-    # Set axis labels and limits
-    max_id = numpy.max(ids)
-    ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
-    ax.set_ylim(-2, max_id + 2)
+    if not len(spikes):
+        print "No spikes were loaded from given '{}' output file".format(label)
+    else:
+        if time_start is None:
+            time_start = spikes.min()
+        if time_stop is None:
+            time_stop = spikes.max()
+        length = time_stop - time_start
+        # Plot spikes
+        ax.scatter(spikes, ids, c=colour)
+        # Set axis labels and limits
+        max_id = numpy.max(ids)
+        ax.set_xlim(time_start - 0.05 * length, time_stop + 0.05 * length)
+        ax.set_ylim(-2, max_id + 2)
 
 def load_trace(filename):
     with open(filename) as f:
@@ -341,24 +355,25 @@ def main(arguments):
         spike_legend = []
         time_start = args.time_start
         time_stop = args.time_stop
-        for filename, ax, colour in zip(spike_filenames, spike_axes, colour_picker.spike_iter()):
-            if filename.split('.')[-1] == 'spikes':
-                label, header, variable = read_txt_header(filename, prefix_filename=args.prefix_filename)
-                spikes, ids = load_txt_spikes(filename)
-            elif filename.split('.')[-2] == 'spikes':
-                spikes, ids, label = load_spikes(filename)                
+        for filename, ax, colour in izip(spike_filenames, spike_axes, ['b', 'r', 'g', 'c', 'm', 'y', 'k']): #colour_picker.spike_iter()):
+            if filename.split('.')[-2] == 'spikes':
+                spikes, ids, label, time_start, time_stop = load_spikes(filename) 
             else:
-                label, header, variable = read_hoc_header(filename, prefix_filename=args.prefix_filename)
-                spikes, ids = load_spikes_hoc(filename)
-            if args.combine:
-                if args.time_start is not None: 
-                    first_spike = spikes.min()
-                    if first_spike < time_start:
-                        time_start = first_spike
-                if args.time_stop is not None: 
-                    last_spike = spikes.max()
-                    if last_spike < time_stop:
-                        time_start = last_spike
+                if filename.split('.')[-1] == 'spikes':
+                    label, header, variable = read_txt_header(filename, prefix_filename=args.prefix_filename)
+                    spikes, ids = load_txt_spikes(filename)
+                else:
+                    label, header, variable = read_hoc_header(filename, prefix_filename=args.prefix_filename)
+                    spikes, ids = load_spikes_hoc(filename)
+                if args.combine:
+                    if args.time_start is not None: 
+                        first_spike = spikes.min()
+                        if first_spike < time_start:
+                            time_start = first_spike
+                    if args.time_stop is not None: 
+                        last_spike = spikes.max()
+                        if last_spike < time_stop:
+                            time_start = last_spike
             plot_spikes(ax, label, spikes, ids, time_start, time_stop, colour=colour)
             if args.combine:
                 spike_legend.append(label)
@@ -379,7 +394,8 @@ def main(arguments):
             ax.set_xlabel('Time (ms)')
             ax.set_ylabel('Cell index')
     # Load and plot the traces
-    trace_filenames = [f for f in args.filenames if f.split('.')[-1][:6] != 'spikes']
+    trace_filenames = [f for f in args.filenames if (f.split('.')[-1][:6] != 'spikes' and
+                                                     f.split('.')[-2] != 'spikes')]
     if len(trace_filenames):
         colour_picker.reset()
         trace_exts = [f.split('.')[-1] for f in trace_filenames]
