@@ -2,9 +2,9 @@
 <nineml>
     <network id="GapTest">
         <!-- Populations -->
-        <population id="Test1" cell="ncml/Test.xml" size="2" />
+        <population id="Test1" cell="ncml/Test.xml" size="3" />
         <!-- <structure type="Extension" engine="Brep" id="debug_Golgis" /> </population> -->
-        <population id="Test2" cell="ncml/Test.xml" size="2" />
+        <population id="Test2" cell="ncml/Test.xml" size="3" />
         <!-- Projections -->
         <projection id="Gap_test" synapseFamily="Electrical">
             <source id="Test1" segment="soma" />
