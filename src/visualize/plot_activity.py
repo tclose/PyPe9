@@ -398,14 +398,14 @@ def main(arguments):
                                                      f.split('.')[-2] != 'spikes')]
     if len(trace_filenames):
         colour_picker.reset()
-        trace_exts = [f.split('.')[-1] for f in trace_filenames]
+        trace_exts = ['.'.join(f.split('.')[-2:]) if f.endswith('pkl') else f.split('.')[-1] for f in trace_filenames]
         trace_axes = FigureHandler(len(trace_filenames), args.combine)
         # Whether to rescale traces to common 0-1 
         rescale_traces = (args.combine and
                           len(set(t[:-4] if t.endswith('_dat') else t for t in trace_exts)) > 1)
         trace_legends = []
         for filename, ext, ax in zip(trace_filenames, trace_exts, trace_axes):
-            if ext.endswith('pkl'):
+            if ext.endswith('v.pkl'):
                 times, values, legends, label = load_trace(filename)
             elif ext.endswith('_dat'):
                 label, header, variable = read_txt_header(filename, 
@@ -427,7 +427,7 @@ def main(arguments):
             if args.combine:
                 trace_legends += ['{} - {}'.format(label, l) for l in legends]
             else:
-                if (ext == 'v' or ext == 'v_dat'):
+                if (ext == 'v.pkl' or ext == 'v' or ext == 'v_dat'):
                     ytitle = 'Voltage'
                     ylabel = 'Voltage (mV)'
                 else:
@@ -440,7 +440,7 @@ def main(arguments):
         if args.combine:
             ax = trace_axes.get_primary()
             ax.legend(trace_legends)
-            if all([e == 'v' or e == 'v_dat' for e in trace_exts]):
+            if all([e == 'v.pkl' or e == 'v' or e == 'v_dat' for e in trace_exts]):
                 ytitle = 'Voltage'
                 ylabel = 'Voltage (mV)'
             else:

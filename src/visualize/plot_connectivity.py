@@ -42,7 +42,17 @@ def plot_connectivity(pre, post, proj, save='', include=[], show=False):
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
     # By default (if optional argument not provided) include all
-    if not include:
+    if include:
+        if len(include) == 1: 
+            proj = proj[int(include[0]):(int(include[0])+1)]
+        elif len(include) == 2: 
+            proj = proj[int(include[0]):int(include[1])]
+        elif len(include) == 3:
+            proj = proj[int(include[0]):int(include[1]):int(include[2])]
+        else:
+            raise Exception("Only up to 4 arguments can be provided to include option ({})"
+                            .format(include))
+    else:
         include = range(pre.shape[0]) 
     # Plot connections between cells
     for pre_id in include:
