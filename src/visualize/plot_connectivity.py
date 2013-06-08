@@ -15,7 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D #@UnusedImport (is actually used but pylint doesn't know that)
 
-def plot_connectivity(pre, post, proj, save='', include=[], show=False):
+def plot_connectivity(pre, post, proj, save='', include=None, show=False):
     # Load pre and post positions and projections if required
     if isinstance(pre, str):
         pre = np.loadtxt(pre)
@@ -37,33 +37,36 @@ def plot_connectivity(pre, post, proj, save='', include=[], show=False):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     for pop, colour in zip((pre, post), ('r', 'g')):
-        ax.scatter(xs=pop[:, 0], ys=pop[:, 1], zs=pop[:, 2], c=colour)
+        ax.scatter(xs=pop[:, 1], ys=pop[:, 2], zs=pop[:, 3], c=colour)
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
     # By default (if optional argument not provided) include all
-    if include:
-        if len(include) == 1: 
-            proj = proj[int(include[0]):(int(include[0])+1)]
-        elif len(include) == 2: 
-            proj = proj[int(include[0]):int(include[1])]
-        elif len(include) == 3:
-            proj = proj[int(include[0]):int(include[1]):int(include[2])]
+    if len(include) == 1 and ':' in include[0]:
+        slice_args = [int(i) for i in include[0].split(':')]
+        if len(slice_args) == 1: 
+            parsed_include = range(pre.shape[0])[int(slice_args[0]):(int(slice_args[0])+1)]
+        elif len(slice_args) == 2: 
+            parsed_include = range(pre.shape[0])[int(slice_args[0]):int(slice_args[1])]
+        elif len(slice_args) == 3:
+            parsed_include = range(pre.shape[0])[int(slice_args[0]):int(slice_args[1]):int(slice_args[2])]
         else:
             raise Exception("Only up to 4 arguments can be provided to include option ({})"
                             .format(include))
+    elif include:
+        parsed_include = [int(i) for i in include]
     else:
-        include = range(pre.shape[0]) 
+        parsed_include = range(pre.shape[0]) 
     # Plot connections between cells
-    for pre_id in include:
+    for pre_id in parsed_include:
         post_ids = proj[proj[:, 0] == pre_id, 1]
         # Basically adds another dimension to the front of the post_positions array
         pre_pos = pre[pre_id, :]
         for post_id in post_ids:
             post_pos = post[post_id, :]
-            ax.plot((pre_pos[0], post_pos[0]),
-                    (pre_pos[1], post_pos[1]),
-                    (pre_pos[2], post_pos[2]), c='b')
+            ax.plot((pre_pos[1], post_pos[1]),
+                    (pre_pos[2], post_pos[2]),
+                    (pre_pos[3], post_pos[3]), c='b')
     # Save or plot figure as required 
     if save:
         fig.savefig(save, dpi=600, transparent=True)
@@ -79,7 +82,7 @@ if __name__ == '__main__':
     parser.add_argument('post', type=str, help="The locations of the postsynaptic neurons")
     parser.add_argument('projection', type=str, help="The filename of the saved pyNN connections")
     parser.add_argument('--save', type=str, help="The path to save the figure to")
-    parser.add_argument('--include', type=int, nargs='+', help="Selection of neurons for plotting")
+    parser.add_argument('--include', type=str, nargs='+', help="Selection of neurons for plotting")
     args = parser.parse_args()
     plot_connectivity(args.pre, args.post, args.projection, save=args.save, include=args.include, 
                       show=True)
