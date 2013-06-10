@@ -13,11 +13,11 @@ Contains a method for plotting activity recorded from Neural simulations
 #######################################################################################
 
 
-import neo
-import urllib
-from matplotlib import pyplot
-import numpy
+import neo.io
+import matplotlib.pyplot as plt
+import numpy as np
 import argparse
+import os
 
 parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
 parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
@@ -36,22 +36,23 @@ parser.add_argument('--prefix_filename', action='store_true',
                     help="Include the filenames of the files in the subplot titles")
 args = parser.parse_args()
 
-distantfile = 'https://portal.g-node.org/neo/neuroexplorer/File_neuroexplorer_2.nex'
-localfile = 'File_neuroexplorer_2.nex'
-urllib.urlretrieve(distantfile, localfile)
-
-
-reader = neo.io.NeuroExplorerIO(filename = 'File_neuroexplorer_2.nex')
-bl = reader.read(cascade = True, lazy = False)[0]
-for seg in bl.segments:
-    fig = pyplot.figure()
-    ax1 = fig.add_subplot(2,1,1)
-    ax2 = fig.add_subplot(2,1,2, sharex = ax1)
-    ax1.set_title(seg.file_origin)
-    for asig in seg.analogsignals:
-        ax1.plot(asig.times, asig)
-    for s,st in enumerate(seg.spiketrains):
-        print st.units
-        ax2.plot(st, s*numpy.ones(st.size), linestyle = 'None', 
-                    marker = '|', color = 'k')
-pyplot.show()
+for filename in args.filenames:
+    if filename.endswith('pkl'):
+        reader = neo.io.PickleIO(filename=args.filenames[0])
+    else:
+        raise Exception("Unsupported extension for file '{}'".format(filename))
+    block = reader.read(cascade=True, lazy=True)[0]
+    for seg in block.segments:
+        if seg.analogsignalarrays:
+            traces_fig = plt.figure()
+            traces_ax = traces_fig.add_subplot(111)
+            traces_ax.set_title(os.path.basename(filename) + ' Traces')
+            for asig in seg.analogsignalarrays:
+                traces_ax.plot(asig.times, asig)
+        if seg.spiketrains:
+            spikes_fig = plt.figure()
+            spikes_ax = spikes_fig.add_subplot(111)
+            spikes_ax.set_title(os.path.basename(filename) + ' Spikes')
+            for s, st in enumerate(seg.spiketrains):
+                spikes_ax.plot(st, s * np.ones(st.size), linestyle='None')
+plt.show()
