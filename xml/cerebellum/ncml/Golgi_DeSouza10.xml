@@ -2,12 +2,26 @@
 <ncml:model xmlns:ncml="ncml" name="Golgi_DeSouza10">
     <!--<include href="SimpleIonChannel.xml"/> Contains ionChannel NaConductance -->
     <ncml:sxslt>
-        <!-- XML syntactic sugar stylesheet -->
-        ( (sxml:match 'ncml:ionicCurrent (lambda (node bindings root env) (let ((id (or (sxml:attr
-        node 'id) (sxml:attr node 'name))) (kids (sxml:kids node))) `(ncml:component (@ (type
-        "ionic-current") (name ,id)) . ,kids) ))) (sxml:match 'ncml:decayingPool (lambda (node
-        bindings root env) (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) (kids
-        (sxml:kids node))) `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) )
+    <!-- XML syntactic sugar stylesheet -->
+        ( (sxml:match 'ncml:conductanceSynapse <br/>
+                      (lambda (node bindings root env) <br/>
+                        (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
+                              (kids (sxml:kids node))) <br/>
+                          `(ncml:component (@ (type "post-synaptic-conductance") (name ,id)) . ,kids) ))) <br/>
+           <br/>
+          (sxml:match 'ncml:ionicCurrent <br/>
+                      (lambda (node bindings root env) <br/>
+                        (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
+                              (kids (sxml:kids node))) <br/>
+                          `(ncml:component (@ (type "ionic-current") (name ,id)) . ,kids) ))) <br/>
+           <br/>
+          (sxml:match 'ncml:decayingPool <br/>
+                      (lambda (node bindings root env) <br/>
+                        (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
+                              (kids (sxml:kids node))) <br/>
+                          `(ncml:component (@ (type "decaying-pool") (name ,id)) . ,kids) ))) <br/>
+           <br/>
+          )
     </ncml:sxslt>
     <cell id="Golgi_DeSouza10" defaultMorphology="WithoutAxon">
         <notes>A model of a Golgi cell</notes>
@@ -2160,6 +2174,78 @@
                         <ncml:output name="e" />
                     </ncml:component>
                 </ncml:ionicCurrent>
+
+                <ncml:conductanceSynapse id="AMPA_MossyFiber" type="Exp2Syn" segmentGroup="soma">
+                    <ncml:input name="w" from="event"/>
+                    <ncml:const name="tauA" value="0.03"/>
+                    <ncml:const name="tauB" value="0.5"/>
+                    <ncml:const name="e" value="0"/>
+                    <ncml:const name="tau1">
+                      (if ((tauA / tauB) &gt; 0.9999) then (0.9999 * tauB) else tauA)
+                    </ncml:const>
+                    <ncml:const name="tau2">
+                      tauB
+                    </ncml:const>
+                    <ncml:const name="tp">
+                      ((tau1 * tau2) / (tau2 - tau1) * ln (tau2 / tau1))
+                    </ncml:const>
+                    <ncml:const name="scale_factor">
+                      (1 / (neg (exp (neg (tp) / tau1)) + exp (neg (tp) / tau2)))
+                    </ncml:const>
+                    <ncml:transient name="A">
+                      <ncml:expr>(neg (A) / tau1)</ncml:expr>
+                      <ncml:onevent>(A + (w * scale_factor))</ncml:onevent>
+                      <ncml:initial>0</ncml:initial>
+                    </ncml:transient>
+                    <ncml:transient name="B">
+                      <ncml:expr>(neg (B) / tau2)</ncml:expr>
+                      <ncml:onevent>(B + (w * scale_factor))</ncml:onevent>
+                      <ncml:initial>0</ncml:initial>
+                    </ncml:transient>
+                    <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr></ncml:asgn>
+                    <ncml:output name="g"/>
+                    <ncml:output name="e"/>
+                    <ncml:output name="scale_factor"/>
+                </ncml:conductanceSynapse>
+
+                <ncml:conductanceSynapse id="AMPA_Granule" type="Exp2Syn" segmentGroup="soma">
+                    <ncml:input name="w" from="event"/>
+
+                    <ncml:const name="tauA" value="1"/>
+                    <ncml:const name="tauB" value="13.3"/>
+                    <ncml:const name="e" value="0"/>
+
+                    <ncml:const name="tau1">
+                      (if ((tauA / tauB) &gt; 0.9999) then (0.9999 * tauB) else tauA)
+                    </ncml:const>
+                    <ncml:const name="tau2">
+                      tauB
+                    </ncml:const>
+                    <ncml:const name="tp">
+                      ((tau1 * tau2) / (tau2 - tau1) * ln (tau2 / tau1))
+                    </ncml:const>
+                    <ncml:const name="scale_factor">
+                      (1 / (neg (exp (neg (tp) / tau1)) + exp (neg (tp) / tau2)))
+                    </ncml:const>
+                    <ncml:transient name="A">
+                      <ncml:expr>(neg (A) / tau1)</ncml:expr>
+                      <ncml:onevent>(A + (w * scale_factor))</ncml:onevent>
+                      <ncml:initial>0</ncml:initial>
+                    </ncml:transient>
+                    <ncml:transient name="B">
+                      <ncml:expr>(neg (B) / tau2)</ncml:expr>
+                      <ncml:onevent>(B + (w * scale_factor))</ncml:onevent>
+                      <ncml:initial>0</ncml:initial>
+                    </ncml:transient>
+                    <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr>
+                    </ncml:asgn>
+
+                    <ncml:output name="g"/>
+                    <ncml:output name="e"/>
+                    <ncml:output name="scale_factor"/>
+                    
+                </ncml:conductanceSynapse>
+
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="ca" value="132.457934" units="mV"
                     segmentGroup="soma" /> <!-- 129.33 -->
@@ -2184,6 +2270,7 @@
                     <parameter name="tau2" value="0.5" units="ms" />
                     <parameter name="e" value="0.0" units="mV" />
                 </conductanceSynapse>
+
             </synapses>
             <initalConditions>
                 <membranePotential value='-65 mV' />
