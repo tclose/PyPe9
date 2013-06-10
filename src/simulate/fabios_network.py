@@ -120,7 +120,7 @@ print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
 mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
 print "Setting up recorders"
-net.record_spikes(args.output)
+net.record_spikes()
 # Set up voltage traces    
 for volt_trace in args.volt_trace:
     pop = net.get_population(volt_trace[0])
@@ -152,9 +152,10 @@ print "MossyFiber firing rate: %f" % args.mf_rate
 # Actually run simulation
 run(args.time) #@UndefinedVariable
 print "Simulated Fabio's Network for %f milliseconds" % args.time
+net.write_data(args.output)
 # Save recorded data to file
 #net.print_spikes(args.output)
-for volt_trace in args.volt_trace:
-    pop = net.get_population(volt_trace[0])
-    pop.write_data(args.output + volt_trace[0] + ".v.pkl", variables='v')
+#for volt_trace in args.volt_trace:
+#    pop = net.get_population(volt_trace[0])
+#    pop.write_data(args.output + volt_trace[0] + ".v.pkl", variables='v')
 print "Saved recorded data to files '{}*.*'".format(args.output)
