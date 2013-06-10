@@ -73,6 +73,7 @@ def main(arguments):
                             "or 'noise'".format(inject_type))
         pop.inject(current_source)
     pop.record_v()
+    pop.record('spikes')
     if args.simulator == 'neuron':
         print "------Miscellaneous hoc variables to print------"
         potential_variables = [ 'ena', 'ek', 'eca', 'ecl', 'celsius']
@@ -86,7 +87,7 @@ def main(arguments):
     run(args.time) #@UndefinedVariable
     print "Simulated single cell for %f milliseconds" % args.time
     print "Saved voltage trace to '{}'".format(args.output)
-    pop.write_data(args.output, 'v')
+    pop.write_data(args.output)
     end() #@UndefinedVariable
 
 def single_cell(arguments):

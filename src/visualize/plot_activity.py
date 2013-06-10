@@ -38,7 +38,7 @@ args = parser.parse_args()
 
 for filename in args.filenames:
     if filename.endswith('pkl'):
-        reader = neo.io.PickleIO(filename=args.filenames[0])
+        reader = neo.io.PickleIO(filename=filename)
     else:
         raise Exception("Unsupported extension for file '{}'".format(filename))
     block = reader.read(cascade=True, lazy=False)[0]
@@ -46,13 +46,13 @@ for filename in args.filenames:
         if seg.analogsignalarrays:
             traces_fig = plt.figure()
             traces_ax = traces_fig.add_subplot(111)
-            traces_ax.set_title(os.path.basename(filename) + ' Traces')
+            traces_ax.set_title(filename + ' - Traces')
             for asig in seg.analogsignalarrays:
                 traces_ax.plot(asig.times, asig)
         if seg.spiketrains:
             spikes_fig = plt.figure()
             spikes_ax = spikes_fig.add_subplot(111)
-            spikes_ax.set_title(os.path.basename(filename) + ' Spikes')
+            spikes_ax.set_title(filename + ' - Spikes')
             for s, st in enumerate(seg.spiketrains):
-                spikes_ax.plot(st, s * np.ones(st.size), linestyle='None')
+                spikes_ax.scatter(st, s * np.ones(st.size))
 plt.show()
