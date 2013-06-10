@@ -2,19 +2,20 @@
 <nineml>
     <network id="GapTest">
         <!-- Populations -->
-        <population id="Test1" cell="ncml/Test.xml" size="1" />
+        <population id="Test1" cell="ncml/Test.xml" size="5" />
         <!-- <structure type="Extension" engine="Brep" id="debug_Golgis" /> </population> -->
-        <population id="Test2" cell="ncml/Test.xml" size="1" />
+        <population id="Test2" cell="ncml/Test.xml" size="5" />
         <!-- Projections -->
         <projection id="Gap_test" synapseFamily="Electrical">
             <source id="Test1" segment="soma" />
             <destination id="Test2" segment="soma" />
-            <connection pattern="AllToAll" />
+<!--             <connection pattern="AllToAll" /> -->
+            <connection pattern="FixedProbability" p_connect="0.4" />
             <weight pattern="Constant" value="1.5 uS" />
         </projection>
         <!--<projection id="Gap_test" synapseFamily="Electrical"> <source id="Test1" segment="soma" /> 
-            <destination id="Test1" segment="soma" /> <connection pattern="DistanceBased" geometry="CylinderMask" radius="10000000 
-            um" /> <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS" exponent="-0.03" 
+            <destination id="Test1" segment="soma" /> <connection pattern="DisplacementBased" geometry="CylinderMask" radius="10000000 
+            um" /> <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="1.5 nS" exponent="-0.03" 
             /> <comment> These are the golgi gap junction projection connections. </comment> </projection> -->
         <!-- <projection id="Test_non_gap"> <source id="Test1" segment="soma" /> <destination id="Test2" 
             segment="soma" synapse="Excitatory" /> <connection pattern="AllToAll"/> <weight pattern="Constant" value="1.5 

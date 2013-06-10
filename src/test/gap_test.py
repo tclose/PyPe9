@@ -25,6 +25,8 @@ def main(arguments):
     parser.add_argument('--output', type=str, 
                         default=os.path.join(PROJECT_PATH, 'output', 'gap_test.'), 
                         help='The output location of the recording files')
+    parser.add_argument('--simulator', help="Currently unused but needed to keep the tombo "
+                                            "script happy")
     parser.add_argument('--reverse_inject', help="Inject current into population 2 instead of "
                                                  "population 1 to check both connections are "
                                                  "working.", action='store_true')
@@ -42,7 +44,7 @@ def main(arguments):
                   silent_build=False, build_mode=args.build) 
     test1 = net.get_population('Test1')
     test2 = net.get_population('Test2')
-    current_source = StepCurrentSource({'amplitudes': [1.0], 'times': [100]})
+    current_source = StepCurrentSource(amplitudes=[1.0], times=[100])
     if args.reverse_inject:
         test2.inject(current_source)
     else:        
@@ -55,8 +57,8 @@ def main(arguments):
     #simulator.state.parallel_context.timeout = 10
     run(200)
     print "Finished run. Saving..."
-    test1.print_v(args.output + 'Test1.v')
-    test2.print_v(args.output + 'Test2.v')
+    test1.print_v(args.output + 'Test1.v.pkl')
+    test2.print_v(args.output + 'Test2.v.pkl')
     print "Simulated gap test network"
    
 def gap_test(arguments):

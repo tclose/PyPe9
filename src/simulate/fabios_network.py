@@ -92,7 +92,6 @@ if args.net_seed:
 else:    
     net_seed = int(time.time() * 256)
 net_rng = NumpyRNG(net_seed)
-print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
 if args.stim_seed:
     stim_seed = int(args.stim_seed)
 else:
@@ -101,7 +100,9 @@ else:
     else:
         stim_seed = net_seed + 1
 stim_rng = NumpyRNG(stim_seed)
-print "Random seed used to generate the stimulation spike train is %d" % stim_seed    
+if args.build != 'compile_only' or args.build != 'build_only':
+    print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
+    print "Random seed used to generate the stimulation spike train is %d" % stim_seed    
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
@@ -114,8 +115,7 @@ if args.no_granule_to_golgi:
 # Build the network
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable
-              build_mode=args.build, silent_build=args.silent_build, flags=flags, 
-              rng=net_rng)
+              build_mode=args.build, silent_build=args.silent_build, flags=flags, rng=net_rng)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
 mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
@@ -152,9 +152,10 @@ print "MossyFiber firing rate: %f" % args.mf_rate
 # Actually run simulation
 run(args.time) #@UndefinedVariable
 print "Simulated Fabio's Network for %f milliseconds" % args.time
+net.write_data(args.output)
 # Save recorded data to file
-net.print_spikes(args.output)
-for volt_trace in args.volt_trace:
-    pop = net.get_population(volt_trace[0])
-    pop.print_v(args.output + volt_trace[0] + ".v")
+#net.print_spikes(args.output)
+#for volt_trace in args.volt_trace:
+#    pop = net.get_population(volt_trace[0])
+#    pop.write_data(args.output + volt_trace[0] + ".v.pkl", variables='v')
 print "Saved recorded data to files '{}*.*'".format(args.output)

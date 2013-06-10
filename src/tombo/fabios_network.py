@@ -13,6 +13,7 @@ SCRIPT_NAME = 'fabios_network'
 import tombo
 import argparse
 import os.path
+import time
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -27,8 +28,10 @@ parser.add_argument('--min_delay', type=float, default=0.020001,
                     help='The minimum synaptic delay in the network (default: %(default)s)')
 parser.add_argument('--timestep', type=float, default=0.02, 
                     help='The time step used for the simulation (default: %(default)s)')
-parser.add_argument('--stim_seed', default=None, 
-                    help='The seed passed to the stimulated spikes (defaults to time stamp)')
+parser.add_argument('--net_seed', help="The random seed used to generate the stochastic parts of "
+                    "the network", type=int, default=None) 
+parser.add_argument('--stim_seed', help="The random seed used to generate the stimulation spike "
+                                        "train.", type=int, default=None) 
 parser.add_argument('--np', type=int, default=96, 
                     help="The the number of processes to use for the simulation " \
                          "(default: %(default)s)")
@@ -58,6 +61,7 @@ parser.add_argument('--name', type=str, default=None,
                          "renaming of the output directory after it is copied to its final "
                          "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
+net_seed, stim_seed = tombo.create_seed(args.net_seed, args.stim_seed)
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 if args.legacy_hoc:
@@ -89,11 +93,11 @@ else:
     cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
                "--time {time} --start_input {start_input} --mf_rate {mf_rate} " \
                "--min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \
-               "--stim_seed {stim_seed} --build require"\
+               "--net_seed {net_seed} --stim_seed {stim_seed} --build require"\
                .format(script_name=SCRIPT_NAME, work_dir=work_dir, mf_rate=args.mf_rate,
                start_input=args.start_input, time=args.time, min_delay=args.min_delay,
                simulator=args.simulator, timestep=args.timestep, 
-               stim_seed=tombo.create_seed(args.stim_seed))
+               net_seed=net_seed, stim_seed=stim_seed)
     if args.debug:
         cmd_line += " --debug"
     for volt_trace in args.volt_trace:

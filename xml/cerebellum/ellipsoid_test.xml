@@ -18,10 +18,10 @@
         <projection id="PresynapticPop_PostsynapticPop_">
             <source id="PresynapticPop" />
             <destination id="PostsynapticPop" synapse="excitatory" />
-            <connection pattern="DistanceBased" geometry="EllipsoidMask" scale="0.5" orient_x="1.0" orient_y="0.0" orient_z="0.0" isotropy="1.0" />
-            <weight pattern="DistanceBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+            <connection pattern="DisplacementBased" geometry="EllipsoidMask" scale="0.5" orient_x="1.0" orient_y="0.0" orient_z="0.0" isotropy="1.0" />
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
                 exponent="-0.01" />
-            <delay pattern="DistanceBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
         </projection>
     </network>
 </nineml>

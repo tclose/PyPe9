@@ -13,6 +13,7 @@ import time
 import shutil
 import subprocess
 from copy import copy
+from ninemlp.common.build import path_to_exec
 
 PYTHON_INSTALL_DIR='/apps/python/272'
 OPEN_MPI_INSTALL_DIR='/opt/mpi/gnu/openmpi-1.6.3'
@@ -26,14 +27,22 @@ def get_project_dir():
     # Root directory of the project code
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')) 
 
-def create_seed(seed):
-    if not seed:
-        seed = long(time.time() * 256)
+def create_seed(*in_seeds):
+    seeder = long(time.time() * 256) 
+    out_seeds = []
+    for seed in in_seeds:
+        if seed:
+            out_seeds.append(int(seed))
+        else:
+            out_seeds.append(seeder)
+            seeder += 1
+    if len(in_seeds) == 1:
+        return out_seeds[0]
     else:
-        seed = int(seed)
-    return seed
+        return out_seeds
 
-def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', 'xml']):
+def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', 'xml'], 
+                    dependencies=[('../PyNN/src', 'pyNN')]):
     """
     Generates unique paths for the work and output directories, creating the work directory in the 
     process.
@@ -75,16 +84,16 @@ def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', '
             # Replace old count at the end of work directory with new count
             work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) 
     output_dir = os.path.join(output_dir_parent, os.path.split(work_dir)[1])
-    init_work_dir(work_dir, required_dirs, time_str)   
+    init_work_dir(work_dir, required_dirs, time_str, dependencies)   
     return work_dir, output_dir
 
-def init_work_dir(work_dir, required_dirs, time_str):
+def init_work_dir(work_dir, required_dirs, time_str, dependencies):
     """
     Copies directories from the project directory to the work directory
     
     @param work_dir: The destination work directory
     @param required_dirs: The required sub-directories to be copied to the work directory
-    """
+    """   
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
         print "Copying '{}' sub-directory to work directory".format(directory)
@@ -98,6 +107,16 @@ def init_work_dir(work_dir, required_dirs, time_str):
 #                            .format(directory, e))
         shutil.copytree(os.path.join(get_project_dir(),directory), 
                         os.path.join(work_dir,directory), symlinks=True)
+    if dependencies:
+        dependency_dir = os.path.join(work_dir, 'depend') 
+        os.mkdir(dependency_dir)
+        for from_, to_ in dependencies:
+            # If not an absolute path prepend the project directory as a relative path (useful for
+            # getting dependencies from directories installed alongside the project directory
+            if not from_.startswith('/'):
+                from_ = get_project_dir() + os.path.sep + from_
+            shutil.copytree(from_, os.path.join(dependency_dir, to_))
+        
     # Make output directory for the generated files
     os.mkdir(os.path.join(work_dir, 'output'))
     # Save the git revision in the output folder for reference
@@ -121,7 +140,7 @@ def create_env(work_dir):
                   os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep + \
                   os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin') + os.pathsep + \
                   os.path.join(NEST_INSTALL_DIR, 'bin')
-    env['PYTHONPATH'] = os.path.join(work_dir, 'src')
+    env['PYTHONPATH'] = os.path.join(work_dir, 'src') + os.pathsep + os.path.join(work_dir, 'depend')
     env['LD_LIBRARY_PATH'] = (os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')+ os.pathsep +
                               os.path.join(NEST_INSTALL_DIR, 'bin'))
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
@@ -143,14 +162,17 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
         env = copy(env)
     env['NINEMLP_MPI'] = '1'
     # Remove NMODL build directory for pyNN neuron so it can be recompiled in script
-    pynn_nmodl_path = os.path.join(work_dir, 'src', 'pyNN','neuron', 'nmodl', 'x86_64')
-    if os.path.exists(pynn_nmodl_path):
-        shutil.rmtree(pynn_nmodl_path)
+    pynn_nmodl_path = os.path.join(work_dir, 'depend', 'pyNN','neuron', 'nmodl')
+    if os.path.exists(os.path.join(pynn_nmodl_path, 'x86_64')):
+        shutil.rmtree(os.path.join(pynn_nmodl_path, 'x86_64'))
+    subprocess.check_call('cd {}; {}'.format(pynn_nmodl_path, path_to_exec('nrnivmodl')), shell=True)
     print "Compiling required NINEML+ objects"
+    print 'python {} {} --build build_only --simulator {}'.\
+           format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
+                  script_args, simulator)
     subprocess.check_call('python {} {} --build build_only --simulator {}'.\
                            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
-                                  script_args, simulator),
-                          shell=True, env=env)
+                                  script_args, simulator), shell=True, env=env)
 
 def compile_custom(script_name, work_dir, env=None, script_dir='test', script_args=''):
     """
