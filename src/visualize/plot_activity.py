@@ -41,7 +41,7 @@ for filename in args.filenames:
         reader = neo.io.PickleIO(filename=args.filenames[0])
     else:
         raise Exception("Unsupported extension for file '{}'".format(filename))
-    block = reader.read(cascade=True, lazy=True)[0]
+    block = reader.read(cascade=True, lazy=False)[0]
     for seg in block.segments:
         if seg.analogsignalarrays:
             traces_fig = plt.figure()
