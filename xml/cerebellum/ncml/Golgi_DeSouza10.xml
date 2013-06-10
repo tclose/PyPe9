@@ -2175,7 +2175,7 @@
                     </ncml:component>
                 </ncml:ionicCurrent>
 
-                <ncml:conductanceSynapse id="AMPA_MossyFiber" type="Exp2Syn" segmentGroup="soma">
+                <ncml:conductanceSynapse id="AMPA_MossyFiber" segmentGroup="soma">
                     <ncml:input name="w" from="event"/>
                     <ncml:const name="tauA" value="0.03"/>
                     <ncml:const name="tauB" value="0.5"/>
@@ -2208,13 +2208,11 @@
                     <ncml:output name="scale_factor"/>
                 </ncml:conductanceSynapse>
 
-                <ncml:conductanceSynapse id="AMPA_Granule" type="Exp2Syn" segmentGroup="soma">
+                <ncml:conductanceSynapse id="AMPA_Granule" segmentGroup="soma">
                     <ncml:input name="w" from="event"/>
-
-                    <ncml:const name="tauA" value="1"/>
-                    <ncml:const name="tauB" value="13.3"/>
+                    <ncml:const name="tauA" value="0.03"/>
+                    <ncml:const name="tauB" value="0.5"/>
                     <ncml:const name="e" value="0"/>
-
                     <ncml:const name="tau1">
                       (if ((tauA / tauB) &gt; 0.9999) then (0.9999 * tauB) else tauA)
                     </ncml:const>
@@ -2239,13 +2237,10 @@
                     </ncml:transient>
                     <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr>
                     </ncml:asgn>
-
                     <ncml:output name="g"/>
                     <ncml:output name="e"/>
                     <ncml:output name="scale_factor"/>
-                    
                 </ncml:conductanceSynapse>
-
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="ca" value="132.457934" units="mV"
                     segmentGroup="soma" /> <!-- 129.33 -->
@@ -2257,21 +2252,21 @@
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
             </intracellularProperties>
-            <synapses>
-                <conductanceSynapse id="AMPA_MossyFiber" type="Exp2Syn"
-                    segmentGroup="soma">
-                    <parameter name="tau1" value="0.3" units="ms" />
-                    <parameter name="tau2" value="0.5" units="ms" />
-                    <parameter name="e" value="0.0" units="mV" />
-                </conductanceSynapse>
-                <conductanceSynapse id="AMPA_Granule" type="Exp2Syn"
-                    segmentGroup="soma">
-                    <parameter name="tau1" value="0.03" units="ms" />
-                    <parameter name="tau2" value="0.5" units="ms" />
-                    <parameter name="e" value="0.0" units="mV" />
-                </conductanceSynapse>
+<!--             <synapses> -->
+<!--                 <conductanceSynapse id="AMPA_MossyFiber" type="Exp2Syn" -->
+<!--                     segmentGroup="soma"> -->
+<!--                     <parameter name="tau1" value="0.03" units="ms" /> -->
+<!--                     <parameter name="tau2" value="0.5" units="ms" /> -->
+<!--                     <parameter name="e" value="0.0" units="mV" /> -->
+<!--                 </conductanceSynapse> -->
+<!--                 <conductanceSynapse id="AMPA_Granule" type="Exp2Syn" -->
+<!--                     segmentGroup="soma"> -->
+<!--                     <parameter name="tau1" value="0.03" units="ms" /> -->
+<!--                     <parameter name="tau2" value="0.5" units="ms" /> -->
+<!--                     <parameter name="e" value="0.0" units="mV" /> -->
+<!--                 </conductanceSynapse> -->
 
-            </synapses>
+<!--             </synapses> -->
             <initalConditions>
                 <membranePotential value='-65 mV' />
                 <ionConcentration species="ca" value="50e-6" />
