@@ -88,6 +88,7 @@ def plot_connectivity(pre, post, proj, save='', include=None, show=False, weight
             ax.plot((pre_pos[1], post_pos[1]),
                     (pre_pos[2], post_pos[2]),
                     (pre_pos[3], post_pos[3]), c='y', alpha=alpha)
+        ax.set_aspect('equal')
     # Save or plot figure as required 
     if save:
         fig.savefig(save, dpi=600, transparent=True)
