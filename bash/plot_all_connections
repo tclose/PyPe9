@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+if [ "$#" -lt 1 ]; then
+    echo "plot_all_connections' requires at least one argument, the saved connections/positions directory (none were provided)"
+    exit 1
+fi
+
+conn_dir=$1
+
+for p in $conn_dir/*.proj; do 
+    base_p=`basename $p`
+    first_p=${base_p%%_*}; 
+    second_p=${base_p%.proj}; 
+    second_p=${second_p#*_}; 
+    second_p=${second_p%_*}; 
+    plot_connectivity.py $conn_dir/${first_p}.pop $conn_dir/${second_p}.pop $p ${@:2}; 
+done
+
