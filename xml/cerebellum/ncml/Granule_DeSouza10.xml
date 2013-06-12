@@ -8,6 +8,7 @@
                         (let ((id (or (sxml:attr node 'id) (sxml:attr node 'name))) <br/>
                               (kids (sxml:kids node))) <br/>
                           `(ncml:component (@ (type "post-synaptic-conductance") (name ,id)) . ,kids) ))) <br/>
+
            <br/>
              (sxml:match 'ncml:ionicCurrent <br/>
                       (lambda (node bindings root env) <br/>
@@ -40,7 +41,7 @@
                 <build tool="nemo" simulator="neuron" method="derivimplicit">
                     <kinetic comp_id="Na_z" />
                 </build>
-                <build tool="nemo" simulator="nest" method="cvode" />
+                <build tool="nemo" simulator="nest" method="gsl" />
             </defaultBuildOptions>
             <actionPotentialThreshold v="-21" />
             <membraneProperties>
@@ -753,107 +754,6 @@
                     <ncml:output name="vchdur" />
                     <ncml:output name="vcbdur" />
                 </ncml:component>
-<<<<<<< HEAD
-                <ncml:conductanceSynapse id="AMPA" segmentGroup="soma">
-                    <ncml:input name="w" from="event"/>
-                    <ncml:const name="tauA" value="0.03"/>
-                    <ncml:const name="tauB" value="0.5"/>
-                    <ncml:const name="e" value="0"/>
-                    <ncml:const name="tau1">
-                      (if ((tauA / tauB) &gt; 0.9999) then (0.9999 * tauB) else tauA)
-                    </ncml:const>
-                    <ncml:const name="tau2">
-                      tauB
-                    </ncml:const>
-                    <ncml:const name="tp">
-                      ((tau1 * tau2) / (tau2 - tau1) * ln (tau2 / tau1))
-                    </ncml:const>
-                    <ncml:const name="scale_factor">
-                      (1 / (neg (exp (neg (tp) / tau1)) + exp (neg (tp) / tau2)))
-                    </ncml:const>
-                    <ncml:transient name="A">
-                      <ncml:expr>(neg (A) / tau1)</ncml:expr>
-                      <ncml:onevent>(A + (w * scale_factor))</ncml:onevent>
-                      <ncml:initial>0</ncml:initial>
-                    </ncml:transient>
-                    <ncml:transient name="B">
-                      <ncml:expr>(neg (B) / tau2)</ncml:expr>
-                      <ncml:onevent>(B + (w * scale_factor))</ncml:onevent>
-                      <ncml:initial>0</ncml:initial>
-                    </ncml:transient>
-                    <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr>
-                    </ncml:asgn>
-                    <ncml:output name="g"/>
-                    <ncml:output name="e"/>
-                    <ncml:output name="scale_factor"/>
-                </ncml:conductanceSynapse>
-                <ncml:conductanceSynapse id="NMDA" segmentGroup="soma">
-                    <ncml:input name="w" from="event"/>
-                    <ncml:const name="tauA" value="1"/>
-                    <ncml:const name="tauB" value="13.3"/>
-                    <ncml:const name="e" value="0"/>
-                    <ncml:const name="tau1">
-                      (if ((tauA / tauB) &gt; 0.9999) then (0.9999 * tauB) else tauA)
-                    </ncml:const>
-                    <ncml:const name="tau2">
-                      tauB
-                    </ncml:const>
-                    <ncml:const name="tp">
-                      ((tau1 * tau2) / (tau2 - tau1) * ln (tau2 / tau1))
-                    </ncml:const>
-                    <ncml:const name="scale_factor">
-                      (1 / (neg (exp (neg (tp) / tau1)) + exp (neg (tp) / tau2)))
-                    </ncml:const>
-                    <ncml:transient name="A">
-                      <ncml:expr>(neg (A) / tau1)</ncml:expr>
-                      <ncml:onevent>(A + (w * scale_factor))</ncml:onevent>
-                      <ncml:initial>0</ncml:initial>
-                    </ncml:transient>
-                    <ncml:transient name="B">
-                      <ncml:expr>(neg (B) / tau2)</ncml:expr>
-                      <ncml:onevent>(B + (w * scale_factor))</ncml:onevent>
-                      <ncml:initial>0</ncml:initial>
-                    </ncml:transient>
-                    <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr>
-                    </ncml:asgn>
-                    <ncml:output name="g"/>
-                    <ncml:output name="e"/>
-                    <ncml:output name="scale_factor"/>
-                </ncml:conductanceSynapse>
-                <ncml:conductanceSynapse id="GABA" segmentGroup="soma">
-                    <ncml:input name="w" from="event"/>
-                    <ncml:const name="tauA" value="0.31"/>
-                    <ncml:const name="tauB" value="8.8"/>
-                    <ncml:const name="e" value="-75"/>
-                    <ncml:const name="tau1">
-                      (if ((tauA / tauB) &gt; 0.9999) then (0.9999 * tauB) else tauA)
-                    </ncml:const>
-                    <ncml:const name="tau2">
-                      tauB
-                    </ncml:const>
-                    <ncml:const name="tp">
-                      ((tau1 * tau2) / (tau2 - tau1) * ln (tau2 / tau1))
-                    </ncml:const>
-                    <ncml:const name="scale_factor">
-                      (1 / (neg (exp (neg (tp) / tau1)) + exp (neg (tp) / tau2)))
-                    </ncml:const>
-                    <ncml:transient name="A">
-                      <ncml:expr>(neg (A) / tau1)</ncml:expr>
-                      <ncml:onevent>(A + (w * scale_factor))</ncml:onevent>
-                      <ncml:initial>0</ncml:initial>
-                    </ncml:transient>
-                    <ncml:transient name="B">
-                      <ncml:expr>(neg (B) / tau2)</ncml:expr>
-                      <ncml:onevent>(B + (w * scale_factor))</ncml:onevent>
-                      <ncml:initial>0</ncml:initial>
-                    </ncml:transient>
-                    <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr>
-                    </ncml:asgn>
-                    <ncml:output name="g"/>
-                    <ncml:output name="e"/>
-                    <ncml:output name="scale_factor"/>
-                </ncml:conductanceSynapse>
-=======
 
                 <ncml:conductanceSynapse id="AMPA" type="Exp2Syn">
                     <ncml:input name="w" from="event"/>
@@ -954,7 +854,6 @@
                     <ncml:output name="scale_factor"/>
                 </ncml:conductanceSynapse>
 
->>>>>>> refs/remotes/origin/ivan
                 <!-- Tom's additions below here -->
                 <specificCapacitance value="1.0" units="uF_per_cm2" />
                 <reversalPotential species="na" value="87.39" units="mV" />
@@ -964,25 +863,25 @@
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
             </intracellularProperties>
-<!--             <synapses> -->
-<!--                 Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
-<!--                 <conductanceSynapse id="AMPA" type="Exp2Syn"> -->
-<!--                     <parameter name="tau1" value="0.03" units="ms" /> -->
-<!--                     <parameter name="tau2" value="0.5" units="ms" /> -->
-<!--                     <parameter name="e" value="0.0" units="mV" /> -->
-<!--                 </conductanceSynapse> -->
-<!--                 <conductanceSynapse id="NMDA" type="Exp2Syn"> -->
-<!--                     <parameter name="tau1" value="1" units="ms" /> -->
-<!--                     <parameter name="tau2" value="13.3" units="ms" /> -->
-<!--                     <parameter name="e" value="0.0" units="mV" /> -->
-<!--                 </conductanceSynapse> -->
-<!--                 <conductanceSynapse id="GABA" type="Exp2Syn"> -->
-<!--                     <parameter name="tau1" value="0.31" units="ms" /> -->
-<!--                     <parameter name="tau2" value="8.8" units="ms" /> -->
-<!--                     <parameter name="e" value="-75.0" units="mV" /> -->
-<!--                 </conductanceSynapse> -->
-<!--                 <gapJunction id="Gap" type="Gap" /> -->
-<!--             </synapses> -->
+            <synapses>
+                <!-- Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
+                <conductanceSynapse id="AMPA" type="Exp2Syn">
+                    <parameter name="tau1" value="0.03" units="ms" />
+                    <parameter name="tau2" value="0.5" units="ms" />
+                    <parameter name="e" value="0.0" units="mV" />
+                </conductanceSynapse>
+                <conductanceSynapse id="NMDA" type="Exp2Syn">
+                    <parameter name="tau1" value="1" units="ms" />
+                    <parameter name="tau2" value="13.3" units="ms" />
+                    <parameter name="e" value="0.0" units="mV" />
+                </conductanceSynapse>
+                <conductanceSynapse id="GABA" type="Exp2Syn">
+                    <parameter name="tau1" value="0.31" units="ms" />
+                    <parameter name="tau2" value="8.8" units="ms" />
+                    <parameter name="e" value="-75.0" units="mV" />
+                </conductanceSynapse>
+                <gapJunction id="Gap" type="Gap" />
+            </synapses>
         </biophysicalProperties>
     </cell>
 </ncml:model>
