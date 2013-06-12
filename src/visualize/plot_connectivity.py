@@ -15,7 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D #@UnusedImport (is actually used but pylint doesn't know that)
 
-def plot_connectivity(pre, post, proj, save='', include=None, show=False, weight_variable='weights', 
+def plot_connectivity(title, pre, post, proj, save='', include=None, show=False, weight_variable='weights', 
                       transparency_range=(0.1,1.0), black_bg=False, histogram=False):
     # Load pre and post positions and projections if required
     if isinstance(pre, str):
@@ -49,6 +49,7 @@ def plot_connectivity(pre, post, proj, save='', include=None, show=False, weight
     # Set up 3D figure
     fig = plt.figure()
     ax1 = fig.add_subplot(num_axes, 1, 1, projection='3d')
+    ax1.set_title(title)
     if black_bg:
         fig.patch.set_facecolor('black')
         ax1.patch.set_facecolor('black')
@@ -92,7 +93,7 @@ def plot_connectivity(pre, post, proj, save='', include=None, show=False, weight
             ax1.plot((pre_pos[1], post_pos[1]),
                     (pre_pos[2], post_pos[2]),
                     (pre_pos[3], post_pos[3]), c='y', alpha=alpha)
-        ax1.set_aspect('equal')
+#        ax1.set_aspect('equal')
     if histogram:
         ax2 = fig.add_subplot(num_axes, 1, 2)
         ax2.hist(proj[:,2], bins=500)
@@ -127,7 +128,7 @@ if __name__ == '__main__':
     parser.add_argument('--transparency_range', nargs=2, type=float, default=(1.0, 1.0), 
                         help="The range of the transparency used for the connections")
     args = parser.parse_args()
-    plot_connectivity(args.pre, args.post, args.projection, save=args.save, include=args.include,
+    plot_connectivity(args.projection, args.pre, args.post, args.projection, save=args.save, include=args.include,
                       weight_variable=args.weight_variable, 
                       transparency_range=args.transparency_range, show=True, black_bg=args.black_bg,
                       histogram=args.histogram)
