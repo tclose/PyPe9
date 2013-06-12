@@ -95,12 +95,12 @@ def plot_connectivity(pre, post, proj, save='', include=None, show=False, weight
         ax1.set_aspect('equal')
     if histogram:
         ax2 = fig.add_subplot(num_axes, 1, 2)
-        ax2.hist(proj[:,2], bins=50)
+        ax2.hist(proj[:,2], bins=500)
         ax2.set_xlabel('weight (uS)')
         ax2.set_ylabel('frequency')
         if num_axes == 3:
             ax3 = fig.add_subplot(num_axes, 1, 3)
-            ax3.hist(proj[:,3], bins=50)
+            ax3.hist(proj[:,3], bins=500)
             ax3.set_xlabel('delay (ms)')
             ax3.set_ylabel('frequency')
     # Save or plot figure as required 
