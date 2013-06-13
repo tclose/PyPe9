@@ -1051,6 +1051,12 @@
                 <ncml:input name="celsius" />
                 <ncml:const name="F" value="96485.3" />
                 <ncml:const name="R" value="8.31342" />
+                <ncml:component type="geometry" name="soma">
+                    <ncml:const name="diam" value="27" />
+                    <ncml:const name="L" value="27" />
+                    <ncml:output name="diam" />
+                    <ncml:output name="L" />
+                </ncml:component>
                 <ncml:component type="defaults">
                     <ncml:const name="V_t" value="-35" />
                     <ncml:const name="celsius" value="23" />
