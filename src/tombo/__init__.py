@@ -176,7 +176,8 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
                            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
                                   script_args, simulator), shell=True, env=env)
 
-def compile_custom(script_name, work_dir, env=None, script_dir='test', script_args=''):
+def compile_custom(script_name, work_dir, env=None, script_dir='test', script_args='', 
+                   simulator='neuron'):
     """
     Compiles objects in the work directory that are required by the custom script
     
@@ -191,9 +192,9 @@ def compile_custom(script_name, work_dir, env=None, script_dir='test', script_ar
         env = copy(env)
     # Remove NMODL build directory for pyNN neuron so it can be recompiled in script
     print "Compiling required objects"
-    subprocess.check_call('python {} {} --build build_only'.\
+    subprocess.check_call('python {} {} --build build_only --simulator {}'.\
                           format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
-                                  script_args),
+                                  script_args, simulator),
                           shell=True, env=env)
 
 def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', max_memory='4G',
