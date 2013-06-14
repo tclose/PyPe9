@@ -19,6 +19,7 @@ PYTHON_INSTALL_DIR='/apps/python/272'
 OPEN_MPI_INSTALL_DIR='/opt/mpi/gnu/openmpi-1.6.3'
 NEURON_INSTALL_DIR='/apps/DeschutterU/NEURON-7.3'
 NEST_INSTALL_DIR='/apps/DeschutterU/nest-2.2.1'
+SUNDIALS_INSTALL_DIR='/apps/DeschutterU/sundials-2.5.0'
 
 def get_project_dir():
     """
@@ -135,16 +136,18 @@ def create_env(work_dir):
     @param work_dir: The work directory to set the envinroment variables for
     """
     env = os.environ.copy()
-    env['PATH'] = env['PATH'] + os.pathsep + \
-                  os.path.join(PYTHON_INSTALL_DIR, 'bin') + os.pathsep + \
-                  os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep + \
-                  os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin') + os.pathsep + \
-                  os.path.join(NEST_INSTALL_DIR, 'bin')
-    env['PYTHONPATH'] = os.path.join(NEST_INSTALL_DIR, 'lib', 'python2.7', 'dist-packages') + \
-                        os.pathsep + os.path.join(work_dir, 'src') + os.pathsep + \
-                        os.path.join(work_dir, 'depend')
-    env['LD_LIBRARY_PATH'] = (os.path.join(OPEN_MPI_INSTALL_DIR, 'lib')+ os.pathsep +
-                              os.path.join(NEST_INSTALL_DIR, 'bin'))
+    env['PATH'] = (env['PATH'] + os.pathsep +
+                   os.path.join(PYTHON_INSTALL_DIR, 'bin') + os.pathsep +
+                   os.path.join(OPEN_MPI_INSTALL_DIR, 'bin') + os.pathsep +
+                   os.path.join(NEURON_INSTALL_DIR, 'x86_64', 'bin') + os.pathsep +
+                   os.path.join(NEST_INSTALL_DIR, 'bin') + os.pathsep +
+                   os.path.join(SUNDIALS_INSTALL_DIR, 'bin'))
+    env['PYTHONPATH'] = (os.path.join(NEST_INSTALL_DIR, 'lib', 'python2.7', 'dist-packages') +
+                         os.pathsep + os.path.join(work_dir, 'src') + os.pathsep +
+                         os.path.join(work_dir, 'depend'))
+    env['LD_LIBRARY_PATH'] = (os.path.join(OPEN_MPI_INSTALL_DIR, 'lib') + os.pathsep +
+                              os.path.join(NEST_INSTALL_DIR, 'lib', 'nest') + os.pathsep +
+                              os.path.join(SUNDIALS_INSTALL_DIR, 'lib'))
     env['NINEML_SRC_PATH'] = os.path.join(work_dir, 'src')
     return env
     
@@ -164,10 +167,12 @@ def compile_ninemlp(script_name, work_dir, env=None, script_dir='simulate', scri
         env = copy(env)
     env['NINEMLP_MPI'] = '1'
     # Remove NMODL build directory for pyNN neuron so it can be recompiled in script
-    pynn_nmodl_path = os.path.join(work_dir, 'depend', 'pyNN','neuron', 'nmodl')
-    if os.path.exists(os.path.join(pynn_nmodl_path, 'x86_64')):
-        shutil.rmtree(os.path.join(pynn_nmodl_path, 'x86_64'))
-    subprocess.check_call('cd {}; {}'.format(pynn_nmodl_path, path_to_exec('nrnivmodl')), shell=True)
+    if simulator == 'neuron':
+        pynn_nmodl_path = os.path.join(work_dir, 'depend', 'pyNN','neuron', 'nmodl')
+        if os.path.exists(os.path.join(pynn_nmodl_path, 'x86_64')):
+            shutil.rmtree(os.path.join(pynn_nmodl_path, 'x86_64'))
+        subprocess.check_call('cd {}; {}'.format(pynn_nmodl_path, path_to_exec('nrnivmodl')), 
+                              shell=True)
     print "Compiling required NINEML+ objects"
     print 'python {} {} --build build_only --simulator {}'.\
            format(os.path.join(work_dir, 'src', script_dir, script_name + '.py'),
