@@ -19,7 +19,6 @@ import argparse
 import ninemlp
 import time
 import sys
-from pyNN.random import NumpyRNG
 
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
@@ -86,6 +85,10 @@ if args.debug_network:
 else:
     xml_filename = 'fabios_network.xml'
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum', xml_filename)
+# Set the build mode for pyNN before importing the simulator specific modules
+ninemlp.pyNN_build_mode = args.build
+exec("from ninemlp.%s import *" % args.simulator)
+from pyNN.random import NumpyRNG
 # Set the random seeds
 if args.net_seed:
     net_seed = int(args.net_seed)
@@ -103,9 +106,6 @@ stim_rng = NumpyRNG(stim_seed)
 if args.build != 'compile_only' or args.build != 'build_only':
     print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
     print "Random seed used to generate the stimulation spike train is %d" % stim_seed    
-# Set the build mode for pyNN before importing the simulator specific modules
-ninemlp.pyNN_build_mode = args.build
-exec("from ninemlp.%s import *" % args.simulator)
 # Set flags for the construction of the network
 flags = []
 if args.include_gap:
