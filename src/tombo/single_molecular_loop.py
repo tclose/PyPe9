@@ -56,7 +56,7 @@ nrniv single_molecular_mosinit.hoc
     copy_to_output = ['data', os.path.join('external','fabios_network')]
 else:
     #Compile network
-    tombo.compile_ninemlp(SCRIPT_NAME, work_dir)
+    tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
     # Set up command to run the script
     cmd_line = \
 "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ --time {time}  \

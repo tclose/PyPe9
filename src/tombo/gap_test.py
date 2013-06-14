@@ -30,7 +30,8 @@ if args.mwe:
 else:
     script_args = ''      
 #Compile network
-tombo.compile_ninemlp(script_name, work_dir, script_dir='test', script_args=script_args)
+tombo.compile_ninemlp(script_name, work_dir, script_dir='test', script_args=script_args,
+                      simulator=args.simulator)
 # Set up command to run the script
 cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
            "--build require {script_args}".format(script_name=script_name, work_dir=work_dir,
