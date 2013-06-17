@@ -202,9 +202,9 @@ def compile_custom(script_name, work_dir, env=None, script_dir='test', script_ar
                                   script_args, simulator),
                           shell=True, env=env)
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='long', max_memory='4G',
-               time_limit=None, env=None, copy_to_output=['xml'], strip_build_from_copy=True, 
-               name=None):
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', max_memory='4G',
+               virtual_memory='4G', time_limit=None, env=None, copy_to_output=['xml'], 
+               strip_build_from_copy=True, name=None):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
     
@@ -267,8 +267,9 @@ cp -r {origin} {destination}
 # use OpenMPI parallel environment with {np} processes
 #$ -pe openmpi {np}
 {time_limit}
-# Set the maximum memory use for the script
+# Set the memory limits for the script
 #$ -l h_vmem={max_mem}
+#$ -l virtual_free={virt_mem}
 
 # Export the following env variables:
 #$ -v HOME
@@ -309,8 +310,9 @@ cp {work_dir}/output_stream {output_dir}/output
 echo "============== Done ===============" 
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], ninemlp_src_path=os.path.join(work_dir,'src'), np=np,
-      que_name=que_name, max_mem=max_memory, cmds=cmds, output_dir=output_dir, name_cmd=name_cmd, 
-      copy_cmd=copy_cmd, jobscript_path=jobscript_path, time_limit=time_limit_option))
+      que_name=que_name, max_mem=max_memory, virt_mem=virtual_memory, cmds=cmds, 
+      output_dir=output_dir, name_cmd=name_cmd, copy_cmd=copy_cmd, jobscript_path=jobscript_path, 
+      time_limit=time_limit_option))
     f.close()
     # Submit job
     print "Submitting job '%s' to que" % jobscript_path
