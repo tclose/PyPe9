@@ -863,25 +863,6 @@
             <intracellularProperties>
                 <resistivity value="100" units="ohm_cm" />  <!-- Used for specific axial resistance -->
             </intracellularProperties>
-            <synapses>
-                <!-- Not inserted need to check <reversalPotential species="cl" value="-65 mV"/> -->
-                <conductanceSynapse id="AMPA" type="Exp2Syn">
-                    <parameter name="tau1" value="0.03" units="ms" />
-                    <parameter name="tau2" value="0.5" units="ms" />
-                    <parameter name="e" value="0.0" units="mV" />
-                </conductanceSynapse>
-                <conductanceSynapse id="NMDA" type="Exp2Syn">
-                    <parameter name="tau1" value="1" units="ms" />
-                    <parameter name="tau2" value="13.3" units="ms" />
-                    <parameter name="e" value="0.0" units="mV" />
-                </conductanceSynapse>
-                <conductanceSynapse id="GABA" type="Exp2Syn">
-                    <parameter name="tau1" value="0.31" units="ms" />
-                    <parameter name="tau2" value="8.8" units="ms" />
-                    <parameter name="e" value="-75.0" units="mV" />
-                </conductanceSynapse>
-                <gapJunction id="Gap" type="Gap" />
-            </synapses>
         </biophysicalProperties>
     </cell>
 </ncml:model>
