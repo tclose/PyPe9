@@ -2241,8 +2241,7 @@
                       <ncml:onevent>(B + (w * scale_factor))</ncml:onevent>
                       <ncml:initial>0</ncml:initial>
                     </ncml:transient>
-                    <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr>
-                    </ncml:asgn>
+                    <ncml:asgn name="g"><ncml:expr>(B - A)</ncml:expr></ncml:asgn>
                     <ncml:output name="g"/>
                     <ncml:output name="e"/>
                     <ncml:output name="scale_factor"/>
