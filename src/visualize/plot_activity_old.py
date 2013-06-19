@@ -408,12 +408,12 @@ def main(arguments):
             if ext.endswith('v.pkl'):
                 times, values, legends, label = load_trace(filename)
             elif ext.endswith('_dat'):
-                label, header, variable = read_txt_header(filename, 
+                label, header, variable = read_hoc_header(filename, 
                                                           prefix_filename=args.prefix_filename)
                 times, values, legends = load_trace_hoc(filename, time_start=args.time_start, 
                                                         time_stop=args.time_stop)
             else:
-                label, header, variable = read_hoc_header(filename, 
+                label, header, variable = read_txt_header(filename, 
                                                           prefix_filename=args.prefix_filename)
                 try:
                     dt = header['dt']
