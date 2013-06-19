@@ -67,7 +67,7 @@ def main(arguments):
             spike_train = Population('SpikeTrain', 1, standardmodels.cells.SpikeSourcePoisson,  #@UndefinedVariable
                                      params={'rate' : [float(args.input[3]) if len(args.input) > 3 else 5], 
                                              'start' : [float(args.input[4]) if len(args.input) > 4 else 1000],
-                                             'duration': [1e10]})
+                                             'duration' : [1e10]})
             proj = Projection(spike_train, pop, 'SpikeConnection', connectors.OneToOneConnector(), #@UndefinedVariable @UnusedVariable
                               standardmodels.synapses.StaticSynapse(weight=float(args.input[2]) if len(args.input) > 2 else 1.0,  #@UndefinedVariable
                                                                     delay=0.2),
