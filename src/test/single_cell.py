@@ -28,7 +28,10 @@ def main(arguments):
     parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.v') , help='The output location of the recording files')
     parser.add_argument('--min_delay', type=float, default=0.05, help='The minimum synaptic delay in the network')
     parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
-    parser.add_argument('--inject', nargs=3, default=None, help='Parameters for the current injection. If TYPE is ''step'' ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' ARG1=mean and ARG2=stdev', metavar=('TYPE', 'ARG1', 'ARG2'))
+    parser.add_argument('--input', nargs='+', default=None, 
+                        help="Parameters for the current inpution. If TYPE is ''step'' "
+                             "ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' "
+                             "ARG1=mean and ARG2=stdev")
     parser.add_argument('--print_all', action='store_true', help='Prints details for all sections instead of just soma')
     parser.add_argument('--no_description', action='store_true', help="Suppresses the pyNN description")
     parser.add_argument('--silent_build', action='store_true', help='Suppresses all build output')
@@ -58,20 +61,30 @@ def main(arguments):
         for seg in cell.segments.values():
             h.psection(sec=seg)
     # Create the input current and times vectors
-    if args.inject:
-        inject_type = args.inject[0]
-        if inject_type == 'step':
-            current_source = StepCurrentSource(amplitudes=[float(args.inject[1])], #@UndefinedVariable
-                                               times=[float(args.inject[2])])
-        elif inject_type == 'noise':
-            current_source = NoisyCurrentSource(mean=float(args.inject[1]), #@UndefinedVariable
-                                                 stdev=float(args.inject[2]),
-                                                 stop=args.time,
-                                                 dt=1.0)
+    if args.input:
+        input_type = args.input[0]
+        if input_type == 'spikes':
+            spike_train = Population('SpikeTrain', 1, standardmodels.cells.SpikeSourcePoisson,  #@UndefinedVariable
+                                     params={'rate' : [float(args.input[3]) if len(args.input) > 3 else 5], 
+                                             'start' : [float(args.input[4]) if len(args.input) > 4 else 1000],
+                                             'duration': [1e10]})
+            proj = Projection(spike_train, pop, 'SpikeConnection', connectors.OneToOneConnector(), #@UndefinedVariable @UnusedVariable
+                              standardmodels.synapses.StaticSynapse(weight=float(args.input[2]) if len(args.input) > 2 else 1.0,  #@UndefinedVariable
+                                                                    delay=0.2),
+                              target=args.input[1]) 
+        elif input_type == 'step':
+            current_source = StepCurrentSource(amplitudes=[float(args.input[1])], #@UndefinedVariable
+                                               times=[float(args.input[2])])
+            pop.input(current_source)
+        elif input_type == 'noise':
+            current_source = NoisyCurrentSource(mean=float(args.input[1]), #@UndefinedVariable
+                                                stdev=float(args.input[2]),
+                                                stop=args.time,
+                                                dt=1.0)
+            pop.input(current_source)
         else:
-            raise Exception("Unrecognised current injection type '{}'. Valid values are 'step' " \
-                            "or 'noise'".format(inject_type))
-        pop.inject(current_source)
+            raise Exception("Unrecognised current input type '{}'. Valid values are 'spikes', " \
+                            "'step' or 'noise'".format(input_type))
     pop.record_v()
     pop.record('spikes')
     if args.simulator == 'neuron':
