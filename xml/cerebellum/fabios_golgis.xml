@@ -31,5 +31,14 @@
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
             </initialConditions>
         </population>
+        <population id="DummyInput" cell="SpikeSourceArray" size="225"/>
+        <population id="DummyCell" cell="IF_curr_exp" size="2"/>
+        <projection id="DummyProjection">
+            <source id="DummyInput" />
+            <destination id="DummyCell" />
+            <connection pattern="AllToAll" /> <!-- number="25" -->
+            <weight pattern="Constant" value="0.2244 nS" />
+            <delay pattern="Constant" value="0.2 ms" />
+        </projection>
     </network>
 </nineml>
