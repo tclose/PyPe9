@@ -55,8 +55,19 @@ def main(arguments):
                 spikes_fig = plt.figure()
                 spikes_ax = spikes_fig.add_subplot(111)
                 spikes_ax.set_title(filename + ' - Spikes')
+                min_time = float('inf')
+                max_time = float('-inf')
                 for s, st in enumerate(seg.spiketrains):
+                    if len(st):
+                        st_min_time = np.min(st)
+                        st_max_time = np.max(st)
+                        if st_min_time < min_time:
+                            min_time = st_min_time
+                        if st_max_time > max_time:
+                            max_time = st_max_time
                     spikes_ax.scatter(st, s * np.ones(st.size))
+                if min_time != float('inf') and max_time != float('-inf'):
+                    plt.axis([min_time, max_time, 0, len(seg.spiketrains)])
     if args.no_show:
         print "Delaying display of plot until matplotlib.pyplot.show() is called"
     else:
