@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <!-- The base network from which to build the main network -->
+    <network id="CerebellarGranularLayer">
+        <freeParameters>
+            <flags>
+                <flag id="includeGap" default="False" />
+                <flag id="GranuleToGolgi" default="True" />
+            </flags>
+            <scalars />
+        </freeParameters>
+        <simulationDefaults>
+            <temperature value="23" />
+        </simulationDefaults>
+        <!-- Populations -->
+        <population id="Golgis" cell="ncml/Golgi_DeSouza10.xml" size="225">
+            <structure type="Distributed">
+                <somas pattern="Grid2D" aspect_ratio="9" dx="33.3333" dy="33.3333"
+                    x0="6.6667" y0="6.6667" z="200">
+                    <distribution attr="x" type="uniform" low="-6.6667" high="6.6667" />
+                    <distribution attr="y" type="uniform" low="-6.6667" high="6.6667" />
+                </somas>
+            </structure>
+            <cellParameters>
+                <distribution attr="diam" type="uniform" low="21.6" high="32.4" units="um"
+                    segmentGroup="soma" />
+                <distribution component="Lkg" attr="e_rev" type="uniform" low="-66"
+                    high="-44" units="nA" />
+            </cellParameters>
+            <initialConditions>
+                <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
+            </initialConditions>
+        </population>
+    </network>
+</nineml>
