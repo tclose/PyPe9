@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import sys
+import quantities as units
 
 def main(arguments):
     parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
@@ -63,7 +64,7 @@ def main(arguments):
                             max_time = st_max_time
                     spikes_ax.scatter(st, s * np.ones(st.size))
                 if max_time != float('-inf'):
-                    plt.axis([0.0, max_time, 0, len(seg.spiketrains)])
+                    plt.axis([0.0 * units.ms, max_time, 0, len(seg.spiketrains)])
     if args.no_show:
         print "Delaying display of plot until matplotlib.pyplot.show() is called"
     else:
