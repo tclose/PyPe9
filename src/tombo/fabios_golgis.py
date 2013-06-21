@@ -10,6 +10,7 @@
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'fabios_golgis'
 # Required imports
+from ninemlp import create_seeds, get_mpi_rank
 import tombo
 import argparse
 import os.path
@@ -29,7 +30,14 @@ parser.add_argument('--min_delay', type=float, default=0.020001,
 parser.add_argument('--timestep', type=float, default=0.02, 
                     help='The time step used for the simulation (default: %(default)s)')
 parser.add_argument('--net_seed', help="The random seed used to generate the stochastic parts of "
-                    "the network", type=int, default=None) 
+                    "the network", type=int, default=None)
+parser.add_argument('--seed_depends_on_np', action='store_true',
+                    help="Instead of a constant seed being used for each process a different seed "
+                         "on each process, which is required if only generated random numbers as "
+                         "required by each node, instead of the whole set on each node. This means "
+                         "the simulation will be dependent on not just the provided seeds but also "
+                         "the number of processes used, but otherwise shouldn't have any "
+                         "detrimental effects")
 #parser.add_argument('--stim_seed', help="The random seed used to generate the stimulation spike "
 #                                        "train.", type=int, default=None) 
 parser.add_argument('--np', type=int, default=96, 
@@ -65,7 +73,8 @@ parser.add_argument('--name', type=str, default=None,
                          "renaming of the output directory after it is copied to its final "
                          "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
-net_seed, stim_seed = tombo.create_seed(args.net_seed, args.stim_seed)
+mpi_rank = get_mpi_rank(args.simulator)
+net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.np, mpi_rank)
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 required_dirs = ['src', 'xml']

@@ -14,6 +14,7 @@ import tombo
 import argparse
 import os.path
 import time
+from ninemlp import create_seeds
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -65,7 +66,8 @@ parser.add_argument('--name', type=str, default=None,
                          "renaming of the output directory after it is copied to its final "
                          "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
-net_seed, stim_seed = tombo.create_seed(args.net_seed, args.stim_seed)
+mpi_rank = get_mpi_rank(args.simulator)
+net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.np, mpi_rank)
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 if args.legacy_hoc:

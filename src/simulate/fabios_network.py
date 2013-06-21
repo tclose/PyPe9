@@ -19,7 +19,7 @@ import argparse
 import ninemlp
 import time
 import sys
-
+from ninemlp import create_seeds, get_mpi_rank
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
@@ -70,6 +70,8 @@ parser.add_argument('--no_granule_to_golgi', action='store_true', help="Deactiva
                                                                        "network.")
 parser.add_argument('--log', type=str, help="Save logging information to file")
 args = parser.parse_args()
+mpi_rank = get_mpi_rank(args.simulator)
+net_seed, stim_seed = create_seeds(args.net_seed, args.stim_seed)
 # Delete all system arguments once they are parsed to avoid conflicts in NEST module
 del sys.argv[1:]
 # Set up logger
@@ -90,18 +92,7 @@ ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
 from pyNN.random import NumpyRNG
 # Set the random seeds
-if args.net_seed:
-    net_seed = int(args.net_seed)
-else:    
-    net_seed = int(time.time() * 256)
 net_rng = NumpyRNG(net_seed)
-if args.stim_seed:
-    stim_seed = int(args.stim_seed)
-else:
-    if args.net_seed:
-        stim_seed = int(time.time() * 256)
-    else:
-        stim_seed = net_seed + 1
 stim_rng = NumpyRNG(stim_seed)
 if args.build != 'compile_only' or args.build != 'build_only':
     print "Random seed used to generate the stochastic elements of the network is %d" % net_seed

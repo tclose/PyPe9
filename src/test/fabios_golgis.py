@@ -70,6 +70,7 @@ parser.add_argument('--no_granule_to_golgi', action='store_true', help="Deactiva
                                                                        "network.")
 parser.add_argument('--log', type=str, help="Save logging information to file")
 args = parser.parse_args()
+net_seed = ninemlp.create_seeds(args.net_seed)
 # Delete all system arguments once they are parsed to avoid conflicts in NEST module
 del sys.argv[1:]
 # Set up logger
@@ -83,10 +84,6 @@ ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
 from pyNN.random import NumpyRNG
 # Set the random seeds
-if args.net_seed:
-    net_seed = int(args.net_seed)
-else:    
-    net_seed = int(time.time() * 256)
 net_rng = NumpyRNG(net_seed)
 #if args.stim_seed:
 #    stim_seed = int(args.stim_seed)
