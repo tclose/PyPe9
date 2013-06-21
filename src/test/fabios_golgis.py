@@ -109,6 +109,7 @@ flags = []
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable
               build_mode=args.build, silent_build=args.silent_build, flags=flags, rng=net_rng)
+net.get_population('Golgis')._cell.source_section.diam = 1000.0
 #print "Setting up simulation"
 #mossy_fibers = net.get_population('MossyFibers')
 #mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
