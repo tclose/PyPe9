@@ -25,10 +25,12 @@ def main(arguments):
     parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
     parser.add_argument('--time_start', type=float, default=None, help='The start of the plot')
     parser.add_argument('--time_stop', type=float, default=None, help='The stop of the plot')
-    parser.add_argument('--incr', type=float, default=0.01,
+    parser.add_argument('--incr', type=float, default=0.1,
                         help="The minimum increment required before the next step in the variable "
                              "trace is plotted")
     parser.add_argument('--label', type=str, default='', help='Additional label information')
+    parser.add_argument('--include', nargs='+', type=str, default=None, 
+                        help="Indices or slices of indices to include")
     parser.add_argument('--combine', action='store_true',
                         help='Plot the variable figures on a single combined axis')
     parser.add_argument('--no_show', action='store_true',
@@ -45,13 +47,31 @@ def main(arguments):
         else:
             raise Exception("Unsupported extension for file '{}'".format(filename))
         block = reader.read(cascade=True, lazy=False)[0]
+        print "Finished reading data file '{}'".format(filename)
         for seg in block.segments:
             if seg.analogsignalarrays and (not args.only or args.only == 'traces'):
                 traces_fig = plt.figure()
                 traces_ax = traces_fig.add_subplot(111)
                 traces_ax.set_title(filename + ' - Traces')
                 for asig in seg.analogsignalarrays:
-                    traces_ax.plot(asig.times, asig)
+                    signals = np.asarray(asig)
+                    times = np.asarray(asig.times)
+                    # Filters out steps that result in minor changes to the y-axis value (eg. voltage)
+                    # to reduce the plotting load.
+                    if args.incr:
+                        mask_array = np.zeros(signals.shape, dtype=bool)
+                        prev_values = - np.ones(signals.shape[1]) * np.inf
+                        for time_i, values in enumerate(signals):
+                            mask = np.where(abs(values - prev_values) > args.incr)[0]
+                            mask_array[time_i, mask] = 1.0
+                            prev_values[mask] = values[mask]
+                        print ("Using an increment of {0} -> displaying of {1:.1f}% of signal data"
+                               .format(args.incr, 100.0 * float(np.count_nonzero(mask_array))/
+                                                  float(mask_array.shape[0] * mask_array.shape[1])))
+                        for mask, sig in zip(mask_array.T, signals.T):
+                            traces_ax.plot(times[mask], sig[mask])
+                    else:
+                        traces_ax.plot(times, signals)
             if seg.spiketrains and (not args.only or args.only == 'spikes'):
                 spikes_fig = plt.figure()
                 spikes_ax = spikes_fig.add_subplot(111)
@@ -64,7 +84,7 @@ def main(arguments):
                             max_time = st_max_time
                     spikes_ax.scatter(st, s * np.ones(st.size))
                 if max_time != float('-inf'):
-                    plt.axis([0.0 * units.ms, max_time, 0, len(seg.spiketrains)])
+                    plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
     if args.no_show:
         print "Delaying display of plot until matplotlib.pyplot.show() is called"
     else:
