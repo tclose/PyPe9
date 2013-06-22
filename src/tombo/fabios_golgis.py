@@ -14,7 +14,7 @@ SCRIPT_NAME = 'fabios_golgis'
 import tombo
 import argparse
 import os.path
-from ninemlp import create_seeds, get_mpi_rank
+from ninemlp import create_seeds
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -79,14 +79,11 @@ required_dirs = ['src', 'xml']
 # Create work directory and get path for output directory
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, 
                                              required_dirs=required_dirs)
-if args.inconsistent_seeds:
-    mpi_rank = get_mpi_rank(args.simulator)
-    process_rank_of_np = (mpi_rank, args.np)
-else:
-    process_rank_of_np = None
-net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), process_rank_of_np)
 #Compile network
 tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
+# Set random seeds
+net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.inconsistent_seeds, 
+                                   args.simulator)
 # Set up command to run the script
 cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
            "--time {time} --min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \

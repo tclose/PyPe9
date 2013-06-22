@@ -83,32 +83,13 @@ if args.log:
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum/fabios_golgis.xml')
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
-exec("from ninemlp.%s import *" % args.simulator)
-if args.inconsistent_seeds:
-    process_rank_of_np = (simulator.state.mpi_rank, args.np) #@UndefinedVariable
-else:
-    process_rank_of_np = None
-net_seed = create_seeds(args.net_seed, process_rank_of_np)
-from pyNN.random import NumpyRNG
-# Set the random seeds
-net_rng = NumpyRNG(net_seed)
-#if args.stim_seed:
-#    stim_seed = int(args.stim_seed)
-#else:
-#    if args.net_seed:
-#        stim_seed = int(time.time() * 256)
-#    else:
-#        stim_seed = net_seed + 1
-#stim_rng = NumpyRNG(stim_seed)
 if args.build != 'compile_only' or args.build != 'build_only':
     print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
-#    print "Random seed used to generate the stimulation spike train is %d" % stim_seed    
-# Set flags for the construction of the network
 flags = []
-#if args.include_gap:
-#    flags.append('includeGap')
-#if args.no_granule_to_golgi:
-#    flags.append(('GranuleToGolgi', False))
+# Set the random seeds
+net_seed = create_seeds(args.net_seed, args.inconsistent_seeds, args.simulator)
+from pyNN.random import NumpyRNG
+net_rng = NumpyRNG(net_seed)
 # Build the network
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable

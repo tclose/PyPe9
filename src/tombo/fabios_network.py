@@ -98,12 +98,8 @@ if args.legacy_hoc:
 else:
     #Compile network
     tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
-    if args.inconsistent_seeds:
-        mpi_rank = get_mpi_rank(args.simulator)
-        process_rank_of_np = (mpi_rank, args.np)
-    else:
-        process_rank_of_np = None
-    net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), process_rank_of_np)
+    net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.inconsistent_seeds,
+                                       args.simulator)
     # Set up command to run the script
     cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
                "--time {time} --start_input {start_input} --mf_rate {mf_rate} " \
