@@ -13,7 +13,7 @@
             <temperature value="23" />
         </simulationDefaults>
         <!-- Populations -->
-        <population id="Golgis" cell="ncml/Golgi_DeSouza10.xml" size="225">
+        <population id="Golgis" cell="ncml/Golgi_DeSouza10.xml" size="100">
             <structure type="Distributed">
                 <somas pattern="Grid2D" aspect_ratio="9" dx="33.3333" dy="33.3333"
                     x0="6.6667" y0="6.6667" z="200">
@@ -27,11 +27,11 @@
                 <distribution component="Lkg" attr="e_rev" type="uniform" low="-66"
                     high="-44" units="nA" />
             </cellParameters>
-            <initialConditions>
+            <!-- <initialConditions>
                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
-            </initialConditions>
+              </initialConditions>-->
         </population>
-        <population id="DummyInput" cell="SpikeSourceArray" size="225"/>
+        <population id="DummyInput" cell="SpikeSourceArray" size="100"/>
         <population id="DummyCell" cell="IF_curr_exp" size="2"/>
         <projection id="DummyProjection">
             <source id="DummyInput" />

@@ -93,8 +93,8 @@ ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
 from pyNN.random import NumpyRNG
 # Set the random seeds
-net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.inconsistent_seeds,
-                                    args.simulator)
+net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), 
+                                   simulator.state if args.inconsistent_seeds else None) #@UndefinedVariable
 net_rng = NumpyRNG(net_seed)
 stim_rng = NumpyRNG(stim_seed)
 if args.build != 'compile_only' or args.build != 'build_only':

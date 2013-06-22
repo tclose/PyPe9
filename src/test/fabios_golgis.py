@@ -72,7 +72,6 @@ parser.add_argument('--no_granule_to_golgi', action='store_true', help="Deactiva
                                                                        "network.")
 parser.add_argument('--log', type=str, help="Save logging information to file")
 args = parser.parse_args()
-net_seed = ninemlp.create_seeds(args.net_seed)
 # Delete all system arguments once they are parsed to avoid conflicts in NEST module
 del sys.argv[1:]
 # Set up logger
@@ -83,18 +82,21 @@ if args.log:
 network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum/fabios_golgis.xml')
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
+exec("from ninemlp.%s import *" % args.simulator)
+# Set the random seeds
+net_seed = create_seeds(args.net_seed, simulator.state if args.inconsistent_seeds else None) #@UndefinedVariable
 if args.build != 'compile_only' or args.build != 'build_only':
     print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
-flags = []
-# Set the random seeds
-net_seed = create_seeds(args.net_seed, args.inconsistent_seeds, args.simulator)
 from pyNN.random import NumpyRNG
 net_rng = NumpyRNG(net_seed)
 # Build the network
 print "Building network"
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable
               build_mode=args.build, silent_build=args.silent_build, flags=flags, rng=net_rng)
-net.get_population('Golgis')._cell.source_section.diam = 1000.0
+#pop = net.get_population('Golgis')
+#local_cells = pop[pop._mask_local]
+#for cell in local_cells:
+  #cell._cell.source_section.Lkg.e_rev = 20.0
 #print "Setting up simulation"
 #mossy_fibers = net.get_population('MossyFibers')
 #mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)

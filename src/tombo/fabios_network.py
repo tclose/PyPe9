@@ -98,17 +98,14 @@ if args.legacy_hoc:
 else:
     #Compile network
     tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
-    net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.inconsistent_seeds,
-                                       args.simulator)
+    net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed))
     # Set up command to run the script
     cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
-               "--time {time} --start_input {start_input} --mf_rate {mf_rate} " \
-               "--min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \
+               "--time {time} --start_input {args.start_input} --mf_rate {args.mf_rate} " \
+               "--min_delay {args.min_delay} --simulator {args.simulator} --timestep {args.timestep} " \
                "--net_seed {net_seed} --stim_seed {stim_seed} --build require"\
-               .format(script_name=SCRIPT_NAME, work_dir=work_dir, mf_rate=args.mf_rate,
-               start_input=args.start_input, time=args.time, min_delay=args.min_delay,
-               simulator=args.simulator, timestep=args.timestep, 
-               net_seed=net_seed, stim_seed=stim_seed)
+               .format(script_name=SCRIPT_NAME, work_dir=work_dir, args=args, net_seed=net_seed, 
+                       stim_seed=stim_seed)
     if args.debug:
         cmd_line += " --debug"
     for volt_trace in args.volt_trace:
@@ -117,6 +114,8 @@ else:
             cmd_line += " "  + str(arg)
     if args.include_gap:
         cmd_line += ' --include_gap'
+    if args.inconsistent_seeds:
+        cmd_line += ' --inconsistent_seeds'
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
     if args.log:

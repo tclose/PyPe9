@@ -80,23 +80,22 @@ required_dirs = ['src', 'xml']
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, 
                                              required_dirs=required_dirs)
 #Compile network
-tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
+tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator, script_dir='test')
 # Set random seeds
-net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.inconsistent_seeds, 
-                                   args.simulator)
+net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed))
 # Set up command to run the script
-cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
+cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
            "--time {time} --min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \
            "--net_seed {net_seed} --build require"\
            .format(script_name=SCRIPT_NAME, work_dir=work_dir, time=args.time, 
                    min_delay=args.min_delay, simulator=args.simulator, timestep=args.timestep, 
                    net_seed=net_seed)
-if args.debug:
-    cmd_line += " --debug"
 for volt_trace in args.volt_trace:
     cmd_line += " --volt_trace"
     for arg in volt_trace:
         cmd_line += " "  + str(arg)
+if args.inconsistent_seeds:
+    cmd_line += ' --inconsistent_seeds'        
 if args.log:
     cmd_line += ' --log {}/output/pyNN.log'.format(work_dir)
 copy_to_output = ['xml']
