@@ -17,9 +17,8 @@ if 'NINEMLP_MPI' in os.environ:
     print "importing MPI"
 import argparse
 import ninemlp
-import time
 import sys
-
+from ninemlp import create_seeds
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
@@ -49,13 +48,16 @@ parser.add_argument('--timestep', type=float, default=DEFAULT_TIMESTEP,
 #parser.add_argument('--save_cell_positions', type=str, default=None, help="A path in which to save "
 #                                                                       "the generated cell positions")
 parser.add_argument('--net_seed', type=int, default=None, help="The random seed used to generate the "
-                                                               "stochastic parts of the network") 
+                                                               "stochastic parts of the network")
+parser.add_argument('--inconsistent_seeds', action='store_true',
+                    help="Instead of a constant seed being used for each process a different seed "
+                         "on each process, which is required if only minimum number of generated "
+                         "random numbers are generated on each node, instead of the whole set. This "
+                         "means the simulation will be dependent on not just the provided seeds but "
+                         "also the number of processes used, but otherwise shouldn't have any "
+                         "detrimental effects")
 #parser.add_argument('--stim_seed', type=int, default=None, help="The random seed used to generate "
 #                                                                " the stimulation spike train.")
-parser.add_argument('--para_unsafe', action='store_true', help="If set the network simulation will "
-                                                               "run parallel unsafe (number of "
-                                                               "cores will alter network generated "
-                                                               "from the same seed).")
 parser.add_argument('--volt_trace', nargs='+', default=[], action='append', 
                     metavar=('POP_ID', 'SLICE_INDICES'), 
                     help="Save voltage traces for the given list of ('population name', 'cell ID') "
@@ -82,6 +84,11 @@ network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum/fabios_golgis.
 # Set the build mode for pyNN before importing the simulator specific modules
 ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
+if args.inconsistent_seeds:
+    process_rank_of_np = (simulator.state.mpi_rank, args.np) #@UndefinedVariable
+else:
+    process_rank_of_np = None
+net_seed = create_seeds(args.net_seed, process_rank_of_np)
 from pyNN.random import NumpyRNG
 # Set the random seeds
 net_rng = NumpyRNG(net_seed)

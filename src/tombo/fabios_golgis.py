@@ -10,11 +10,11 @@
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'fabios_golgis'
 # Required imports
-from ninemlp import create_seeds, get_mpi_rank
+
 import tombo
 import argparse
 import os.path
-import time
+from ninemlp import create_seeds, get_mpi_rank
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -31,7 +31,7 @@ parser.add_argument('--timestep', type=float, default=0.02,
                     help='The time step used for the simulation (default: %(default)s)')
 parser.add_argument('--net_seed', help="The random seed used to generate the stochastic parts of "
                     "the network", type=int, default=None)
-parser.add_argument('--seed_depends_on_np', action='store_true',
+parser.add_argument('--inconsistent_seeds', action='store_true',
                     help="Instead of a constant seed being used for each process a different seed "
                          "on each process, which is required if only generated random numbers as "
                          "required by each node, instead of the whole set on each node. This means "
@@ -73,14 +73,18 @@ parser.add_argument('--name', type=str, default=None,
                          "renaming of the output directory after it is copied to its final "
                          "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
-mpi_rank = get_mpi_rank(args.simulator)
-net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.np, mpi_rank)
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 required_dirs = ['src', 'xml']
 # Create work directory and get path for output directory
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, 
                                              required_dirs=required_dirs)
+if args.inconsistent_seeds:
+    mpi_rank = get_mpi_rank(args.simulator)
+    process_rank_of_np = (mpi_rank, args.np)
+else:
+    process_rank_of_np = None
+net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), process_rank_of_np)
 #Compile network
 tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
 # Set up command to run the script

@@ -13,8 +13,7 @@ SCRIPT_NAME = 'fabios_network'
 import tombo
 import argparse
 import os.path
-import time
-from ninemlp import create_seeds
+from ninemlp import create_seeds, get_mpi_rank
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -32,7 +31,14 @@ parser.add_argument('--timestep', type=float, default=0.02,
 parser.add_argument('--net_seed', help="The random seed used to generate the stochastic parts of "
                     "the network", type=int, default=None) 
 parser.add_argument('--stim_seed', help="The random seed used to generate the stimulation spike "
-                                        "train.", type=int, default=None) 
+                                        "train.", type=int, default=None)
+parser.add_argument('--inconsistent_seeds', action='store_true',
+                    help="Instead of a constant seed being used for each process a different seed "
+                         "on each process, which is required if only minimum number of generated "
+                         "random numbers are generated on each node, instead of the whole set. This "
+                         "means the simulation will be dependent on not just the provided seeds but "
+                         "also the number of processes used, but otherwise shouldn't have any "
+                         "detrimental effects")
 parser.add_argument('--np', type=int, default=96, 
                     help="The the number of processes to use for the simulation " \
                          "(default: %(default)s)")
@@ -66,8 +72,6 @@ parser.add_argument('--name', type=str, default=None,
                          "renaming of the output directory after it is copied to its final "
                          "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
-mpi_rank = get_mpi_rank(args.simulator)
-net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), args.np, mpi_rank)
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 if args.legacy_hoc:
@@ -82,7 +86,6 @@ work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir,
 if args.legacy_hoc:
     args.np = 1
     import subprocess
-    import os.path
     try:
         nrnivmodl_path = subprocess.check_output('which nrnivmodl', shell=True)
     except subprocess.CalledProcessError:
@@ -95,6 +98,12 @@ if args.legacy_hoc:
 else:
     #Compile network
     tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
+    if args.inconsistent_seeds:
+        mpi_rank = get_mpi_rank(args.simulator)
+        process_rank_of_np = (mpi_rank, args.np)
+    else:
+        process_rank_of_np = None
+    net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), process_rank_of_np)
     # Set up command to run the script
     cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
                "--time {time} --start_input {start_input} --mf_rate {mf_rate} " \

@@ -19,7 +19,7 @@ import argparse
 import ninemlp
 import time
 import sys
-from ninemlp import create_seeds, get_mpi_rank
+from ninemlp import create_seeds
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 # Parse the input options
@@ -52,10 +52,13 @@ parser.add_argument('--net_seed', type=int, default=None, help="The random seed 
                                                                "stochastic parts of the network") 
 parser.add_argument('--stim_seed', type=int, default=None, help="The random seed used to generate "
                                                                 " the stimulation spike train.")
-parser.add_argument('--para_unsafe', action='store_true', help="If set the network simulation will "
-                                                               "run parallel unsafe (number of "
-                                                               "cores will alter network generated "
-                                                               "from the same seed).")
+parser.add_argument('--inconsistent_seeds', action='store_true',
+                    help="Instead of a constant seed being used for each process a different seed "
+                         "on each process, which is required if only minimum number of generated "
+                         "random numbers are generated on each node, instead of the whole set. This "
+                         "means the simulation will be dependent on not just the provided seeds but "
+                         "also the number of processes used, but otherwise shouldn't have any "
+                         "detrimental effects")
 parser.add_argument('--volt_trace', nargs='+', default=[], action='append', 
                     metavar=('POP_ID', 'SLICE_INDICES'), 
                     help="Save voltage traces for the given list of ('population name', 'cell ID') "
@@ -70,8 +73,6 @@ parser.add_argument('--no_granule_to_golgi', action='store_true', help="Deactiva
                                                                        "network.")
 parser.add_argument('--log', type=str, help="Save logging information to file")
 args = parser.parse_args()
-mpi_rank = get_mpi_rank(args.simulator)
-net_seed, stim_seed = create_seeds(args.net_seed, args.stim_seed)
 # Delete all system arguments once they are parsed to avoid conflicts in NEST module
 del sys.argv[1:]
 # Set up logger
@@ -92,6 +93,11 @@ ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
 from pyNN.random import NumpyRNG
 # Set the random seeds
+if args.inconsistent_seeds:
+    process_rank_of_np = (simulator.state.mpi_rank, args.np) #@UndefinedVariable
+else:
+    process_rank_of_np = None
+net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed), process_rank_of_np)
 net_rng = NumpyRNG(net_seed)
 stim_rng = NumpyRNG(stim_seed)
 if args.build != 'compile_only' or args.build != 'build_only':
