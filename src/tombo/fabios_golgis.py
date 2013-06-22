@@ -65,7 +65,7 @@ parser.add_argument('--name', type=str, default=None,
                          "renaming of the output directory after it is copied to its final "
                          "destination, via the command 'mv <output_dir> `cat <output_dir>/name`'")
 args = parser.parse_args()
-net_seed, stim_seed = tombo.create_seed(args.net_seed, args.stim_seed)
+net_seed = tombo.create_seed(args.net_seed)
 # Set the required directories to copy to the work directory depending on whether the legacy hoc 
 # code is used or not
 required_dirs = ['src', 'xml']
@@ -73,16 +73,14 @@ required_dirs = ['src', 'xml']
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, 
                                              required_dirs=required_dirs)
 #Compile network
-tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
+tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator, script_dir='test')
 # Set up command to run the script
-cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
+cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
            "--time {time} --min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \
            "--net_seed {net_seed} --build require"\
            .format(script_name=SCRIPT_NAME, work_dir=work_dir, time=args.time, 
                    min_delay=args.min_delay, simulator=args.simulator, timestep=args.timestep, 
                    net_seed=net_seed)
-if args.debug:
-    cmd_line += " --debug"
 for volt_trace in args.volt_trace:
     cmd_line += " --volt_trace"
     for arg in volt_trace:
