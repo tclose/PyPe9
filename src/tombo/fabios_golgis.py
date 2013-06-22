@@ -82,7 +82,7 @@ work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir,
 #Compile network
 tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator, script_dir='test')
 # Set random seeds
-net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed))
+net_seed = create_seeds(args.net_seed)
 # Set up command to run the script
 cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
            "--time {time} --min_delay {min_delay} --simulator {simulator} --timestep {timestep} " \

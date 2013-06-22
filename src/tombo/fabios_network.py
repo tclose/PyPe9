@@ -13,7 +13,7 @@ SCRIPT_NAME = 'fabios_network'
 import tombo
 import argparse
 import os.path
-from ninemlp import create_seeds, get_mpi_rank
+from ninemlp import create_seeds
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--simulator', type=str, default='neuron',
@@ -101,7 +101,7 @@ else:
     net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed))
     # Set up command to run the script
     cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
-               "--time {time} --start_input {args.start_input} --mf_rate {args.mf_rate} " \
+               "--time {args.time} --start_input {args.start_input} --mf_rate {args.mf_rate} " \
                "--min_delay {args.min_delay} --simulator {args.simulator} --timestep {args.timestep} " \
                "--net_seed {net_seed} --stim_seed {stim_seed} --build require"\
                .format(script_name=SCRIPT_NAME, work_dir=work_dir, args=args, net_seed=net_seed, 

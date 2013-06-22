@@ -91,6 +91,7 @@ from pyNN.random import NumpyRNG
 net_rng = NumpyRNG(net_seed)
 # Build the network
 print "Building network"
+flags =[]
 net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_delay, max_delay=20.0, #@UndefinedVariable
               build_mode=args.build, silent_build=args.silent_build, flags=flags, rng=net_rng)
 #pop = net.get_population('Golgis')
