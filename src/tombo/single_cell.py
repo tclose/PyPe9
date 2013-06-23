@@ -20,10 +20,11 @@ parser.add_argument('xml_filename', type=str, help='The name of the xml file to 
 parser.add_argument('--solver', type=str, default='cvode', help="The solver used to simulate the cell models")
 parser.add_argument('--simulator', type=str, default='neuron',
                                            help="simulator for NINEML+ (either 'neuron' or 'nest')")
-parser.add_argument('--build', type=str, default=ninemlp.DEFAULT_BUILD_MODE,
-                            help='Option to build the NMODL files before running (can be one of \
-                            %s.' % ninemlp.BUILD_MODE_OPTIONS)
-parser.add_argument('--time', type=float, default=25.0, help='The run time of the simulation (ms)')
+parser.add_argument('--input', nargs='+', default=None, 
+                    help="Parameters for the current inpution. If TYPE is ''step'' "
+                         "ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' "
+                         "ARG1=mean and ARG2=stdev")
+ parser.add_argument('--time', type=float, default=25.0, help='The run time of the simulation (ms)')
 parser.add_argument('--min_delay', type=float, default=0.002, help='The minimum synaptic delay in the network')
 parser.add_argument('--timestep', type=float, default=0.001, help='The timestep used for the simulation')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
@@ -49,6 +50,8 @@ cmd_line = \
                                                                               min_delay=args.min_delay,
                                                                               simulator=args.simulator,
                                                                               timestep=args.timestep)
+if args.input:
+    cmd_line += ' --input ' + ' '.join(args.input)
 copy_to_output= ['xml']
 # Submit job to que
 tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, copy_to_output=copy_to_output, que_name=args.que_name)

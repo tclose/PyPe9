@@ -46,8 +46,7 @@ def main(arguments):
             reader = neo.io.PickleIO(filename=filename)
         else:
             raise Exception("Unsupported extension for file '{}'".format(filename))
-        block = reader.read(cascade=True, lazy=False)[0]
-        print "Finished reading data file '{}'".format(filename)
+        block = reader.read(cascade=True, lazy=True)[0]
         for seg in block.segments:
             if seg.analogsignalarrays and (not args.only or args.only == 'traces'):
                 traces_fig = plt.figure()
@@ -82,7 +81,7 @@ def main(arguments):
                         st_max_time = np.max(st)
                         if st_max_time > max_time:
                             max_time = st_max_time
-                    spikes_ax.scatter(st, s * np.ones(st.size))
+                        spikes_ax.scatter(st, s * np.ones(st.size))
                 if max_time != float('-inf'):
                     plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
     if args.no_show:
