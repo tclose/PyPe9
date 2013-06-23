@@ -71,6 +71,8 @@ def main(arguments):
                             traces_ax.plot(times[mask], sig[mask])
                     else:
                         traces_ax.plot(times, signals)
+                traces_ax.set_xlabel('Time (ms)')
+                traces_ax.set_ylabel('Voltage (mV)')
             if seg.spiketrains and (not args.only or args.only == 'spikes'):
                 spikes_fig = plt.figure()
                 spikes_ax = spikes_fig.add_subplot(111)
@@ -84,6 +86,8 @@ def main(arguments):
                         spikes_ax.scatter(st, s * np.ones(st.size))
                 if max_time != float('-inf'):
                     plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
+                spikes_ax.set_xlabel('Time (ms)')
+                spikes_ax.set_ylabel('Cell index')
     if args.no_show:
         print "Delaying display of plot until matplotlib.pyplot.show() is called"
     else:
