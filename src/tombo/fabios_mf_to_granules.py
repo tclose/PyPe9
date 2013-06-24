@@ -39,7 +39,7 @@ parser.add_argument('--inconsistent_seeds', action='store_true',
                          "means the simulation will be dependent on not just the provided seeds but "
                          "also the number of processes used, but otherwise shouldn't have any "
                          "detrimental effects")
-parser.add_argument('--save_connections', type=str, default=None, 
+parser.add_argument('--save_connections', action='store_true', 
                     help="A path in which to save the generated connections")
 parser.add_argument('--np', type=int, default=96, 
                     help="The the number of processes to use for the simulation " \
@@ -87,7 +87,7 @@ for volt_trace in args.volt_trace:
     for arg in volt_trace:
         cmd_line += " "  + str(arg)
 if args.save_connections:
-    connections_dir = os.path.join(work_dir, 'output', args.save_connections)
+    connections_dir = os.path.join(work_dir, 'output', 'connections')
     os.mkdir(connections_dir)
     cmd_line += ' --save_connections {}'.format(connections_dir)
 if args.inconsistent_seeds:
