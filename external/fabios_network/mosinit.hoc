@@ -3,7 +3,7 @@ load_file("nrngui.hoc")
 //Simulation parameters//
 ////////////////////////
 //tmax=150         
-tmax=2000
+tmax=500//2000
 cvode.active(0)  //Fixed time step 
 DT=0.025	
 
@@ -11,16 +11,14 @@ DT=0.025
 //MF stimulus parameters//   
 /////////////////////////
 MFfreq=5
-NETIN_SP_START=1000
+NETIN_SP_START=0//1000
 SEED=1
 
 ///////////////////////////////
 //uncomment gap junction flag//
 //////////////////////////////
-GJ=1      // with GJ between GoCs
-//GJ=0      // without GJ between GoCs
-GrC2GoC=1
-//GrC2GoC=0
+GJ=0      // with GJ between GoCs
+GrC2GoC=0 // with PF
 
 ///////////////////////////
 //Building Network Layers//
@@ -37,6 +35,8 @@ stimulus(NETIN_SP_START, MFfreq, tmax, SEED)  //start MF stimulus
 init()
 tstop=DT 
 run()  //run a single time step
+
+printf("Finished run")
 
 //set vinit to randomize vrest
 min=-84 

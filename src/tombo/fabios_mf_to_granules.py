@@ -73,7 +73,7 @@ required_dirs = ['src', 'xml']
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, 
                                              required_dirs=required_dirs)
 #Compile network
-tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator)
+tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator, , script_dir='test')
 net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed))
 # Set up command to run the script
 cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
