@@ -40,7 +40,11 @@ def main(arguments):
                         help="Include the filenames of the files in the subplot titles")
     parser.add_argument('--only', type=str, default=None, help='Only plot spikes or traces')
     args = parser.parse_args(arguments)
-    
+    if args.include:
+        if len(args.include) == 1 and ':' in args.include[0]:
+            args.include = slice(*[float(i) for i in args.include[0].split(':')])
+        else:
+            args.include = [float(i) for i in args.include]
     for filename in args.filenames:
         if filename.endswith('pkl'):
             reader = neo.io.PickleIO(filename=filename)
@@ -54,6 +58,8 @@ def main(arguments):
                 traces_ax.set_title(filename + ' - Traces')
                 for asig in seg.analogsignalarrays:
                     signals = np.asarray(asig)
+                    if args.include:
+                        signals = signals[:, args.include]
                     times = np.asarray(asig.times)
                     # Filters out steps that result in minor changes to the y-axis value (eg. voltage)
                     # to reduce the plotting load.

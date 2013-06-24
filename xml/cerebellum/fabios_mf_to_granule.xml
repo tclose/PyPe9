@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nineml>
+    <!-- The base network from which to build the main network -->
+    <network id="CerebellarGranularLayer">
+        <freeParameters>
+            <flags />
+            <scalars />
+        </freeParameters>
+        <simulationDefaults>
+            <temperature value="23" />
+        </simulationDefaults>
+        <!-- Populations -->
+        <population id="MossyFibers" cell="SpikeSourceArray" size="900">
+            <structure type="Distributed">
+                <somas pattern="Grid2D" aspect_ratio="9" dx="16.6667" dy="16.6667"
+                    x0="0" y0="0" z="0">
+                    <distribution attr="x" type="uniform" low="-3.3333" high="3.3333" />
+                    <distribution attr="y" type="uniform" low="-3.3333" high="3.3333" />
+                </somas>
+            </structure>
+        </population>
+        <population id="Granules" cell="ncml/Granule_DeSouza10.xml" size="8100">
+            <structure type="Distributed">
+                <somas pattern="Grid2D" aspect_ratio="9" dx="5.5556" dy="5.5556"
+                    x0="0" y0="0" z="150">
+                    <distribution attr="x" type="uniform" low="-1.1111" high="1.1111" />
+                    <distribution attr="y" type="uniform" low="-1.1111" high="1.1111" />
+                    <distribution attr="z" type="uniform" low="-1.1111" high="0" />
+                </somas>
+            </structure>
+            <cellParameters>
+                <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
+                    high="-13.2" units="nA" />
+                <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um"
+                    segmentGroup="soma" />
+            </cellParameters>
+            <initialConditions>
+                <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
+            </initialConditions>
+        </population>
+        <!-- Projections -->
+        <projection id="MossyFibers_Granules_AMPA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="AMPA" segment="soma" />
+            <connection pattern="DisplacementBased" geometry="CylinderMask" radius="19.44 um" /> <!-- number="39" -->
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="2.6 nS"
+                exponent="-0.01" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+        </projection>
+        <projection id="MossyFibers_Granules_NMDA">
+            <source id="MossyFibers" />
+            <destination id="Granules" synapse="NMDA" segment="soma" />
+            <connection pattern="DisplacementBased" geometry="CylinderMask" radius="19.44 um" /> <!-- number="25" -->
+            <weight pattern="DisplacementBased" geometry="ExponentialWith2DDistance" scalar="0.2244 nS"
+                exponent="-0.01" />
+            <delay pattern="DisplacementBased" geometry="LinearWith2DDistance" scalar="2 us/um" />
+            <comment> The mossy fiber branches before the cerebellum and in the granular layer and
+                gives off the rosettes/glomeruli (estimates say that one mossy fiber gives off about
+                150 rosettes, which may cross folia. The rosettes are at a distance of about 100um
+                of each other. Each rosette talks to about 20+ granule cells, and about one GoC
+                Axon. Distribution of Glomeruli: Preferably homogeneous. Euclidean distance between
+                rosettes about 85um (can be used as the radius of a sphere). Each Glomerulus
+                contacts about 21 gr cells. One Glomerulus is contacted by a Golgi cell axon. We do
+                not have that yet.
+            </comment>
+        </projection>
+    </network>
+</nineml>
