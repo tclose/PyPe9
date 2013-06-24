@@ -87,8 +87,9 @@ for volt_trace in args.volt_trace:
     for arg in volt_trace:
         cmd_line += " "  + str(arg)
 if args.save_connections:
-    cmd_line += ' --save_connections {}'.format(os.path.join(work_dir, 'output',
-                                                             args.save_connections))
+    connections_dir = os.path.join(work_dir, 'output', args.save_connections)
+    os.mkdir(connections_dir)
+    cmd_line += ' --save_connections {}'.format(connections_dir)
 if args.inconsistent_seeds:
     cmd_line += ' --inconsistent_seeds'
 if args.log:
