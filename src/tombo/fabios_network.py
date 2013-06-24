@@ -63,10 +63,12 @@ parser.add_argument('--dry_run', action='store_true', help="Runs the script but 
 parser.add_argument('--keep_build', action='store_true', help="Don't delete the build directory to "
                                                              "allow the script to be rerun")
 parser.add_argument('--log', action='store_true', help='Save logging information to file')
-parser.add_argument('--max_memory', type=str, default='2G', 
+parser.add_argument('--max_memory', type=str, default='3g', 
                     help="The maximum memory allocated to run the network (when tested the neuron "
                          "version required 1~1.5Gb and the NEST version ~500Mb so 2G is set as the "
                          "safe default")
+parser.add_argument('--virtual_memory', type=str, default='2g', 
+                    help="The average memory usage required by the program, decides when the scheduler is able to run the job")
 parser.add_argument('--name', type=str, default=None, 
                     help="Saves a file within the output directory with the name 'name' for easy "
                          "renaming of the output directory after it is copied to its final "
@@ -126,4 +128,4 @@ if not args.dry_run:
     tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
                      copy_to_output=copy_to_output, que_name=args.que_name, 
                      strip_build_from_copy=(not args.keep_build), name=args.name,
-                     max_memory=args.max_memory, virtual_memory=args.max_memory)
+                     max_memory=args.max_memory, virtual_memory=args.virtual_memory)

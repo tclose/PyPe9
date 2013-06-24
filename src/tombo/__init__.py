@@ -188,8 +188,8 @@ def compile_custom(script_name, work_dir, env=None, script_dir='test', script_ar
                                   script_args, simulator),
                           shell=True, env=env)
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', max_memory='4G',
-               virtual_memory='4G', time_limit=None, env=None, copy_to_output=['xml'], 
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', max_memory='4g',
+               virtual_memory='3g', time_limit=None, env=None, copy_to_output=['xml'], 
                strip_build_from_copy=True, name=None):
     """
     Create a jobscript in the work directory and then submit it to the tombo que
