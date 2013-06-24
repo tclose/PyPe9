@@ -76,7 +76,7 @@ work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir,
 tombo.compile_ninemlp(SCRIPT_NAME, work_dir, simulator=args.simulator, script_dir='test')
 net_seed, stim_seed = create_seeds((args.net_seed, args.stim_seed))
 # Set up command to run the script
-cmd_line = "time mpirun python src/simulate/{script_name}.py --output {work_dir}/output/ " \
+cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
            "--time {args.time} --start_input {args.start_input} --mf_rate {args.mf_rate} " \
            "--min_delay {args.min_delay} --simulator {args.simulator} --timestep {args.timestep} " \
            "--net_seed {net_seed} --stim_seed {stim_seed} --build require"\
@@ -87,8 +87,8 @@ for volt_trace in args.volt_trace:
     for arg in volt_trace:
         cmd_line += " "  + str(arg)
 if args.save_connections:
-    cmd_line += ' --save_connections {}'.format(os.path(work_dir, 'output',
-                                                        args.save_connections))
+    cmd_line += ' --save_connections {}'.format(os.path.join(work_dir, 'output',
+                                                             args.save_connections))
 if args.inconsistent_seeds:
     cmd_line += ' --inconsistent_seeds'
 if args.log:
