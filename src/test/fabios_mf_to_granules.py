@@ -17,7 +17,7 @@ if 'NINEMLP_MPI' in os.environ:
     print "importing MPI"
 import argparse
 import ninemlp
-import time
+from pyNN.parameters import Sequence
 import sys
 import numpy as np
 from ninemlp import create_seeds
@@ -93,8 +93,8 @@ net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_d
               build_mode=args.build, silent_build=args.silent_build, rng=net_rng)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
-spike_times = np.zeros(len(mossy_fibers))
-spike_times[100] = 250
+spike_times = [Sequence([])] * len(mossy_fibers)
+spike_times[100] = Sequence((250,))
 mossy_fibers.set(spike_times=spike_times)
 #mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
 print "Setting up recorders"
