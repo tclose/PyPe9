@@ -58,10 +58,9 @@ parser.add_argument('--inconsistent_seeds', action='store_true',
                          "means the simulation will be dependent on not just the provided seeds but "
                          "also the number of processes used, but otherwise shouldn't have any "
                          "detrimental effects")
-parser.add_argument('--volt_trace', nargs='+', default=[], action='append', 
-                    metavar=('POP_ID', 'SLICE_INDICES'), 
-                    help="Save voltage traces for the given list of ('population name', 'cell ID') "
-                         "tuples")
+parser.add_argument('--spike_times', nargs='+', default=[], action='append', type=int,
+                    metavar=('POP_ID', 'SPIKE_TIMES'), 
+                    help="The Mossy Fiber ID followed by its spike times afterwards")
 parser.add_argument('--debug_network', action='store_true', help="Loads a stripped down version of "
                                                                  "the network for easier debugging")
 parser.add_argument('--silent_build', action='store_true', help="Suppresses all build output")
@@ -93,27 +92,20 @@ net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_d
               build_mode=args.build, silent_build=args.silent_build, rng=net_rng)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
-spike_times = [Sequence([])] * len(mossy_fibers)
-spike_times[100] = Sequence((100,200,300,400))
-mossy_fibers.set(spike_times=spike_times)
+granules = net.get_population('Granules')
+proj = net.get_projection('MossyFibers_Granules_AMPA')
 #mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
 print "Setting up recorders"
 net.record_spikes()
 # Set up voltage traces    
-for volt_trace in args.volt_trace:
-    pop = net.get_population(volt_trace[0])
-    if len(volt_trace) == 1: 
-        view = pop
-    elif len(volt_trace) == 2: 
-        view = pop[int(volt_trace[1]):(int(volt_trace[1])+1)]
-    elif len(volt_trace) == 3: 
-        view = pop[int(volt_trace[1]):int(volt_trace[2])]
-    elif len(volt_trace) == 4:
-        view = pop[int(volt_trace[1]):int(volt_trace[2]):int(volt_trace[3])]
-    else:
-        raise Exception("Only up to 4 arguments can be provided to volt_trace option ({})"
-                        .format(volt_trace))
-    view.record_v() #@UndefinedVariable
+spike_times = [Sequence([])] * len(mossy_fibers)
+for times in args.spike_times:
+    ID = times[0]
+    spike_times[ID] = Sequence(times[1:])
+    conn_list = np.array(proj.get([], 'list'), dtype=int)
+    post_proj = conn_list[np.where(conn_list[:,0] == ID), 1]
+    granules[post_proj].record_v()
+mossy_fibers.set(spike_times=spike_times)    
 print "Network description"
 net.describe()
 if args.save_connections:
