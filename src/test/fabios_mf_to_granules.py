@@ -19,6 +19,7 @@ import argparse
 import ninemlp
 import time
 import sys
+import numpy as np
 from ninemlp import create_seeds
 # Set the project path for use in default parameters of the arguments
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
@@ -92,7 +93,10 @@ net = Network(network_xml_location, timestep=args.timestep, min_delay=args.min_d
               build_mode=args.build, silent_build=args.silent_build, rng=net_rng)
 print "Setting up simulation"
 mossy_fibers = net.get_population('MossyFibers')
-mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
+spike_times = np.zeros(len(mossy_fibers))
+spike_times[100] = 250
+mossy_fibers.set(spike_times=spike_times)
+#mossy_fibers.set_poisson_spikes(args.mf_rate, args.start_input, args.time, stim_rng.rng)
 print "Setting up recorders"
 net.record_spikes()
 # Set up voltage traces    
