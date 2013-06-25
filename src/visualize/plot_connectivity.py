@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D #@UnusedImport (is actually used but pylint doesn't know that)
 
 def plot_connectivity(title, pre, post, proj, save='', include=None, show=False, weight_variable='weights', 
-                      transparency_range=(0.1,1.0), black_bg=False, histogram=False):
+                      transparency_range=(0.1,1.0), black_bg=False, histogram=False, equal=False):
     # Load pre and post positions and projections if required
     if isinstance(pre, str):
         pre_file = pre
@@ -58,6 +58,13 @@ def plot_connectivity(title, pre, post, proj, save='', include=None, show=False,
     ax1.set_xlabel('X')
     ax1.set_ylabel('Y')
     ax1.set_zlabel('Z')
+    if equal:
+        combined_pops =np.concatenate((pre[:, 1:], post[:, 1:]), axis=0) 
+        minimum = np.min(combined_pops)
+        maximum = np.max(combined_pops)
+        ax1.set_xlim(minimum, maximum)
+        ax1.set_ylim(minimum, maximum)
+        ax1.set_zlim(minimum, maximum)
     # By default (if optional argument not provided) include all
     if include and ':' in include[0]:
         slice_args = [int(i) for i in include[0].split(':')]
@@ -127,8 +134,9 @@ if __name__ == '__main__':
                         "the transparency of the connections")
     parser.add_argument('--transparency_range', nargs=2, type=float, default=(1.0, 1.0), 
                         help="The range of the transparency used for the connections")
+    parser.add_argument('--equal', action='store_true', help='Plot connectivity with equal aspect ratios')
     args = parser.parse_args()
     plot_connectivity(args.projection, args.pre, args.post, args.projection, save=args.save, include=args.include,
                       weight_variable=args.weight_variable, 
-                      transparency_range=args.transparency_range, show=True, black_bg=args.black_bg,
+                      transparency_range=args.transparency_range, show=True, black_bg=args.black_bg, equal=args.equal,
                       histogram=args.histogram)
