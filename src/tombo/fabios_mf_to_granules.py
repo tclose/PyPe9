@@ -46,9 +46,9 @@ parser.add_argument('--np', type=int, default=96,
                          "(default: %(default)s)")
 parser.add_argument('--que_name', type=str, default='short', 
                     help='The the que to submit the job to(default: %(default)s)')
-parser.add_argument('--volt_trace', nargs='+', action='append', default=[], 
-                    metavar=('POP_ID', 'SLICE_INDICES'), 
-                    help="The population label and cell ID of a cell to record its voltage trace")
+parser.add_argument('--spike_times', nargs='+', default=[], action='append', type=int,
+                    metavar=('POP_ID', 'SPIKE_TIMES'), 
+                    help="The Mossy Fiber ID followed by its spike times afterwards")
 parser.add_argument('--output_dir', default=None, type=str, 
                     help='The parent directory in which the output directory will be created ' \
                          '(defaults to $HOME/Output)')
@@ -82,9 +82,9 @@ cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/out
            "--net_seed {net_seed} --stim_seed {stim_seed} --build require"\
            .format(script_name=SCRIPT_NAME, work_dir=work_dir, args=args, net_seed=net_seed, 
                    stim_seed=stim_seed)
-for volt_trace in args.volt_trace:
-    cmd_line += " --volt_trace"
-    for arg in volt_trace:
+for spike_times in args.spike_times:
+    cmd_line += " --spike_times"
+    for arg in spike_times:
         cmd_line += " "  + str(arg)
 if args.save_connections:
     connections_dir = os.path.join(work_dir, 'output', 'connections')
