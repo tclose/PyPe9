@@ -47,7 +47,7 @@ parser.add_argument('--timestep', type=float, default=DEFAULT_TIMESTEP,
 #                                                                       "the generated cell positions")
 parser.add_argument('--net_seed', type=int, default=None, help="The random seed used to generate the "
                                                                "stochastic parts of the network")
-parser.add_argument('--inconsistent_seeds', action='store_true',
+parser.add_argument('--separate_seeds', action='store_true',
                     help="Instead of a constant seed being used for each process a different seed "
                          "on each process, which is required if only minimum number of generated "
                          "random numbers are generated on each node, instead of the whole set. This "
@@ -82,7 +82,7 @@ network_xml_location = os.path.join(PROJECT_PATH, 'xml/cerebellum/fabios_golgis.
 ninemlp.pyNN_build_mode = args.build
 exec("from ninemlp.%s import *" % args.simulator)
 # Set the random seeds
-net_seed = create_seeds(args.net_seed, simulator.state if args.inconsistent_seeds else None) #@UndefinedVariable
+net_seed = create_seeds(args.net_seed, simulator.state if args.separate_seeds else None) #@UndefinedVariable
 if args.build != 'compile_only' or args.build != 'build_only':
     print "Random seed used to generate the stochastic elements of the network is %d" % net_seed
 from pyNN.random import NumpyRNG

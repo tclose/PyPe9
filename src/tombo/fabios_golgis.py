@@ -29,7 +29,7 @@ parser.add_argument('--timestep', type=float, default=0.02,
                     help='The time step used for the simulation (default: %(default)s)')
 parser.add_argument('--net_seed', help="The random seed used to generate the stochastic parts of "
                     "the network", type=int, default=None)
-parser.add_argument('--inconsistent_seeds', action='store_true',
+parser.add_argument('--separate_seeds', action='store_true',
                     help="Instead of a constant seed being used for each process a different seed "
                          "on each process, which is required if only generated random numbers as "
                          "required by each node, instead of the whole set on each node. This means "
@@ -92,8 +92,8 @@ for volt_trace in args.volt_trace:
     cmd_line += " --volt_trace"
     for arg in volt_trace:
         cmd_line += " "  + str(arg)
-if args.inconsistent_seeds:
-    cmd_line += ' --inconsistent_seeds'        
+if args.separate_seeds:
+    cmd_line += ' --separate_seeds'        
 if args.log:
     cmd_line += ' --log {}/output/pyNN.log'.format(work_dir)
 copy_to_output = ['xml']

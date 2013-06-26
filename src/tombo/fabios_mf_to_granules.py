@@ -32,7 +32,7 @@ parser.add_argument('--net_seed', help="The random seed used to generate the sto
                     "the network", type=int, default=None) 
 parser.add_argument('--stim_seed', help="The random seed used to generate the stimulation spike "
                                         "train.", type=int, default=None)
-parser.add_argument('--inconsistent_seeds', action='store_true',
+parser.add_argument('--separate_seeds', action='store_true',
                     help="Instead of a constant seed being used for each process a different seed "
                          "on each process, which is required if only minimum number of generated "
                          "random numbers are generated on each node, instead of the whole set. This "
@@ -90,8 +90,8 @@ if args.save_connections:
     connections_dir = os.path.join(work_dir, 'output', 'connections')
     os.mkdir(connections_dir)
     cmd_line += ' --save_connections {}'.format(connections_dir)
-if args.inconsistent_seeds:
-    cmd_line += ' --inconsistent_seeds'
+if args.separate_seeds:
+    cmd_line += ' --separate_seeds'
 if args.log:
     cmd_line += ' --log {}/output/pyNN.log'.format(work_dir)
 copy_to_output = ['xml']

@@ -32,7 +32,7 @@ parser.add_argument('--net_seed', help="The random seed used to generate the sto
                     "the network", type=int, default=None) 
 parser.add_argument('--stim_seed', help="The random seed used to generate the stimulation spike "
                                         "train.", type=int, default=None)
-parser.add_argument('--inconsistent_seeds', action='store_true',
+parser.add_argument('--separate_seeds', action='store_true',
                     help="Instead of a constant seed being used for each process a different seed "
                          "on each process, which is required if only minimum number of generated "
                          "random numbers are generated on each node, instead of the whole set. This "
@@ -116,8 +116,8 @@ else:
             cmd_line += " "  + str(arg)
     if args.include_gap:
         cmd_line += ' --include_gap'
-    if args.inconsistent_seeds:
-        cmd_line += ' --inconsistent_seeds'
+    if args.separate_seeds:
+        cmd_line += ' --separate_seeds'
     if args.no_granule_to_golgi:
         cmd_line += ' --no_granule_to_golgi'
     if args.log:
