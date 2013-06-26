@@ -12,9 +12,7 @@
 #
 #######################################################################################
 import os.path
-if 'NINEMLP_MPI' in os.environ:
-    import mpi4py #@UnresolvedImport @UnusedImport
-    print "importing MPI"
+from mpi4py import MPI #@UnresolvedImport @UnusedImport
 import argparse
 import ninemlp
 import sys

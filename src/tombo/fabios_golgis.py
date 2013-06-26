@@ -10,10 +10,8 @@
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'fabios_golgis'
 # Required imports
-
 import tombo
 import argparse
-import os.path
 from ninemlp import create_seeds
 # Arguments to the script
 parser = argparse.ArgumentParser(description=__doc__)
