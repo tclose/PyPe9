@@ -104,7 +104,7 @@ for times in args.spike_times:
     conn_list = np.array(proj.get([], 'list'), dtype=int)
     post_proj = conn_list[np.where(conn_list[:,0] == ID), 1]
     view = granules[post_proj]
-    if len(view._mask_local):
+    if np.count_nonzero(view._mask_local):
         view.record_v()
 mossy_fibers.set(spike_times=spike_times)    
 print "Network description"
