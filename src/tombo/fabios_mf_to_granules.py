@@ -41,7 +41,7 @@ parser.add_argument('--separate_seeds', action='store_true',
                          "detrimental effects")
 parser.add_argument('--save_connections', action='store_true', 
                     help="A path in which to save the generated connections")
-parser.add_argument('--np', type=int, default=96, 
+parser.add_argument('--np', type=int, default=250, 
                     help="The the number of processes to use for the simulation " \
                          "(default: %(default)s)")
 parser.add_argument('--que_name', type=str, default='short', 
