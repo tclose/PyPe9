@@ -60,6 +60,8 @@ parser.add_argument('--separate_seeds', action='store_true',
 parser.add_argument('--spike_times', nargs='+', default=[], action='append', type=int,
                     metavar=('POP_ID', 'SPIKE_TIMES'), 
                     help="The Mossy Fiber ID followed by its spike times afterwards")
+parser.add_argument('--save_volt_traces', action='store_true', 
+                    help="Stores the voltage traces of the post-synaptic cells that are sent spikes")
 parser.add_argument('--debug_network', action='store_true', help="Loads a stripped down version of "
                                                                  "the network for easier debugging")
 parser.add_argument('--silent_build', action='store_true', help="Suppresses all build output")
@@ -101,11 +103,12 @@ spike_times = [Sequence([])] * len(mossy_fibers)
 for times in args.spike_times:
     ID = times[0]
     spike_times[ID] = Sequence(times[1:])
-    conn_list = np.array(proj.get([], 'list'), dtype=int)
-    post_proj = conn_list[np.where(conn_list[:,0] == ID), 1]
-    local_proj = post_proj[granules._mask_local[post_proj]]
-    if len(local_proj):
-        granules[local_proj].record_v()
+    if args.sav_volt_traces:
+        conn_list = np.array(proj.get([], 'list'), dtype=int)
+        post_proj = conn_list[np.where(conn_list[:,0] == ID), 1]
+        local_proj = post_proj[granules._mask_local[post_proj]]
+        if len(local_proj):
+            granules[local_proj].record_v()
 mossy_fibers.set(spike_times=spike_times)    
 print "Network description"
 net.describe()
