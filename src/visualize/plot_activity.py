@@ -36,6 +36,8 @@ def main(arguments):
     parser.add_argument('--no_show', action='store_true',
                         help="Don't show the plots initially (waiting for other plots to be " \
                              "plotted")
+    parser.add_argument('--spikes_histogram', action='store_true', 
+                        help="Plots a histogram of the number of spikes per cell")
     parser.add_argument('--prefix_filename', action='store_true',
                         help="Include the filenames of the files in the subplot titles")
     parser.add_argument('--only', type=str, default=None, help='Only plot spikes or traces')
@@ -79,6 +81,7 @@ def main(arguments):
                         traces_ax.plot(times, signals)
                 traces_ax.set_xlabel('Time (ms)')
                 traces_ax.set_ylabel('Voltage (mV)')
+                traces_ax.legend([str(i) for i in args.include])
             if seg.spiketrains and (not args.only or args.only == 'spikes'):
                 spikes_fig = plt.figure()
                 spikes_ax = spikes_fig.add_subplot(111)
@@ -94,6 +97,13 @@ def main(arguments):
                     plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
                 spikes_ax.set_xlabel('Time (ms)')
                 spikes_ax.set_ylabel('Cell index')
+                if args.spikes_histogram:
+                    hist_fig = plt.figure()
+                    hist_ax = hist_fig.add_subplot(111)
+                    hist_ax.set_title(filename + ' - Spike Histogram')
+                    hist_ax.set_xlabel('Number of spikes')
+                    hist_ax.set_ylabel('Frequency')
+                    hist_ax.hist(np.array([len(st) for st in seg.spiketrains]))
     if args.no_show:
         print "Delaying display of plot until matplotlib.pyplot.show() is called"
     else:
