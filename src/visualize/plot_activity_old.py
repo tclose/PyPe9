@@ -341,6 +341,8 @@ def main(arguments):
     parser.add_argument('--no_show', action='store_true',
                         help="Don't show the plots initially (waiting for other plots to be " \
                              "plotted")
+    parser.add_argument('--spikes_histogram', action='store_true',
+                        help="Show a histogram of the number of spikes per neuron")
     parser.add_argument('--prefix_filename', action='store_true',
                         help="Include the filenames of the files in the subplot titles")
     args = parser.parse_args(arguments)
@@ -384,6 +386,19 @@ def main(arguments):
                 ax.set_title(title)
                 ax.set_xlabel('Time (ms)')
                 ax.set_ylabel('Cell Index')
+            if args.spikes_histogram:
+                hist_fig = plt.figure()
+                hist_ax = hist_fig.add_subplot(111)
+                hist_ax.set_title(filename + ' - Spike Histogram')
+                hist_ax.set_xlabel('Number of spikes')
+                hist_ax.set_ylabel('Frequency')
+                sorted_ids = numpy.sort(ids)
+                unique_ids = numpy.unique(sorted_ids)
+                num_spikes = (numpy.searchsorted(sorted_ids, unique_ids, 'right') -
+                              numpy.searchsorted(sorted_ids, unique_ids, 'left'))
+                hist_ax.hist(num_spikes, numpy.max(num_spikes))
+                ax.set_xlabel('Number of spikes')
+                ax.set_ylabel('Frequency')
         if args.combine:
             ax = spike_axes.get_primary()
             ax.legend(spike_legend)

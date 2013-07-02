@@ -81,7 +81,10 @@ def main(arguments):
                         traces_ax.plot(times, signals)
                 traces_ax.set_xlabel('Time (ms)')
                 traces_ax.set_ylabel('Voltage (mV)')
-                traces_ax.legend([str(i) for i in args.include])
+                if args.include:
+                    traces_ax.legend([str(i) for i in args.include])
+                else:
+                    traces_ax.legend([str(i) for i in range(len(signals))])
             if seg.spiketrains and (not args.only or args.only == 'spikes'):
                 spikes_fig = plt.figure()
                 spikes_ax = spikes_fig.add_subplot(111)
@@ -103,7 +106,8 @@ def main(arguments):
                     hist_ax.set_title(filename + ' - Spike Histogram')
                     hist_ax.set_xlabel('Number of spikes')
                     hist_ax.set_ylabel('Frequency')
-                    hist_ax.hist(np.array([len(st) for st in seg.spiketrains]))
+                    num_spikes = np.array([len(st) for st in seg.spiketrains])
+                    hist_ax.hist(num_spikes, bins=np.max(num_spikes))
     if args.no_show:
         print "Delaying display of plot until matplotlib.pyplot.show() is called"
     else:
