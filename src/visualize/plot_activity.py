@@ -19,7 +19,6 @@ import numpy as np
 import argparse
 import sys
 import quantities as units
-
 def main(arguments):
     parser = argparse.ArgumentParser(description='A script to plot activity recorded from NINEML+')
     parser.add_argument('filenames', nargs='+', help='The files to plot the activity from')
@@ -90,12 +89,17 @@ def main(arguments):
                 spikes_ax = spikes_fig.add_subplot(111)
                 spikes_ax.set_title(filename + ' - Spikes')
                 max_time = float('-inf')
-                for s, st in enumerate(seg.spiketrains):
+                num_procs = block.annotations['mpi_processes']
+                cells_per_node = int(np.ceil(float(len(seg.spiketrains)) / num_procs))
+                for i, st in enumerate(seg.spiketrains):
+                    node_rank = i // cells_per_node
+                    index_on_node = i % cells_per_node
+                    cell_index = index_on_node * num_procs + node_rank 
                     if len(st):
                         st_max_time = np.max(st)
                         if st_max_time > max_time:
                             max_time = st_max_time
-                        spikes_ax.scatter(st, s * np.ones(st.size))
+                        spikes_ax.scatter(st, cell_index * np.ones(st.size))
                 if max_time != float('-inf'):
                     plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
                 spikes_ax.set_xlabel('Time (ms)')
