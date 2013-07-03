@@ -90,10 +90,18 @@ def main(arguments):
                 spikes_ax.set_title(filename + ' - Spikes')
                 max_time = float('-inf')
                 num_procs = block.annotations['mpi_processes']
-                cells_per_node = int(np.ceil(float(len(seg.spiketrains)) / num_procs))
+                num_cells = len(seg.spiketrains)
+                min_cells_per_node = num_cells // num_procs
+                extra_cell_nodes = num_cells - min_cells_per_node * num_procs
+                cells_on_extra_cell_nodes = extra_cell_nodes * (min_cells_per_node + 1)                
                 for i, st in enumerate(seg.spiketrains):
-                    node_rank = i // cells_per_node
-                    index_on_node = i % cells_per_node
+                    if i < cells_on_extra_cell_nodes:
+                        node_rank = i // (min_cells_per_node + 1)
+                        index_on_node = i % (min_cells_per_node + 1)
+                    else:
+                        node_rank = (extra_cell_nodes + 
+                                     (i - cells_on_extra_cell_nodes) // min_cells_per_node)
+                        index_on_node = (i - cells_on_extra_cell_nodes) % min_cells_per_node
                     cell_index = index_on_node * num_procs + node_rank 
                     if len(st):
                         st_max_time = np.max(st)
