@@ -103,7 +103,7 @@ spike_times = [Sequence([])] * len(mossy_fibers)
 for times in args.spike_times:
     ID = times[0]
     spike_times[ID] = Sequence(times[1:])
-    if args.sav_volt_traces:
+    if args.save_volt_traces:
         conn_list = np.array(proj.get([], 'list'), dtype=int)
         post_proj = conn_list[np.where(conn_list[:,0] == ID), 1]
         local_proj = post_proj[granules._mask_local[post_proj]]
