@@ -93,7 +93,7 @@ if args.save_connections:
     os.mkdir(connections_dir)
     cmd_line += ' --save_connections {}'.format(connections_dir)
 if args.save_volt_traces:
-    cmd_line += ' --save_connections'
+    cmd_line += ' --save_volt_traces'
 if args.separate_seeds:
     cmd_line += ' --separate_seeds'
 if args.log:
