@@ -14,8 +14,8 @@
             <structure type="Distributed">
                 <somas pattern="Grid2D" aspect_ratio="9" dx="16.6667" dy="16.6667"
                     x0="0" y0="0" z="0">
-                    <distribution attr="x" type="uniform" low="-3.3333" high="3.3333" />
-                    <distribution attr="y" type="uniform" low="-3.3333" high="3.3333" />
+<!--                     <distribution attr="x" type="uniform" low="-3.3333" high="3.3333" /> -->
+<!--                     <distribution attr="y" type="uniform" low="-3.3333" high="3.3333" /> -->
                 </somas>
             </structure>
         </population>
@@ -23,20 +23,20 @@
             <structure type="Distributed">
                 <somas pattern="Grid2D" aspect_ratio="9" dx="5.5556" dy="5.5556"
                     x0="0" y0="0" z="150">
-                    <distribution attr="x" type="uniform" low="-1.1111" high="1.1111" />
-                    <distribution attr="y" type="uniform" low="-1.1111" high="1.1111" />
-                    <distribution attr="z" type="uniform" low="-1.1111" high="0" />
+<!--                     <distribution attr="x" type="uniform" low="-1.1111" high="1.1111" /> -->
+<!--                     <distribution attr="y" type="uniform" low="-1.1111" high="1.1111" /> -->
+<!--                     <distribution attr="z" type="uniform" low="-1.1111" high="0" /> -->
                 </somas>
             </structure>
             <cellParameters>
-                <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8"
-                    high="-13.2" units="nA" />
-                <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um"
-                    segmentGroup="soma" />
+<!--                 <distribution component="Lkg1" attr="e_rev" type="uniform" low="-19.8" -->
+<!--                     high="-13.2" units="nA" /> -->
+<!--                 <distribution attr="diam" type="uniform" low="9.4" high="14.16" units="um" -->
+<!--                     segmentGroup="soma" /> -->
             </cellParameters>
-            <initialConditions>
-                <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" />
-            </initialConditions>
+<!--             <initialConditions> -->
+<!--                 <distribution attr="v" type="uniform" low="-84" high="-56" units="mV" /> -->
+<!--             </initialConditions> -->
         </population>
         <!-- Projections -->
         <projection id="MossyFibers_Granules_AMPA">
