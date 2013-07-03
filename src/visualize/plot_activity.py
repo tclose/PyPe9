@@ -89,13 +89,13 @@ def main(arguments):
                 spikes_ax = spikes_fig.add_subplot(111)
                 spikes_ax.set_title(filename + ' - Spikes')
                 max_time = float('-inf')
-                spiketrains = sorted(seg.spiketrains, key=lambda s: s.annotations['source_id'])
-                for i, st in enumerate(spiketrains):
+                for st in seg.spiketrains:
                     if len(st):
                         st_max_time = np.max(st)
                         if st_max_time > max_time:
                             max_time = st_max_time
-                        spikes_ax.scatter(st, i * np.ones(st.size))
+                        spikes_ax.scatter(st, (st.annotations['source_id'] - 
+                                               block.annotations['first_id']) * np.ones(st.size))
                 if max_time != float('-inf'):
                     plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
                 spikes_ax.set_xlabel('Time (ms)')
