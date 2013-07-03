@@ -41,6 +41,8 @@ parser.add_argument('--separate_seeds', action='store_true',
                          "detrimental effects")
 parser.add_argument('--save_connections', action='store_true', 
                     help="A path in which to save the generated connections")
+parser.add_argument('--save_volt_traces', action='store_true', 
+                    help="Stores the voltage traces of the post-synaptic cells that are sent spikes")
 parser.add_argument('--np', type=int, default=250, 
                     help="The the number of processes to use for the simulation " \
                          "(default: %(default)s)")
@@ -90,6 +92,8 @@ if args.save_connections:
     connections_dir = os.path.join(work_dir, 'output', 'connections')
     os.mkdir(connections_dir)
     cmd_line += ' --save_connections {}'.format(connections_dir)
+if args.save_volt_traces:
+    cmd_line += ' --save_connections'
 if args.separate_seeds:
     cmd_line += ' --separate_seeds'
 if args.log:

@@ -20,9 +20,6 @@ args = parser.parse_args()
 # Create work directory and get path for output directory
 required_dirs = ['src','xml']
 work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
-# Set gap mechanism dir as a script arg if required      
-#Compile network
-tombo.compile_ninemlp(SCRIPT_NAME, work_dir, script_dir='test', simulator=args.simulator)
 # Set up command to run the script
 cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
            "--build require".format(script_name=SCRIPT_NAME, work_dir=work_dir)
