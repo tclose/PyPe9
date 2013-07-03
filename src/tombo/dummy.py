@@ -9,7 +9,7 @@
 """
 import tombo
 import argparse
-SCRIPT_NAME='gap_mwe'
+SCRIPT_NAME='dummy'
 # Parse input arguments
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')

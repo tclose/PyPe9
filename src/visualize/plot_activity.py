@@ -89,25 +89,13 @@ def main(arguments):
                 spikes_ax = spikes_fig.add_subplot(111)
                 spikes_ax.set_title(filename + ' - Spikes')
                 max_time = float('-inf')
-                num_procs = block.annotations['mpi_processes']
-                num_cells = len(seg.spiketrains)
-                min_cells_per_node = num_cells // num_procs
-                extra_cell_nodes = num_cells - min_cells_per_node * num_procs
-                cells_on_extra_cell_nodes = extra_cell_nodes * (min_cells_per_node + 1)                
-                for i, st in enumerate(seg.spiketrains):
-                    if i < cells_on_extra_cell_nodes:
-                        node_rank = i // (min_cells_per_node + 1)
-                        index_on_node = i % (min_cells_per_node + 1)
-                    else:
-                        node_rank = (extra_cell_nodes + 
-                                     (i - cells_on_extra_cell_nodes) // min_cells_per_node)
-                        index_on_node = (i - cells_on_extra_cell_nodes) % min_cells_per_node
-                    cell_index = index_on_node * num_procs + node_rank 
+                spiketrains = sorted(seg.spiketrains, key=lambda s: s.annotations['source_id'])
+                for i, st in enumerate(spiketrains):
                     if len(st):
                         st_max_time = np.max(st)
                         if st_max_time > max_time:
                             max_time = st_max_time
-                        spikes_ax.scatter(st, cell_index * np.ones(st.size))
+                        spikes_ax.scatter(st, i * np.ones(st.size))
                 if max_time != float('-inf'):
                     plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
                 spikes_ax.set_xlabel('Time (ms)')
