@@ -14,7 +14,8 @@ SCRIPT_NAME='gap_mwe'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation (default: %(default)s)')
-parser.add_argument('--que_name', type=str, default='test.q', help='The the que to submit the job to(default: %(default)s)')
+parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to(default: %(default)s)')
+parser.add_argument('--simulator', type=str, default='neuron', help='The the que to submit the job to(default: %(default)s)')
 args = parser.parse_args()
 # Create work directory and get path for output directory
 required_dirs = ['src','xml']
