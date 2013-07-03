@@ -9,7 +9,7 @@
 """
 import tombo
 import argparse
-SCRIPT_NAME='gap_mwe'
+SCRIPT_NAME='dummy'
 # Parse input arguments
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
@@ -25,7 +25,7 @@ work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir, requi
 tombo.compile_ninemlp(SCRIPT_NAME, work_dir, script_dir='test', simulator=args.simulator)
 # Set up command to run the script
 cmd_line = "time mpirun python src/test/{script_name}.py --output {work_dir}/output/ " \
-           "--build require {script_args}".format(script_name=SCRIPT_NAME, work_dir=work_dir)
+           "--build require".format(script_name=SCRIPT_NAME, work_dir=work_dir)
 copy_to_output= ['xml']
 # Submit job to que
 tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, 
