@@ -14,6 +14,7 @@
 import os.path
 import argparse
 import ninemlp
+from pyNN.parameters import Sequence
 PROJECT_PATH = os.path.normpath(os.path.join(ninemlp.SRC_PATH, '..'))
 def main(arguments):
     parser = argparse.ArgumentParser(description=__doc__)
@@ -28,7 +29,7 @@ def main(arguments):
     parser.add_argument('--output', type=str, default=os.path.join(PROJECT_PATH, 'output', 'single_cell.v') , help='The output location of the recording files')
     parser.add_argument('--min_delay', type=float, default=0.05, help='The minimum synaptic delay in the network')
     parser.add_argument('--timestep', type=float, default=0.025, help='The timestep used for the simulation')
-    parser.add_argument('--input', nargs='+', default=None, 
+    parser.add_argument('--inputs', nargs='+', default=None, action='append',
                         help="Parameters for the current inpution. If TYPE is ''step'' "
                              "ARG1=amplitude and ARG2=delay, whereas if TYPE is ''noise'' "
                              "ARG1=mean and ARG2=stdev")
@@ -61,24 +62,31 @@ def main(arguments):
         for seg in cell.segments.values():
             h.psection(sec=seg)
     # Create the input current and times vectors
-    if args.input:
-        input_type = args.input[0]
+    for input in args.inputs:
+        input_type = input[0]
         if input_type == 'spikes':
             spike_train = Population('SpikeTrain', 1, standardmodels.cells.SpikeSourcePoisson,  #@UndefinedVariable
-                                     params={'rate' : [float(args.input[3]) if len(args.input) > 3 else 5], 
-                                             'start' : [float(args.input[4]) if len(args.input) > 4 else 1000],
+                                     params={'rate' : [float(input[3]) if len(input) > 3 else 5], 
+                                             'start' : [float(input[4]) if len(input) > 4 else 1000],
                                              'duration' : [1e10]})
             proj = Projection(spike_train, pop, 'SpikeConnection', connectors.OneToOneConnector(), #@UndefinedVariable @UnusedVariable
-                              standardmodels.synapses.StaticSynapse(weight=float(args.input[2]) if len(args.input) > 2 else 1.0,  #@UndefinedVariable
+                              standardmodels.synapses.StaticSynapse(weight=float(input[2]) if len(input) > 2 else 1.0,  #@UndefinedVariable
                                                                     delay=0.2),
-                              target=args.input[1]) 
+                              target=input[1]) 
+        elif input_type == 'single_spike':
+            spike_train = Population('SpikeTrain', 1, standardmodels.cells.SpikeSourceArray,  #@UndefinedVariable
+                                     params={'spike_times' : [Sequence([args.time / 2.0])] })
+            proj = Projection(spike_train, pop, 'SpikeConnection', connectors.OneToOneConnector(), #@UndefinedVariable @UnusedVariable
+                              standardmodels.synapses.StaticSynapse(weight=float(input[2]) if len(input) > 2 else 1.0,  #@UndefinedVariable
+                                                                    delay=0.2),
+                              target=input[1])
         elif input_type == 'step':
-            current_source = StepCurrentSource(amplitudes=[float(args.input[1])], #@UndefinedVariable
-                                               times=[float(args.input[2])])
+            current_source = StepCurrentSource(amplitudes=[float(input[1])], #@UndefinedVariable
+                                               times=[float(input[2])])
             pop.input(current_source)
         elif input_type == 'noise':
-            current_source = NoisyCurrentSource(mean=float(args.input[1]), #@UndefinedVariable
-                                                stdev=float(args.input[2]),
+            current_source = NoisyCurrentSource(mean=float(input[1]), #@UndefinedVariable
+                                                stdev=float(input[2]),
                                                 stop=args.time,
                                                 dt=1.0)
             pop.input(current_source)
