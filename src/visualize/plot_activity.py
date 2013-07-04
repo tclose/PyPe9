@@ -52,11 +52,13 @@ def main(arguments):
         else:
             raise Exception("Unsupported extension for file '{}'".format(filename))
         block = reader.read(cascade=True, lazy=True)[0]
+        id_offset = block.annotations['first_id']
         for seg in block.segments:
             if seg.analogsignalarrays and (not args.only or args.only == 'traces'):
                 traces_fig = plt.figure()
                 traces_ax = traces_fig.add_subplot(111)
                 traces_ax.set_title(filename + ' - Traces')
+                legends = []
                 for asig in seg.analogsignalarrays:
                     signals = np.asarray(asig)
                     if args.include:
@@ -78,12 +80,11 @@ def main(arguments):
                             traces_ax.plot(times[mask], sig[mask])
                     else:
                         traces_ax.plot(times, signals)
+                    
+                    legends += [str(i - id_offset) for i in asig.annotations['source_ids']]
                 traces_ax.set_xlabel('Time (ms)')
                 traces_ax.set_ylabel('Voltage (mV)')
-                if args.include:
-                    traces_ax.legend([str(i) for i in args.include])
-                else:
-                    traces_ax.legend([str(i) for i in range(len(signals))])
+                traces_ax.legend(legends)
             if seg.spiketrains and (not args.only or args.only == 'spikes'):
                 spikes_fig = plt.figure()
                 spikes_ax = spikes_fig.add_subplot(111)
@@ -94,8 +95,8 @@ def main(arguments):
                         st_max_time = np.max(st)
                         if st_max_time > max_time:
                             max_time = st_max_time
-                        spikes_ax.scatter(st, (st.annotations['source_id'] - 
-                                               block.annotations['first_id']) * np.ones(st.size))
+                        spikes_ax.scatter(st, (st.annotations['source_id'] - id_offset) * 
+                                               np.ones(st.size))
                 if max_time != float('-inf'):
                     plt.axis([0.0 * units.s, max_time, 0, len(seg.spiketrains)])
                 spikes_ax.set_xlabel('Time (ms)')
