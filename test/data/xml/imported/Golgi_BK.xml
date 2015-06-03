@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <NineML xmlns="http://nineml.net/9ML/1.0">
-  <Component name="Golgi_BK">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/Golgi_BKClass.xml">Golgi_BKClass</Definition>
+  <DynamicsProperties name="Golgi_BK">
+    <Definition name="Golgi_BKClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/Golgi_BKClass.xml"/>
     <Property units="per_ms" name="Aalpha_c">
       <SingleValue>7.0</SingleValue>
     </Property>
@@ -26,7 +26,7 @@
     <Property units="S_per_cm2" name="gkbar">
       <SingleValue>0.003</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Unit symbol="mol_per_m3" dimension="concentration" power="0"/>
   <Dimension name="per_time" t="-1"/>
   <Dimension i="2" t="3" m="-1" l="-4" name="conductanceDensity"/>

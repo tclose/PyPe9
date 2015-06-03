@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <NineML xmlns="http://nineml.net/9ML/1.0">
-  <Component name="GRC_KIR">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KIRClass.xml">GRC_KIRClass</Definition>
+  <DynamicsProperties name="GRC_KIR">
+    <Definition name="GRC_KIRClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KIRClass.xml"/>
     <Property units="per_ms" name="Aalpha_d">
       <SingleValue>0.13289</SingleValue>
     </Property>
@@ -29,7 +29,7 @@
     <Property units="S_per_cm2" name="gkbar">
       <SingleValue>0.0009</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Dimension name="per_time" t="-1"/>
   <Dimension k="1" name="temperature"/>
   <Unit symbol="mV" dimension="voltage" power="-3"/>

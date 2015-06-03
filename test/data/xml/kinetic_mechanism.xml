@@ -42,8 +42,8 @@
       </Alias>
     </Kinetics>
   </Dynamics>
-  <Component name="KineticsTest">
-    <Definition>Kinetic_Class</Definition>
+  <DynamicsProperties name="KineticsTest">
+    <Definition name="Kinetic_Class"/>
     <Property name="d1" units="mV">
       <SingleValue>-50</SingleValue>
     </Property>
@@ -62,7 +62,7 @@
     <Property name="tau2" units="ms">
       <SingleValue>10</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Dimension name="time" t="-1"/>
   <Dimension name="voltage" m="1" l="2" t="-3" i="-1"/>
   <Dimension name="per_voltage" m="-1" l="-2" t="3" i="1"/>

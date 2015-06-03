@@ -7,24 +7,24 @@ import quantities as pq
 import os.path
 import collections
 from itertools import chain
-from nineml.abstraction_layer.componentclass import Parameter
-from nineml.abstraction_layer.dynamics import (
+from nineml.abstraction.componentclass import Parameter
+from nineml.abstraction.dynamics import (
     TimeDerivative, StateAssignment, Dynamics)
-from nineml.abstraction_layer.dynamics import Regime, StateVariable, OnEvent
-from nineml.abstraction_layer.expressions import Alias
-from nineml.abstraction_layer.ports import (
+from nineml.abstraction.dynamics import Regime, StateVariable, OnEvent
+from nineml.abstraction.expressions import Alias
+from nineml.abstraction.ports import (
     AnalogReceivePort, AnalogSendPort, EventReceivePort)
-import nineml.abstraction_layer.units as un
-from nineml.user_layer import Definition
+import nineml.abstraction.units as un
+from nineml.user import Definition
 from nineml.document import Document
-from nineml.user_layer import Dynamics
-from nineml.abstraction_layer.expressions import Constant
+from nineml.user import Dynamics
+from nineml.abstraction.expressions import Constant
 from pype9.exceptions import Pype9RuntimeError
 
-# from nineml.user_layer.dynamics import IonDynamics
+# from nineml.user.dynamics import IonDynamics
 from collections import defaultdict
-from nineml.abstraction_layer import units
-from nineml.abstraction_layer.expressions.piecewise import (Piecewise, Piece,
+from nineml.abstraction import units
+from nineml.abstraction.expressions.piecewise import (Piecewise, Piece,
                                                             Otherwise)
 
 

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <NineML xmlns="http://nineml.net/9ML/1.0">
   <Dimension k="1" name="temperature"/>
-  <Component name="GRC_NA">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_NAClass.xml">GRC_NAClass</Definition>
+  <DynamicsProperties name="GRC_NA">
+    <Definition name="GRC_NAClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_NAClass.xml"/>
     <Property units="unitless" name="ACoff">
       <SingleValue>0.5</SingleValue>
     </Property>
@@ -63,7 +63,7 @@
     <Property units="unitless" name="n4">
       <SingleValue>0.738</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Unit symbol="degC" dimension="temperature" power="0" offset="273.15"/>
   <Unit symbol="mV" dimension="voltage" power="-3"/>
   <Dimension i="-1" t="-3" m="1" l="2" name="voltage"/>

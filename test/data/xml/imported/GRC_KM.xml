@@ -8,8 +8,8 @@
   <Dimension i="-1" t="-3" m="1" l="2" name="voltage"/>
   <Unit symbol="S_per_cm2" dimension="conductanceDensity" power="4"/>
   <Unit symbol="per_ms" dimension="per_time" power="3"/>
-  <Component name="GRC_KM">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KMClass.xml">GRC_KMClass</Definition>
+  <DynamicsProperties name="GRC_KM">
+    <Definition name="GRC_KMClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KMClass.xml"/>
     <Property units="per_ms" name="Aalpha_n">
       <SingleValue>0.0033</SingleValue>
     </Property>
@@ -43,5 +43,5 @@
     <Property units="S_per_cm2" name="gkbar">
       <SingleValue>0.00025</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
 </NineML>

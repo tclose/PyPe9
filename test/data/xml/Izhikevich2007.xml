@@ -61,8 +61,8 @@
         <MathInline>(k * (V - Vr) * (V - Vt) - U + iSyn + iExt) / Cm</MathInline>
       </Alias>
     </Dynamics>
-  <Component name="Izhikevich">
-    <Definition>IzhikevichClass</Definition>
+  <DynamicsProperties name="Izhikevich">
+    <Definition name="IzhikevichClass"/>
     <Property name="a" units="none">
       <SingleValue>0.02</SingleValue>
     </Property>
@@ -90,7 +90,7 @@
     <Property name="Cm" units="uF">
       <SingleValue>20</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Dimension name="dimensionless"/>
   <Dimension name="voltage" m="1" l="2" t="-3" i="-1"/>
   <Dimension name="conductance_per_voltage2" m="-3" l="-6" t="9" i="4"/>

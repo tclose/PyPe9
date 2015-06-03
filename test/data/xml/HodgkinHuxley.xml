@@ -10,8 +10,8 @@
   <Unit symbol="S_per_cm2" dimension="conductanceDensity" power="4"/>
   <Unit symbol="uF_per_cm2" dimension="specificCapacitance" power="-2"/>
   <Unit symbol="degC" dimension="temperature" power="1" offset="-273.15"/>
-  <Component name="HodgkinHuxley">
-    <Definition url="./HodgkinHuxleyClass.xml">HodgkinHuxleyClass</Definition>
+  <DynamicsProperties name="HodgkinHuxley">
+    <Definition name="HodgkinHuxleyClass" url="./HodgkinHuxleyClass.xml"/>
     <Property name="m_alpha_A" units="per_ms">
       <SingleValue>0.1</SingleValue>
     </Property>
@@ -93,5 +93,5 @@
     <Property name="T" units="degC">
       <SingleValue>30.0</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
 </NineML>

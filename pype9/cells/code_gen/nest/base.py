@@ -21,7 +21,7 @@ from datetime import datetime
 from copy import copy
 from pype9.annotations import (
     MEMBRANE_VOLTAGE, PYPE9_NS, TRANSFORM_SRC, TRANSFORM_DEST)
-from nineml.user_layer import Component, Definition
+from nineml.user import DynamicsProperties, Definition
 from nineml import Document
 
 
@@ -230,7 +230,7 @@ class CodeGenerator(BaseCodeGenerator):
         # ---------------------------------------------------------------------
         trans.validate()
         # Retun a prototype of the transformed class
-        return Component(
+        return DynamicsProperties(
             prototype.name, Definition(trans.name, Document(trans)), props)
 
 # Old template arguments to Ivan's templates.

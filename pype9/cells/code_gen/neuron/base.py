@@ -15,15 +15,15 @@ import uuid
 import subprocess as sp
 from ..base import BaseCodeGenerator
 import nineml.units as un
-from nineml.abstraction_layer.expressions import Alias
-from nineml.abstraction_layer.ports import AnalogSendPort
+from nineml.abstraction.expressions import Alias
+from nineml.abstraction.ports import AnalogSendPort
 from pype9.exceptions import (
     Pype9BuildError, Pype9RuntimeError, Pype9NoMatchingElementException)
 import pype9
 from datetime import datetime
 from nineml import Document
-from nineml.user_layer import Component, Definition, Property
-from nineml.abstraction_layer import Parameter
+from nineml.user import DynamicsProperties, Definition, Property
+from nineml.abstraction import Parameter
 try:
     from nineml.extensions.kinetics import Kinetics
 except ImportError:
@@ -73,7 +73,7 @@ class CodeGenerator(BaseCodeGenerator):
                 `is_subcomponent`  -- Whether to use the 'SUFFIX' tag or not.
                 `ode_solver`       -- specifies the ODE solver to use
         """
-        assert isinstance(prototype, Component), \
+        assert isinstance(prototype, DynamicsProperties), \
             ("Provided prototype class '{}' is not a Dynamics object"
              .format(prototype))
 #         if isinstance(prototype, Kinetics):

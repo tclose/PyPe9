@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <NineML xmlns="http://nineml.net/9ML/1.0">
   <Unit symbol="mol_per_m3" dimension="concentration" power="0"/>
-  <Component name="GRC_KCA">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KCAClass.xml">GRC_KCAClass</Definition>
+  <DynamicsProperties name="GRC_KCA">
+    <Definition name="GRC_KCAClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KCAClass.xml"/>
     <Property units="per_ms" name="Aalpha_c">
       <SingleValue>2.5</SingleValue>
     </Property>
@@ -30,7 +30,7 @@
     <Property units="S_per_cm2" name="gkbar">
       <SingleValue>0.003</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Dimension k="1" name="temperature"/>
   <Unit symbol="mV" dimension="voltage" power="-3"/>
   <Unit symbol="degC" dimension="temperature" power="0" offset="273.15"/>

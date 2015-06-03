@@ -2,8 +2,8 @@
 <NineML xmlns="http://nineml.net/9ML/1.0">
   <Dimension name="per_time" t="-1"/>
   <Dimension k="1" name="temperature"/>
-  <Component name="GRC_KA">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KAClass.xml">GRC_KAClass</Definition>
+  <DynamicsProperties name="GRC_KA">
+    <Definition name="GRC_KAClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_KAClass.xml"/>
     <Property units="per_ms" name="Aalpha_a">
       <SingleValue>0.8147</SingleValue>
     </Property>
@@ -61,7 +61,7 @@
     <Property units="S_per_cm2" name="gkbar">
       <SingleValue>0.0032</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Unit symbol="mV" dimension="voltage" power="-3"/>
   <Unit symbol="degC" dimension="temperature" power="0" offset="273.15"/>
   <Dimension i="-1" t="-3" m="1" l="2" name="voltage"/>

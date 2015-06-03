@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <NineML xmlns="http://nineml.net/9ML/1.0">
   <Unit symbol="S_per_cm2" dimension="conductanceDensity" power="4"/>
-  <Component name="Golgi_SK2">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/Golgi_SK2Class.xml">Golgi_SK2Class</Definition>
+  <DynamicsProperties name="Golgi_SK2">
+    <Definition name="Golgi_SK2Class" url="/Users/tclose/git/pype9/test/data/nmodl/imported/Golgi_SK2Class.xml"/>
     <Property units="unitless" name="Q10">
       <SingleValue>3.0</SingleValue>
     </Property>
@@ -42,7 +42,7 @@
     <Property units="unitless" name="invo2">
       <SingleValue>0.1</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Dimension i="2" t="3" m="-1" l="-4" name="conductanceDensity"/>
   <Unit symbol="unitless" dimension="dimensionless" power="0"/>
   <Dimension name="dimensionless"/>

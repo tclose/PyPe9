@@ -5,8 +5,8 @@
   <Dimension l="-3" name="concentration" n="1"/>
   <Unit symbol="um" dimension="length" power="-6"/>
   <Dimension name="length" l="1"/>
-  <Component name="GRC_CALC">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_CALCClass.xml">GRC_CALCClass</Definition>
+  <DynamicsProperties name="GRC_CALC">
+    <Definition name="GRC_CALCClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/GRC_CALCClass.xml"/>
     <Property units="per_ms" name="beta">
       <SingleValue>1.5</SingleValue>
     </Property>
@@ -16,6 +16,6 @@
     <Property units="um" name="d">
       <SingleValue>0.2</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Unit symbol="per_ms" dimension="per_time" power="3"/>
 </NineML>

@@ -34,13 +34,13 @@
         <OutputEvent port="spikeOutput"/>
       </OnCondition>
     </Regime>
-    <Constant name="const1" units="per_mV_ms">0.04</Constant>
-    <Constant name="const2" units="per_ms">5</Constant>
-    <Constant name="const3" units="mV_per_ms">140</Constant>
-    <Constant name="C" units="nF">1.0</Constant>
+    <Constant name="const1" value="0.04" units="per_mV_ms"/>
+    <Constant name="const2" value="5" units="per_ms"/>
+    <Constant name="const3" value="140" units="mV_per_ms"/>
+    <Constant name="C" value="1.0" units="nF"/>
   </Dynamics>
-  <Component name="Izhikevich">
-    <Definition>IzhikevichClass</Definition>
+  <DynamicsProperties name="Izhikevich">
+    <Definition name="IzhikevichClass"/>
     <Property name="a" units="per_ms">
       <SingleValue>0.02</SingleValue>
     </Property>
@@ -56,7 +56,7 @@
     <Property name="theta" units="mV">
       <SingleValue>30.0</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Dimension name="voltage" m="1" l="2" t="-3" i="-1"/>
   <Dimension name="voltage_per_time" m="1" l="2" t="-4" i="-1"/>
   <Dimension name="per_voltage_time" m="-1" l="-2" t="2" i="1"/>

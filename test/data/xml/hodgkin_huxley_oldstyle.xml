@@ -3,7 +3,7 @@
   <B:Biophysics xmlns:B="http://www.nineml.org/Biophysics" name="hodgkin_huxley">
 
     <B:AnalogPort mode='receive' name="v"/>
-    <B:Component type="defaults">
+    <B:DynamicsProperties type="defaults">
       <B:Parameter name="Vrest">
         <B:value>-65</B:value>
       </B:Parameter>
@@ -12,14 +12,14 @@
       </B:Parameter>
       <B:AnalogPort mode='send' name="Vrest"/>
       <B:AnalogPort mode='send' name="V_t"/>
-    </B:Component>
+    </B:DynamicsProperties>
     
-    <B:Component type="membrane-capacitance">
+    <B:DynamicsProperties type="membrane-capacitance">
       <B:Parameter name="C">
         <B:value>1.0</B:value>
       </B:Parameter>
       <B:AnalogPort mode='send' name="C"/>
-    </B:Component>
+    </B:DynamicsProperties>
 
     <B:Dynamics type="ionic-current" name="Nadef">
       <B:Interface><B:Parameter name="A_alpha_m"/>
@@ -37,7 +37,7 @@
       <B:Parameter name="g"/>
       <B:Parameter name="e"/>
       </B:Interface>
-      <B:Component type="gate">
+      <B:DynamicsProperties type="gate">
         <B:Alias name="amf" arguments="v">
           <B:body>(A_alpha_m * ((v - B_alpha_m) / (1.0 - (exp ((neg (v - B_alpha_m)) / C_alpha_m)))))</B:body>
         </B:Alias>
@@ -60,21 +60,21 @@
           <B:h_alpha>(ahf (v))</B:h_alpha>
           <B:h_beta>(bhf (v))</B:h_beta>
         </B:hh_ionic_gate>
-      </B:Component>
+      </B:DynamicsProperties>
 
-      <B:Component type="permeating-ion" name="na">
+      <B:DynamicsProperties type="permeating-ion" name="na">
         <B:Parameter name="erev">
           <B:value>e</B:value>
         </B:Parameter>
         <B:AnalogPort mode='send' name="erev"/>
-      </B:Component>
+      </B:DynamicsProperties>
 
-      <B:Component type="pore">
+      <B:DynamicsProperties type="pore">
         <B:Parameter name="gbar">
           <B:value>g</B:value>
         </B:Parameter>
         <B:AnalogPort mode='send' name="gbar"/>
-      </B:Component>
+      </B:DynamicsProperties>
 
     </B:Dynamics>
 
@@ -88,7 +88,7 @@
       <B:Parameter name="e"/>
       <B:Parameter name="g"/>
       </B:Interface>
-      <B:Component type="gate">
+      <B:DynamicsProperties type="gate">
         <B:Alias name="anf" arguments="v">
           <B:body>(A_alpha_n * ((v - B_alpha_n) / (1 - (exp ((neg (v - B_alpha_n)) / C_alpha_n)))))</B:body>
         </B:Alias>
@@ -102,21 +102,21 @@
           <B:m_alpha>(anf (v))</B:m_alpha>
           <B:m_beta>(bnf (v))</B:m_beta>
         </B:hh_ionic_gate>
-      </B:Component>
+      </B:DynamicsProperties>
 
-      <B:Component type="pore">
+      <B:DynamicsProperties type="pore">
         <B:Parameter name="gbar">
           <B:value>g</B:value>
         </B:Parameter>
         <B:AnalogPort mode='send' name="gbar"/>
-      </B:Component>
+      </B:DynamicsProperties>
 
-      <B:Component type="permeating-ion" name="k">
+      <B:DynamicsProperties type="permeating-ion" name="k">
         <B:Parameter name="erev">
           <B:value>e</B:value>
         </B:Parameter>
         <B:AnalogPort mode='send' name="erev"/>
-      </B:Component>
+      </B:DynamicsProperties>
 
     </B:Dynamics>
 
@@ -124,23 +124,23 @@
       <B:Interface><B:Parameter name="e"/>
       <B:Parameter name="g"/>
       </B:Interface>
-      <B:Component type="pore">
+      <B:DynamicsProperties type="pore">
         <B:Parameter name="gbar">
           <B:value>g</B:value>
         </B:Parameter>
         <B:AnalogPort mode='send' name="gbar"/>
-      </B:Component>
+      </B:DynamicsProperties>
 
-      <B:Component type="permeating-ion" name="non-specific">
+      <B:DynamicsProperties type="permeating-ion" name="non-specific">
         <B:Parameter name="erev">
           <B:value>e</B:value>
         </B:Parameter>
         <B:AnalogPort mode='send' name="erev"/>
-      </B:Component>
+      </B:DynamicsProperties>
 
     </B:Dynamics>
 
-    <B:Component name="Na" definition="Nadef">
+    <B:DynamicsProperties name="Na" definition="Nadef">
       <B:properties><B:Parameter name="A_alpha_m">
         <B:value>0.1</B:value>
       </B:Parameter>
@@ -183,9 +183,9 @@
       <B:Parameter name="g">
         <B:value>0.12</B:value>
       </B:Parameter>
-    </B:properties></B:Component>
+    </B:properties></B:DynamicsProperties>
 
-    <B:Component name="K" definition="Kdef">
+    <B:DynamicsProperties name="K" definition="Kdef">
       <B:properties><B:Parameter name="A_alpha_n">
         <B:value>0.01</B:value>
       </B:Parameter>
@@ -210,16 +210,16 @@
       <B:Parameter name="g">
         <B:value>0.036</B:value>
       </B:Parameter>
-    </B:properties></B:Component>
+    </B:properties></B:DynamicsProperties>
 
-    <B:Component name="Leak" definition="Leakdef">
+    <B:DynamicsProperties name="Leak" definition="Leakdef">
       <B:properties><B:Parameter name="g">
         <B:value>0.0003</B:value>
       </B:Parameter>
       <B:Parameter name="e">
         <B:value>-54.4</B:value>
       </B:Parameter>
-    </B:properties></B:Component>
+    </B:properties></B:DynamicsProperties>
 
   </B:Biophysics>
 </NineML>

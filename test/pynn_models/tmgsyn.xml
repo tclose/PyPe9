@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<NineML xmlns="http://nineml.net/9ML/1.0">
+  <DynamicsProperties name="tmgsyn">
+    <Definition name="tmgsynClass" url="/Users/tclose/git/pype9/test/pynn_models/tmgsynClass.xml"/>
+    <Property units="mV" name="e">
+      <SingleValue>-90.0</SingleValue>
+    </Property>
+    <Property units="ms" name="tau">
+      <SingleValue>3.0</SingleValue>
+    </Property>
+  </DynamicsProperties>
+  <Dimension i="-1" l="2" m="1" t="-3" name="voltage"/>
+  <Dimension name="time" t="1"/>
+  <Unit symbol="mV" dimension="voltage" power="-3"/>
+  <Unit symbol="ms" dimension="time" power="-3"/>
+</NineML>

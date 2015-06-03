@@ -3,8 +3,8 @@
   <Dimension i="2" t="3" m="-1" l="-4" name="conductanceDensity"/>
   <Unit symbol="mV" dimension="voltage" power="-3"/>
   <Unit symbol="unitless" dimension="dimensionless" power="0"/>
-  <Component name="Golgi_Ca_LVA">
-    <Definition url="/Users/tclose/git/pype9/test/data/nmodl/imported/Golgi_Ca_LVAClass.xml">Golgi_Ca_LVAClass</Definition>
+  <DynamicsProperties name="Golgi_Ca_LVA">
+    <Definition name="Golgi_Ca_LVAClass" url="/Users/tclose/git/pype9/test/data/nmodl/imported/Golgi_Ca_LVAClass.xml"/>
     <Property units="unitless" name="A_tau_h">
       <SingleValue>1.0</SingleValue>
     </Property>
@@ -59,7 +59,7 @@
     <Property units="mV" name="v0_tau_m2">
       <SingleValue>-100.0</SingleValue>
     </Property>
-  </Component>
+  </DynamicsProperties>
   <Unit symbol="S_per_cm2" dimension="conductanceDensity" power="4"/>
   <Dimension name="dimensionless"/>
   <Dimension i="-1" t="-3" m="1" l="2" name="voltage"/>

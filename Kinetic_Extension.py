@@ -7,20 +7,20 @@ import os.path
 import collections
 from itertools import chain
 from nineml.maths import is_builtin_symbol
-from nineml.abstraction_layer.components.interface import Parameter
-from nineml.abstraction_layer.dynamics.component import ComponentClass
-from nineml.abstraction_layer.dynamics import Regime, StateVariable, OnEvent
-from nineml.abstraction_layer.dynamics.component.expressions import (
+from nineml.abstraction.components.interface import Parameter
+from nineml.abstraction.dynamics.component import ComponentClass
+from nineml.abstraction.dynamics import Regime, StateVariable, OnEvent
+from nineml.abstraction.dynamics.component.expressions import (
     Alias, TimeDerivative, StateAssignment)
-from nineml.abstraction_layer.dynamics.component.ports import (
+from nineml.abstraction.dynamics.component.ports import (
     AnalogReceivePort, AnalogSendPort, EventReceivePort)
-import nineml.abstraction_layer.units as un
-from nineml.user_layer import Definition, IonDynamicsType
+import nineml.abstraction.units as un
+from nineml.user import Definition, IonDynamicsType
 from nineml.context import Context
 
-# from nineml.user_layer.dynamics import IonDynamics
+# from nineml.user.dynamics import IonDynamics
 from collections import defaultdict
-from nineml.abstraction_layer import units
+from nineml.abstraction import units
 
 
 # Compiled regular expressions
