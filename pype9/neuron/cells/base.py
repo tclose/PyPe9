@@ -82,8 +82,6 @@ class Cell(base.Cell):
         self.gsyn_trace = {}
         self.recording_time = 0
         self.rec = h.NetCon(self.source, None, sec=self._sec)
-        self._inputs = {}
-        self._input_auxs = []
         self.initial_v = self.V_INIT_DEFAULT
         # Call base init (needs to be after 9ML init)
         super(Cell, self).__init__(*properties, **kwprops)
@@ -143,15 +141,17 @@ class Cell(base.Cell):
                            .format(port_name))
             # FIXME: This assumes that all event ports are voltage threshold
             #        crossings
-            self._recorders[port_name] = recorder = h.NetCon(
+            recorder = h.NetCon(
                 self._sec._ref_v, None, self.get_threshold(), 0.0, 1.0,
                 sec=self._sec)
         try:
             recorder = getattr(self._hoc, '_ref_' + port_name)
         except AttributeError:
             recorder = getattr(self._sec(0.5), '_ref_' + port_name)
-        self._recordings[port_name] = recording = h.Vector()
+        recording = h.Vector()
         recording.record(recorder)
+        # Save the recording and recorder to ensure they don't go out of scope
+        self._recorders[port_name] = (recorder, recording)
 
     def recording(self, port_name):
         """
@@ -165,12 +165,12 @@ class Cell(base.Cell):
                 PYPE9_NS][MEMBRANE_VOLTAGE]
         if isinstance(port, EventPort):
             recording = neo.SpikeTrain(
-                self._recordings[port_name], t_start=0.0 * pq.ms,
+                self._recorders[port_name][1], t_start=0.0 * pq.ms,
                 t_stop=h.t * pq.ms, units='ms')
         else:
             units_str = UnitHandler.dimension_to_unit_str(port.dimension)
             recording = neo.AnalogSignal(
-                self._recordings[port_name], sampling_period=h.dt * pq.ms,
+                self._recorders[port_name][1], sampling_period=h.dt * pq.ms,
                 t_start=0.0 * pq.ms, units=units_str, name=port_name)
         return recording
 
@@ -179,15 +179,8 @@ class Cell(base.Cell):
         Resets the recordings for the cell and the NEURON simulator (assumes
         that only one cell is instantiated)
         """
-        for rec in self._recordings.itervalues():
-            rec.resize(0)
-
-    def clear_recorders(self):
-        """
-        Clears all recorders and recordings
-        """
-        super(Cell, self).clear_recorders()
-        super(base.Cell, self).__setattr__('_recordings', {})
+        for _, recording in self._recorders.itervalues():
+            recording.resize(0)
 
     def play(self, port_name, signal):
         """
@@ -195,26 +188,31 @@ class Cell(base.Cell):
 
         `current` -- a vector containing the current [neo.AnalogSignal]
         """
-        ext_is = self.build_componentclass.annotations[
-            PYPE9_NS][EXTERNAL_CURRENTS]
         try:
-            self.componentclass.port(port_name)
+            port = self.componentclass.port(port_name)
         except KeyError:
             raise Pype9RuntimeError(
                 "Cannot play into unrecognised port '{}'".format(port_name))
-        if port_name not in (p.name for p in ext_is):
-            raise NotImplementedError(
-                "Can only play into external current ports ('{}'), not '{}' "
-                "port.".format("', '".join(p.name for p in ext_is), port_name))
-        iclamp = h.IClamp(0.5, sec=self._sec)
-        iclamp.delay = 0.0
-        iclamp.dur = 1e12
-        iclamp.amp = 0.0
-        iclamp_amps = h.Vector(pq.Quantity(signal, 'nA'))
-        iclamp_times = h.Vector(pq.Quantity(signal.times, 'ms'))
-        iclamp_amps.play(iclamp._ref_amp, iclamp_times)
-        self._inputs['iclamp'] = iclamp
-        self._input_auxs.extend((iclamp_amps, iclamp_times))
+        if isinstance(port, EventPort):
+            vec_stim = h.VecStim()
+            vec_stim.play(pq.Quantity(signal, pq.ms))
+            self._inputs[port_name] = vec_stim
+        else:
+            ext_is = self.build_componentclass.annotations[
+                PYPE9_NS][EXTERNAL_CURRENTS]
+            if port_name not in (p.name for p in ext_is):
+                raise NotImplementedError(
+                    "Can only play into external current ports ('{}'), not "
+                    "'{}' port.".format(
+                        "', '".join(p.name for p in ext_is), port_name))
+            iclamp = h.IClamp(0.5, sec=self._sec)
+            iclamp.delay = 0.0
+            iclamp.dur = 1e12
+            iclamp.amp = 0.0
+            iclamp_amps = h.Vector(pq.Quantity(signal, 'nA'))
+            iclamp_times = h.Vector(pq.Quantity(signal.times, 'ms'))
+            iclamp_amps.play(iclamp._ref_amp, iclamp_times)
+            self._inputs[port_name] = (iclamp, iclamp_amps, iclamp_times)
 
     def voltage_clamp(self, voltages, series_resistance=1e-3):
         """
@@ -229,8 +227,7 @@ class Cell(base.Cell):
         seclamp_amps = h.Vector(pq.Quantity(voltages, 'mV'))
         seclamp_times = h.Vector(pq.Quantity(voltages.times, 'ms'))
         seclamp_amps.play(seclamp._ref_amp, seclamp_times)
-        self._inputs['seclamp'] = seclamp
-        self._input_auxs.extend((seclamp_amps, seclamp_times))
+        self._inputs['_seclamp'] = (seclamp, seclamp_amps, seclamp_times)
 
 
 class CellMetaClass(base.CellMetaClass):

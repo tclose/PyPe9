@@ -5,6 +5,7 @@ else:
 from os import path
 import neuron
 import nest
+import nineml
 from neuron import h
 try:
     import pylab as plt
@@ -40,76 +41,30 @@ def to_float(qty, units):
 xml_dir = path.join(os.environ['HOME'], 'git', 'nineml_catalog', 'neurons')
 
 
-class TestCells(TestCase):
+class TestPostSynapticResponses(TestCase):
 
-    models = [('Izhikevich2003', 'Izhikevich', 'izhikevich'),
-              ('AdExpIaF', 'AdExpIF', 'aeif_cond_alpha'),
-              ('HodgkinHuxley', 'hh_traub', 'hh_cond_exp_traub'),
-              ('LeakyIntegrateAndFire', 'ResetRefrac', 'iaf_psc_alpha')]
+    cell_model_9ML = 'LeakyIntegrateAndFire'
+    cell_model_pyNN_neuron = 'ResetRefrac'
 
-    initial_states = {'Izhikevich2003': {'u': -14 * pq.mV / pq.ms,
-                                         'v': -65.0 * pq.mV},
-                      'AdExpIaF': {'w': 0.0 * pq.nA,
-                                   'v': -65 * pq.mV},
-                      'HodgkinHuxley': {'v': -65 * pq.mV,
-                                        'm': 0, 'h': 1, 'n': 0},
-                      'LeakyIntegrateAndFire': {'v': -65 * pq.mV,
-                                                'end_refractory': 0.0}}
+    neuron_pas = {'g': 0.00025, 'e': -70}
+    neuron_params = {'vthresh': -55, 'vreset': -70, 'trefrac': 2}
 
-    neuron_pas = {'Izhikevich2003': None,
-                  'AdExpIaF': None,
-                  'HodgkinHuxley': None,
-                  'LeakyIntegrateAndFire': {'g': 0.00025, 'e': -70}}
-    neuron_params = {'Izhikevich2003': None,
-                     'AdExpIaF': None,
-                     'HodgkinHuxley': None,
-                     'LeakyIntegrateAndFire': {
-                         'vthresh': -55,
-                         'vreset': -70,
-                         'trefrac': 2}}
+    nest_states = {'v': 'V_m', 'end_refractory': None}
+    nest_params = {}
 
-    nest_states = {'Izhikevich2003': {'u': 'U_m', 'v': 'V_m'},
-                   'AdExpIaF': {'w': 'w', 'v': 'V_m'},
-                   'HodgkinHuxley': {'v': 'V_m', 'm': 'Act_m', 'h': 'Act_h',
-                                     'n': 'Inact_n'},
-                   'LeakyIntegrateAndFire': {'v': 'V_m',
-                                             'end_refractory': None}}
-    nest_params = {'Izhikevich2003': {'a': 0.02, 'c': -65.0, 'b': 0.2,
-                                      'd': 2.0},
-                   'AdExpIaF': {},
-                   'HodgkinHuxley': {"C_m": 250.0,
-                                     "tau_m": 20.0,
-                                     "tau_syn_ex": 0.5,
-                                     "tau_syn_in": 0.5,
-                                     "t_ref": 2.0,
-                                     "E_L": 0.0,
-                                     "V_reset": 0.0,
-                                     "V_m": 0.0,
-                                     "V_th": 20.0},
-                   'LeakyIntegrateAndFire': {}}
-    paradigms = {'Izhikevich2003': {'duration': 100 * pq.ms,
-                                    'stim_amp': 0.02 * pq.nA,
-                                    'stim_start': 20 * pq.ms,
-                                    'dt': 0.02 * pq.ms},
-                 'AdExpIaF': {'duration': 50 * pq.ms,
-                              'stim_amp': 1 * pq.nA,
-                              'stim_start': 25 * pq.ms,
-                              'dt': 0.002 * pq.ms},
-                 'HodgkinHuxley': {'duration': 100 * pq.ms,
-                                   'stim_amp': 0.5 * pq.nA,
-                                   'stim_start': 50 * pq.ms,
-                                   'dt': 0.002 * pq.ms},
-                 'LeakyIntegrateAndFire': {'duration': 50 * pq.ms,
-                                           'stim_amp': 1 * pq.nA,
-                                           'stim_start': 25 * pq.ms,
-                                           'dt': 0.002 * pq.ms}}
+    models = [('ExpISyn', 'ExpISyn', 'iaf_psc_alpha')]
+
+    initial_cell_states = {'v': -65 * pq.mV, 'end_refractory': 0.0}
+    initial_states = {'ExpISyn': {'i': 0.0}}
+
+    paradigms = {'duration': 50 * pq.ms, 'stim_frequency': 5 * pq.Hz}
 
 #     order = [0, 1, 2, 3, 4]
-    order = [3, 2, 3]
+    order = [1, 2, 3]
     min_delay = 0.04
     max_delay = 10
 
-    def test_cells(
+    def test_post_synaptic_responses(
             self, plot=False, build_mode='force',
             tests=('nrn9ML', 'nrnPyNN', 'nest9ML', 'nestPyNN')):
         self.nml_cells = {}
@@ -169,7 +124,7 @@ class TestCells(TestCase):
                     self.assertAlmostEqual(self._diff_NEST(name), 0, places=3)
             break
 
-    def _create_9ML(self, name, sim_name, build_mode, injected_signal):
+    def _create_9ML(self, name, sim_name, build_mode, input_spikes):
         # -----------------------------------------------------------------
         # Set up 9MLML cell
         # -----------------------------------------------------------------
@@ -179,39 +134,36 @@ class TestCells(TestCase):
             CellMetaClass = CellMetaClassNEST
         else:
             assert False
-        CellClass = CellMetaClass(
-            path.join(xml_dir, name + '.xml'), build_mode=build_mode)
+        cell_9ML = nineml.read(
+            path.join(xml_dir, 'neurons',
+                      self.cell_name + '.xml'))[self.cell_name]
+        psr_9ML = nineml.read(path.join(xml_dir, 'postsynapticresponses',
+                                        name + '.xml'))[name]
+        combined = nineml.Dynamics(self.cell_name + '_with_' + name,
+                                   subnodes=(cell_9ML, psr_9ML))
+        CellClass = CellMetaClass(combined, build_mode=build_mode)
         self.nml_cells[sim_name] = CellClass()
-        self.nml_cells[sim_name].play('iExt', injected_signal)
+        self.nml_cells[sim_name].play('incoming_spike', input_spikes)
         self.nml_cells[sim_name].record('v')
         self.nml_cells[sim_name].update_state(self.initial_states[name])
 
-    def _create_NEURON(self, name, model_name, stim_start, stim_amp, duration):  # @UnusedVariable @IgnorePep8
+    def _create_NEURON(self, name, model_name, stim_start, stim_rate,
+                       duration):  # @UnusedVariable @IgnorePep8
         # -----------------------------------------------------------------
         # Set up PyNN section
         # -----------------------------------------------------------------
         self._nrn_pnn = h.Section()
-        try:
-            self._nrn_pnn_cell = eval(
-                'h.{}(0.5, sec=self._nrn_pnn)'.format(model_name))
-            self._nrn_pnn.L = 10
-            self._nrn_pnn.diam = 10 / pi
-            self._nrn_pnn.cm = 1.0
-        except TypeError:
-            self._nrn_pnn.insert(model_name)
-            self._nrn_pnn_cell = self._nrn_pnn(0.5)
-            self._nrn_pnn.L = 100
-            self._nrn_pnn.diam = 1000 / pi
-            self._nrn_pnn.cm = 0.2
-#         if self.neuron_params[name] is not None:
-#             for k, v in self.neuron_params[name].iteritems():
-#                 setattr(getattr(self._nrn_pnn(0.5), model_name), k, v)
-        if self.neuron_pas[name] is not None:
-            self._nrn_pnn.insert('pas')
-            self._nrn_pnn(0.5).pas.g = self.neuron_pas[name]['g']
-            self._nrn_pnn(0.5).pas.e = self.neuron_pas[name]['e']
+        self._nrn_pnn.insert(model_name)
+        self._nrn_pnn_cell = self._nrn_pnn(0.5)
+        self._nrn_pnn.L = 100
+        self._nrn_pnn.diam = 1000 / pi
+        self._nrn_pnn.cm = 0.2
+        self._nrn_pnn.insert('pas')
+        self._nrn_pnn(0.5).pas.g = self.neuron_pas['g']
+        self._nrn_pnn(0.5).pas.e = self.neuron_pas['e']
         # Specify current injection
-        self._nrn_stim = h.IClamp(1.0, sec=self._nrn_pnn)
+        self._nrn_stim = h.VecStim()
+        self._nrn_con = h.NetCon()
         self._nrn_stim.delay = stim_start   # ms
         self._nrn_stim.dur = duration   # ms
         self._nrn_stim.amp = to_float(stim_amp, 'nA')   # nA
@@ -300,8 +252,8 @@ class NEURONRecorder(object):
 
 
 if __name__ == '__main__':
-    t = TestCells()
-    t.test_cells(
+    t = TestPostSynapticResponses()
+    t.test_post_synaptic_responses(
         plot=True, build_mode='force',
 #         tests=('nrn9ML', 'nrnPyNN',))
 #         tests=('nest9ML', 'nestPyNN'))

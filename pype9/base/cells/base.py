@@ -128,6 +128,9 @@ class Cell(object):
         # parameters
         for prop in self.properties:
             self.set(prop)
+        # Dictionaries to hold inputs and recorders
+        self._inputs = {}
+        self._recorders = {}
         # Flag to determine whether the cell has been initialised or not
         # (it makes a difference to how the state of the cell is updated,
         # either saved until the 'initialze' method is called or directly
