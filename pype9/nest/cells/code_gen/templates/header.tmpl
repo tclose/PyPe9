@@ -233,8 +233,8 @@ namespace nineml {
 	     public:
 	       Regime_({{component_name}}* cell) : cell(cell) {}
 	       dynamics_function_type get_dynamics_function();
-	       Transition_* transition(State_& state, Buffers_& buffers, double t, const nest::long_t& lag);
-	       void set_triggers(State_& state, double t);
+	       Transition_* transition(nest::Time const & origin, const nest::long_t& lag);
+	       void set_triggers(nest::Time const & origin, const nest::long_t& lag);
 	       
 	     protected:
 	       {{component_name}}* cell;
@@ -270,9 +270,9 @@ namespace nineml {
 	      public:
 	        Transition_(Regime_* regime);
 	        virtual ~Transition_() {}
-	        virtual bool trigger_condition({{component_name}}::State_& state, double t, const nest::long_t& lag) = 0;
-	        virtual double trigger_time(State_& state, double t) = 0;
-	        virtual void body({{component_name}}* node, double t, nest::Time const& origin, nest::long_t& lag) = 0;
+	        virtual bool trigger_condition(nest::Time const & origin, const nest::long_t& lag) = 0;
+	        virtual double trigger_time(nest::Time const & origin, const nest::long_t& lag) = 0;
+	        virtual void body(nest::Time const & origin, const nest::long_t& lag) = 0;
 	        void set_target_regime(Regime_* target_regime);
 	        Regime_* get_target_regime();
 	        
@@ -295,8 +295,8 @@ namespace nineml {
 	      public:
 	        OnEvent_(Regime_* regime, nest::RingBuffer* event_port)
               : Transition_(regime), event_port(event_port) {}  
-	        bool trigger_condition({{component_name}}::State_& state, double t, const nest::long_t& lag);
-	        double trigger_time(State_& state, double t);
+	        bool trigger_condition(nest::Time const & origin, const nest::long_t& lag);
+	        double trigger_time(nest::Time const & origin, const nest::long_t& lag);
 	        
 	      protected:
 	        nest::RingBuffer* event_port;
@@ -322,9 +322,9 @@ namespace nineml {
 
           public:
 //            {{ClassName}}(Regime_* regime, nest::RingBuffer* event_port) : OnEvent_(regime, event_port) {}            
-            bool trigger_condition(State_& state, double t, const nest::long_t& lag);
-            double trigger_time(State_& state, double t);
-            void body({{component_name}}* node, double t);
+            bool trigger_condition(nest::Time const & origin, const nest::long_t& lag);
+            double trigger_time(nest::Time const & origin, const nest::long_t& lag);
+            void body(nest::Time const & origin, const nest::long_t& lag);
      
         };
 
@@ -335,9 +335,9 @@ namespace nineml {
 
           public:
 //            {{ClassName}}(Regime_* regime) : OnCondition_(regime) {}
-            bool trigger_condition(State_& state, double t, const nest::long_t& lag);
-            double trigger_time(State_& state, double t);
-            void body({{component_name}}* node, double t, nest::Time const& origin, nest::long_t& lag);
+            bool trigger_condition(nest::Time const & origin, const nest::long_t& lag);
+            double trigger_time(nest::Time const & origin, const nest::long_t& lag);
+            void body(nest::Time const & origin, const nest::long_t& lag);
      
         };
 
