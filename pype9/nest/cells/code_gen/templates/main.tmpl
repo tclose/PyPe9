@@ -69,11 +69,11 @@ extern "C" int {{component_name}}_dynamics{% include "dynamics_signature.tmpl" %
 }
 
 
-{{component_name}}::Transition_* {{component_name}}::Regime_::transition({{component_name}}::State_& state, double t) {
-    // Get list of triggered conditions
+{{component_name}}::Transition_* {{component_name}}::Regime_::transition({{component_name}}::State_& state, double t, const nest::long_t& lag) {
+    // Get vector of transitions (both OnConditions and OnEvents) that are triggered in the current timestep
     std::vector<Transition_*> triggered;
     for (std::vector<Transition_*>::iterator it = this->active.begin(); it != this->active.end(); ++it)
-        if ((*it)->trigger_condition(state, t))
+        if ((*it)->trigger_condition(state, t, lag))
             triggered.push_back(*it);
 
     // Get the earliest transition to be triggered
@@ -81,28 +81,29 @@ extern "C" int {{component_name}}_dynamics{% include "dynamics_signature.tmpl" %
     if (!triggered.size())
         transition = NULL;
     else if (triggered.size() == 1)
-        transition = triggered[0]
+        transition = triggered[0];
     else {
         std::vector<double> times;
-        for (std::vector<Transition_*>::iterator it = this->triggered.begin(); it != this->triggered.end(); ++it)
+        for (std::vector<Transition_*>::iterator it = triggered.begin(); it != triggered.end(); ++it) 
             times.push_back((*it)->trigger_time(state, t));
-        transition = triggered[std::argmin(times)];
+        int min_index = std::min_element(times.begin(), times.end()) - times.begin();
+        transition = triggered[min_index];
     }
     return transition;
 }
 
 
-void {{component_name}}::Regime_::set_triggers({{component_name}}::State_& state, double t) {
+void {{component_name}}::Regime_::set_triggers({{component_name}}::State_& state, double t, const nest::long_t& lag) {
     // Reset the vector of active transitions
     this->active.clear();
     
     // Add OnConditions to the list of active transitions if their trigger condition evaluates to false
-    for (std::vector<Transition_*>::iterator it = this->on_conditions.begin(); it != this->on_conditions.end(); ++it)
-        if (!(*it)->trigger_condition(state, t))
+    for (std::vector<OnCondition_*>::iterator it = this->on_conditions.begin(); it != this->on_conditions.end(); ++it)
+        if (!(*it)->trigger_condition(state, t, lag))
             this->active.push_back(*it);
             
     // Add all OnEvents to the list of active transitions    
-    for (std::vector<Transition_*>::iterator it = this->on_events.begin(); it != this->on_events.end(); ++it)
+    for (std::vector<OnEvent_*>::iterator it = this->on_events.begin(); it != this->on_events.end(); ++it)
         this->active.push_back(*it);
         
 }
@@ -113,7 +114,7 @@ double {{component_name}}::OnEvent_::trigger_time({{component_name}}::State_& st
 }
 
 
-bool {{component_name}}::OnEvent_::trigger_condition({{component_name}}::State_& state, {{component_name}}::Buffers_& buffer, double t, nest::long_t lag) {
+bool {{component_name}}::OnEvent_::trigger_condition({{component_name}}::State_& state, double t, const nest::long_t& lag) {
     return (bool)this->event_port->get_value(lag);
 }
 
@@ -162,9 +163,9 @@ extern "C" int {{component_name}}_{{regime.name}}_dynamics{% include "dynamics_s
 }
 
 {{component_name}}::{{regime.name}}Regime::~{{regime.name}}Regime() {
-    for (std::vector<Transition_*>::iterator it = this->on_conditions.begin(); it != this->on_conditions.end(); ++it)
+    for (std::vector<OnCondition_*>::iterator it = this->on_conditions.begin(); it != this->on_conditions.end(); ++it)
         delete *it;
-    for (std::vector<Transition_*>::iterator it = this->on_events.begin(); it != this->on_events.end(); ++it)
+    for (std::vector<OnEvent_*>::iterator it = this->on_events.begin(); it != this->on_events.end(); ++it)
         delete *it;        
 }
 
@@ -200,14 +201,14 @@ extern "C" int {{component_name}}_{{regime.name}}_dynamics{% include "dynamics_s
     {% endfor %}
     {% for on_condition in regime.on_conditions %}
         {% set TransitionClassName = '{}OnCondition{}'.format(regime.name, regime.index_of(on_condition)) %}
-{{component_name}}::{{TransitionClassName}}::trigger_condition({{component_name}}::State_& state, {{component_name}}::Buffers_& buffer, double t) {
+{{component_name}}::{{TransitionClassName}}::trigger_condition({{component_name}}::State_& state, {{component_name}}::Buffers_& buffers, double t, const nest::long_t& lag) {
     {{macros.map_required_vars_locally(on_condition.state_assignments, component_class, component_name, unit_handler, []) | indent(4)}}
 
     return {{on_condition.trigger.rhs_cstr}};
 
 }
 
-{{component_name}}::{{TransitionClassName}}::trigger_time({{component_name}}::State_& state, double t) {
+{{component_name}}::{{TransitionClassName}}::trigger_time({{component_name}}::State_& state, double t const nest::long_t& lag) {
        {% set exact_time_expr = on_condition.trigger.crossing_time_expr %}
        {% if exact_time_expr %}
     {{macros.map_required_vars_locally(on_condition.state_assignments, component_class, component_name, unit_handler, []) | indent(4)}}       
