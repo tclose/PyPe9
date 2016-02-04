@@ -71,23 +71,27 @@ namespace nineml {
 
 	{{component_name}}::Transition_* {{component_name}}::Regime_::transition(nest::Time const& origin, const nest::long_t& lag) {
 	    // Get vector of transitions (both OnConditions and OnEvents) that are triggered in the current timestep
-	    std::vector<Transition_*> triggered;
-	    for (std::vector<Transition_*>::iterator it = this->active.begin(); it != this->active.end(); ++it)
-	        if ((*it)->trigger_condition(origin, lag))
-	            triggered.push_back(*it);
+	    std::vector<Transition_*> occurred;
+	    for (std::vector<OnCondition_*>::iterator it = this->active_on_conditions.begin(); it != this->active_on_conditions.end(); ++it)
+	        if ((*it)->condition(origin, lag))
+	            occurred.push_back(*it);
+	            
+	    for (std::vector<OnEvent_*>::iterator it = this->on_events.begin(); it != this->on_events.end(); ++it)
+	        if ((*it)->received(origin, lag))
+	            occurred.push_back(*it);
 	
 	    // Get the earliest transition to be triggered
 	    Transition_* transition;
-	    if (!triggered.size())
+	    if (!occurred.size())
 	        transition = NULL;
-	    else if (triggered.size() == 1)
-	        transition = triggered[0];
+	    else if (occurred.size() == 1)
+	        transition = occurred[0];
 	    else {
 	        std::vector<double> times;
-	        for (std::vector<Transition_*>::iterator it = triggered.begin(); it != triggered.end(); ++it) 
-	            times.push_back((*it)->trigger_time(origin, lag));
+	        for (std::vector<Transition_*>::iterator it = occurred.begin(); it != occurred.end(); ++it) 
+	            times.push_back((*it)->time_occurred(origin, lag));
 	        int min_index = std::min_element(times.begin(), times.end()) - times.begin();
-	        transition = triggered[min_index];
+	        transition = occurred[min_index];
 	    }
 	    return transition;
 	}
@@ -95,27 +99,23 @@ namespace nineml {
 
 	void {{component_name}}::Regime_::set_triggers(nest::Time const& origin, const nest::long_t& lag) {
 	    // Reset the vector of active transitions
-	    this->active.clear();
+	    this->active_on_conditions.clear();
 	    
 	    // Add OnConditions to the list of active transitions if their trigger condition evaluates to false
 	    for (std::vector<OnCondition_*>::iterator it = this->on_conditions.begin(); it != this->on_conditions.end(); ++it)
-	        if (!(*it)->trigger_condition(origin, lag))
-	            this->active.push_back(*it);
-	            
-	    // Add all OnEvents to the list of active transitions    
-	    for (std::vector<OnEvent_*>::iterator it = this->on_events.begin(); it != this->on_events.end(); ++it)
-	        this->active.push_back(*it);
+	        if (!(*it)->condition(origin, lag))
+	            this->active_on_conditions.push_back(*it);
 	        
 	}
 
 
-	double {{component_name}}::OnEvent_::trigger_time(nest::Time const& origin, const nest::long_t& lag) {
+	double {{component_name}}::OnEvent_::time_occurred(nest::Time const& origin, const nest::long_t& lag) {
 	    //FIXME: Should use the exact spike time specified in the spike event
 	    return origin.get_ms() + lag * nest::Time::get_resolution().get_ms();
 	}
 	
 	
-	bool {{component_name}}::OnEvent_::trigger_condition(nest::Time const& origin, const nest::long_t& lag) {
+	bool {{component_name}}::OnEvent_::received(nest::Time const& origin, const nest::long_t& lag) {
 	    return (bool)this->event_port->get_value(lag);
 	}
 
@@ -208,7 +208,7 @@ namespace nineml {
     {% endfor %}
     {% for on_condition in regime.on_conditions %}
         {% set TransitionClassName = '{}OnCondition{}'.format(regime.name, regime.index_of(on_condition)) %}
-	bool {{component_name}}::{{TransitionClassName}}::trigger_condition(nest::Time const& origin, const nest::long_t& lag) {
+	bool {{component_name}}::{{TransitionClassName}}::condition(nest::Time const& origin, const nest::long_t& lag) {
 	    
 	    const State_& S_ = this->regime->cell->S_;
 	    const Buffers_& B_ = this->regime->cell->B_;
@@ -221,7 +221,7 @@ namespace nineml {
 	
 	}
 	
-	double {{component_name}}::{{TransitionClassName}}::trigger_time(nest::Time const& origin, const nest::long_t& lag) {
+	double {{component_name}}::{{TransitionClassName}}::time_occurred(nest::Time const& origin, const nest::long_t& lag) {
        {% set exact_time_expr = on_condition.trigger.crossing_time_expr %}
        {% if exact_time_expr %}
 	
@@ -441,6 +441,16 @@ void {{component_name}}::init_buffers_() {
 {% endfor %}
 
 {% include "init_solver.tmpl" %}
+}
+
+
+void {{component_name}}::reset_events() {
+{% for port in component_class.event_send_ports %}
+    B_.num_{{port.name}}_events = 0;
+{% endfor %}
+{% for port in component_class.event_receive_ports %}
+    B_.num_unprocessed_{{port.name}}_events = B_.{{port.name}}_event_port.get_multiplicity();
+{% endfor %}
 }
 
 /****************
