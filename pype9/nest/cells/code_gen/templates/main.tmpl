@@ -43,31 +43,6 @@ namespace nest{
 
 namespace nineml {
 
-	extern "C" int {{component_name}}_dynamics{% include "dynamics_signature.tmpl" %} {
-	
-		// Get references to the members of the model
-		assert(pnode_);
-		const {{component_name}}& node_ = *(reinterpret_cast<{{component_name}}*>(pnode_));
-		const {{component_name}}::Parameters_& P_ = node_.P_;
-		const {{component_name}}::State_& S_ = node_.S_;
-		const {{component_name}}::Buffers_& B_ = node_.B_;
-	
-{% for regime in component_class.regimes %}
-	    {{elseif(loop.first)}} (B_.current_regime == {{component_name}}::{{regime.name}}_REGIME) {
-		    {{macros.map_required_vars_locally(regime.time_derivatives, component_class, component_name, unit_handler, []) | indent(8)}}
-		    // Evaluate differential equations
-	{% for td, scaled_expr, units in unit_handler.scale_time_derivatives(regime.time_derivatives) %}
-		    //std::cout << "{{td.dependent_variable}}=" << {{scaled_expr.rhs_cstr}};
-		    ITEM(f_, {{component_name}}::State_::{{td.dependent_variable}}_INDEX) = {{scaled_expr.rhs_cstr}};  // ({{units}})
-	{% endfor %}
-	    {{endif(loop.last)}}
-{% endfor %}
-	
-	    //std::cout << "Success at t=" << t << ": " << GSL_SUCCESS << std::endl;
-	    {% include "dynamics_return.tmpl" %}
-	
-	}
-
 
 	{{component_name}}::Transition_* {{component_name}}::Regime_::transition(nest::Time const& origin, const nest::long_t& lag) {
 	    // Get vector of transitions (both OnConditions and OnEvents) that are triggered in the current timestep
@@ -136,21 +111,21 @@ namespace nineml {
     }        
     {% endif %}
 
-	{{component_name}}::{{regime.name}}Regime::{{regime.name}}Regime({{component_name}}* cell)
+	{{component_name}}::{{regime.name}}Regime_::{{regime.name}}Regime_({{component_name}}* cell)
 	  : Regime_(cell{% if regime.num_time_derivatives %}, {{component_name}}_{{regime.name}}_dynamics{% endif %}) {
 	  
 	    // Construct OnConditions specific to the regime.
     {% for on_condition in regime.on_conditions %}
-	    this->on_conditions.push_back(new {{regime.name}}OnCondition{{regime.index_of(on_condition)}}(this));
+	    this->on_conditions.push_back(new {{regime.name}}OnCondition{{regime.index_of(on_condition)}}(this, "{{on_condition.target_regime.name}}"));
     {% endfor %}
 	
 	    // Construct OnConditions specific to the regime.
     {% for on_event in regime.on_events %}
-	    this->on_events.push_back(new {{regime.name}}On{{on_event.src_port_name}}Event(this, this->cell->B_.{{on_event.src_port_name}}_event_port));              
+	    this->on_events.push_back(new {{regime.name}}On{{on_event.src_port_name}}Event(this, "{{on_event.target_regime.name}}"));              
     {% endfor %}
 	}
 
-	{{component_name}}::{{regime.name}}Regime::~{{regime.name}}Regime() {
+	{{component_name}}::{{regime.name}}Regime_::~{{regime.name}}Regime_() {
 	    for (std::vector<OnCondition_*>::iterator it = this->on_conditions.begin(); it != this->on_conditions.end(); ++it)
 	        delete *it;
 	    for (std::vector<OnEvent_*>::iterator it = this->on_events.begin(); it != this->on_events.end(); ++it)
@@ -312,12 +287,18 @@ namespace nineml {
     
     // Construct all regimes
 {% for regime in component_class.regimes %}
-    this->regimes[{{regime.name}}] = new {{regime.name}}Regime_(this);
+    this->regimes["{{regime.name}}"] = new {{regime.name}}Regime_(this);
 {% endfor %}
+
+    // Set target regimes in all transitions
+    Regime_* regime;
+
 {% for regime in component_class.regimes %}
-    {% for transition in regime.transitions %}
-    this->regimes[{{regime.name}}].set_target_regime({regime.name}}Regime_(this);
-    {% endfor %}
+    regime = this->regimes["{{regime.name}}"];
+    for (std::vector<OnEvent_*>::iterator it = regime->on_events.begin(); it != regime->on_events.end(); ++it)
+        (*it)->set_target_regime(this->regimes);
+    for (std::vector<OnCondition_*>::iterator it = regime->on_conditions.begin(); it != regime->on_conditions.end(); ++it)
+        (*it)->set_target_regime(this->regimes);   
 {% endfor %}        
 }
 
@@ -460,16 +441,14 @@ void {{component_name}}::State_::set (const DictionaryDatum &d_, const Parameter
 
 {{component_name}}::Buffers_::Buffers_({{component_name}}& n)
     : logger_(n),
-{% include "buffer_vars.tmpl" %}
-      current_regime({% if initial_regime %}{{initial_regime}}_REGIME{% else %}DEFAULT_REGIME_{% endif %}) {
+{% include "buffer_vars.tmpl" %} {
     // Initialization of the remaining members is deferred to
     // init_buffers_().
 }
 
 {{component_name}}::Buffers_::Buffers_(const Buffers_&, {{component_name}}& n)
     : logger_(n),
-{% include "buffer_vars.tmpl" %}
-      current_regime({% if initial_regime %}{{initial_regime}}_REGIME{% else %}DEFAULT_REGIME_{% endif %}) {
+{% include "buffer_vars.tmpl" %} {
     // Initialization of the remaining members is deferred to
     // init_buffers_().
 }
@@ -497,7 +476,7 @@ void {{component_name}}::init_buffers_() {
     B_.{{p.name}}_value = 0.0;
 {% endfor %}
 
-    B_.current_regime = n.regimes[{{default_regime}}];
+    B_.current_regime = this->regimes["{{default_regime}}"];
 
 {% include "init_solver.tmpl" %}
 }
