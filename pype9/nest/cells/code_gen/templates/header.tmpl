@@ -322,13 +322,8 @@ namespace nineml {
 	    class OnEvent_ : public Transition_ {
 	    
 	      public:
-	        OnEvent_(Regime_* regime, nest::RingBuffer* event_port)
-              : Transition_(regime), event_port(event_port) {}  
-	        bool received(nest::Time const & origin, const nest::long_t& lag);
-	        double time_occurred(nest::Time const & origin, const nest::long_t& lag);
-	        
-	      protected:
-	        nest::RingBuffer* event_port;
+	        OnEvent_(Regime_* regime) : Transition_(regime) {}
+            virtual bool received(nest::Time const & origin, const nest::long_t& lag) = 0;
 	    
 	    };
 
@@ -351,7 +346,8 @@ namespace nineml {
         class {{ClassName}} : public OnEvent_ {
 
           public:
-            {{ClassName}}(Regime_* regime, nest::RingBuffer* event_port) : OnEvent_(regime, event_port) {}            
+            {{ClassName}}(Regime_* regime, nest::RingBuffer* event_port) : OnEvent_(regime, event_port) {}
+            bool received(nest::Time const & origin, const nest::long_t& lag);                        
             double time_occurred(nest::Time const & origin, const nest::long_t& lag);
             void body(nest::Time const & origin, const nest::long_t& lag);
      
