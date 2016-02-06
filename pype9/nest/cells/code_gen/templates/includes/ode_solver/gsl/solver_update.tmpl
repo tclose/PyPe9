@@ -2,12 +2,12 @@
 	        double tt = 0.0;
 	        while (tt < dt) {
 	            const int status =  gsl_odeiv2_evolve_apply(
-	                B_.e_, B_.c_, B_.s_,
-	                &B_.sys_, // system of ODE
+	                e_, c_, s_,
+	                &sys_, // system of ODE
 	                &tt, // from t...
 	                dt, // ...to t= t + dt
-	                &B_.IntegrationStep_, // integration window (written on!)
-	                S_.y_); // neuron state
+	                &IntegrationStep_, // integration window (written on!)
+	                this->cell->S_.y_); // neuron state
 	            if (status != GSL_SUCCESS)
-	              throw nest::GSLSolverFailure(get_name(), status);
+	              throw nest::GSLSolverFailure(this->cell->get_name(), status);
 	        }
