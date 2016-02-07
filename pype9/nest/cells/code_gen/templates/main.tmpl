@@ -143,7 +143,22 @@ void {{component_name}}::{{regime.name}}Regime_::init_solver() {
 }
 
 int {{component_name}}::{{regime.name}}Regime_::step_ode() {
+
+    //FIXME: Clamping of vars should be replaced by the resizing of the state
+    //       vector that is solved to only the states that have time-derivatives
+    //       in the regime.
+    /***** Set clamp vars for state variables that don't have a time derivative in this regime *****/
+    {% for sv in regime.no_time_derivatives(component_class.state_variables) %}
+    double {{sv.name}}_clamp_ = S_.y_[{{component_name}}::State_::{{sv.name}}_INDEX];
+    {% endfor %}
+
+    // Step ODE solver
 {% include "solver_update.tmpl" %}
+    
+    /***** Reset state variables from clamp vars for state variables that don't have a time derivative in this regime *****/
+    {% for sv in regime.no_time_derivatives(component_class.state_variables) %}
+            S_.y_[{{component_name}}::State_::{{sv.name}}_INDEX] = {{sv.name}}_clamp_;
+    {% endfor %}    
 }
 
 // Transition methods for {{regime.name}} regime
@@ -525,32 +540,18 @@ void {{component_name}}::update(nest::Time const & origin, const nest::long_t fr
     for (nest::long_t lag = from; lag < to; ++lag) {
 
         /***** Solve ODE over timestep *****/
-
-{% for regime in component_class.regimes %}
-        {{elseif(loop.first)}} (B_.current_regime == {{regime.name}}_REGIME) {
-
-            /***** Set clamp vars for state variables that don't have a time derivative in this regime *****/
-    {% for sv in regime.no_time_derivatives(component_class.state_variables) %}
-            double {{sv.name}}_clamp_ = S_.y_[{{component_name}}::State_::{{sv.name}}_INDEX];
-    {% endfor %} 
-
-	        {% include "update_step.tmpl" %}
-    
-            /***** Reset state variables from clamp vars for state variables that don't have a time derivative in this regime *****/
-    {% for sv in regime.no_time_derivatives(component_class.state_variables) %}
-            S_.y_[{{component_name}}::State_::{{sv.name}}_INDEX] = {{sv.name}}_clamp_;
-    {% endfor %}    
-
-    {% if debug %}
-            std::cout << "Regime: {{regime.name}} at time " << t << std::endl;
-    {% endif %}
-        {{endif(loop.last)}} 
-{% endfor %}
+        this->current_regime->step_ode();
 
         /***** Transition handling *****/
         int transition_count = 0;
-        double prev_t = -std::numeric_limits<double>::infinity();
-        int transitioned_to;
+        
+        
+        
+        while (transition = this->current_regime->transition(origin, lag)) {
+            
+        
+            ++transition_count;
+        }
         
         do {
 {% for regime in component_class.regimes %}

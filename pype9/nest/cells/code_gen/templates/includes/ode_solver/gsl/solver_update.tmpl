@@ -1,4 +1,5 @@
 	{# Performs the update step for the GSL solver #}
+	        double dt = nest::Time::get_resolution().get_ms();
 	        double tt = 0.0;
 	        while (tt < dt) {
 	            const int status =  gsl_odeiv2_evolve_apply(
