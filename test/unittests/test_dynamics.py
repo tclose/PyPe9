@@ -357,7 +357,7 @@ class TestDynamics(TestCase):
         nineml_model = ninemlcatalog.load('input/Poisson', 'Poisson')
         build_args = {'neuron': {'build_mode': 'force',
                                  'external_currents': ['iSyn']},
-                      'nest': {'build_mode': 'force', 'verbose': True}}
+                      'nest': {'build_mode': 'force'}}
         initial_states = {'t_next': 0.0 * un.ms}
         cells = {}
         for sim_name, meta_class in (('nest', CellMetaClassNEST),):  #, ('neuron', CellMetaClassNEURON)): @IgnorePep8
@@ -366,8 +366,6 @@ class TestDynamics(TestCase):
             cells[sim_name] = celltype(rate=rate)
             cells[sim_name].record('spike_output')
             cells[sim_name].update_state(initial_states)
-        print "Exiting after successful compilation"
-        return
         # Run NEURON simulation
 #         simulatorNEURON.reset()
 #         neuron.h.dt = self.dt

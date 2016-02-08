@@ -252,7 +252,7 @@ namespace nineml {
 	        virtual ~Regime_();    
 	        dynamics_function_type get_dynamics_function();
 	        Transition_* transition(nest::Time const & origin, const nest::long_t& lag);
-	        void set_triggers(nest::Time const & origin, const nest::long_t& lag);
+	        void set_triggers(double t);
 	        virtual void init_solver() = 0;
 	        virtual void step_ode() = 0;
 	        
@@ -314,7 +314,7 @@ namespace nineml {
             void set_target_regime(std::map<std::string, Regime_*>& regimes);
             Regime_* get_target_regime();	        
 	        virtual double time_occurred(nest::Time const & origin, const nest::long_t& lag) = 0;
-	        virtual bool body(nest::Time const & origin, const nest::long_t& lag) = 0;
+	        virtual bool body(double t) = 0;
 	        
             /* Inline random distribution methods */
 	        double random_uniform_(double low, double high);
@@ -347,7 +347,7 @@ namespace nineml {
 	      public:
 	        OnCondition_(Regime_* regime, const std::string& target_regime_name) : Transition_(regime, target_regime_name) {}
 	        virtual ~OnCondition_() {}
-            virtual bool condition(nest::Time const & origin, const nest::long_t& lag) = 0;
+            virtual bool condition(double t) = 0;
 	    };
 	    
 	    /*
@@ -364,7 +364,7 @@ namespace nineml {
             virtual ~{{ClassName}}() {}
             virtual bool received(nest::Time const & origin, const nest::long_t& lag);                        
             virtual double time_occurred(nest::Time const & origin, const nest::long_t& lag);
-            virtual bool body(nest::Time const & origin, const nest::long_t& lag);
+            virtual bool body(double t);
      
         };
 
@@ -376,9 +376,9 @@ namespace nineml {
           public:
             {{ClassName}}(Regime_* regime, const std::string& target_regime_name) : OnCondition_(regime, target_regime_name) {}
             virtual ~{{ClassName}}() {}
-            virtual bool condition(nest::Time const & origin, const nest::long_t& lag);
+            virtual bool condition(double t);
             virtual double time_occurred(nest::Time const & origin, const nest::long_t& lag);
-            virtual bool body(nest::Time const & origin, const nest::long_t& lag);
+            virtual bool body(double t);
      
         };
 
