@@ -333,7 +333,24 @@ double {{component_name}}::{{TransitionClassName}}::time_occurred(nest::Time con
       B_(*this) {
 
     recordablesMap_.create();
-    
+    construct_regimes();
+        
+}
+
+{{component_name}}::{{component_name}}(const {{component_name}}& n)
+    : Archiving_Node(n),
+      P_(n.P_),
+      S_(n.S_),
+      B_(n.B_, *this) {
+      
+    construct_regimes();
+}
+
+/**
+ * Constructs all regimes (and their transitions) in the component class
+ */      
+void {{component_name}}::construct_regimes() {
+
     // Construct all regimes
 {% for regime in component_class.regimes %}
     regimes["{{regime.name}}"] = new {{regime.name}}Regime_(this);
@@ -348,15 +365,8 @@ double {{component_name}}::{{TransitionClassName}}::time_occurred(nest::Time con
         (*it)->set_target_regime(regimes);
     for (std::vector<OnCondition_*>::iterator it = regime->on_conditions.begin(); it != regime->on_conditions.end(); ++it)
         (*it)->set_target_regime(regimes);   
-{% endfor %}        
+{% endfor %}
 }
-
-{{component_name}}::{{component_name}}(const {{component_name}}& n)
-    : Archiving_Node(n),
-      P_(n.P_),
-      S_(n.S_),
-      B_(n.B_, *this),
-      regimes(n.regimes) {}
 
 void {{component_name}}::init_node_(const Node& proto) {
     const {{component_name}}& pr = downcast<{{component_name}}>(proto);
@@ -375,7 +385,6 @@ void {{component_name}}::init_state_(const Node& proto) {
 
 {{component_name}}::~{{component_name}} () {
     // Destruct all regimes
-    std::cout << "L378" << std::endl;
     for (std::map<std::string, Regime_*>::iterator it = regimes.begin(); it != regimes.end(); ++it)
         delete it->second;
     regimes.clear();
