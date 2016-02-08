@@ -253,8 +253,8 @@ namespace nineml {
 	        dynamics_function_type get_dynamics_function();
 	        Transition_* transition(nest::Time const & origin, const nest::long_t& lag);
 	        void set_triggers(nest::Time const & origin, const nest::long_t& lag);
-	        virtual void init_solver();
-	        virtual void step_ode();
+	        virtual void init_solver() = 0;
+	        virtual void step_ode() = 0;
 	        
 	       
 	      protected:
@@ -308,7 +308,8 @@ namespace nineml {
 	    class Transition_ {
 
 	      public:
-	        Transition_(Regime_* regime, const std::string& target_regime_name);
+	        Transition_(Regime_* regime, const std::string& target_regime_name)
+	          : regime(regime), target_regime_name(target_regime_name) {}
 	        virtual ~Transition_() {}
             void set_target_regime(std::map<std::string, Regime_*>& regimes);
             Regime_* get_target_regime();	        

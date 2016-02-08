@@ -54,7 +54,7 @@ std::string ExceededMaximumSimultaneousTransitions::message() {
 {{component_name}}::Regime_::~Regime_() {
     for (std::vector<OnCondition_*>::iterator it = on_conditions.begin(); it != on_conditions.end(); ++it)
         delete *it;
-    for (std::vector<OnEvent_*>::iterator it = on_events.begin(); it != on_events.end(); ++it)
+    for (std::vector<OnEvent_*>::iterator it = on_events.begin(); it != on_events.end(); ++it)    
         delete *it;
 }
 
@@ -96,6 +96,7 @@ void {{component_name}}::Regime_::set_triggers(nest::Time const& origin, const n
             active_on_conditions.push_back(*it);
         
 }
+
 
 {% for regime in component_class.regimes %}
 
@@ -374,8 +375,10 @@ void {{component_name}}::init_state_(const Node& proto) {
 
 {{component_name}}::~{{component_name}} () {
     // Destruct all regimes
+    std::cout << "L378" << std::endl;
     for (std::map<std::string, Regime_*>::iterator it = regimes.begin(); it != regimes.end(); ++it)
         delete it->second;
+    regimes.clear();
 }
 
 
