@@ -50,6 +50,7 @@ namespace nineml {
      */
 {% for regime in component_class.regimes %}
     extern "C" int {{component_name}}_{{regime.name}}_dynamics{% include "dynamics_signature.tmpl" %};
+    {% include "jacobian_signature.tmpl" %}
     {% include "residual_signature.tmpl" %}
     {% include "event_signature.tmpl" %}
     {% include "ss_signature.tmpl" %}
@@ -297,6 +298,8 @@ namespace nineml {
             // Structures required by the solver
 {% include "solver_structs.tmpl" %}
     {% endif %}
+    
+          {% include "jacobian_friend.tmpl" %}
 
         };
 {% endfor %}	    
