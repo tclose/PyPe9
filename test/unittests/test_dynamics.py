@@ -65,7 +65,7 @@ class TestDynamics(TestCase):
                                  'alpha': (None, 1), 'beta': (None, 1),
                                  'zeta': (None, 1), 'theta': ('vthresh', 1)},
             neuron_build_args={'build_mode': 'force'},
-            nest_build_args={'build_mode': 'force'},
+            nest_build_args={'build_mode': 'compile_only'},
             build_name='Izhikevich_')
         comparer.simulate(self.duration)
         comparisons = comparer.compare()
@@ -402,7 +402,7 @@ class TestDynamics(TestCase):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test', type=str, default='liaf',
+    parser.add_argument('--test', type=str, default='izhi',
                         help=("Which test to run, can be one of: 'alpha_syn', "
                               "'izhi', 'izhiFS', 'liaf', 'poisson' or 'hh' "
                               "(default: %(default)s )"))

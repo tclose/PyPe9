@@ -159,6 +159,7 @@ void {{component_name}}::{{regime.name}}Regime_::init_solver() {
     {% if regime.num_time_derivatives %}    
     {% include "solver_init.tmpl" %}
     {% endif %}
+    
 }
 
 void {{component_name}}::{{regime.name}}Regime_::step_ode() {
