@@ -67,6 +67,7 @@ class TestDynamics(TestCase):
             neuron_build_args={'build_mode': 'force'},
             nest_build_args={'build_mode': 'compile_only'},
             build_name='Izhikevich_')
+#             build_name='IzhikevichMaster')
         comparer.simulate(self.duration)
         comparisons = comparer.compare()
         if print_comparisons:
