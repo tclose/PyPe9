@@ -24,3 +24,13 @@ x86_64
 *.Plo
 .unit_handler_cache.pkl
 /doc/_build
+Makefile.in
+aclocal.m4
+autom4te.cache/
+/test/side-by-side/nest/compile
+/test/side-by-side/nest/config.guess
+/test/side-by-side/nest/config.sub
+/test/side-by-side/nest/configure
+/test/side-by-side/nest/depcomp
+/test/side-by-side/nest/install-sh
+/test/side-by-side/nest/missing
