@@ -36,7 +36,7 @@ namespace nineml {
     
 
 
-    class IzhikevichGenerated;
+    class IzhikevichBranch;
 
     /**
      * Create a typedef for the function that represents the system of ODEs
@@ -46,9 +46,9 @@ namespace nineml {
     /**
      * Declaration of dynamics and residual signatures
      */
-    extern "C" int IzhikevichGenerated_subthreshold_regime_dynamics(double t, const double y_[], double f_[], void* pnode_);
-    extern "C" int IzhikevichGenerated_subthreshold_regime_jacobian(double t, const double y[], double *dfdy, double dfdt[], void* node);
-    class IzhikevichGenerated : public nest::Archiving_Node {
+    extern "C" int IzhikevichBranch_subthreshold_regime_dynamics(double t, const double y_[], double f_[], void* pnode_);
+    extern "C" int IzhikevichBranch_subthreshold_regime_jacobian(double t, const double y[], double *dfdy, double dfdt[], void* node);
+    class IzhikevichBranch : public nest::Archiving_Node {
 
       public:
 
@@ -61,9 +61,9 @@ namespace nineml {
         class subthreshold_regimeOnCondition0;
       
 
-        ~IzhikevichGenerated();
-	    IzhikevichGenerated(const IzhikevichGenerated &);
-	    IzhikevichGenerated();
+        ~IzhikevichBranch();
+	    IzhikevichBranch(const IzhikevichBranch &);
+	    IzhikevichBranch();
 
 	    /**
 	     * Import sets of overloaded virtual functions.
@@ -102,7 +102,7 @@ namespace nineml {
 	    void update(nest::Time const &, const nest::long_t, const nest::long_t);
 
     // Set dynamics methods (the ones that actually model the dynamics) as friends
-	    friend int IzhikevichGenerated_subthreshold_regime_dynamics(double t, const double y_[], double f_[], void* pnode_);
+	    friend int IzhikevichBranch_subthreshold_regime_dynamics(double t, const double y_[], double f_[], void* pnode_);
 
 
 	    /* Event port ids
@@ -129,8 +129,8 @@ namespace nineml {
         // Synaptic event function definitions
 
 	    // The next two classes need to be friends to access the State_ class/member
-	    friend class nest::RecordablesMap<IzhikevichGenerated>;
-	    friend class nest::UniversalDataLogger<IzhikevichGenerated>;
+	    friend class nest::RecordablesMap<IzhikevichBranch>;
+	    friend class nest::UniversalDataLogger<IzhikevichBranch>;
 
         struct Parameters_ {
             double a;
@@ -169,9 +169,9 @@ namespace nineml {
         };
 
         struct Buffers_ {
-	        Buffers_(IzhikevichGenerated&);
-	        Buffers_(const Buffers_&, IzhikevichGenerated&);
-	        nest::UniversalDataLogger<IzhikevichGenerated> logger_;
+	        Buffers_(IzhikevichBranch&);
+	        Buffers_(const Buffers_&, IzhikevichBranch&);
+	        nest::UniversalDataLogger<IzhikevichBranch> logger_;
 
 	        // Timesteps
 	        double_t step_;       //!< step size in ms
@@ -193,7 +193,7 @@ namespace nineml {
 	    class Regime_ {
 	     
 	      public:
-	        Regime_(IzhikevichGenerated* cell, dynamics_function_type dynamics_function)
+	        Regime_(IzhikevichBranch* cell, dynamics_function_type dynamics_function)
 	          : cell(cell), dynamics_function(dynamics_function) {}
 	        virtual ~Regime_();    
 	        dynamics_function_type get_dynamics_function();
@@ -204,13 +204,13 @@ namespace nineml {
 	        
 	       
 	      protected:
-	        IzhikevichGenerated* cell;
+	        IzhikevichBranch* cell;
 	        dynamics_function_type dynamics_function;
             std::vector<OnCondition_*> on_conditions;
             std::vector<OnEvent_*> on_events;
             std::vector<OnCondition_*> active_on_conditions;
            
-          friend class IzhikevichGenerated;
+          friend class IzhikevichBranch;
           friend class Transition_;
           friend class OnEvent_;
           friend class OnCondition_;
@@ -226,7 +226,7 @@ namespace nineml {
         class subthreshold_regimeRegime_ : public Regime_ {
             
           public:
-            subthreshold_regimeRegime_(IzhikevichGenerated* cell);
+            subthreshold_regimeRegime_(IzhikevichBranch* cell);
             virtual ~subthreshold_regimeRegime_();
             virtual void init_solver();
             virtual void step_ode();
@@ -241,7 +241,7 @@ namespace nineml {
             unsigned int N;  // size of state vector used by Jacobian
             double *u, *jac;  // intermediate state vectors used for Jacobian approximation	            
 
-          friend int IzhikevichGenerated_subthreshold_regime_jacobian(double t, const double y[], double *dfdy, double dfdt[], void* node);
+          friend int IzhikevichBranch_subthreshold_regime_jacobian(double t, const double y[], double *dfdy, double dfdt[], void* node);
         };
 	    
 	    
@@ -319,37 +319,37 @@ namespace nineml {
 		Buffers_    B_;
 
 	    //! Mapping of recordables names to access functions	
-		static nest::RecordablesMap<IzhikevichGenerated> recordablesMap_;
+		static nest::RecordablesMap<IzhikevichBranch> recordablesMap_;
 		
 	  protected:
 	    void construct_regimes();
         std::map<std::string, Regime_*> regimes;		
     
-	}; // end class IzhikevichGenerated
+	}; // end class IzhikevichBranch
 	
-	inline IzhikevichGenerated::Regime_* IzhikevichGenerated::get_regime(const std::string& regime_name) {
+	inline IzhikevichBranch::Regime_* IzhikevichBranch::get_regime(const std::string& regime_name) {
 	   return regimes[regime_name];
 	}
 	
-	inline dynamics_function_type IzhikevichGenerated::Regime_::get_dynamics_function() {
+	inline dynamics_function_type IzhikevichBranch::Regime_::get_dynamics_function() {
 	    return this->dynamics_function;
     }
 
-    inline void IzhikevichGenerated::Transition_::set_target_regime(std::map<std::string, IzhikevichGenerated::Regime_*>& regimes) {
+    inline void IzhikevichBranch::Transition_::set_target_regime(std::map<std::string, IzhikevichBranch::Regime_*>& regimes) {
         this->target_regime = regimes[this->target_regime_name];   
     }
 
-    inline IzhikevichGenerated::Regime_* IzhikevichGenerated::Transition_::get_target_regime() {
+    inline IzhikevichBranch::Regime_* IzhikevichBranch::Transition_::get_target_regime() {
         return this->target_regime;   
     }
 
-    inline nest::port IzhikevichGenerated::send_test_event(nest::Node& target, nest::port receptor_type, nest::synindex, bool) {
+    inline nest::port IzhikevichBranch::send_test_event(nest::Node& target, nest::port receptor_type, nest::synindex, bool) {
 		nest::SpikeEvent e;
 		e.set_sender(*this);
 		return target.handles_test_event(e, receptor_type);
     }
 
-    inline nest::port IzhikevichGenerated::handles_test_event(nest::SpikeEvent&, nest::port receptor_type) {
+    inline nest::port IzhikevichBranch::handles_test_event(nest::SpikeEvent&, nest::port receptor_type) {
 	    if (receptor_type < 0 || receptor_type >= SUP_EVENT_PORT_)
             throw nest::UnknownReceptorType(receptor_type, this->get_name());
         else if (receptor_type < MIN_EVENT_PORT_)
@@ -357,7 +357,7 @@ namespace nineml {
 		return receptor_type;
     }
 
-    inline nest::port IzhikevichGenerated::handles_test_event(nest::CurrentEvent&, nest::port receptor_type) {
+    inline nest::port IzhikevichBranch::handles_test_event(nest::CurrentEvent&, nest::port receptor_type) {
 		if (receptor_type < 0 || receptor_type >= SUP_ANALOG_PORT_)
 		    throw nest::UnknownReceptorType(receptor_type, this->get_name());
 		else if (receptor_type < MIN_ANALOG_PORT_)
@@ -365,13 +365,13 @@ namespace nineml {
 	    return receptor_type;
 	}
 
-	inline nest::port IzhikevichGenerated::handles_test_event(nest::DataLoggingRequest& dlr, nest::port receptor_type) {
+	inline nest::port IzhikevichBranch::handles_test_event(nest::DataLoggingRequest& dlr, nest::port receptor_type) {
 	    if (receptor_type != 0)
             throw nest::UnknownReceptorType(receptor_type, this->get_name());
 		return B_.logger_.connect_logging_device( dlr, recordablesMap_ );
     }
 
-    inline void IzhikevichGenerated::get_status(DictionaryDatum &d) const {
+    inline void IzhikevichBranch::get_status(DictionaryDatum &d) const {
 		P_.get(d);
 		S_.get(d);
 		nest::Archiving_Node::get_status(d);
@@ -383,7 +383,7 @@ namespace nineml {
         (*d)[nest::names::receptor_types] = receptor_dict_;
     }
 
-    inline void IzhikevichGenerated::set_status(const DictionaryDatum &d) {
+    inline void IzhikevichBranch::set_status(const DictionaryDatum &d) {
 	    Parameters_ ptmp = P_;  // temporary copy in case of errors
 	    ptmp.set(d);             // throws if BadProperty
 	    State_    stmp = S_;  // temporary copy in case of errors
@@ -403,11 +403,11 @@ namespace nineml {
        from the corresponding NEST random deviate implementations in librandom
        but stripped from RandomDeviate boiler plate */
     
-    inline double IzhikevichGenerated::random_uniform_(double low, double high) {
+    inline double IzhikevichBranch::random_uniform_(double low, double high) {
         return low + (high - low) * V_.rng_->drand();
     }
 
-    inline double IzhikevichGenerated::random_normal_(double mu, double sigma) {
+    inline double IzhikevichBranch::random_normal_(double mu, double sigma) {
         // Box-Muller algorithm, see Knuth TAOCP, vol 2, 3rd ed, p 122
         // we waste one number
         double V1;
@@ -425,16 +425,16 @@ namespace nineml {
         return mu + sigma * S;
     }
     
-    inline double IzhikevichGenerated::random_exponential_(double lambda) {
+    inline double IzhikevichBranch::random_exponential_(double lambda) {
         return -std::log(V_.rng_->drandpos()) / lambda;
     }
     
     
-    inline double IzhikevichGenerated::Transition_::random_uniform_(double low, double high) {
+    inline double IzhikevichBranch::Transition_::random_uniform_(double low, double high) {
         return low + (high - low) * this->regime->cell->V_.rng_->drand();
     }
 
-    inline double IzhikevichGenerated::Transition_::random_normal_(double mu, double sigma) {
+    inline double IzhikevichBranch::Transition_::random_normal_(double mu, double sigma) {
         // Box-Muller algorithm, see Knuth TAOCP, vol 2, 3rd ed, p 122
         // we waste one number
         double V1;
@@ -452,7 +452,7 @@ namespace nineml {
         return mu + sigma * S;
     }
     
-    inline double IzhikevichGenerated::Transition_::random_exponential_(double lambda) {
+    inline double IzhikevichBranch::Transition_::random_exponential_(double lambda) {
         return -std::log(this->regime->cell->V_.rng_->drandpos()) / lambda;
     }
     
