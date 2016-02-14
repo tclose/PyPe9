@@ -2,6 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
 AC_INIT(src/main.cpp, 1.0)
+LT_INIT
 
 PACKAGE=test_nest
 VERSION=0.1.0

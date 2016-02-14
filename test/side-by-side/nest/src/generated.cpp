@@ -9,7 +9,7 @@
 #include <cstring>
 #include <cmath>
 
-#include "IzhikevichBranch.h"
+#include "generated.h"
 #include "exceptions.h"
 #include "network.h"
 #include "dict.h"
@@ -23,12 +23,12 @@
  * Template specialization that needs to be in the nest namesapce *
  ******************************************************************/
 
-nest::RecordablesMap<nineml::IzhikevichBranch> nineml::IzhikevichBranch::recordablesMap_;
+nest::RecordablesMap<nineml::IzhikevichGenerated> nineml::IzhikevichGenerated::recordablesMap_;
 
 namespace nest{
-  template <> void RecordablesMap<nineml::IzhikevichBranch>::create() {
-    insert_("U", &nineml::IzhikevichBranch::get_y_elem_<nineml::IzhikevichBranch::State_::U_INDEX>);
-    insert_("V", &nineml::IzhikevichBranch::get_y_elem_<nineml::IzhikevichBranch::State_::V_INDEX>);
+  template <> void RecordablesMap<nineml::IzhikevichGenerated>::create() {
+    insert_("U", &nineml::IzhikevichGenerated::get_y_elem_<nineml::IzhikevichGenerated::State_::U_INDEX>);
+    insert_("V", &nineml::IzhikevichGenerated::get_y_elem_<nineml::IzhikevichGenerated::State_::V_INDEX>);
   }
 }
 
@@ -46,14 +46,14 @@ std::string ExceededMaximumSimultaneousTransitions::message() {
 }
 
 
-IzhikevichBranch::Regime_::~Regime_() {
+IzhikevichGenerated::Regime_::~Regime_() {
     for (std::vector<OnCondition_*>::iterator it = on_conditions.begin(); it != on_conditions.end(); ++it)
         delete *it;
     for (std::vector<OnEvent_*>::iterator it = on_events.begin(); it != on_events.end(); ++it)    
         delete *it;
 }
 
-IzhikevichBranch::Transition_* IzhikevichBranch::Regime_::transition(nest::Time const& origin, const nest::long_t& lag) {
+IzhikevichGenerated::Transition_* IzhikevichGenerated::Regime_::transition(nest::Time const& origin, const nest::long_t& lag) {
     // Set the time to the end of the current timestep
     double t = origin.get_ms() + lag * nest::Time::get_resolution().get_ms();
 
@@ -84,7 +84,7 @@ IzhikevichBranch::Transition_* IzhikevichBranch::Regime_::transition(nest::Time 
 }
 
 
-void IzhikevichBranch::Regime_::set_triggers(double t) {
+void IzhikevichGenerated::Regime_::set_triggers(double t) {
     // Reset the vector of active transitions
     active_on_conditions.clear();
     
@@ -101,18 +101,18 @@ void IzhikevichBranch::Regime_::set_triggers(double t) {
  *  Dynamics and transitions for subthreshold_regime regime
  */
 
-extern "C" int IzhikevichBranch_subthreshold_regime_dynamics(double t, const double y_[], double f_[], void* pnode_) {
+extern "C" int IzhikevichGenerated_subthreshold_regime_dynamics(double t, const double y_[], double f_[], void* pnode_) {
 
     // Get references to the members of the model
     assert(pnode_);
-    const IzhikevichBranch& node_ = *(reinterpret_cast<IzhikevichBranch*>(pnode_));
-    const IzhikevichBranch::Parameters_& P_ = node_.P_;
-    const IzhikevichBranch::State_& S_ = node_.S_;
-    const IzhikevichBranch::Buffers_& B_ = node_.B_;
+    const IzhikevichGenerated& node_ = *(reinterpret_cast<IzhikevichGenerated*>(pnode_));
+    const IzhikevichGenerated::Parameters_& P_ = node_.P_;
+    const IzhikevichGenerated::State_& S_ = node_.S_;
+    const IzhikevichGenerated::Buffers_& B_ = node_.B_;
 
     // State Variables
-    const double_t& U = S_.y_[IzhikevichBranch::State_::U_INDEX];  // (mV/ms)
-    const double_t& V = S_.y_[IzhikevichBranch::State_::V_INDEX];  // (mV)
+    const double_t& U = S_.y_[IzhikevichGenerated::State_::U_INDEX];  // (mV/ms)
+    const double_t& V = S_.y_[IzhikevichGenerated::State_::V_INDEX];  // (mV)
         
     
     // Parameters
@@ -134,30 +134,30 @@ extern "C" int IzhikevichBranch_subthreshold_regime_dynamics(double t, const dou
     
 
     // Evaluate differential equations
-    ITEM(f_, IzhikevichBranch::State_::U_INDEX) = a*(-U + V*b);  // (mV/ms^2)
-    ITEM(f_, IzhikevichBranch::State_::V_INDEX) = -U + V*beta + alpha*(V*V) + zeta + Isyn/C_m;  // (mV/ms)
+    ITEM(f_, IzhikevichGenerated::State_::U_INDEX) = a*(-U + V*b);  // (mV/ms^2)
+    ITEM(f_, IzhikevichGenerated::State_::V_INDEX) = -U + V*beta + alpha*(V*V) + zeta + Isyn/C_m;  // (mV/ms)
 	
     //std::cout << "Success at t=" << t << ": " << GSL_SUCCESS << std::endl;
     return GSL_SUCCESS;}        
     
 /* Jacobian for the subthreshold_regime regime if required by the solver */
 /** Diagonal Jacobian approximation (for GSL): (f(s+.01) - f(s))/.001 */
-extern "C" int IzhikevichBranch_subthreshold_regime_jacobian(double t, const double y[], double *dfdy, double dfdt[], void* node) {
-    // cast the node ptr to IzhikevichBranch object
+extern "C" int IzhikevichGenerated_subthreshold_regime_jacobian(double t, const double y[], double *dfdy, double dfdt[], void* node) {
+    // cast the node ptr to IzhikevichGenerated object
     assert(node);
-    IzhikevichBranch& cell =    *(reinterpret_cast<IzhikevichBranch*>(node));
-    IzhikevichBranch::subthreshold_regimeRegime_& regime = *(reinterpret_cast<IzhikevichBranch::subthreshold_regimeRegime_*>(cell.get_regime("subthreshold_regime")));
+    IzhikevichGenerated& cell =    *(reinterpret_cast<IzhikevichGenerated*>(node));
+    IzhikevichGenerated::subthreshold_regimeRegime_& regime = *(reinterpret_cast<IzhikevichGenerated::subthreshold_regimeRegime_*>(cell.get_regime("subthreshold_regime")));
 
     for (int i = 0; i < regime.N; i++)
         regime.u[i] = y[i] + 0.01;
 
-    IzhikevichBranch_subthreshold_regime_dynamics(t, regime.u, regime.jac, node);
+    IzhikevichGenerated_subthreshold_regime_dynamics(t, regime.u, regime.jac, node);
     for (int i = 0; i < regime.N; i++)
         dfdt[i*regime.N + i] = (regime.jac[i] - dfdy[i]) / .001;
     return 0;
 }
-IzhikevichBranch::subthreshold_regimeRegime_::subthreshold_regimeRegime_(IzhikevichBranch* cell)
-  : Regime_(cell, IzhikevichBranch_subthreshold_regime_dynamics),
+IzhikevichGenerated::subthreshold_regimeRegime_::subthreshold_regimeRegime_(IzhikevichGenerated* cell)
+  : Regime_(cell, IzhikevichGenerated_subthreshold_regime_dynamics),
       IntegrationStep_(0),
       s_(0),
       c_(0),
@@ -173,7 +173,7 @@ IzhikevichBranch::subthreshold_regimeRegime_::subthreshold_regimeRegime_(Izhikev
 
 }
 
-IzhikevichBranch::subthreshold_regimeRegime_::~subthreshold_regimeRegime_() {
+IzhikevichGenerated::subthreshold_regimeRegime_::~subthreshold_regimeRegime_() {
     
     // GSL structs only allocated by init_nodes_(),
     // so we need to protect destruction
@@ -188,7 +188,7 @@ IzhikevichBranch::subthreshold_regimeRegime_::~subthreshold_regimeRegime_() {
     if ( jac != NULL)
         free (jac);}
 
-void IzhikevichBranch::subthreshold_regimeRegime_::init_solver() {
+void IzhikevichGenerated::subthreshold_regimeRegime_::init_solver() {
     
 
     IntegrationStep_ = cell->B_.step_;
@@ -213,8 +213,8 @@ void IzhikevichBranch::subthreshold_regimeRegime_::init_solver() {
     else
         gsl_odeiv2_evolve_reset(e_);
 
-    sys_.function  = IzhikevichBranch_subthreshold_regime_dynamics;
-    sys_.jacobian  = IzhikevichBranch_subthreshold_regime_jacobian;
+    sys_.function  = IzhikevichGenerated_subthreshold_regime_dynamics;
+    sys_.jacobian  = IzhikevichGenerated_subthreshold_regime_jacobian;
     sys_.dimension = N;
     sys_.params    = reinterpret_cast<void*>(this);
 
@@ -226,8 +226,8 @@ void IzhikevichBranch::subthreshold_regimeRegime_::init_solver() {
         assert (jac);    
 }
 
-void IzhikevichBranch::subthreshold_regimeRegime_::step_ode() {
-    IzhikevichBranch::State_& S_ = cell->S_;
+void IzhikevichGenerated::subthreshold_regimeRegime_::step_ode() {
+    IzhikevichGenerated::State_& S_ = cell->S_;
     //FIXME: Clamping of vars should be replaced by the resizing of the state
     //       vector that is solved to only the states that have time-derivatives
     //       in the regime.
@@ -253,7 +253,7 @@ void IzhikevichBranch::subthreshold_regimeRegime_::step_ode() {
 // Transition methods for subthreshold_regime regime
 
 
-bool IzhikevichBranch::subthreshold_regimeOnCondition0::body(double t) {
+bool IzhikevichGenerated::subthreshold_regimeOnCondition0::body(double t) {
     // Map all variables/expressions to the local namespace that are required to evaluate the state assignments that were not required for the triggers
 
 
@@ -264,7 +264,7 @@ bool IzhikevichBranch::subthreshold_regimeOnCondition0::body(double t) {
     
     
     // State Variables
-    const double_t& U = S_.y_[IzhikevichBranch::State_::U_INDEX];  // (mV/ms)
+    const double_t& U = S_.y_[IzhikevichGenerated::State_::U_INDEX];  // (mV/ms)
         
     
     // Parameters
@@ -281,8 +281,8 @@ bool IzhikevichBranch::subthreshold_regimeOnCondition0::body(double t) {
     
 
     // State assignments
-    S_.y_[IzhikevichBranch::State_::U_INDEX] = U + d;  // (mV/ms)
-    S_.y_[IzhikevichBranch::State_::V_INDEX] = c;  // (mV)
+    S_.y_[IzhikevichGenerated::State_::U_INDEX] = U + d;  // (mV/ms)
+    S_.y_[IzhikevichGenerated::State_::V_INDEX] = c;  // (mV)
 	        
     // Output events
     ++B_.num_spike_events;
@@ -291,14 +291,14 @@ bool IzhikevichBranch::subthreshold_regimeOnCondition0::body(double t) {
     return true;  // Transition contains discontinuous changes in state
 }
 
-bool IzhikevichBranch::subthreshold_regimeOnCondition0::condition(double t) {
+bool IzhikevichGenerated::subthreshold_regimeOnCondition0::condition(double t) {
 	    
     const State_& S_ = regime->cell->S_;
     const Buffers_& B_ = regime->cell->B_;
     const Parameters_& P_ = regime->cell->P_;
         
     // State Variables
-    const double_t& V = S_.y_[IzhikevichBranch::State_::V_INDEX];  // (mV)
+    const double_t& V = S_.y_[IzhikevichGenerated::State_::V_INDEX];  // (mV)
         
     
     // Parameters
@@ -317,7 +317,7 @@ bool IzhikevichBranch::subthreshold_regimeOnCondition0::condition(double t) {
 
 }
 
-double IzhikevichBranch::subthreshold_regimeOnCondition0::time_occurred(nest::Time const& origin, const nest::long_t& lag) {
+double IzhikevichGenerated::subthreshold_regimeOnCondition0::time_occurred(nest::Time const& origin, const nest::long_t& lag) {
     return origin.get_ms() + lag * nest::Time::get_resolution().get_ms();
 }
 
@@ -339,7 +339,7 @@ double IzhikevichBranch::subthreshold_regimeOnCondition0::time_occurred(nest::Ti
  * Constructors *
  ****************/
 
-IzhikevichBranch::IzhikevichBranch()
+IzhikevichGenerated::IzhikevichGenerated()
     : Archiving_Node(),
       P_(),
       S_(P_),
@@ -350,7 +350,7 @@ IzhikevichBranch::IzhikevichBranch()
         
 }
 
-IzhikevichBranch::IzhikevichBranch(const IzhikevichBranch& n)
+IzhikevichGenerated::IzhikevichGenerated(const IzhikevichGenerated& n)
     : Archiving_Node(n),
       P_(n.P_),
       S_(n.S_),
@@ -362,7 +362,7 @@ IzhikevichBranch::IzhikevichBranch(const IzhikevichBranch& n)
 /**
  * Constructs all regimes (and their transitions) in the component class
  */      
-void IzhikevichBranch::construct_regimes() {
+void IzhikevichGenerated::construct_regimes() {
 
     // Construct all regimes
     regimes["subthreshold_regime"] = new subthreshold_regimeRegime_(this);
@@ -377,14 +377,14 @@ void IzhikevichBranch::construct_regimes() {
         (*it)->set_target_regime(regimes);   
 }
 
-void IzhikevichBranch::init_node_(const Node& proto) {
-    const IzhikevichBranch& pr = downcast<IzhikevichBranch>(proto);
+void IzhikevichGenerated::init_node_(const Node& proto) {
+    const IzhikevichGenerated& pr = downcast<IzhikevichGenerated>(proto);
     P_ = pr.P_;
     S_ = State_(P_);
 }
 
-void IzhikevichBranch::init_state_(const Node& proto) {
-    const IzhikevichBranch& pr = downcast<IzhikevichBranch>(proto);
+void IzhikevichGenerated::init_state_(const Node& proto) {
+    const IzhikevichGenerated& pr = downcast<IzhikevichGenerated>(proto);
     S_ = State_(pr.P_);
 }
 
@@ -392,7 +392,7 @@ void IzhikevichBranch::init_state_(const Node& proto) {
  * Destructor *
  **************/
 
-IzhikevichBranch::~IzhikevichBranch () {
+IzhikevichGenerated::~IzhikevichGenerated () {
     // Destruct all regimes
     for (std::map<std::string, Regime_*>::iterator it = regimes.begin(); it != regimes.end(); ++it)
         delete it->second;
@@ -404,7 +404,7 @@ IzhikevichBranch::~IzhikevichBranch () {
  * Define parameters of the model *
  **********************************/
 
-IzhikevichBranch::Parameters_::Parameters_():
+IzhikevichGenerated::Parameters_::Parameters_():
     a (0.0),
     c (0.0),
     b (0.0),
@@ -421,7 +421,7 @@ IzhikevichBranch::Parameters_::Parameters_():
  * Construct state from parameters.
  ************************************/
 
-IzhikevichBranch::State_::State_(const Parameters_& p) {
+IzhikevichGenerated::State_::State_(const Parameters_& p) {
 
     const Parameters_ *params = &p;
 
@@ -434,7 +434,7 @@ IzhikevichBranch::State_::State_(const Parameters_& p) {
 /***********************************
  * Copy constructor for State class
  ***********************************/
-IzhikevichBranch::State_::State_(const State_& s) {
+IzhikevichGenerated::State_::State_(const State_& s) {
   for (int i = 0 ; i < 2 ; ++i)
       y_[i] = s.y_[i];
 }
@@ -443,7 +443,7 @@ IzhikevichBranch::State_::State_(const State_& s) {
  * Assignment of a State from another State *
  ********************************************/
 
-IzhikevichBranch::State_& IzhikevichBranch::State_::operator=(const State_& s) {
+IzhikevichGenerated::State_& IzhikevichGenerated::State_::operator=(const State_& s) {
   assert(this != &s);
   for (size_t i = 0 ; i < 2 ; ++i)
        y_[i] = s.y_[i];
@@ -451,7 +451,7 @@ IzhikevichBranch::State_& IzhikevichBranch::State_::operator=(const State_& s) {
   return *this;
 }
 
-void IzhikevichBranch::calibrate() {
+void IzhikevichGenerated::calibrate() {
     B_.logger_.init();
     V_.rng_ = net_->get_rng( get_thread() );
 }
@@ -460,7 +460,7 @@ void IzhikevichBranch::calibrate() {
  * Accessors and Modifiers *
  ***************************/
 
-void IzhikevichBranch::Parameters_::get (DictionaryDatum &d_) const {
+void IzhikevichGenerated::Parameters_::get (DictionaryDatum &d_) const {
 
     // Update dictionary from internal parameters, scaling if required.
     def<double_t>(d_, "a", a);
@@ -475,7 +475,7 @@ void IzhikevichBranch::Parameters_::get (DictionaryDatum &d_) const {
 
 }
 
-void IzhikevichBranch::Parameters_::set (const DictionaryDatum &d_) {
+void IzhikevichGenerated::Parameters_::set (const DictionaryDatum &d_) {
 
     // Update internal parameters from dictionary
     updateValue<double_t>(d_, "a", a);
@@ -491,13 +491,13 @@ void IzhikevichBranch::Parameters_::set (const DictionaryDatum &d_) {
     // Scale parameters as required
 }
 
-void IzhikevichBranch::State_::get (DictionaryDatum &d_) const {
+void IzhikevichGenerated::State_::get (DictionaryDatum &d_) const {
     // Get states from internal variables
     def<double_t>(d_, "U", y_[0]);
     def<double_t>(d_, "V", y_[1]);
 }
 
-void IzhikevichBranch::State_::set (const DictionaryDatum &d_, const Parameters_&) {
+void IzhikevichGenerated::State_::set (const DictionaryDatum &d_, const Parameters_&) {
     // Set internal state variables from dictionary values
     updateValue<double_t>(d_, "U", y_[0]);
     updateValue<double_t>(d_, "V", y_[1]);
@@ -507,19 +507,19 @@ void IzhikevichBranch::State_::set (const DictionaryDatum &d_, const Parameters_
  * Buffers *
  ***********/
 
-IzhikevichBranch::Buffers_::Buffers_(IzhikevichBranch& n)
+IzhikevichGenerated::Buffers_::Buffers_(IzhikevichGenerated& n)
     : logger_(n) {
     // Initialization of the remaining members is deferred to
     // init_buffers_().
 }
 
-IzhikevichBranch::Buffers_::Buffers_(const Buffers_&, IzhikevichBranch& n)
+IzhikevichGenerated::Buffers_::Buffers_(const Buffers_&, IzhikevichGenerated& n)
     : logger_(n) {
     // Initialization of the remaining members is deferred to
     // init_buffers_().
 }
 
-void IzhikevichBranch::init_buffers_() {
+void IzhikevichGenerated::init_buffers_() {
 
     // Clear event buffers
 
@@ -541,7 +541,7 @@ void IzhikevichBranch::init_buffers_() {
 }
 
 
-void IzhikevichBranch::refresh_events(const nest::long_t& lag) {
+void IzhikevichGenerated::refresh_events(const nest::long_t& lag) {
     B_.num_spike_events = 0;
 }
 
@@ -554,7 +554,7 @@ void IzhikevichBranch::refresh_events(const nest::long_t& lag) {
  * Evaluate the update *
  ***********************/
 
-void IzhikevichBranch::update(nest::Time const & origin, const nest::long_t from, const nest::long_t to) {
+void IzhikevichGenerated::update(nest::Time const & origin, const nest::long_t from, const nest::long_t to) {
 
     assert(to >= 0 && (nest::delay) from < nest::Scheduler::get_min_delay());
     assert(from < to);
@@ -562,7 +562,7 @@ void IzhikevichBranch::update(nest::Time const & origin, const nest::long_t from
     double dt = nest::Time::get_resolution().get_ms();
     nest::long_t current_steps = origin.get_steps();
 
-    double f_[IzhikevichBranch::State_::STATE_VEC_SIZE_];  // Vector to hold the time derivatives
+    double f_[IzhikevichGenerated::State_::STATE_VEC_SIZE_];  // Vector to hold the time derivatives
 
     for (nest::long_t lag = from; lag < to; ++lag) {
 
@@ -583,7 +583,7 @@ void IzhikevichBranch::update(nest::Time const & origin, const nest::long_t from
             else
                 simultaneous_transition_count = 0;
             if (simultaneous_transition_count > MAX_SIMULTANEOUS_TRANSITIONS)
-                throw ExceededMaximumSimultaneousTransitions("IzhikevichBranch", simultaneous_transition_count, t);
+                throw ExceededMaximumSimultaneousTransitions("IzhikevichGenerated", simultaneous_transition_count, t);
             bool discontinuous = transition->body(t) || (transition->get_target_regime() != B_.current_regime);
             B_.current_regime = transition->get_target_regime();
             B_.current_regime->set_triggers(t);
@@ -614,12 +614,12 @@ void IzhikevichBranch::update(nest::Time const & origin, const nest::long_t from
  * Event Handles *
  *****************/
 
-void IzhikevichBranch::handle(nest::SpikeEvent & e) {
+void IzhikevichGenerated::handle(nest::SpikeEvent & e) {
     assert(e.get_delay() > 0);
     // Loop through event receive ports
 }
 
-void IzhikevichBranch::handle(nest::CurrentEvent& e) {
+void IzhikevichGenerated::handle(nest::CurrentEvent& e) {
     assert(e.get_delay() > 0);
 
     const double_t c = e.get_current();
@@ -631,7 +631,7 @@ void IzhikevichBranch::handle(nest::CurrentEvent& e) {
     }
 }
 
-void IzhikevichBranch::handle(nest::DataLoggingRequest& e) {
+void IzhikevichGenerated::handle(nest::DataLoggingRequest& e) {
     B_.logger_.handle(e);
 }
 

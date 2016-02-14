@@ -3,3 +3,7 @@
 aclocal \
 && automake --add-missing \
 && autoconf
+rm -r build/*
+cd build
+../configure --prefix=`pwd`/../bin
+make

@@ -34,3 +34,5 @@ autom4te.cache/
 /test/side-by-side/nest/depcomp
 /test/side-by-side/nest/install-sh
 /test/side-by-side/nest/missing
+/test/side-by-side/nest/bin
+/test/side-by-side/nest/build
