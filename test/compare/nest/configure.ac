@@ -1,5 +1,5 @@
 AC_PREREQ(2.52)
-AC_INIT([Izhikevich_Module], [1.0], [nest_user@nest-initiative.org])
+AC_INIT([compare], [1.0], [user@pype9.org])
 
 # Exporting source and build directories requires full path names.
 # Thus we have to expand.
@@ -152,7 +152,7 @@ AC_SUBST(MAKE_FLAGS)
 AC_SUBST(INCLTDL)
 AC_SUBST(LIBLTDL)
 
-AC_CONFIG_HEADER(Izhikevich_Module_config.h:Izhikevich_Module_config.h.in)
+AC_CONFIG_HEADER(config.h:config.h.in)
 AC_CONFIG_FILES(Makefile)
 
 # -----------------------------------------------
@@ -168,7 +168,7 @@ AC_OUTPUT
 
 echo
 echo "-------------------------------------------------------"
-echo "Izhikevich_Module Configuration Summary"
+echo "Nest Compare Configuration Summary"
 echo "-------------------------------------------------------"
 echo
 echo "C++ compiler        : $CXX"
@@ -183,9 +183,9 @@ eval eval eval  PKGDATADIR_AS_CONFIGURED=$PKGDATADIR
 echo
 echo "-------------------------------------------------------"
 echo
-echo "You can build and install Izhikevich_Module now, using"
+echo "You can build and install Nest Compare now, using"
 echo "  make"
 echo "  make install"
 echo
-echo "Izhikevich_Module will be installed to:"
+echo "Nest Compare will be installed to:"
 echo -n "  "; eval eval echo "$libdir"
