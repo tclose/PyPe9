@@ -38,3 +38,4 @@ autom4te.cache/
 /test/raw/nest/depcomp
 /test/raw/nest/compile
 /test/raw/nest/nest-build
+/test/raw/nest/nest-install
