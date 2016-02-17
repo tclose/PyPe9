@@ -20,6 +20,7 @@ int main(void) {
     // Initialise network
     SLIInterpreter sli;
     nest::Network network(sli);
+    network.reset_kernel();
 
     // Initialise models
     nineml::IzhikevichMaster reference;
@@ -43,18 +44,7 @@ int main(void) {
     reference.calibrate();
     generated.calibrate();
 
-    double dt = 0.025;
-
-    for (int i = 0; i < 100; ++i) {
-
-        nest::Time origin(nest::Time::ms(i * dt));
-        nest::long_t from = 0;
-        nest::long_t to = 100;
-
-        reference.update(origin, from, to);
-        generated.update(origin, from, to);
-
-    }
+    network.simulate(nest::Time(nest::Time::ms(10.0)));
 
 	return 0;
 }
