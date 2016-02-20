@@ -1,11 +1,9 @@
 bin_PROGRAMS = raw-compare
 
-raw_compare_CXXFLAGS = -I/usr/local/Cellar/gsl/1.16/include @AM_CXXFLAGS@
+raw_compare_CXXFLAGS = @AM_CXXFLAGS@ -I/usr/local/Cellar/gsl/1.16/include
 raw_compare_SOURCES =  main.cpp IzhikevichBranch.h IzhikevichBranch.cpp \
-                   	   IzhikevichMaster.cpp IzhikevichMaster.h \
-                   	   lockptr.h lockptrdatum.h lockptrdatrum_impl.h \
-                   	   name.h name.cc token.h token.cc slitype.h slitype.cc \
-                   	   slifunction.h datum.h datum.cc dict.h dict.cc
+                       IzhikevichMaster.cpp IzhikevichMaster.h \
+                       mock_nest.h mock_nest.cpp \
 raw_compare_LDADD =  -lgsl -lgslcblas
 raw_compare_LDFLAGS = -L/usr/local/Cellar/gsl/1.16/lib
 
