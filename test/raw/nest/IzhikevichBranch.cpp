@@ -9,16 +9,18 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
-#include <math>
+#include <cmath>
 
-#include "exceptions.h"
-#include "network.h"
-#include "dict.h"
-#include "integerdatum.h"
-#include "doubledatum.h"
-#include "dictutils.h"
-#include "numerics.h"
-#include "universal_data_logger_impl.h"
+//#include "exceptions.h"
+//#include "network.h"
+//#include "dict.h"
+//#include "integerdatum.h"
+//#include "doubledatum.h"
+//#include "dictutils.h"
+//#include "numerics.h"
+//#include "universal_data_logger_impl.h"
+#include "mock_nest.h"
+
 
 /******************************************************************
  * Template specialization that needs to be in the nest namesapce *

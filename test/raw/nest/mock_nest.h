@@ -1,14 +1,13 @@
 #ifndef MOCK_NEST_H
 #define MOCK_NEST_H
 
-namespace std {
-#include <math.h>
-}
+#include <cmath>
 #include <vector>
 #include <map>
 #include "name.h"
 
 const Name DOUBLE_TYPE;
+const Name LONG_TYPE;
 const Name DICTIONARY_TYPE;
 
 class Datum {
@@ -121,10 +120,6 @@ public:
         return *p;
     }
 
-    const std::type_info& type(void) const {
-        return typeid( *p );
-    }
-
     Token& operator=(const Token& t) {
         if (t.p != p) {
             if (t.p == NULL)
@@ -198,6 +193,62 @@ class DictionaryDatum: public Datum {
 
   protected:
     Dictionary* dict;
+};
+
+class DoubleDatum : public Datum {
+    public:
+
+    DoubleDatum(double* dbl)
+      : Datum(&DOUBLE_TYPE), dbl(dbl) {
+      }
+
+      double* operator->() const {
+          return dbl;
+      }
+
+      double* operator->() {
+          return dbl;
+      }
+
+      double& operator*() {
+          return *dbl;
+      }
+
+      Datum* clone() const {
+          return new DoubleDatum(dbl);
+      }
+
+    protected:
+      double* dbl;
+
+};
+
+class LongDatum : public Datum {
+  public:
+
+    LongDatum(long* lng)
+      : Datum(&LONG_TYPE), lng(lng) {
+      }
+
+    long* operator->() const {
+          return lng;
+      }
+
+    long* operator->() {
+          return lng;
+      }
+
+    long& operator*() {
+          return *lng;
+      }
+
+      Datum* clone() const {
+          return new LongDatum(lng);
+      }
+
+  protected:
+    long* lng;
+
 };
 
 template<typename FT>
@@ -299,6 +350,13 @@ namespace nest {
         std::string get_name() {
             return "TestNode";
         }
+
+        template < typename ConcreteNode > const ConcreteNode& downcast( const Node& n ) {
+          ConcreteNode const* tp = dynamic_cast< ConcreteNode const* >( &n );
+          assert( tp != 0 );
+          return *tp;
+        }
+
     };
 
     class Archiving_Node: public Node {
