@@ -4,6 +4,8 @@
 #include <cmath>
 #include <vector>
 #include <map>
+#include <sstream>
+#include <algorithm>
 #include "name.h"
 
 const Name DOUBLE_TYPE;
@@ -12,7 +14,7 @@ const Name DICTIONARY_TYPE;
 
 class Datum {
 
-public:
+  public:
 
     Datum(const Name* t) :
             type(t) {
@@ -42,10 +44,10 @@ public:
 class Token {
   friend class Datum;
 
-private:
+  private:
     Datum* p;
 
-public:
+  public:
     ~Token() {
         delete p;
     }
@@ -165,6 +167,7 @@ class Dictionary {
 
     Token& insert(const Name& n, const Token& t);
     Token& insert_move(const Name&, Token&);
+    const Token& lookup(const Name& n) const;
 };
 
 
@@ -196,178 +199,147 @@ class DictionaryDatum: public Datum {
 };
 
 class DoubleDatum : public Datum {
-    public:
+  public:
 
-    DoubleDatum(double* dbl)
+    DoubleDatum(double dbl)
       : Datum(&DOUBLE_TYPE), dbl(dbl) {
       }
 
-      double* operator->() const {
-          return dbl;
-      }
+    const double* operator->() const {
+        return &dbl;
+    }
 
-      double* operator->() {
-          return dbl;
-      }
+    double* operator->() {
+        return &dbl;
+    }
 
-      double& operator*() {
-          return *dbl;
-      }
+    double operator*() {
+        return dbl;
+    }
 
-      Datum* clone() const {
-          return new DoubleDatum(dbl);
-      }
+    Datum* clone() const {
+        return new DoubleDatum(dbl);
+    }
 
-    protected:
-      double* dbl;
+    double get() const {
+        return dbl;
+    }
+
+  protected:
+    double dbl;
 
 };
 
-class LongDatum : public Datum {
+class IntegerDatum : public Datum {
   public:
 
-    LongDatum(long* lng)
+    IntegerDatum(long lng)
       : Datum(&LONG_TYPE), lng(lng) {
       }
 
-    long* operator->() const {
-          return lng;
-      }
+    const long* operator->() const {
+        return &lng;
+    }
 
     long* operator->() {
-          return lng;
-      }
+        return &lng;
+    }
 
     long& operator*() {
-          return *lng;
-      }
+        return lng;
+    }
 
-      Datum* clone() const {
-          return new LongDatum(lng);
-      }
+    Datum* clone() const {
+      return new IntegerDatum(lng);
+    }
+
+    long get() const {
+        return lng;
+    }
 
   protected:
-    long* lng;
+    long lng;
 
 };
 
-template<typename FT>
-void def(DictionaryDatum& d, Name const n, FT const& value) {
+template<typename FT> void def(DictionaryDatum& d, Name const n, FT const& value) {
     Token t(value); // we hope that we have a constructor for this.
     d->insert_move(n, t);
 }
 
+template < typename FT > FT getValue( const Token& t ) {
+  FT* value = dynamic_cast< FT* >( t.datum() );
+  if ( value == NULL )
+      throw std::exception();
+  return *value;
+}
+
+template < typename FT > void setValue( const Token& t, FT const& value ) {
+  FT* old = dynamic_cast< FT* >( t.datum() );
+  if ( value == NULL )
+      throw std::exception();
+  *old = value;
+}
+
+template < typename FT > Token newToken( FT const& value );
+
+template <> double getValue< double >( const Token& t ) {
+    DoubleDatum* id = dynamic_cast< DoubleDatum* >( t.datum() );
+    if ( id == NULL )
+        throw std::exception();
+    return id->get();
+}
+template <> void setValue< double >( const Token& t, double const& value ) {
+    DoubleDatum* id = dynamic_cast< DoubleDatum* >( t.datum() );
+    if ( id == NULL )
+        throw std::exception();
+    (*id) = value;
+}
+
+
+template <> long getValue< long >( const Token& t ) {
+  const IntegerDatum* id = dynamic_cast< const IntegerDatum* >( t.datum() );
+  if ( id == NULL )
+    throw std::exception();
+  return id->get();
+}
+template <> void setValue< long >( const Token& t, long const& value ) {
+    IntegerDatum* id = dynamic_cast< IntegerDatum* >( t.datum() );
+    if ( id == NULL )
+        throw std::exception();
+    (*id) = value;
+}
+
+template <> Token newToken< long >( long const& value ) {
+    return Token( new IntegerDatum( value ) );
+}
+
+
+template <> Token newToken< double >( double const& value ) {
+    return Token( new DoubleDatum( value ) );
+}
+
+template < typename FT, typename VT > bool updateValue( DictionaryDatum const& d, Name const n, VT& value ) {
+  // We will test for the name, and do nothing if it does not exist,
+  // instead of simply trying to getValue() it and catching a possible
+  // exception. The latter works, however, but non-existing names are
+  // the rule with updateValue(), not the exception, hence using the
+  // exception mechanism would be inappropriate. (Markus pointed this
+  // out, 05.02.2001, Ruediger.)
+
+  // We must take a reference, so that access information can be stored in the
+  // token.
+  const Token& t = d->lookup( n );
+
+  if ( t.empty() )
+    return false;
+
+  value = getValue< FT >( t );
+  return true;
+}
+
 typedef double double_t;
 
-namespace nest {
-
-    namespace names {
-        extern const Name receptor_type;
-        extern const Name t_spike;
-        extern const Name recordables;
-        extern const Name receptor_types;
-    }
-
-    typedef int synindex;
-    typedef long long_t;
-    typedef int port;
-
-    class Archiving_Node;
-
-    class KernelException: public std::exception {
-      public:
-        KernelException(const std::string& name) {
-        }
-    };
-
-    class UnknownReceptorType: public std::exception {
-      public:
-        UnknownReceptorType(const port& port, const std::string& name) {
-        }
-    };
-
-    class IncompatibleReceptorType: public std::exception {
-      public:
-        IncompatibleReceptorType(const port& port,
-                const std::string& name, const std::string& msg) {
-        }
-    };
-
-    class DataLoggingRequest {
-
-    };
-
-    class Time {
-
-      public:
-        Time(double_t ms) :
-                ms_(ms) {
-        }
-        static double_t ms(double t);
-
-      protected:
-        double_t ms_;
-
-    };
-
-    class SpikeEvent {
-      public:
-        void set_sender(Archiving_Node& node);
-    };
-
-    class CurrentEvent {
-
-    };
-
-    template<class NodeType> class RecordablesMap {
-      public:
-        Token get_list();
-    };
-
-    template<class NodeType> class UniversalDataLogger {
-      public:
-        port connect_logging_device(DataLoggingRequest& request,
-                RecordablesMap<NodeType>& map);
-    };
-
-    class RingBuffer {
-      public:
-        void add_value(const long_t offs, const double_t);
-        void set_value(const long_t offs, const double_t);
-        double get_value(const long_t offs);
-        void clear();
-        void resize();
-    };
-
-    class Node {
-      public:
-        void handle(SpikeEvent& event);
-        void handle(CurrentEvent& event);
-        port handles_test_event(nest::SpikeEvent& event,
-                nest::port receptor_type);
-        port handles_test_event(nest::CurrentEvent& event,
-                nest::port receptor_type);
-        std::string get_name() {
-            return "TestNode";
-        }
-
-        template < typename ConcreteNode > const ConcreteNode& downcast( const Node& n ) {
-          ConcreteNode const* tp = dynamic_cast< ConcreteNode const* >( &n );
-          assert( tp != 0 );
-          return *tp;
-        }
-
-    };
-
-    class Archiving_Node: public Node {
-      public:
-        void get_status(DictionaryDatum& d) const;
-        void set_status(const DictionaryDatum& d);
-        double_t get_spiketime_ms() const;
-
-    };
-
-}
 
 namespace librandom {
 
@@ -380,14 +352,10 @@ namespace librandom {
          *       RandomGen::DefaultSeed if you want to
          *       create a generator with a default seed value.
          */
-        RandomGen() {
-        }
-        ;
+        RandomGen() {}
 
         // ensures proper clean up
-        virtual ~RandomGen() {
-        }
-        ;
+        virtual ~RandomGen() {}
 
         /**
          The following functions implement the user interface of the
@@ -395,34 +363,18 @@ namespace librandom {
          random generator is provided by protected member functions below.
          */
         double drand(void);                    //!< draw from [0, 1)
-//      double operator()( void );                   //!< draw from [0, 1)
+        double operator()( void ) { return drand(); }                   //!< draw from [0, 1)
         double drandpos(void);                 //!< draw from (0, 1)
-//      unsigned long ulrand( const unsigned long ); //!< draw from [0, n-1]
-
-//      void seed( const unsigned long ); //!< set random seed to a new value
-//
-//      /**
-//       * Create built-in Knuth Lagged Fibonacci random generator.
-//       * This function is provided so that RNGs can be created in places
-//       * where the SLI rngdict is not accessible.
-//       * @see KnuthLFG
-//       */
-//      static RngPtr create_knuthlfg_rng( unsigned long );
-//
-//      //! Default value for seeding generators in places where no seed is supplied.
-//      static const unsigned long DefaultSeed;
-//
-//      //! clone a random number generator of same type initialized with given seed
-//      virtual RngPtr clone( const unsigned long ) = 0;
 
     };
 
     class RngPtr {
       public:
 
-        RngPtr(RandomGen* rng) :
-                rng(rng) {
-        }
+        RngPtr() : rng(new RandomGen()) {}
+
+        RngPtr(RandomGen* rng)
+          : rng(rng) {}
 
         RandomGen* operator->() const {
             return rng;
@@ -438,6 +390,180 @@ namespace librandom {
 
       protected:
         RandomGen* rng;
+
+    };
+
+}
+
+
+namespace nest {
+
+    typedef double delay;
+
+    namespace names {
+        extern const Name receptor_type;
+        extern const Name t_spike;
+        extern const Name recordables;
+        extern const Name receptor_types;
+    }
+
+    typedef int synindex;
+    typedef long long_t;
+    typedef int port;
+
+    class Node;
+    class Archiving_Node;
+
+    class KernelException: public std::exception {
+      public:
+        KernelException(const std::string& name) {
+        }
+    };
+
+    class GSLSolverFailure : public KernelException {
+      public:
+        GSLSolverFailure(const std::string& name, int status) : KernelException(name) {}
+    };
+
+    class UnknownReceptorType: public std::exception {
+      public:
+        UnknownReceptorType(const port& port, const std::string& name) {
+        }
+    };
+
+    class IncompatibleReceptorType: public std::exception {
+      public:
+        IncompatibleReceptorType(const port& port,
+                const std::string& name, const std::string& msg) {
+        }
+    };
+
+    class Scheduler {
+      public:
+        static double get_min_delay() { return min_delay; }
+        static double min_delay;
+    };
+
+    class Time {
+
+      public:
+        Time(double_t ms) :
+                ms_(ms) {
+        }
+        static double_t ms(double t);
+        double get_ms() const {
+            return ms_;
+        }
+
+        static Time get_resolution() {
+            return Time(resolution);
+        }
+
+        static double_t step(long_t step) { return (double_t)step * resolution; }
+        long_t get_steps() const { return 1; }
+
+      protected:
+        double_t ms_;
+        static double resolution;
+
+    };
+
+    class SpikeEvent {
+      public:
+        void set_sender(Archiving_Node& node) {}
+        void set_multiplicity(long_t m) {}
+        double_t get_delay() const;
+        double get_current() const;
+        double get_weight() const;
+
+    };
+
+    class CurrentEvent {
+      public:
+        double_t get_delay() const;
+        double get_current() const;
+        double get_weight() const;
+        int get_rel_delivery_steps(const Time& time) const;
+        int get_rport() const;
+    };
+
+    class DataLoggingRequest {
+      public:
+        void handle(const SpikeEvent& e) {}
+        void handle(const CurrentEvent& e) {}
+    };
+
+
+    template<class NodeType> class RecordablesMap {
+      public:
+        typedef double_t ( NodeType::*DataAccessFct )() const;
+
+        Token get_list();
+        void create() {}
+        void insert_(const std::string& name, DataAccessFct* f) {}
+    };
+
+    template<class NodeType> class UniversalDataLogger {
+      public:
+        UniversalDataLogger(NodeType& node) {}
+        port connect_logging_device(DataLoggingRequest& request,
+                RecordablesMap<NodeType>& map);
+        void init() {}
+        void reset() {}
+        void record_data(long_t step) {}
+        void handle(const DataLoggingRequest& dlr) {}
+    };
+
+    class RingBuffer {
+      public:
+        void add_value(const long_t offs, const double_t);
+        void set_value(const long_t offs, const double_t);
+        double get_value(const long_t offs);
+        void clear();
+        void resize();
+    };
+
+
+    class Network {
+      public:
+        void send(Node& node, SpikeEvent& se, long_t lag) {}
+        librandom::RngPtr get_rng(int dummy);
+        Time get_slice_origin();
+    };
+
+    class Node {
+      public:
+        Node() : net_(new Network()) {}
+        virtual ~Node() { delete net_; }
+        void handle(SpikeEvent& event);
+        void handle(CurrentEvent& event);
+        port handles_test_event(nest::SpikeEvent& event, nest::port receptor_type);
+        port handles_test_event(nest::CurrentEvent& event, nest::port receptor_type);
+
+        std::string get_name() { return "TestNode"; }
+        void set_spiketime(double t) {}
+        int get_thread() const { return 0; }
+
+        template < typename ConcreteNode > const ConcreteNode& downcast( const Node& n ) {
+          ConcreteNode const* tp = dynamic_cast< ConcreteNode const* >( &n );
+          assert( tp != 0 );
+          return *tp;
+        }
+
+        Network* network() { return net_; }
+
+      protected:
+        Network *net_;
+
+    };
+
+    class Archiving_Node: public Node {
+      public:
+        virtual ~Archiving_Node() {}
+        virtual void get_status(DictionaryDatum& d) const = 0;
+        virtual void set_status(const DictionaryDatum& d) = 0;
+        double_t get_spiketime_ms() const;
+        void clear_history() {}
 
     };
 
