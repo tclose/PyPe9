@@ -6,8 +6,8 @@
 #include <map>
 #include <sstream>
 #include <algorithm>
+#include <cassert>
 #include "name.h"
-
 
 const Name DOUBLE_TYPE("double");
 const Name LONG_TYPE("long");
@@ -456,6 +456,10 @@ namespace nest {
             return ms_;
         }
 
+        static void set_resolution(double_t t) {
+            resolution = t;
+        }
+
         static Time get_resolution() {
             return Time(resolution);
         }
@@ -464,8 +468,8 @@ namespace nest {
         long_t get_steps() const { return 1; }
 
       protected:
-        double_t ms_;
         static double resolution;
+        double_t ms_;
 
     };
 
