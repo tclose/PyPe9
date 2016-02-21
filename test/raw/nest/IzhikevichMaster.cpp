@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
-#include <math>
+#include <cmath>
 
 //#include "exceptions.h"
 //#include "network.h"

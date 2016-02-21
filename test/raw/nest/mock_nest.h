@@ -8,9 +8,10 @@
 #include <algorithm>
 #include "name.h"
 
-const Name DOUBLE_TYPE;
-const Name LONG_TYPE;
-const Name DICTIONARY_TYPE;
+
+const Name DOUBLE_TYPE("double");
+const Name LONG_TYPE("long");
+const Name DICTIONARY_TYPE("dictionary");
 
 class Datum {
 
@@ -500,7 +501,7 @@ namespace nest {
 
         Token get_list();
         void create() {}
-        void insert_(const std::string& name, DataAccessFct* f) {}
+        void insert_(const char* name, DataAccessFct f) {}
     };
 
     template<class NodeType> class UniversalDataLogger {
