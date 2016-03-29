@@ -31,7 +31,7 @@ AC_CANONICAL_HOST
 # ------------------------------------------------------------------------
 
 # nest-config
-NEST_CONFIG=`pwd`/../nest-install/bin/nest-config  #`which nest-config`
+NEST_CONFIG=`which nest-config`
 AC_ARG_WITH(nest,[  --with-nest=script	nest-config script including path],
 [
   if test "$withval" != yes; then
