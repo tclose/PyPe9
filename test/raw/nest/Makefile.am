@@ -1,10 +1,10 @@
-bin_PROGRAMS = raw-compare
+bin_PROGRAMS = compare
 
-raw_compare_CXXFLAGS = @AM_CXXFLAGS@ -I/usr/local/Cellar/gsl/1.16/include -I/usr/local/Cellar/gcc/5.3.0/include/c++/5.3.0
-raw_compare_SOURCES =  main.cpp IzhikevichBranch.h IzhikevichBranch.cpp \
+compare_CXXFLAGS = @AM_CXXFLAGS@ -I/usr/local/Cellar/gsl/1.16/include -I/usr/local/Cellar/gcc/5.3.0/include/c++/5.3.0
+compare_SOURCES =  main.cpp IzhikevichBranch.h IzhikevichBranch.cpp \
                        IzhikevichMaster.cpp IzhikevichMaster.h \
                        mock_nest.h mock_nest.cpp name.h name.cpp \
-raw_compare_LDADD =  -L/usr/local/Cellar/gsl/1.16/lib -L/usr/local/Cellar/gcc/5.3.0/lib/gcc/5 -lgsl -lgslcblas -lm
+compare_LDADD =  -L/usr/local/Cellar/gsl/1.16/lib -L/usr/local/Cellar/gcc/5.3.0/lib/gcc/5 -lgsl -lgslcblas -lm
 
 MAKEFLAGS= @MAKE_FLAGS@
 
