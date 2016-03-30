@@ -13,6 +13,10 @@
 #define ARRAY_ALLOC_SIZE 64
 #define LONG_MAX  __LONG_MAX__
 #define LONG_MIN  (-__LONG_MAX__ -1L)
+#define DBL_MAX __DBL_MAX__
+#define LDBL_MAX __LDBL_MAX__
+#define double_t_max ( DBL_MAX ) // because C++ language designers are apes
+#define double_t_min ( DBL_MIN ) // (only integral consts are compile time)
 
 const Name DOUBLE_TYPE("double");
 const Name LONG_TYPE("long");
@@ -35,6 +39,16 @@ const rport invalid_port_ = -1;
 typedef long tic_t;
 const tic_t tic_t_max = LONG_MAX;
 const tic_t tic_t_min = LONG_MIN;
+
+namespace nest {
+    class Time;
+}
+
+std::ostream& operator<<( std::ostream&, const nest::Time& );
+
+long ld_round( double x ) {
+  return ( long ) std::floor((long double)(x + 0.5));
+}
 
 class Datum {
 
@@ -1144,6 +1158,7 @@ namespace librandom {
 
 namespace nest {
 
+    typedef double double_t;
     typedef double delay;
 
     namespace names {
@@ -1768,7 +1783,7 @@ namespace nest {
         port handles_test_event(nest::CurrentEvent& event, nest::port receptor_type);
 
         std::string get_name() { return "TestNode"; }
-        void set_spiketime(double t) {}
+        void set_spiketime(Time const& t_sp ) {}
         int get_thread() const { return 0; }
 
         template < typename ConcreteNode > const ConcreteNode& downcast( const Node& n ) {
@@ -1800,6 +1815,5 @@ namespace nest {
 
 }
 
-std::ostream& operator<<( std::ostream&, const nest::Time& );
 
 #endif
