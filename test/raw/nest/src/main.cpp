@@ -17,8 +17,8 @@
 int main(void) {
 
     // Initialise models
-    nineml::IzhikevichMaster reference;
-    nineml::IzhikevichBranch generated;
+    nineml::Master reference;
+    nineml::Branch generated;
 
     // Set statuses of models
     Dictionary reference_status;
