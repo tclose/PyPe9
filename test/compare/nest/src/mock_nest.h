@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cassert>
 #include <valarray>
-#include "name.h"
+#include "../../../compare/nest/src/name.h"
 
 #define ARRAY_ALLOC_SIZE 64
 #define LONG_MAX  __LONG_MAX__

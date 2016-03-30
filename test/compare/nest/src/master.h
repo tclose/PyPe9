@@ -12,12 +12,11 @@
 //#include "universal_data_logger.h"
 //#include "recordables_map.h"
 
-#include "mock_nest.h"
-
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_sf_exp.h>
 #include <gsl/gsl_odeiv2.h>
+#include "../../../compare/nest/src/mock_nest.h"
 
 #define ITEM(v,i)  (v[i])
 namespace nineml {

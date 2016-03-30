@@ -20,7 +20,7 @@
  *
  */
 
-#include "name.h"
+#include "../../../compare/nest/src/name.h"
 
 #include <iostream>
 #include <iomanip>

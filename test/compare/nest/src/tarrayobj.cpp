@@ -20,7 +20,8 @@
  *
  */
 
-#include "tarrayobj.h"
+#include "../../../compare/nest/src/tarrayobj.h"
+
 #include "datum.h"
 #include "token.h"
 

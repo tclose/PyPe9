@@ -27,7 +27,8 @@
 #include <climits>
 #include <cfloat>
 #include <limits>
-#include "config.h"
+
+#include "../../../compare/nest/build/config.h"
 
 /**
  * @mainpage NEST: Neural Simulation Tool

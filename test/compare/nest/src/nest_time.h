@@ -29,8 +29,8 @@
 #include <cmath>
 #include <cstdlib>
 
-#include "nest.h"
-#include "numerics.h"
+#include "../../../compare/nest/src/nest.h"
+#include "../../../compare/nest/src/numerics.h"
 
 class Token;
 

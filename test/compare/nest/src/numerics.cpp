@@ -21,8 +21,9 @@
  */
 
 
-#include "config.h"
-#include "numerics.h"
+#include "../../../compare/nest/src/numerics.h"
+
+#include "../../../compare/nest/build/config.h"
 
 
 #ifndef HAVE_M_E

@@ -30,7 +30,8 @@
 #include <cstddef>
 #include <vector>
 #include <valarray>
-#include "tarrayobj.h"
+
+#include "../../../compare/nest/src/tarrayobj.h"
 #include "sliexceptions.h"
 
 // class Tokenarray uses reference counting and lazy evaluation.

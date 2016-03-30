@@ -8,10 +8,11 @@
  ============================================================================
  */
 
-#include <src/branch.h>
-#include <src/master.h>
 #include <iostream>
-#include "mock_nest.h"
+
+#include "../../../compare/nest/src/branch.h"
+#include "../../../compare/nest/src/master.h"
+#include "../../../compare/nest/src/mock_nest.h"
 
 
 int main(void) {

@@ -20,7 +20,8 @@
  *
  */
 
-#include "tokenarray.h"
+#include "../../../compare/nest/src/tokenarray.h"
+
 #include "integerdatum.h"
 #include "doubledatum.h"
 #include "stringdatum.h"

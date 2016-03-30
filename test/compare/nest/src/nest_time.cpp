@@ -20,13 +20,15 @@
  *
  */
 
+#include "../../../compare/nest/src/nest_time.h"
+
 #include <string>
-#include "nest_time.h"
+
+#include "../../../compare/nest/build/config.h"
+#include "../../../compare/nest/src/numerics.h"
 #include "token.h"
 #include "integerdatum.h"
 #include "doubledatum.h"
-#include "config.h"
-#include "numerics.h"
 
 using namespace nest;
 
