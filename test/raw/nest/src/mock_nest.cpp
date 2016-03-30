@@ -3,6 +3,14 @@
 #include <iostream>
 #include <iomanip>
 
+const Name receptor_type( "receptor_type" );
+const Name receptor_types( "receptor_types" );
+const Name recordables( "recordables" );
+const Name t_spike( "t_spike" );
+
+const unsigned long librandom::RandomGen::DefaultSeed = 0xd37ca59fUL;
+
+double min_delay = 0.1;
 
 Token::Token( int value )
 {
@@ -48,79 +56,99 @@ Token::operator double() const
 double nest::Time::resolution = 0.0;
 
 
-//Dictionary::insert_move(Name const&, Token&), referenced from:
-//    void def<double>(DictionaryDatum&, Name, double const&) in raw_compare-IzhikevichBranch.o
-//    void def<double>(DictionaryDatum&, Name, double const&) in raw_compare-IzhikevichMaster.o
-//Dictionary::insert(Name const&, Token const&), referenced from:
-//    _main in raw_compare-main.o
-//Dictionary::operator[](Name const&), referenced from:
-//    nineml::IzhikevichBranch::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichMaster.o
-//Name::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&), referenced from:
-//    Name::Name(char const*) in raw_compare-main.o
-//    Name::Name(char const*) in raw_compare-IzhikevichBranch.o
-//    Name::Name(char const*) in raw_compare-IzhikevichMaster.o
-//    Name::Name(char const*) in raw_compare-mock_nest.o
-//nest::RingBuffer::clear(), referenced from:
-//    nineml::IzhikevichBranch::init_buffers_()      in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::init_buffers_()      in raw_compare-IzhikevichMaster.o
-//nest::RingBuffer::add_value(long, double), referenced from:
-//    nineml::IzhikevichBranch::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::RingBuffer::get_value(long), referenced from:
-//    nineml::IzhikevichBranch::update(nest::Time const&, long, long) in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::update(nest::Time const&, long, long) in raw_compare-IzhikevichMaster.o
-//nest::Archiving_Node::set_status(DictionaryDatum const&), referenced from:
-//    nineml::IzhikevichBranch::set_status(DictionaryDatum const&)  in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::set_status(DictionaryDatum const&)  in raw_compare-IzhikevichMaster.o
-//nest::RecordablesMap<nineml::IzhikevichBranch>::get_list(), referenced from:
-//    nineml::IzhikevichBranch::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichBranch.o
-//nest::RecordablesMap<nineml::IzhikevichMaster>::get_list(), referenced from:
-//    nineml::IzhikevichMaster::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichMaster.o
-//nest::Time::ms(double), referenced from:
-//    _main in raw_compare-main.o
-//nest::names::recordables, referenced from:
-//    nineml::IzhikevichBranch::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichMaster.o
-//nest::names::receptor_types, referenced from:
-//    nineml::IzhikevichBranch::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichMaster.o
-//nest::names::t_spike, referenced from:
-//    nineml::IzhikevichBranch::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichMaster.o
-//nest::Network::get_slice_origin(), referenced from:
-//    nineml::IzhikevichBranch::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::Network::get_rng(int), referenced from:
-//    nineml::IzhikevichBranch::calibrate()     in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::calibrate()     in raw_compare-IzhikevichMaster.o
-//nest::Scheduler::min_delay, referenced from:
-//    nest::Scheduler::get_min_delay()     in raw_compare-IzhikevichBranch.o
-//    nest::Scheduler::get_min_delay()     in raw_compare-IzhikevichMaster.o
-//Dictionary::lookup(Name const&) const, referenced from:
-//    bool updateValue<double, double>(DictionaryDatum const&, Name, double&) in raw_compare-IzhikevichBranch.o
-//    bool updateValue<double, double>(DictionaryDatum const&, Name, double&) in raw_compare-IzhikevichMaster.o
-//nest::SpikeEvent::get_delay() const, referenced from:
-//    nineml::IzhikevichBranch::handle(nest::SpikeEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::SpikeEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::CurrentEvent::get_weight() const, referenced from:
-//    nineml::IzhikevichBranch::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::CurrentEvent::get_current() const, referenced from:
-//    nineml::IzhikevichBranch::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::CurrentEvent::get_rel_delivery_steps(nest::Time const&) const, referenced from:
-//    nineml::IzhikevichBranch::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::CurrentEvent::get_delay() const, referenced from:
-//    nineml::IzhikevichBranch::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::CurrentEvent::get_rport() const, referenced from:
-//    nineml::IzhikevichBranch::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::handle(nest::CurrentEvent&)       in raw_compare-IzhikevichMaster.o
-//nest::Archiving_Node::get_status(DictionaryDatum&) const, referenced from:
-//    nineml::IzhikevichBranch::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichMaster.o
-//nest::Archiving_Node::get_spiketime_ms() const, referenced from:
-//    nineml::IzhikevichBranch::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichBranch.o
-//    nineml::IzhikevichMaster::get_status(DictionaryDatum&) const  in raw_compare-IzhikevichMaster.o
+Token& Dictionary::insert_move( const Name& n, Token& t )
+{
+  Token& result = TokenMap::operator[]( n );
+  result.move( t );
+  return result;
+}
+
+inline Token& Dictionary::insert( const Name& n, const Token& t )
+{
+  return TokenMap::operator[]( n ) = t;
+}
+
+inline Token& Dictionary::operator[]( const Name& n )
+{
+  return TokenMap::operator[]( n );
+}
+
+
+void nest::RingBuffer::clear()
+{
+  resize();      // does nothing if size is fine
+  buffer_ = 0.0; // clear all elements
+}
+
+void nest::RingBuffer::add_value( const long_t offs, const double_t v )
+{
+ buffer_[ get_index_( offs ) ] += v;
+}
+
+double nest::RingBuffer::get_value( const long_t offs ) {
+  assert( 0 <= offs && ( size_t ) offs < buffer_.size() );
+  assert( ( delay ) offs < Scheduler::get_min_delay() );
+
+  // offs == 0 is beginning of slice, but we have to
+  // take modulo into account when indexing
+  long_t idx = get_index_( offs );
+  double_t val = buffer_[ idx ];
+  buffer_[ idx ] = 0.0; // clear buffer after reading
+  return val;
+}
+
+void nest::Archiving_Node::set_status( const DictionaryDatum& d ) {
+  // We need to preserve values in case invalid values are set
+  double_t new_tau_minus = tau_minus_;
+  double_t new_tau_minus_triplet = tau_minus_triplet_;
+  updateValue< double_t >( d, names::tau_minus, new_tau_minus );
+  updateValue< double_t >( d, names::tau_minus_triplet, new_tau_minus_triplet );
+
+  if ( new_tau_minus <= 0 || new_tau_minus_triplet <= 0 )
+    throw BadProperty( "All time constants must be strictly positive." );
+
+  tau_minus_ = new_tau_minus;
+  tau_minus_triplet_ = new_tau_minus_triplet;
+
+  // check, if to clear spike history and K_minus
+  bool clear = false;
+  updateValue< bool >( d, names::clear, clear );
+  if ( clear )
+    clear_history();
+}
+
+nest::Time const& nest::Network::get_slice_origin() const {
+  return Time(0);
+}
+
+nest::Network::Network() {
+    rng_ = librandom::RandomGen::create_knuthlfg_rng(librandom::RandomGen::DefaultSeed);
+}
+
+nest::Network:~Network{
+    delete rng_;
+}
+
+librandom::RandomGen::create_knuthlfg_rng( unsigned long seed ) {
+  return librandom::RngPtr( new librandom::KnuthLFG( seed ) );
+}
+
+inline long_t Event::get_rel_delivery_steps( const Time& t ) const
+{
+  return d_ - 1 - t.get_steps();
+}
+
+void nest::Archiving_Node::get_status( DictionaryDatum& d ) const {
+  def< double >( d, names::t_spike, get_spiketime_ms() );
+  def< double >( d, names::tau_minus, tau_minus_ );
+  def< double >( d, names::tau_minus_triplet, tau_minus_triplet_ );
+}
+
+const Token& Dictionary::lookup( const Name& n ) const {
+  TokenMap::const_iterator where = find( n );
+  if ( where != end() )
+    return ( *where ).second;
+  else
+    return Dictionary::VoidToken;
+}
+

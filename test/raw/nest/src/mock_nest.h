@@ -344,6 +344,8 @@ typedef double double_t;
 
 namespace librandom {
 
+    class RngPtr;
+
     class RandomGen {
       public:
         /**
@@ -366,6 +368,10 @@ namespace librandom {
         double drand(void);                    //!< draw from [0, 1)
         double operator()( void ) { return drand(); }                   //!< draw from [0, 1)
         double drandpos(void);                 //!< draw from (0, 1)
+
+        RngPtr create_knuthlfg_rng(const unsigned long seed);
+
+        const static unsigned long DefaultSeed;
 
     };
 
@@ -448,13 +454,11 @@ namespace nest {
     class Time {
 
       public:
-        Time(double_t ms) :
-                ms_(ms) {
-        }
+        Time(double_t ms) : ms_(ms) {}
         static double_t ms(double t);
-        double get_ms() const {
-            return ms_;
-        }
+        explicit ms(double_t t) : ms( t ) {}
+        explicit ms(long_t t) : ms( static_cast< double_t >( t ) ) {}
+        double get_ms() const { return ms_; }
 
         static void set_resolution(double_t t) {
             resolution = t;
@@ -473,23 +477,41 @@ namespace nest {
 
     };
 
-    class SpikeEvent {
+    class Event {
       public:
+        Event() : d_(0), w_(0), rp_(0) {}
         void set_sender(Archiving_Node& node) {}
-        void set_multiplicity(long_t m) {}
-        double_t get_delay() const;
-        double get_current() const;
-        double get_weight() const;
+        double_t get_delay() const { return d_; }
+        double get_weight() const { return w_; }
+        int get_rel_delivery_steps(const Time& time) const;
+        int get_rport() const { return rp_; }
+
+        // Public members
+        delay d_;
+        weight w_;
+        int rp_;
+    };
+
+    class SpikeEvent : public Event {
+      public:
+        SpikeEvent() : m_(0) {}
+        void set_multiplicity(long_t m) { m_ = m; }
+        double_t get_delay() const { return d_; }
+        double get_weight() const { return w_; }
+
+        // Public members
+        long_t m_;
 
     };
 
-    class CurrentEvent {
+    class CurrentEvent : public Event {
       public:
-        double_t get_delay() const;
-        double get_current() const;
-        double get_weight() const;
-        int get_rel_delivery_steps(const Time& time) const;
-        int get_rport() const;
+        CurrentEvent() : c_(0.0) {}
+        double get_current() const { return c_; }
+
+        //Public members
+        double c_;
+
     };
 
     class DataLoggingRequest {
@@ -499,11 +521,19 @@ namespace nest {
     };
 
 
-    template<class NodeType> class RecordablesMap {
+    template<class NodeType> class RecordablesMap : public std::map< Name, double_t> {
       public:
         typedef double_t ( NodeType::*DataAccessFct )() const;
 
-        Token get_list();
+        ArrayDatum get_list() const {
+          ArrayDatum recordables;
+          for ( typename Base_::const_iterator it = this->begin(); it != this->end(); ++it )
+            recordables.push_back( new LiteralDatum( it->first ) );
+          return recordables;
+
+          // the entire function should just be
+          // return recordables_;
+        }
         void create() {}
         void insert_(const char* name, DataAccessFct f) {}
     };
@@ -531,9 +561,12 @@ namespace nest {
 
     class Network {
       public:
+        Network();
+        ~Network();
         void send(Node& node, SpikeEvent& se, long_t lag) {}
-        librandom::RngPtr get_rng(int dummy);
+        librandom::RngPtr get_rng(int dummy) { return rng_; }
         Time get_slice_origin();
+        librandom::RngPtr rng_;
     };
 
     class Node {
@@ -564,11 +597,15 @@ namespace nest {
 
     class Archiving_Node: public Node {
       public:
+        Archiving_Node() : last_spike_(-1.0) {}
         virtual ~Archiving_Node() {}
         virtual void get_status(DictionaryDatum& d) const = 0;
         virtual void set_status(const DictionaryDatum& d) = 0;
-        double_t get_spiketime_ms() const;
+        double_t get_spiketime_ms() const { return last_spike_; }
+        void set_spiketime_ms(double_t st) { last_spike_ = st; }
         void clear_history() {}
+
+        double_t last_spike_;
 
     };
 
