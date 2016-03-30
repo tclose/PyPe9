@@ -7,11 +7,28 @@
 #include <sstream>
 #include <algorithm>
 #include <cassert>
+#include <valarray>
 #include "name.h"
+
+#define ARRAY_ALLOC_SIZE 64
 
 const Name DOUBLE_TYPE("double");
 const Name LONG_TYPE("long");
 const Name DICTIONARY_TYPE("dictionary");
+const Name ARRAY_TYPE("array");
+const Name LITERAL_TYPE("literal");
+
+typedef long long_t;
+typedef long_t rport;
+typedef long_t port;
+typedef double_t weight;
+typedef long_t delay;
+
+const long_t long_t_max = __LONG_MAX__;
+const long_t long_t_min = (-__LONG_MAX__ -1L);
+const long_t delay_max = long_t_max;
+const long_t delay_min = long_t_min;
+const rport invalid_port_ = -1;
 
 class Datum {
 
@@ -33,6 +50,13 @@ class Datum {
     virtual bool equals( const Datum* d ) const {
         return this == d;
     }
+
+    virtual Datum* get_ptr() {
+      return clone();
+    }
+
+    void addReference() const {}
+    void removeReference() {}
 
   protected:
     // Putting the following variables here, avoids a number of virtual
@@ -154,6 +178,684 @@ class Token {
         return !(*this == t);
     }
 
+
+    void move( Token& c ) {
+      if ( p )
+        p->removeReference();
+      p = c.p;
+      c.p = NULL;
+    }
+
+
+    /**
+     * Initialize the token by moving a datum from another token.
+     * This function assumes that the token does not
+     * point to a valid datum and that the argument token
+     * does point to a valid datum.
+     * This function does not change the reference count of the datum.
+     */
+    void init_move( Token& rhs ) {
+      p = rhs.p;
+      rhs.p = NULL;
+    }
+
+    /**
+     * Initialize the token by moving a datum from another token.
+     * This function assumes that the token does not
+     * point to a valid datum and that the argument token
+     * does point to a valid datum.
+     * This function does not change the reference count of the datum.
+     */
+    void init_by_copy( const Token& rhs ) {
+      p = rhs.p->get_ptr();
+    }
+
+    /**
+     * Initialize the token with a reference.
+     * This function assumes that the token does not
+     * point to a valid datum and that the argument token
+     * does point to a valid datum.
+     * This function increases the reference count of the argument.
+     */
+
+    void init_by_ref( const Token& rhs ) {
+      rhs.p->addReference();
+      p = rhs.p;
+    }
+
+    /**
+     * Initialize the token with a datum pointer.
+     * This function assumes that the token does not point to
+     * a valid datum.
+     * The function assumes that the datum is new and DOES NOT increases its reference count.
+     */
+    void init_by_pointer( Datum* rhs ) {
+      p = rhs;
+    }
+
+};
+
+
+class Token;
+
+class TokenArrayObj
+{
+private:
+  Token* p;
+  Token* begin_of_free_storage;
+  Token* end_of_free_storage;
+  unsigned int alloc_block_size;
+  unsigned int refs_;
+
+  //  bool homogeneous;
+
+  void allocate( size_t, size_t, size_t, const Token& = Token() );
+
+  static size_t allocations;
+
+public:
+  TokenArrayObj( void )
+    : p( NULL )
+    , begin_of_free_storage( NULL )
+    , end_of_free_storage( NULL )
+    , alloc_block_size( ARRAY_ALLOC_SIZE )
+    , refs_( 1 ){};
+
+  TokenArrayObj( size_t, const Token& = Token(), size_t = 0 );
+  TokenArrayObj( const TokenArrayObj& );
+
+  virtual ~TokenArrayObj();
+
+  Token*
+  begin() const
+  {
+    return p;
+  }
+
+  Token*
+  end() const
+  {
+    return begin_of_free_storage;
+  }
+
+  size_t
+  size( void ) const
+  {
+    return ( size_t )( begin_of_free_storage - p );
+  }
+
+  size_t
+  capacity( void ) const
+  {
+    return ( size_t )( end_of_free_storage - p );
+  }
+
+  Token& operator[]( size_t i )
+  {
+    return p[ i ];
+  }
+
+  const Token& operator[]( size_t i ) const
+  {
+    return p[ i ];
+  }
+
+  const Token&
+  get( long i ) const
+  {
+    return *( p + i );
+    //      return p[i];
+  }
+
+  bool
+  index_is_valid( long i ) const
+  {
+    return ( p + i ) < begin_of_free_storage;
+  }
+
+  void rotate( Token*, Token*, Token* );
+
+
+  // Memory allocation
+
+  bool shrink( void );
+  bool reserve( size_t );
+
+  unsigned int
+  references( void )
+  {
+    return refs_;
+  }
+
+  unsigned int
+  remove_reference()
+  {
+    --refs_;
+    if ( refs_ == 0 )
+    {
+      delete this;
+      return 0;
+    }
+
+    return refs_;
+  }
+
+  unsigned int
+  add_reference()
+  {
+    return ++refs_;
+  }
+
+  void resize( size_t, size_t, const Token& = Token() );
+  void resize( size_t, const Token& = Token() );
+
+  void
+  reserve_token( size_t n )
+  {
+    if ( capacity() < size() + 1 + n )
+      reserve( size() + n );
+  }
+  // Insertion, deletion
+  void
+  push_back( const Token& t )
+  {
+    if ( capacity() < size() + 1 )
+      reserve( size() + alloc_block_size );
+    ( begin_of_free_storage++ )->init_by_copy( t );
+  }
+
+  void
+  push_back_move( Token& t )
+  {
+    if ( capacity() < size() + 1 )
+      reserve( size() + alloc_block_size );
+
+    ( begin_of_free_storage++ )->init_move( t );
+    //      ++begin_of_free_storage;
+  }
+
+  /**
+   * Push back a reference.  This function expects that enough space
+   * on the stack has been reserved and that the token points to a
+   * valid datum object.
+   */
+  void
+  push_back_by_ref( const Token& t )
+  {
+    if ( capacity() < size() + 1 )
+      reserve( size() + alloc_block_size );
+    ( begin_of_free_storage++ )->init_by_ref( t );
+  }
+
+  /**
+   * Push back a datum pointer.  This function assumes that enough
+   * space on the stack has been reserved.  This function expects a
+   * valid datum pointer and increases the reference count of the
+   * datum.
+   */
+  void
+  push_back_by_pointer( Datum* rhs )
+  {
+    if ( capacity() < size() + 1 )
+      reserve( size() + alloc_block_size );
+    begin_of_free_storage->init_by_pointer( rhs );
+    ++begin_of_free_storage;
+  }
+
+  void
+  assign_move( Token* tp, Token& t )
+  {
+    tp->move( t );
+  }
+
+  void
+  pop_back( void )
+  {
+    ( --begin_of_free_storage )->clear();
+  }
+
+  // Erase the range given by the iterators.
+  void erase( size_t, size_t );
+  void erase( Token*, Token* );
+  void
+  erase( Token* tp )
+  {
+    erase( tp, tp + 1 );
+  }
+
+  // Reduce the array to the range given by the iterators
+  void reduce( Token*, Token* );
+  void reduce( size_t, size_t );
+
+  void insert( size_t, size_t = 1, const Token& = Token() );
+  void
+  insert( size_t i, const Token& t )
+  {
+    insert( i, 1, t );
+  }
+
+  void insert_move( size_t, TokenArrayObj& );
+  void insert_move( size_t, Token& );
+
+  void assign_move( TokenArrayObj&, size_t, size_t );
+  void assign( const TokenArrayObj&, size_t, size_t );
+
+  void replace_move( size_t, size_t, TokenArrayObj& );
+
+  void append_move( TokenArrayObj& );
+
+  void clear( void );
+
+
+  const TokenArrayObj& operator=( const TokenArrayObj& );
+
+  bool operator==( const TokenArrayObj& ) const;
+
+  bool
+  empty( void ) const
+  {
+    return size() == 0;
+  }
+
+  void info( std::ostream& ) const;
+
+  static size_t
+  getallocations( void )
+  {
+    return allocations;
+  }
+
+  bool valid( void ) const; // check integrity
+};
+
+std::ostream& operator<<( std::ostream&, const TokenArrayObj& );
+
+
+class TokenArray
+{
+private:
+  TokenArrayObj* data;
+
+  bool
+  clone( void )
+  {
+    if ( data->references() > 1 )
+    {
+      data->remove_reference();
+      data = new TokenArrayObj( *data );
+      return true;
+    }
+    else
+      return false;
+  }
+
+  bool
+  detach( void )
+  {
+    if ( data->references() > 1 )
+    {
+      data->remove_reference();
+      data = new TokenArrayObj();
+      return true;
+    }
+    else
+      return false;
+  }
+
+protected:
+  friend class TokenArrayObj;
+  friend class TokenStack;
+  operator TokenArrayObj() const
+  {
+    return *data;
+  }
+
+public:
+  TokenArray( void )
+    : data( new TokenArrayObj() ){};
+
+  explicit TokenArray( size_t n, const Token& t = Token(), size_t alloc = 128 )
+    : data( new TokenArrayObj( n, t, alloc ) )
+  {
+  }
+
+  TokenArray( const TokenArray& a )
+    : data( a.data )
+  {
+    data->add_reference();
+  }
+
+  TokenArray( const TokenArrayObj& a )
+    : data( new TokenArrayObj( a ) )
+  {
+  }
+
+  TokenArray( const std::vector< size_t >& );
+  TokenArray( const std::vector< long >& );
+  TokenArray( const std::valarray< long >& );
+  TokenArray( const std::valarray< double >& );
+  TokenArray( const std::valarray< float >& );
+  TokenArray( const std::vector< double >& );
+  TokenArray( const std::vector< float >& );
+
+  virtual ~TokenArray()
+  {
+    data->remove_reference(); // this will dispose data if needed.
+  }
+
+  /**
+   * Return pointer to the first element.
+   */
+  Token*
+  begin() const
+  {
+    return data->begin();
+  }
+
+  /**
+   * Return pointer to next to last element.
+   */
+  Token*
+  end() const
+  {
+    return data->end();
+  }
+
+  /**
+   * Return number of elements in the array.
+   */
+  size_t
+  size( void ) const
+  {
+    return data->size();
+  }
+
+  /**
+   * Return maximal number of elements that fit into the container.
+   */
+  size_t
+  capacity( void ) const
+  {
+    return data->capacity();
+  }
+
+  // Note, in order to use the const version of operator[]
+  // through a pointer, it is in some cases necessary to
+  // use an explicit TokenArray const * pointer!
+  // Use the member function get(size_t) const to force
+  // constness.
+
+  Token& operator[]( size_t i )
+  {
+    clone();
+    return ( *data )[ i ];
+  }
+
+  const Token& operator[]( size_t i ) const
+  {
+    return ( *data )[ i ];
+  }
+
+  const Token&
+  get( long i ) const
+  {
+    return data->get( i );
+  }
+
+  bool
+  index_is_valid( long i ) const
+  {
+    return data->index_is_valid( i );
+  }
+
+  void
+  rotate( Token* t1, Token* t2, Token* t3 )
+  {
+    size_t s1 = t1 - data->begin();
+    size_t s2 = t2 - data->begin();
+    size_t s3 = t3 - data->begin();
+
+    clone();
+    Token* b = data->begin();
+
+    data->rotate( b + s1, b + s2, b + s3 );
+  }
+
+  void rotate( long n );
+
+  // The following two members shrink and reserve do
+  // NOT invoke cloning, since they have no immediate
+  // consequences.
+
+  /**
+   * Reduce allocated space such that size()==capacity().
+   * Returns true if the array was resized and false otherwhise.
+   * If true is returned, all existing pointers into the array are
+   * invalidated.
+   */
+  bool
+  shrink( void )
+  {
+    return data->shrink();
+  }
+
+  /**
+   * Reserve space such that after the call the new capacity is n.
+   * Returns true, if the container was reallocated. In this case all
+   * existing pointers are invalidated.
+   */
+  bool
+  reserve( size_t n )
+  {
+    return data->reserve( n );
+  }
+
+  unsigned int
+  references( void )
+  {
+    return data->references();
+  }
+
+  /**
+   * Resizes the container to size s.
+   * If the new size is larger than the old size, the new space is initialized with t.
+   */
+  void
+  resize( size_t s, const Token& t = Token() )
+  {
+    clone();
+    data->resize( s, t );
+  }
+
+  // Insertion, deletion
+  void
+  push_back( const Token& t )
+  {
+    clone();
+    data->push_back( t );
+  }
+
+  void
+  push_back( Datum* d )
+  {
+    Token t( d );
+    clone();
+    data->push_back_move( t );
+  }
+
+  void
+  push_back_move( Token& t )
+  {
+    clone();
+    data->push_back_move( t );
+  }
+
+  void
+  push_back_dont_clone( Token& t )
+  {
+    data->push_back_move( t );
+  }
+
+  void assign_move( size_t i, Token& t ) // 8.4.98 Diesmann
+  {
+    clone();
+    data->assign_move( data->begin() + i, t );
+  }
+
+  void
+  assign_move( TokenArray& a, size_t i, size_t n )
+  {
+    clear(); // no cloning, because we overwrite everything
+    // This is slightly inefficient, because if a has references,
+    // cloning is more expensive than just copying the desired range.
+    if ( a.references() == 1 )
+      data->assign_move( *( a.data ), i, n );
+    else
+      data->assign( *( a.data ), i, n );
+  }
+
+  void insert_move( size_t i, TokenArray& a ) // 8.4.98 Diesmann
+  {
+    clone();   // make copy if others point to representation
+    a.clone(); // also for a because we are going to empy it
+               //      assert(data->refs==1);    // private copy
+               //      assert(a.data->refs==1);  // private copy
+
+    data->insert_move( i, *( a.data ) );
+    // the representations insert_move moves the
+    // the contens of all Tokens in a.data and marks it empty.
+
+    //      assert(a.data->size()==0); // empty, but memory is still allocated incase
+    // it will be used again. data->clear() would
+    // free the memory. In any case the destructor
+    // finally frees the memory.
+  }
+
+  void
+  insert_move( size_t i, Token& t )
+  {
+    clone();
+    data->insert_move( i, t );
+  }
+
+
+  void
+  replace_move( size_t i, size_t n, TokenArray& a )
+  {
+    clone();
+    a.clone();
+
+    data->replace_move( i, n, *( a.data ) );
+  }
+
+
+  void
+  append_move( TokenArray& a )
+  {
+    clone();   // make copy if others point to representation
+    a.clone(); // also for a because we are going to empy it
+
+    data->append_move( *( a.data ) );
+  }
+
+  void
+  pop_back( void )
+  {
+    clone();
+    data->pop_back();
+  }
+
+  void
+  clear( void )
+  {
+    erase();
+  }
+
+  void
+  erase( void )
+  {
+    if ( !detach() )
+      erase( begin(), end() );
+  }
+
+
+  void
+  erase( Token* from, Token* to )
+  {
+    if ( from != to )
+    {
+      size_t sf = from - data->begin();
+      size_t st = to - data->begin();
+
+      clone();
+      data->erase( data->begin() + sf, data->begin() + st );
+    }
+  }
+
+  void
+  erase( size_t i, size_t n )
+  {
+    if ( i < size() && n > 0 )
+    {
+      clone();
+      data->erase( i, n );
+    }
+  }
+
+  // Reduce the Array to the Range given by the iterators
+  void
+  reduce( size_t i, size_t n )
+  {
+    if ( i > 0 || n < size() )
+    {
+      clone();
+      data->reduce( i, n );
+    }
+  }
+
+  void reverse();
+
+  void
+  swap( TokenArray& a )
+  {
+    std::swap( data, a.data );
+  }
+
+  const TokenArray& operator=( const TokenArray& );
+  const TokenArray& operator=( const std::vector< long >& );
+  const TokenArray& operator=( const std::vector< double >& );
+  const TokenArray& operator=( const std::valarray< long >& );
+  const TokenArray& operator=( const std::valarray< double >& );
+
+  bool operator==( const TokenArray& a ) const
+  {
+    return *data == *a.data;
+  }
+
+  bool
+  empty( void ) const
+  {
+    return size() == 0;
+  }
+
+  void info( std::ostream& ) const;
+
+  /** Fill vectors with homogenous integer and double arrays */
+
+  void toVector( std::vector< size_t >& ) const;
+  void toVector( std::vector< long >& ) const;
+  void toVector( std::vector< double >& ) const;
+  void toVector( std::vector< std::string >& ) const;
+  void toValarray( std::valarray< long >& ) const;
+  void toValarray( std::valarray< double >& ) const;
+
+  bool valid( void ) const; // check integrity
+
+  /** Exception classes */
+  //  class TypeMismatch {};
+  class OutOfRange
+  {
+  };
 };
 
 
@@ -262,6 +964,37 @@ class IntegerDatum : public Datum {
     long lng;
 
 };
+
+class ArrayDatum : public Datum, public TokenArray {
+
+  public:
+
+    ArrayDatum()
+      : Datum(&ARRAY_TYPE) {
+    }
+
+    Datum* clone() const {
+        return new ArrayDatum();
+    }
+
+};
+
+class LiteralDatum : public Datum, public Name {
+
+  public:
+    Datum* clone( void ) const {
+        return new LiteralDatum( *this );
+    }
+
+    Datum* get_ptr() {
+        Datum::addReference();
+        return this;
+    }
+
+    LiteralDatum( const Name& n ) : Datum(&LITERAL_TYPE), Name(n) {}
+    LiteralDatum( const LiteralDatum& n) : Datum(&LITERAL_TYPE), Name(n) {}
+};
+
 
 template<typename FT> void def(DictionaryDatum& d, Name const n, FT const& value) {
     Token t(value); // we hope that we have a constructor for this.
@@ -454,11 +1187,19 @@ namespace nest {
     class Time {
 
       public:
-        Time(double_t ms) : ms_(ms) {}
-        static double_t ms(double t);
-        explicit ms(double_t t) : ms( t ) {}
-        explicit ms(long_t t) : ms( static_cast< double_t >( t ) ) {}
-        double get_ms() const { return ms_; }
+
+        struct ms {
+          double_t t;
+          explicit ms(double_t t) : t(t) {}
+          explicit ms(long_t t) : t(static_cast< double_t >(t)) {}
+          static double_t fromtoken(const Token& t);
+          explicit ms(const Token& t) : t(fromtoken(t)){};
+        };
+
+        Time(ms ms_) : ms_(ms_) {}
+        Time(double t) : ms_(t) {}
+
+        ms get_ms() const { return ms_; }
 
         static void set_resolution(double_t t) {
             resolution = t;
@@ -473,7 +1214,7 @@ namespace nest {
 
       protected:
         static double resolution;
-        double_t ms_;
+        ms ms_;
 
     };
 
@@ -522,6 +1263,7 @@ namespace nest {
 
 
     template<class NodeType> class RecordablesMap : public std::map< Name, double_t> {
+        typedef std::map< Name, double_t> Base_;
       public:
         typedef double_t ( NodeType::*DataAccessFct )() const;
 
