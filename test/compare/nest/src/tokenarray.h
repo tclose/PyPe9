@@ -31,8 +31,9 @@
 #include <vector>
 #include <valarray>
 
-#include "../../../compare/nest/src/tarrayobj.h"
-#include "sliexceptions.h"
+#include "mock_nest.h"
+#include "tarrayobj.h"
+
 
 // class Tokenarray uses reference counting and lazy evaluation.
 // This means that only a pointer

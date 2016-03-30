@@ -20,12 +20,7 @@
  *
  */
 
-#include "../../../compare/nest/src/tokenarray.h"
-
-#include "integerdatum.h"
-#include "doubledatum.h"
-#include "stringdatum.h"
-#include "tokenutils.h"
+#include "tokenarray.h"
 
 
 const TokenArray& TokenArray::operator=( const TokenArray& a )

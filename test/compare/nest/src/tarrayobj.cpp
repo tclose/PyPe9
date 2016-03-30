@@ -20,10 +20,7 @@
  *
  */
 
-#include "../../../compare/nest/src/tarrayobj.h"
-
-#include "datum.h"
-#include "token.h"
+#include "tarrayobj.h"
 
 #ifdef assert
 #undef assert
