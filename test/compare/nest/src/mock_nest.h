@@ -158,7 +158,7 @@ namespace nest {
         void set_sender(Archiving_Node& node) {}
         double_t get_delay() const { return d_; }
         double get_weight() const { return w_; }
-        int get_rel_delivery_steps(const Time& time) const;
+        long_t get_rel_delivery_steps(const Time& time) const;
         int get_rport() const { return rp_; }
 
         // Public members
@@ -241,7 +241,7 @@ namespace nest {
         ~Network();
         void send(Node& node, SpikeEvent& se, long_t lag) {}
         librandom::RngPtr get_rng(int dummy) { return rng_; }
-        Time get_slice_origin();
+        const Time& get_slice_origin() const;
         librandom::RngPtr rng_;
     };
 

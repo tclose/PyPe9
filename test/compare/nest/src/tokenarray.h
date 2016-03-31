@@ -480,3 +480,4 @@ TokenArray::rotate( long n = 1 )
 std::ostream& operator<<( std::ostream&, const TokenArray& );
 
 
+#endif

@@ -2,7 +2,6 @@
 #define MOCKSLI_H
 
 #include "name.h"
-#include "tokenarray.h"
 
 const Name DOUBLE_TYPE("double");
 const Name LONG_TYPE("long");
@@ -159,6 +158,10 @@ class Token {
     }
 
 
+    void swap( Token& c ) {
+        std::swap( p, c.p );
+    }
+
     void move( Token& c ) {
       if ( p )
         p->removeReference();
@@ -215,6 +218,7 @@ class Token {
 
 };
 
+#include "tokenarray.h"
 
 class Dictionary {
   public:

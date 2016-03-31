@@ -59,4 +59,10 @@ inline Token& Dictionary::operator[]( const Name& n )
   return TokenMap::operator[]( n );
 }
 
-
+const Token& Dictionary::lookup( const Name& n ) const {
+  TokenMap::const_iterator where = find( n );
+  if ( where != end() )
+    return ( *where ).second;
+  else
+    return Dictionary::VoidToken;
+}

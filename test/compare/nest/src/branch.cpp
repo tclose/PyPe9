@@ -562,10 +562,7 @@ void Branch::update(nest::Time const & origin, const nest::long_t from, const ne
     assert(to >= 0 && (nest::delay) from < nest::Scheduler::get_min_delay());
     assert(from < to);
 
-    double dt = nest::Time::get_resolution().get_ms();
     nest::long_t current_steps = origin.get_steps();
-
-    double f_[Branch::State_::STATE_VEC_SIZE_];  // Vector to hold the time derivatives
 
     for (nest::long_t lag = from; lag < to; ++lag) {
 
