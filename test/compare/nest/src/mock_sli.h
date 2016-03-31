@@ -1,6 +1,7 @@
 #ifndef MOCKSLI_H
 #define MOCKSLI_H
 
+#include <vector>
 #include "name.h"
 
 const Name DOUBLE_TYPE("double");
@@ -218,9 +219,10 @@ class Token {
 
 };
 
-#include "tokenarray.h"
 
-class Dictionary {
+typedef std::map< Name, Token, std::less< Name > > TokenMap;
+
+class Dictionary : private TokenMap {
   public:
 
     const Token& operator[](const Name&) const;
@@ -232,6 +234,7 @@ class Dictionary {
     Token& insert(const Name& n, const Token& t);
     Token& insert_move(const Name&, Token&);
     const Token& lookup(const Name& n) const;
+    static const Token VoidToken;
 };
 
 
@@ -343,19 +346,6 @@ class LiteralDatum : public Datum, public Name {
 };
 
 
-class ArrayDatum : public Datum, public TokenArray {
-
-  public:
-
-    ArrayDatum()
-      : Datum(&ARRAY_TYPE) {
-    }
-
-    Datum* clone() const {
-        return new ArrayDatum();
-    }
-
-};
 
 
 template<typename FT> void def(DictionaryDatum& d, Name const n, FT const& value) {

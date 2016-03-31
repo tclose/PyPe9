@@ -5,7 +5,7 @@ bin_PROGRAMS = compare
 
 compare_SOURCES =  main.cpp branch.h branch.cpp master.cpp master.h \
                    mock_nest.h mock_nest.cpp mock_sli.h mock_sli.cpp \
+                   tarraryobj.h tarrayobj.cpp tokenarray.h tokenarray.cpp \
                    name.h name.cpp nest_time.h nest_time.cpp nest.h \
-                   tarraryobj.h tarray.cpp tokenarray.h tokenarray.cpp \
-                   numerics.h numerics.cpp
+                   numerics.h numerics.cpp arraydatum.h
 

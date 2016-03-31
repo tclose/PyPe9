@@ -11,6 +11,7 @@
 #include "nest_time.h"
 #include "nest.h"
 #include "mock_sli.h"
+#include "arraydatum.h"
 
 #define ARRAY_ALLOC_SIZE 64
 #define LONG_MAX  __LONG_MAX__
@@ -227,11 +228,30 @@ namespace nest {
 
     class RingBuffer {
       public:
-        void add_value(const long_t offs, const double_t);
-        void set_value(const long_t offs, const double_t);
-        double get_value(const long_t offs);
+        RingBuffer();
+
+        void add_value( const long_t offs, const double_t );
+        void set_value( const long_t offs, const double_t );
+        double get_value( const long_t offs );
         void clear();
         void resize();
+        size_t size() const {
+          return buffer_.size();
+        }
+
+        static delay get_modulo( delay d );
+
+    private:
+      //! Buffered data
+      std::valarray< double_t > buffer_;
+
+      /**
+       * Obtain buffer index.
+       * @param delay delivery delay for event
+       * @returns index to buffer element into which event should be
+       * recorded.
+       */
+      size_t get_index_( const delay d ) const;
     };
 
 

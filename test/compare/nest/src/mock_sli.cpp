@@ -1,5 +1,7 @@
 #include "mock_sli.h"
 
+const Token Dictionary::VoidToken;
+
 Token::Token( int value )
 {
   p = new IntegerDatum( value );
