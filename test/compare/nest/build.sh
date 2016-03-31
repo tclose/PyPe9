@@ -5,5 +5,5 @@ aclocal \
 && autoconf
 rm -r build/*
 cd build
-../configure --prefix=`pwd`/../bin
-make
+../configure --prefix=`pwd`/..
+make install
