@@ -4,7 +4,8 @@ LDADD = -L/usr/local/Cellar/gsl/1.16/lib -L/usr/local/Cellar/gcc/5.3.0/lib/gcc/5
 bin_PROGRAMS = compare
 
 compare_SOURCES =  main.cpp Branch.h Branch.cpp Master.cpp Master.h \
-                   mock_nest.h mock_nest.cpp name.h name.cpp \
-                   nest_time.h nest_time.cpp nest.h numerics.h numerics.cpp \
-                   tarraryobj.h tarray.cpp tokenarray.h tokenarray.cpp
+                   mock_nest.h mock_nest.cpp mock_sli.h mock_sli.cpp \
+                   name.h name.cpp nest_time.h nest_time.cpp nest.h \
+                   tarraryobj.h tarray.cpp tokenarray.h tokenarray.cpp \
+                   numerics.h numerics.cpp
 

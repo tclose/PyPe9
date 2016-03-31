@@ -11,67 +11,6 @@ const Name t_spike( "t_spike" );
 const unsigned long librandom::RandomGen::DefaultSeed = 0xd37ca59fUL;
 
 double min_delay = 0.1;
-
-Token::Token( int value )
-{
-  p = new IntegerDatum( value );
-}
-
-Token::Token( unsigned int value )
-{
-  p = new IntegerDatum( value );
-}
-
-Token::Token( long value )
-{
-  p = new IntegerDatum( value );
-}
-
-Token::Token( unsigned long value )
-{
-  p = new IntegerDatum( value );
-}
-
-Token::Token( double value )
-{
-  p = new DoubleDatum( value );
-}
-
-
-Token::operator long() const
-{
-  return getValue< long >( *this );
-}
-
-Token::operator size_t() const
-{
-  return getValue< long >( *this );
-}
-
-Token::operator double() const
-{
-  return getValue< double >( *this );
-}
-
-
-Token& Dictionary::insert_move( const Name& n, Token& t )
-{
-  Token& result = TokenMap::operator[]( n );
-  result.move( t );
-  return result;
-}
-
-inline Token& Dictionary::insert( const Name& n, const Token& t )
-{
-  return TokenMap::operator[]( n ) = t;
-}
-
-inline Token& Dictionary::operator[]( const Name& n )
-{
-  return TokenMap::operator[]( n );
-}
-
-
 void nest::RingBuffer::clear()
 {
   resize();      // does nothing if size is fine

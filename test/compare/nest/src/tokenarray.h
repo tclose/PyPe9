@@ -31,7 +31,7 @@
 #include <vector>
 #include <valarray>
 
-#include "mock_nest.h"
+#include "mock_sli.h"
 #include "tarrayobj.h"
 
 
@@ -480,10 +480,3 @@ TokenArray::rotate( long n = 1 )
 std::ostream& operator<<( std::ostream&, const TokenArray& );
 
 
-#ifdef TokenArray_H_DEBUG
-#undef TokenArray_H_DEBUG
-#undef NDEBUG
-#endif
-
-
-#endif
