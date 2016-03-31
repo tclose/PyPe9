@@ -475,13 +475,13 @@ template < typename FT > void setValue( const Token& t, FT const& value ) {
 
 template < typename FT > Token newToken( FT const& value );
 
-template <> double getValue< double >( const Token& t ) {
+template <> inline double getValue< double >( const Token& t ) {
     DoubleDatum* id = dynamic_cast< DoubleDatum* >( t.datum() );
     if ( id == NULL )
         throw std::exception();
     return id->get();
 }
-template <> void setValue< double >( const Token& t, double const& value ) {
+template <> inline void setValue< double >( const Token& t, double const& value ) {
     DoubleDatum* id = dynamic_cast< DoubleDatum* >( t.datum() );
     if ( id == NULL )
         throw std::exception();
@@ -489,25 +489,25 @@ template <> void setValue< double >( const Token& t, double const& value ) {
 }
 
 
-template <> long getValue< long >( const Token& t ) {
+template <> inline long getValue< long >( const Token& t ) {
   const IntegerDatum* id = dynamic_cast< const IntegerDatum* >( t.datum() );
   if ( id == NULL )
     throw std::exception();
   return id->get();
 }
-template <> void setValue< long >( const Token& t, long const& value ) {
+template <> inline void setValue< long >( const Token& t, long const& value ) {
     IntegerDatum* id = dynamic_cast< IntegerDatum* >( t.datum() );
     if ( id == NULL )
         throw std::exception();
     (*id) = value;
 }
 
-template <> Token newToken< long >( long const& value ) {
+template <> inline Token newToken< long >( long const& value ) {
     return Token( new IntegerDatum( value ) );
 }
 
 
-template <> Token newToken< double >( double const& value ) {
+template <> inline Token newToken< double >( double const& value ) {
     return Token( new DoubleDatum( value ) );
 }
 

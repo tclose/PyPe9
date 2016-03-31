@@ -51,12 +51,12 @@ Token& Dictionary::insert_move( const Name& n, Token& t )
   return result;
 }
 
-inline Token& Dictionary::insert( const Name& n, const Token& t )
+Token& Dictionary::insert( const Name& n, const Token& t )
 {
   return TokenMap::operator[]( n ) = t;
 }
 
-inline Token& Dictionary::operator[]( const Name& n )
+Token& Dictionary::operator[]( const Name& n )
 {
   return TokenMap::operator[]( n );
 }
@@ -77,3 +77,4 @@ std::ostream& operator<<( std::ostream& o, const Token& c )
     c->print( o );
   return o;
 }
+

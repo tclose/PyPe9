@@ -245,6 +245,7 @@ namespace nest {
       public:
         static double get_min_delay() { return min_delay; }
         static double min_delay;
+        static double max_delay;
     };
 
 

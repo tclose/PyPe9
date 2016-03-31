@@ -13,8 +13,8 @@ const Name t_spike( "t_spike" );
 
 const unsigned long librandom::RandomGen::DefaultSeed = 0xd37ca59fUL;
 
-double min_delay = 0.1;
-double max_delay = 1000.0;
+double nest::Scheduler::min_delay = 0.1;
+double nest::Scheduler::max_delay = 1000.0;
 unsigned int moduli_size = 100;
 
 void nest::RingBuffer::add_value( const long_t offs, const double_t v ) {
@@ -27,7 +27,7 @@ void nest::RingBuffer::set_value( const long_t offs, const double_t v ) {
 
 double nest::RingBuffer::get_value( const long_t offs ) {
   assert( 0 <= offs && ( size_t ) offs < buffer_.size() );
-  assert( ( delay ) offs < min_delay );
+  assert( ( delay ) offs < nest::Scheduler::min_delay );
 
   // offs == 0 is beginning of slice, but we have to
   // take modulo into account when indexing
@@ -55,10 +55,10 @@ delay nest::RingBuffer::get_modulo( delay d ) {
 }
 
 nest::RingBuffer::RingBuffer()
-  : buffer_( 0.0, min_delay + max_delay ) {}
+  : buffer_( 0.0, nest::Scheduler::min_delay + nest::Scheduler::max_delay ) {}
 
 void nest::RingBuffer::resize() {
-  size_t size = min_delay + max_delay;
+  size_t size = nest::Scheduler::min_delay + nest::Scheduler::max_delay;
   if ( buffer_.size() != size )
   {
     buffer_.resize( size );
@@ -105,7 +105,7 @@ librandom::RngPtr librandom::RandomGen::create_knuthlfg_rng( unsigned long seed 
   return librandom::RngPtr( new librandom::KnuthLFG( seed ) );
 }
 
-inline long_t nest::Event::get_rel_delivery_steps( const nest::Time& t ) const
+long_t nest::Event::get_rel_delivery_steps( const nest::Time& t ) const
 {
   return d_ - 1 - t.get_steps();
 }
