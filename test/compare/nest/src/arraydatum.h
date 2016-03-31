@@ -15,6 +15,14 @@ class ArrayDatum : public Datum, public TokenArray {
         return new ArrayDatum();
     }
 
+    void print( std::ostream& o ) const {
+      o << "<array datums are not implemented>";
+    }
+
+    void pprint( std::ostream& o ) const {
+      o << "<array datums are not implemented>";
+    }
+
 };
 
 

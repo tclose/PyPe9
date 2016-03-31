@@ -68,3 +68,12 @@ const Token& Dictionary::lookup( const Name& n ) const {
   else
     return Dictionary::VoidToken;
 }
+
+std::ostream& operator<<( std::ostream& o, const Token& c )
+{
+  if ( !c )
+    o << "<Null token>";
+  else
+    c->print( o );
+  return o;
+}

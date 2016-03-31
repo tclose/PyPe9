@@ -8,7 +8,26 @@ const Name DOUBLE_TYPE("double");
 const Name LONG_TYPE("long");
 const Name DICTIONARY_TYPE("dictionary");
 const Name ARRAY_TYPE("array");
+const Name STRING_TYPE("string");
 const Name LITERAL_TYPE("literal");
+
+class TypeMismatch : public std::exception {
+  std::string expected_;
+  std::string provided_;
+
+public:
+  ~TypeMismatch() throw() {}
+
+  TypeMismatch() {}
+
+  TypeMismatch(const std::string& expectedType)
+    : expected_(expectedType) { }
+
+  TypeMismatch(const std::string& expectedType, const std::string& providedType)
+    : expected_( expectedType ), provided_( providedType ) {}
+
+  std::string message();
+};
 
 class Datum {
 
@@ -37,6 +56,11 @@ class Datum {
 
     void addReference() const {}
     void removeReference() {}
+    virtual void print( std::ostream& o ) const = 0;
+    virtual void pprint( std::ostream& o ) const = 0;
+    const Name& gettypename() const {
+      return *type;
+    }
 
   protected:
     // Putting the following variables here, avoids a number of virtual
@@ -48,6 +72,7 @@ class Datum {
 
 class Token {
   friend class Datum;
+  friend class TokenArrayObj;
 
   private:
     Datum* p;
@@ -219,6 +244,7 @@ class Token {
 
 };
 
+std::ostream& operator<<( std::ostream&, const Token& );
 
 typedef std::map< Name, Token, std::less< Name > > TokenMap;
 
@@ -261,6 +287,15 @@ class DictionaryDatum: public Datum {
         return new DictionaryDatum(dict);
     }
 
+    void print( std::ostream& o ) const {
+      o << dict;
+    }
+
+    void pprint( std::ostream& o ) const {
+      o << dict;
+    }
+
+
   protected:
     Dictionary* dict;
 };
@@ -268,7 +303,7 @@ class DictionaryDatum: public Datum {
 class DoubleDatum : public Datum {
   public:
 
-    DoubleDatum(double dbl)
+    DoubleDatum(double dbl=0.0)
       : Datum(&DOUBLE_TYPE), dbl(dbl) {
       }
 
@@ -292,6 +327,15 @@ class DoubleDatum : public Datum {
         return dbl;
     }
 
+    void print( std::ostream& o ) const {
+      o << dbl;
+    }
+
+    void pprint( std::ostream& o ) const {
+      o << dbl;
+    }
+
+
   protected:
     double dbl;
 
@@ -300,7 +344,7 @@ class DoubleDatum : public Datum {
 class IntegerDatum : public Datum {
   public:
 
-    IntegerDatum(long lng)
+    IntegerDatum(long lng=0)
       : Datum(&LONG_TYPE), lng(lng) {
       }
 
@@ -324,8 +368,61 @@ class IntegerDatum : public Datum {
         return lng;
     }
 
+    void print( std::ostream& o ) const {
+      o << lng;
+    }
+
+    void pprint( std::ostream& o ) const {
+      o << lng;
+    }
+
+
   protected:
     long lng;
+
+};
+
+class StringDatum : public Datum {
+  public:
+
+    StringDatum()
+      : Datum(&STRING_TYPE) {}
+
+    StringDatum(const std::string& str)
+      : Datum(&STRING_TYPE), str(str) {
+      }
+
+    const std::string* operator->() const {
+        return &str;
+    }
+
+    std::string* operator->() {
+        return &str;
+    }
+
+    std::string& operator*() {
+        return str;
+    }
+
+    Datum* clone() const {
+      return new StringDatum(str);
+    }
+
+    std::string get() const {
+        return str;
+    }
+
+    void print( std::ostream& o ) const {
+      o << str;
+    }
+
+    void pprint( std::ostream& o ) const {
+      o << str;
+    }
+
+
+  protected:
+    std::string str;
 
 };
 
@@ -343,6 +440,15 @@ class LiteralDatum : public Datum, public Name {
 
     LiteralDatum( const Name& n ) : Datum(&LITERAL_TYPE), Name(n) {}
     LiteralDatum( const LiteralDatum& n) : Datum(&LITERAL_TYPE), Name(n) {}
+
+    void print( std::ostream& o ) const {
+      o << (Name)(*this);
+    }
+
+    void pprint( std::ostream& o ) const {
+      o << (Name)(*this);
+    }
+
 };
 
 

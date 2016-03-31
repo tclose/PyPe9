@@ -69,7 +69,7 @@ void nest::RingBuffer::clear() {
   resize();      // does nothing if size is fine
   buffer_ = 0.0; // clear all elements
 }
-/*
+
 void nest::Archiving_Node::set_status( const DictionaryDatum& d ) {
   // We need to preserve values in case invalid values are set
   double_t new_tau_minus = tau_minus_;
@@ -116,5 +116,3 @@ void nest::Archiving_Node::get_status( DictionaryDatum& d ) const {
   def< double >( d, names::tau_minus, tau_minus_ );
   def< double >( d, names::tau_minus_triplet, tau_minus_triplet_ );
 }
-
-*/
