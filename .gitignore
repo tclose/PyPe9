@@ -29,6 +29,7 @@ aclocal.m4
 autom4te.cache/
 .autotools
 /test/compare/nest/build/*
+/test/compare/nest/xcode/*
 /test/compare/nest/bin/*
 /test/compare/nest/config.guess
 /test/compare/nest/config.sub
