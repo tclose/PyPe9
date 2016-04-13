@@ -13,33 +13,40 @@
 #include "branch.h"
 #include "master.h"
 #include "mock_nest.h"
+#include "status.h"
 
 
 int main(void) {
 
+    std::cout << "Create model objects" << std::endl;
+    
     // Initialise models
-    nineml::Master reference;
-    nineml::Branch generated;
+    nineml::Master master;
+    nineml::Branch branch;
+    
+    std::cout << "Set Status" << std::endl;
+    
+    Dictionary status;
+    set_status(status);  // From custom "status.h"
+    DictionaryDatum status_datum(&status);
 
-    // Set statuses of models
-    Dictionary reference_status;
-    Dictionary generated_status;
+    master.set_status(status_datum);
+    branch.set_status(status_datum);
 
-    reference_status.insert(Name("test"), Token(1.0));
-
-    DictionaryDatum reference_datum(&reference_status);
-    DictionaryDatum generated_datum(&generated_status);
-
+    std::cout << "Initialise buffers" << std::endl;
+    
     // Init Buffers of models
-    reference.init_buffers_();
-    generated.init_buffers_();
+    master.init_buffers_();
+    branch.init_buffers_();
 
-    std::cout << "Hello Nest 3" << std::endl; /* prints Hello World */
-
-    reference.calibrate();
-    generated.calibrate();
+    std::cout << "Calibrate" << std::endl;
+    
+    master.calibrate();
+    branch.calibrate();
 
     double dt = 0.025;
+    
+    std::cout << "Run update steps" << std::endl;
 
     for (int i = 0; i < 100; ++i) {
 
@@ -47,8 +54,8 @@ int main(void) {
         nest::long_t from = 0;
         nest::long_t to = 100;
 
-        reference.update(origin, from, to);
-        generated.update(origin, from, to);
+        master.update(origin, from, to);
+        branch.update(origin, from, to);
 
     }
 
