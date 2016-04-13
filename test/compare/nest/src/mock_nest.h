@@ -8,10 +8,14 @@
 #include <algorithm>
 #include <cassert>
 #include <valarray>
+#include <unistd.h>
+#include <iostream>
+#include <fstream>
 #include "nest_time.h"
 #include "nest.h"
 #include "mock_sli.h"
 #include "arraydatum.h"
+
 
 #define ARRAY_ALLOC_SIZE 64
 #define LONG_MAX  __LONG_MAX__
@@ -313,15 +317,19 @@ namespace nest {
         }
     };
 
-    template<class NodeType> class UniversalDataLogger {
+    template <class NodeType> class UniversalDataLogger {
       public:
-        UniversalDataLogger(NodeType& node) {}
+        UniversalDataLogger(NodeType& node);
+        ~UniversalDataLogger();
         port connect_logging_device(DataLoggingRequest& request,
                 RecordablesMap<NodeType>& map);
         void init() {}
         void reset() {}
-        void record_data(long_t step) {}
+        void record_data(long_t step);
         void handle(const DataLoggingRequest& dlr) {}
+      private:
+        std::ofstream output_file;
+        NodeType* node_;
     };
 
     class RingBuffer {
@@ -401,6 +409,31 @@ namespace nest {
         double_t last_spike_;
 
     };
+    
+    template <class NodeType> UniversalDataLogger<NodeType>::UniversalDataLogger(NodeType& node) {
+        node_ = &node;
+        // Get the current working directory in which to create the data files
+        char cwd[5000];
+        getcwd(cwd, sizeof(cwd));
+        std::ostringstream path;
+        // Append the name of the NodeType type to the file path
+        path << cwd << "/" << typeid(NodeType).name() << ".dat";
+        std::cout << path.str() << std::endl;
+        output_file.open(path.str());
+        for (typename RecordablesMap<NodeType>::iterator it = node.recordablesMap_.begin(); it != node.recordablesMap_.end(); ++it)
+            output_file << it->first << " ";
+        output_file << std::endl;
+    }
+    
+    template <class NodeType> UniversalDataLogger<NodeType>::~UniversalDataLogger() {
+        output_file.close();
+    }
+    
+    template <class NodeType> void UniversalDataLogger<NodeType>::record_data(long_t step) {
+        for (typename RecordablesMap<NodeType>::iterator it = node_->recordablesMap_.begin(); it != node_->recordablesMap_.end(); ++it)
+            output_file << ((*node_).*(it->second))()  << " ";
+        output_file << std::endl;
+    }
 
 }
 
