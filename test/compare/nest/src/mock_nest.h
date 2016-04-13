@@ -293,8 +293,8 @@ namespace nest {
     };
 
 
-    template <class NodeType> class RecordablesMap : public std::map< Name, double_t (NodeType::*) ()> {
-        typedef std::map< Name,  double_t (NodeType::*) ()> Base_;
+    template <class NodeType> class RecordablesMap : public std::map< Name, double_t (NodeType::*) () const> {
+        typedef std::map< Name,  double_t (NodeType::*) () const> Base_;
       public:
         typedef double_t ( NodeType::*DataAccessFct )() const;
         virtual ~RecordablesMap() {}
