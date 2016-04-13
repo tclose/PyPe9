@@ -420,6 +420,7 @@ namespace nest {
         path << cwd << "/" << typeid(NodeType).name() << ".dat";
         std::cout << path.str() << std::endl;
         output_file.open(path.str());
+        output_file << "# ";
         for (typename RecordablesMap<NodeType>::iterator it = node.recordablesMap_.begin(); it != node.recordablesMap_.end(); ++it)
             output_file << it->first << " ";
         output_file << std::endl;
