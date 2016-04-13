@@ -13,8 +13,8 @@ const Name t_spike( "t_spike" );
 
 const unsigned long librandom::RandomGen::DefaultSeed = 0xd37ca59fUL;
 
-double nest::Scheduler::min_delay = 0.1;
-double nest::Scheduler::max_delay = 1000.0;
+delay nest::Scheduler::min_delay = 1000;
+delay nest::Scheduler::max_delay = 100000;
 unsigned int moduli_size = 100;
 
 void nest::RingBuffer::add_value( const long_t offs, const double_t v ) {

@@ -243,9 +243,9 @@ namespace nest {
 
     class Scheduler {
       public:
-        static double get_min_delay() { return min_delay; }
-        static double min_delay;
-        static double max_delay;
+        static delay get_min_delay() { return min_delay; }
+        static delay min_delay;
+        static delay max_delay;
     };
 
 
@@ -293,8 +293,8 @@ namespace nest {
     };
 
 
-    template<class NodeType> class RecordablesMap : public std::map< Name, double_t> {
-        typedef std::map< Name, double_t> Base_;
+    template<class NodeType> class RecordablesMap : public std::map< Name, double_t ( NodeType::* )() const> {
+        typedef std::map< Name, double_t ( NodeType::* )() const > Base_;
       public:
         typedef double_t ( NodeType::*DataAccessFct )() const;
 
@@ -308,7 +308,9 @@ namespace nest {
           // return recordables_;
         }
         void create() {}
-        void insert_(const char* name, DataAccessFct f) {}
+        void insert_(const Name& n, const DataAccessFct f) {
+            Base_::insert(std::make_pair(n, f));
+        }
     };
 
     template<class NodeType> class UniversalDataLogger {
