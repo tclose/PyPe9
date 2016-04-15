@@ -46,7 +46,7 @@ int main(void) {
 
     double dt = 0.025;
     
-    std::cout << "Set up ring buffers" << std::endl;
+    std::cout << "Set current and event buffers" << std::endl;
     
     set_ring_buffers<nineml::Master>(master);
     //set_ring_buffers<nineml::Branch>(branch);

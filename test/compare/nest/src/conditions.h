@@ -10,7 +10,7 @@
 
 #include "mock_nest.h"
 
-#define INJECTION_AMPLITUDE 0.02
+#define INJECTION_AMPLITUDE 20 // pA
 
 inline void set_status(Dictionary& status) {
     status.insert(Name("C_m"), Token(1.0));
