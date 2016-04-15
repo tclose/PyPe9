@@ -52,6 +52,18 @@ std::ostream& operator<<( std::ostream&, const nest::Time& );
 typedef double double_t;
 
 
+template <class NodeType> std::string get_data_path() {
+    // Get the current working directory in which to create the data files
+    char* cwd_buffer = (char*)malloc(sizeof(char) * MAX_PATH_LENGTH);
+    char* cwd = getcwd(cwd_buffer, MAX_PATH_LENGTH);
+    std::ostringstream path;
+    // Append the name of the NodeType type to the file path
+    path << cwd << "/" << typeid(NodeType).name() << ".dat";
+    free(cwd_buffer);
+    return path.str();
+}
+
+
 namespace librandom {
     
     class RandomGen;
@@ -443,15 +455,9 @@ namespace nest {
     
     template <class NodeType> UniversalDataLogger<NodeType>::UniversalDataLogger(NodeType& node)
       : node_(&node) {
-        // Get the current working directory in which to create the data files
-        char* cwd_buffer = (char*)malloc(sizeof(char) * MAX_PATH_LENGTH);
-        char* cwd = getcwd(cwd_buffer, MAX_PATH_LENGTH);
-        std::ostringstream path;
-        // Append the name of the NodeType type to the file path
-        path << cwd << "/" << typeid(NodeType).name() << ".dat";
-        free(cwd_buffer);
-        std::cout << "Writing output to " << path.str() << std::endl;
-        output_file = new std::ofstream(path.str());
+        std::string path = ::get_data_path<NodeType>();
+        std::cout << "Writing output to " << path << std::endl;
+        output_file = new std::ofstream(path);
     }
     
     template <class NodeType> UniversalDataLogger<NodeType>::~UniversalDataLogger() {

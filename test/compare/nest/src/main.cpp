@@ -62,5 +62,10 @@ int main(void) {
 
     }
 
+    std::cout << "To plot comparison:" << std::endl;
+    std::cout << "plot_comparison.py " << get_data_path<nineml::Master>();
+    //std::cout << " " << get_data_path<nineml::Branch>();
+    std::cout << std::endl;
+    
 	return 0;
 }

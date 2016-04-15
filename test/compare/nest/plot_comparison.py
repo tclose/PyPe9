@@ -27,8 +27,6 @@ for pth in args.recorded_data_paths:
 # Plot figures
 for var in header:
     data = np.concatenate(all_data[var])
-    print data
-    print len(data)
     plt.figure()
     plt.plot(data)
     plt.title(var)
