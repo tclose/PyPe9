@@ -29,8 +29,7 @@ inline void set_status(Dictionary& status) {
 template <class NodeType> void set_ring_buffers(NodeType& node) {
     
     long_t buffer_length = NUM_SLICES * nest::Scheduler::min_delay;
-    nest::RingBuffer& isyn = node.Isyn_analog_port;
-    isyn.resize(buffer_length);
+    nest::RingBuffer& isyn = node.B_.Isyn_analog_port;
     
     for (long_t i = 0; i < buffer_length; ++i)
         if (i < buffer_length / 2)

@@ -53,9 +53,9 @@ int main(void) {
     
     std::cout << "Run update steps" << std::endl;
 
+    nest::Time origin(nest::Time::ms(0.0));
+    
     for (int i = 0; i < NUM_SLICES; ++i) {
-
-        nest::Time origin(nest::Time::ms(nest::Scheduler::min_delay * i * dt));
 
         master.update(origin, nest::Scheduler::min_delay * i, nest::Scheduler::min_delay * (i + 1));
         //branch.update(origin, from, to);

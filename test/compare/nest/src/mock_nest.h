@@ -8,7 +8,7 @@
 #define double_t_max ( DBL_MAX ) // because C++ language designers are apes
 #define double_t_min ( DBL_MIN ) // (only integral consts are compile time)
 #define MAX_PATH_LENGTH 10000
-#define NUM_SLICES 100
+#define NUM_SLICES 10
 
 #include <cmath>
 #include <vector>
@@ -273,7 +273,7 @@ namespace nest {
 
     class Scheduler {
       public:
-        static delay get_min_delay() { return min_delay; }
+        static delay get_min_delay() { return LONG_MAX; }
         static delay min_delay;
         static delay max_delay;
     };
@@ -363,14 +363,14 @@ namespace nest {
       public:
         RingBuffer();
 
-        void add_value( const long_t offs, const double_t );
+        void add_value( const long_t offs, const double_t ) {}
         void set_value( const long_t offs, const double_t );
         double get_value( const long_t offs );
-        void clear();
-        void resize();
-        size_t size() const {
-          return buffer_.size();
-        }
+        void clear() {}
+        //void resize();
+        //size_t size() const {
+        //  return buffer_.size();
+        //}
 
         static delay get_modulo( delay d );
 
@@ -452,10 +452,6 @@ namespace nest {
         free(cwd_buffer);
         std::cout << "Writing output to " << path.str() << std::endl;
         output_file = new std::ofstream(path.str());
-        (*output_file) << "# ";
-        for (typename RecordablesMap<NodeType>::iterator it = node.recordablesMap_.begin(); it != node.recordablesMap_.end(); ++it)
-            (*output_file) << it->first << " ";
-        (*output_file) << std::endl;
     }
     
     template <class NodeType> UniversalDataLogger<NodeType>::~UniversalDataLogger() {
@@ -463,6 +459,12 @@ namespace nest {
     }
     
     template <class NodeType> void UniversalDataLogger<NodeType>::record_data(long_t step) {
+        if (!step) {
+            (*output_file) << "# ";
+            for (typename RecordablesMap<NodeType>::iterator it = node_->recordablesMap_.begin(); it != node_->recordablesMap_.end(); ++it)
+                (*output_file) << it->first << " ";
+            (*output_file) << std::endl;
+        }
         for (typename RecordablesMap<NodeType>::iterator it = node_->recordablesMap_.begin(); it != node_->recordablesMap_.end(); ++it)
             (*output_file) << ((*node_).*(it->second))()  << " ";
         (*output_file) << std::endl;
