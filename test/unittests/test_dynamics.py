@@ -360,23 +360,38 @@ class TestDynamics(TestCase):
                                  'external_currents': ['iSyn']},
                       'nest': {'build_mode': 'force'}}
         initial_states = {'t_next': 0.0 * un.ms}
-        cells = {}
-        for sim_name, meta_class in (('nest', CellMetaClassNEST), ('neuron', CellMetaClassNEURON)): # @IgnorePep8
+        for sim_name, meta_class in (('nest', CellMetaClassNEST),
+                                     ):
+                                     # ('neuron', CellMetaClassNEURON)):
+            # Build celltype
             celltype = meta_class(
                 nineml_model, name=nineml_model.name, **build_args[sim_name])
-            cells[sim_name] = celltype(rate=rate)
-            cells[sim_name].record('spike_output')
-            cells[sim_name].update_state(initial_states)
-        # Run NEURON simulation
-        simulatorNEURON.reset()
-        neuron.h.dt = self.dt
-        simulatorNEURON.run(duration.in_units(un.ms))
-        # Run NEST simulation
-        simulatorNEST.reset()
-        nest.SetKernelStatus({'resolution': self.dt})
-        simulatorNEST.run(duration.in_units(un.ms))
-        for sim_name in ('nest',):  # ('neuron', 'nest'):
-            spikes = cells[sim_name].recording('spike_output')
+            # Initialise simulator
+            if sim_name == 'neuron':
+                # Run NEURON simulation
+                simulatorNEURON.reset()
+                neuron.h.dt = self.dt
+                simulatorNEURON.run(duration.in_units(un.ms))
+            elif sim_name == 'nest':
+                # Run NEST simulation
+                simulatorNEST.reset()
+                nest.SetKernelStatus({'resolution': self.dt})
+                simulatorNEST.run(duration.in_units(un.ms))
+            else:
+                assert False
+            # Create and initialise cell
+            cell = celltype(rate=rate)
+            cell.record('spike_output')
+            cell.update_state(initial_states)
+            # Run simulation
+            if sim_name == 'neuron':
+                simulatorNEURON.run(duration.in_units(un.ms))
+            elif sim_name == 'nest':
+                simulatorNEST.run(duration.in_units(un.ms))
+            else:
+                assert False
+            # Get recording
+            spikes = cell.recording('spike_output')
             # Calculate the rate of the modelled process
             recorded_rate = pq.Quantity(
                 len(spikes) / (spikes.t_stop - spikes.t_start), 'Hz')
