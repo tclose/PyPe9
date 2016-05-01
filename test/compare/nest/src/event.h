@@ -1,6 +1,8 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include "nest_time.h"
+
 namespace nest {
 
     class Node;

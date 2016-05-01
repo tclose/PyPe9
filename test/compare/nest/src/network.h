@@ -2,10 +2,11 @@
 #define NETWORK_H
 
 #include "random.h"
-#include "archiving_node.h"
-
+#include "event.h"
 
 namespace nest {
+
+    class Node;
 
     class Scheduler {
       public:
