@@ -36,8 +36,8 @@ using namespace nest;
 
 #define CONFIG_TICS_PER_STEP 100
 
-#include "integer_datum.h"
-#include "double_datum.h"
+#include "integerdatum.h"
+#include "doubledatum.h"
 #include "exceptions.h"
 #include "token.h"
 

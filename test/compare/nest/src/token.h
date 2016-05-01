@@ -1,8 +1,8 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include "double_datum.h"
-#include "integer_datum.h"
+#include "doubledatum.h"
+#include "integerdatum.h"
 
 class Token {
   friend class Datum;

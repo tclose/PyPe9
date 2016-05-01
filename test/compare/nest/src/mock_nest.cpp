@@ -10,6 +10,7 @@
 #include "ring_buffer.h"
 #include "network.h"
 #include "archiving_node.h"
+#include "dictutils.h"
 
 
 const unsigned long librandom::RandomGen::DefaultSeed = 0xd37ca59fUL;
