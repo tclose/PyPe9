@@ -8,7 +8,7 @@
 #ifndef setup_h
 #define setup_h
 
-#include "mock_nest.h"
+#include "random.h"
 
 
 #define _Izhikevich_ 1
