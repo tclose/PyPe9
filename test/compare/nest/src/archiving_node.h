@@ -3,6 +3,7 @@
 
 #include "mock_sli.h"
 #include "network.h"
+#include "event.h"
 
 namespace nest {
 

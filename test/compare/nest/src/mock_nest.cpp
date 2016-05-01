@@ -5,12 +5,16 @@
 #include <iomanip>
 #include <vector>
 #include <list>
-#include "../../src/random.h"
+#include "nest.h"
+#include "random.h"
+//#include "ring_buffer.h"
+#include "network.h"
+//#include "archiving_node.h"
 
-const Name receptor_type( "receptor_type" );
-const Name receptor_types( "receptor_types" );
-const Name recordables( "recordables" );
-const Name t_spike( "t_spike" );
+//const Name receptor_type( "receptor_type" );
+//const Name receptor_types( "receptor_types" );
+//const Name recordables( "recordables" );
+//const Name t_spike( "t_spike" );
 
 const unsigned long librandom::RandomGen::DefaultSeed = 0xd37ca59fUL;
 

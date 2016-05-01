@@ -2,6 +2,7 @@
 #define NETWORK_H
 
 #include "random.h"
+#include "archiving_node.h"
 
 
 namespace nest {
