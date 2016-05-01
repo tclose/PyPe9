@@ -1,5 +1,5 @@
-AM_CXXFLAGS = -I/usr/local/Cellar/gsl/1.16/include -Wall
-LDADD = -L/usr/local/Cellar/gsl/1.16/lib -lgsl -lgslcblas -lm
+AM_CXXFLAGS = -I/Users/tclose/git/debug/gsl/1.16/include -Wall -std=c++11 -g3 -O0
+LDADD = -L/Users/tclose/git/debug/gsl/1.16/lib -lgsl -lgslcblas -lm
 
 bin_PROGRAMS = compare
 
@@ -8,7 +8,8 @@ compare_SOURCES =  mock_nest.h mock_nest.cpp mock_sli.h mock_sli.cpp \
                    name.h name.cpp nest_time.h nest_time.cpp nest.h \
                    numerics.h numerics.cpp arraydatum.h nest_names.h \
                    nest_names.cpp lockptr.h setup.h main.cpp \
-                   models/PyNNLeakyIntegrateAndFire.cpp models/PyNNLeakyIntegrateAndFire.h
+                   models/PyNNLeakyIntegrateAndFire.cpp models/PyNNLeakyIntegrateAndFire.h \
+                   models/IafAlpha.cpp models/IafAlpha.h
 
 #                   models/IzhikevichMaster.h models/IzhikevichMaster.cpp \
 #                   models/IzhikevichBranch.h models/IzhikevichBranch.cpp
