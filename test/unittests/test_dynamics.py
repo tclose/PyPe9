@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import quantities as pq
 import os.path
 from itertools import chain, repeat
