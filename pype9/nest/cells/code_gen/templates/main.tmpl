@@ -615,6 +615,7 @@ void {{component_name}}::update(nest::Time const & origin, const nest::long_t fr
         int simultaneous_transition_count = 0;
         double prev_t = origin.get_ms();
         while ((transition = B_.current_regime->transition(origin, lag))) {  // Check for a transition (i.e. the output of current_regime->transition is not NULL) and record it in the 'transition' variable.
+                    
             double t = transition->time_occurred(origin, lag);  // Get the exact time the transition occurred.
             if (t == prev_t) {
                 ++simultaneous_transition_count;
