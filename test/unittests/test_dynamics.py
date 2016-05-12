@@ -200,7 +200,8 @@ class TestDynamics(TestCase):
 
     def test_alpha_syn(self, plot=False, print_comparisons=False,
                        simulators=['nest', 'neuron'], dt=0.001,
-                       duration=100.0, **kwargs):  # @UnusedVariable
+                       duration=100.0, min_delay=5, device_delay=5,
+                       **kwargs):  # @UnusedVariable
         # Perform comparison in subprocess
         iaf = ninemlcatalog.load(
             'neuron/LeakyIntegrateAndFire', 'PyNNLeakyIntegrateAndFire')
@@ -276,9 +277,10 @@ class TestDynamics(TestCase):
             initial_regime=initial_regime,
             neuron_ref='ResetRefrac',
             nest_ref='iaf_psc_alpha',
-            input_train=input_freq('input_spike', 500 * pq.Hz, duration,
+            input_train=input_freq('input_spike', 450 * pq.Hz, duration,
                                    weight=[Property('weight__pls__syn',
-                                                    10 * pq.nA)]),
+                                                    10 * pq.nA)],
+                                   offset=duration / 2.0),
             nest_translations=nest_tranlsations,
             neuron_translations=neuron_tranlsations,
             extra_mechanisms=['pas'],
@@ -288,7 +290,9 @@ class TestDynamics(TestCase):
                 'build_dir': os.path.join(build_dir, 'neuron', 'IaFAlpha')},
             nest_build_args={
                 'build_mode': 'force',
-                'build_dir': os.path.join(build_dir, 'nest', 'IaFAlpha')})
+                'build_dir': os.path.join(build_dir, 'nest', 'IaFAlpha')},
+            min_delay=min_delay,
+            device_delay=device_delay)
         comparer.simulate(duration)
         comparisons = comparer.compare()
         if print_comparisons:
