@@ -12,11 +12,10 @@
            the MIT Licence, see LICENSE for details.
 """
 from itertools import chain
-from copy import deepcopy
 import quantities as pq
 import nineml
 from nineml.abstraction import Dynamics, Regime
-from nineml.user import MultiDynamicsProperties, Property
+from nineml.user import Property, Initial
 from nineml.units import Quantity
 from pype9.annotations import PYPE9_NS
 from pype9.exceptions import (
@@ -152,57 +151,36 @@ class CellMetaClass(type):
 
 class Cell(object):
 
-    def __init__(self, *properties, **kwprops):
-        self._in_pynn = kwprops.pop('_in_pynn', False)
+    def __init__(self, *properties, **kwprops_and_states):
+        self._in_pynn = kwprops_and_states.pop('_in_pynn', False)
+        initial_states = []
         # Combine keyword and non-keyword properties into a single list
         if len(properties) == 1 and isinstance(properties[0],
                                                nineml.DynamicsProperties):
-            self._nineml = properties[0]
+            properties = list(properties[0].properties)
         else:
             # Check to see if properties is a dictionary of name/quantity pairs
             if len(properties) == 1 and isinstance(properties[0], dict):
-                kwprops.update(properties[0])
+                kwprops_and_states.update(properties[0])
                 properties = []
             else:
                 properties = list(properties)
-            # Convert "Python-Quantities" quantities into 9ML quantities
-            for name, pq_qty in kwprops.iteritems():
-                qty = self.UnitHandler.from_pq_quantity(pq_qty)
-                properties.append(Property(name, qty.value * qty.units))
-            # If default properties not provided create a Dynamics Properties
-            # from the provided properties
-            if self.default_properties is None:
-                # FIXME: Probably should just initialise the properties to NaN
-                #        or something
-                self._nineml = nineml.user.DynamicsProperties(
-                    self.component_class.name + 'Properties',
-                    self.component_class, properties)
-            # If no properties provided use the default properties
-            elif not properties:
-                self._nineml = deepcopy(self.default_properties)
-            # Otherwise use the default properties as a prototype and override
-            # where specific properties are provided
+        # Convert "Python-Quantities" quantities into 9ML quantities
+        for name, pq_qty in kwprops_and_states.iteritems():
+            qty = self.UnitHandler.from_pq_quantity(pq_qty)
+            if name in self.component_class.state_variable_names:
+                initial_states.append(Initial(name, qty))
             else:
-                if isinstance(self.default_properties,
-                              MultiDynamicsProperties):
-                    logger.warning("Unable to set default properties for '{}' "
-                                   "cell as it is MultiDynamicsProperties"
-                                   .format(self.name))
-                    self._nineml = deepcopy(self.default_properties)
-                else:
-                    self._nineml = type(self.default_properties)(
-                        self.default_properties.name, self.default_properties,
-                        properties)
-        # Set up references from parameter names to internal variables and set
-        # parameters
-        for prop in self.properties:
-            self.set(prop)
+                properties.append(Property(name, qty.value * qty.units))
+        self._nineml = nineml.user.DynamicsProperties(
+            self.component_class.name + 'Properties',
+            self.component_class, properties, initial_states,
+            check_initial_values=True)
         # Flag to determine whether the cell has been initialised or not
         # (it makes a difference to how the state of the cell is updated,
         # either saved until the 'initialze' method is called or directly
         # set to the state)
         self._initialized = False
-        self._initial_states = None
         self._initial_regime = None
         self._is_dead = False
         if not self._in_pynn:
