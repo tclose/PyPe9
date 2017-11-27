@@ -126,7 +126,7 @@ Reporting Issues
 ================
 
 Please submit bug reports and feature requests to the GitHub issue tracker
-(http://github.com/CNS-OIST/PyPe9/issues).
+(http://github.com/NeuralEnsemble/PyPe9/issues).
 
 :copyright: Copyright 20012-2016 by the Pype9 team, see AUTHORS.
 :license: MIT, see LICENSE for details.
