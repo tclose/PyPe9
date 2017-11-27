@@ -231,7 +231,7 @@ class build(_build):
 
 setup(
     name="pype9",
-    version="0.1a0",
+    version="0.1",
     package_data={package_name: package_data},
     scripts=[os.path.join('bin', 'pype9')],
     packages=packages,
@@ -246,14 +246,15 @@ setup(
     license="The MIT License (MIT)",
     keywords=("NineML pipeline computational neuroscience modeling "
               "interoperability XML 9ML neuron nest"),
-    url="http://github.com/CNS-OIST/PyPe9",
+    url="http://github.com/NeuralEnsemble/PyPe9",
     classifiers=['Development Status :: 3 - Alpha',
                  'Environment :: Console',
                  'Intended Audience :: Science/Research',
-                 'License :: OSI Approved :: MIT',
+                 'License :: OSI Approved :: MIT License',
                  'Natural Language :: English',
                  'Operating System :: OS Independent',
                  'Programming Language :: Python :: 2',
+                 'Programming Language :: Python :: 2.7',
                  'Topic :: Scientific/Engineering'],
     install_requires=[
         'nineml==0.1',
