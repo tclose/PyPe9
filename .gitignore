@@ -45,3 +45,6 @@ autom4te.cache/
 *.gdf
 N6nineml8*E.dat
 /doc/build
+/build/
+/dist/
+/pype9.egg-info/
