@@ -4,7 +4,7 @@ JSON_, YAML_) and 9ML versions.
 """
 from argparse import ArgumentParser
 from pype9.utils.arguments import nineml_document
-from pype9.utils.logging import logger
+from pype9.utils.logging import logger, set_loglevel
 
 
 def argparser():
@@ -15,11 +15,15 @@ def argparser():
     parser.add_argument('out_file', help="Converted filename")
     parser.add_argument('--nineml_version', '-v', type=str, default=None,
                         help="The version of nineml to output")
+    parser.add_argument('--loglevel', type=str, default='INFO',
+                        help="Sets the verbosity level of the logger")
     return parser
 
 
 def run(argv):
     args = argparser().parse_args(argv)
+    set_loglevel(args.loglevel)
+    import pype9.utils.logging.handlers.sysout  # @UnusedImport
 
     doc = args.in_file.clone()
     kwargs = {}

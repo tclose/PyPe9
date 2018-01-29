@@ -30,7 +30,7 @@ from pype9.simulate.common.code_gen import BaseCodeGenerator
 import quantities as pq
 from pype9.utils.arguments import nineml_model
 from pype9.utils.units import parse_units
-from pype9.utils.logging import logger
+from pype9.utils.logging import logger, set_loglevel
 
 RecordSpec = collections.namedtuple('RecordSpec', 'port fname t_start')
 
@@ -98,6 +98,8 @@ def argparser():
     parser.add_argument('--build_version', type=str, default=None,
                         help=("Version to append to name to use when building "
                               "component classes"))
+    parser.add_argument('--loglevel', type=str, default='INFO',
+                        help="Sets the verbosity level of the logger")
     return parser
 
 
@@ -120,6 +122,9 @@ def run(argv):
         from pype9.simulate.nest import Network, CellMetaClass, Simulation  # @Reimport @IgnorePep8
     else:
         assert False
+
+    set_loglevel(args.loglevel)
+    import pype9.utils.logging.handlers.sysout  # @UnusedImport
 
     if not args.record:
         raise Pype9UsageError(

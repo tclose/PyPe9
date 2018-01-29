@@ -31,4 +31,3 @@ try:
 except (NineMLUsageError, Pype9RuntimeError) as e:
     logger.error(e)
     sys.exit(1)  # Signal an error to the calling shell
-

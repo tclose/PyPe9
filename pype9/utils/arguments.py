@@ -9,7 +9,6 @@ import os.path
 import nineml
 import ninemlcatalog
 from argparse import ArgumentTypeError
-import pype9.utils.logging.handlers.sysout  # @UnusedImport
 
 CATALOG_PREFIX = 'catalog://'
 

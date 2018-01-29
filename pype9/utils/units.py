@@ -4,7 +4,6 @@ import sympy
 import nineml.units
 from pype9.exceptions import Pype9UsageError, Pype9UnitStrError
 from functools import reduce
-import pype9.utils.logging.handlers.sysout  # @UnusedImport
 
 
 # Get all standard units defined in nineml.units
@@ -19,9 +18,10 @@ def parse_units(unit_str):
     # TODO: Should donate this function to the nineml.units module
     try:
         unit_expr = sympy.sympify(unit_str)
-    except:
+    except Exception as e:
         raise Pype9UsageError(
-            "Unit expression '{}' is not a valid expression".format(unit_str))
+            "Unit expression '{}' is not a valid expression: {}"
+            .format(unit_str, e))
     try:
         return _parse_subexpr(unit_expr)
     except Pype9UnitStrError:

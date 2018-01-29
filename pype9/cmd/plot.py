@@ -6,7 +6,7 @@ regime transitions.
 """
 from argparse import ArgumentParser
 from pype9.utils.arguments import existing_file
-from pype9.utils.logging import logger  # @UnusedImport
+from pype9.utils.logging import logger, set_loglevel  # @UnusedImport
 
 
 def argparser():
@@ -23,6 +23,8 @@ def argparser():
                         help="Whether to show the plot or not")
     parser.add_argument('--resolution', type=float, default=300.0,
                         help="Resolution of the figure when it is saved")
+    parser.add_argument('--loglevel', type=str, default='INFO',
+                        help="Sets the verbosity level of the logger")
     return parser
 
 
@@ -34,6 +36,8 @@ def run(argv):
         import matplotlib  # @IgnorePep8
         matplotlib.use('Agg')  # Set to use Agg so DISPLAY is not required
     from pype9.plot import plot  # @IgnorePep8
+    set_loglevel(args.loglevel)
+    import pype9.utils.logging.handlers.sysout  # @UnusedImport
 
     segments = neo.PickleIO(args.filename).read()
     if len(segments) > 1:
