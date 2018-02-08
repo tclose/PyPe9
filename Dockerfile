@@ -91,7 +91,7 @@ WORKDIR $HOME
 
 # Set up bashrc vimrc and add welcome message
 RUN sed 's/#force_color_prompt/force_color_prompt/' $HOME/.bashrc > $HOME/tmp; mv $HOME/tmp $HOME/.bashrc;
-RUN echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3"
+RUN echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> $HOME/.bashrc
 RUN echo "source /usr/local/bin/virtualenvwrapper.sh" >> $HOME/.bashrc
 RUN echo "workon pype9" >> $HOME/.bashrc
 RUN echo "echo \"Type 'pype9 help' for instructions on how to run pype9\"" >> $HOME/.bashrc
